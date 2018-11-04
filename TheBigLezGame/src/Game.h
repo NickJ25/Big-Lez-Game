@@ -1,24 +1,20 @@
 #pragma once
-#include "MenuState.h"
-#include "Menu.h"
 #include "rt3d.h"
 #include "rt3dObjLoader.h"
-#include "Game.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stack>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
-class SinglePlayerMenu : public MenuState {
-private:
-	Game singleplayerGame;
+class Game {
 public:
-	SinglePlayerMenu();
-	virtual ~SinglePlayerMenu() {};
-	void handle(Menu* menu);
+	Game() {};
+	~Game() {};
+	void init();
 	void update();
 	void draw();
 };

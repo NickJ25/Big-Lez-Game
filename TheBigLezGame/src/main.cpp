@@ -5,8 +5,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include "Menu.h"
+
 const static float SCREEN_HEIGHT = 1280;
 const static float SCREEN_WIDTH = 720;
+Menu menuSystem;
 
 using namespace std;
 
@@ -41,14 +43,6 @@ SDL_Window * setupRC(SDL_GLContext &context) {
 	return window;
 }
 
-void draw(SDL_Window * window) {
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	
-
-	SDL_GL_SwapWindow(window); // swap buffers
-}
 
 int main(int argc, char *argv[]) {
 	SDL_Window * hWindow; // window handle
@@ -74,6 +68,8 @@ int main(int argc, char *argv[]) {
 				running = false;
 		}
 		menuSystem.updateMenus();
+		menuSystem.drawMenus();
+		SDL_GL_SwapWindow(hWindow);
 	}
 	SDL_GL_DeleteContext(glContext);
 	SDL_DestroyWindow(hWindow);

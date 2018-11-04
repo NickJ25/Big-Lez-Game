@@ -259,3 +259,9 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/TheBigLezGame/assets/Skybox/skyrender_top.bmp
+/TheBigLezGame/assets/Skybox/skyrender_right.bmp
+/TheBigLezGame/assets/Skybox/skyrender_left.bmp
+/TheBigLezGame/assets/Skybox/skyrender_front.bmp
+/TheBigLezGame/assets/Skybox/skyrender_bottom.bmp
+/TheBigLezGame/assets/Skybox/skyrender_back.bmp

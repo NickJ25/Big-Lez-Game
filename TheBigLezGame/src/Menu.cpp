@@ -26,6 +26,11 @@ void Menu::setCurrent(MenuState * menu)
 	current = menu;
 }
 
+MenuState * Menu::getCurrentState()
+{
+	return current;
+}
+
 void Menu::updateMenus()
 {
 	current->update();
@@ -33,12 +38,7 @@ void Menu::updateMenus()
 
 void Menu::drawMenus()
 {
-
-}
-
-MenuState * Menu::getCurrentState()
-{
-	return current;
+	current->draw();
 }
 
 MenuState * Menu::getMainMenu()

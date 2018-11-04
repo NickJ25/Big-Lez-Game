@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\AudioMenu.cpp" />
     <ClCompile Include="src\ControlsMenu.cpp" />
     <ClCompile Include="src\GraphicsMenu.cpp" />
@@ -163,6 +164,14 @@
     <ClCompile Include="src\SinglePlayerMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionComponent.h" />
+    <ClInclude Include="src\Skybox.h" />
+    <ClInclude Include="src\AIComponent.h" />
+    <ClInclude Include="src\Component.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\GameObject.h" />
+    <ClInclude Include="src\PhysicsComponent.h" />
+    <ClInclude Include="src\RenderComponent.h" />
     <ClInclude Include="src\AudioMenu.h" />
     <ClInclude Include="src\ControlsMenu.h" />
     <ClInclude Include="src\GraphicsMenu.h" />
@@ -174,6 +183,11 @@
     <ClInclude Include="src\rt3dObjLoader.h" />
     <ClInclude Include="src\ScoreboardMenu.h" />
     <ClInclude Include="src\SinglePlayerMenu.h" />
+    <ClInclude Include="src\TransformComponent.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\toonShader.frag" />
+    <None Include="src\toonShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
