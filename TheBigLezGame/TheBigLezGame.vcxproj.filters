@@ -75,6 +75,12 @@
     <ClCompile Include="src\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\TransformComponent.cpp">
+      <Filter>Source Files\GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderComponent.cpp">
+      <Filter>Source Files\GameObject\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MenuState.h">
@@ -134,7 +140,7 @@
     <ClInclude Include="src\Skybox.h">
       <Filter>Header Files\GameObject\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionComponent.h">
+    <ClInclude Include="src\CollisionComponent.h">
       <Filter>Header Files\GameObject\Components</Filter>
     </ClInclude>
   </ItemGroup>

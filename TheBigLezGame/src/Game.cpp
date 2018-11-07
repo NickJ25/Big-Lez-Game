@@ -2,7 +2,7 @@
 #define DEG_TO_RADIAN 0.017453293
 
 
-GLuint meshObjects[1];
+GLuint meshObjects[1]; // Change to Vector
 GLuint textures[1];
 GLuint skybox[5];
 GLuint cubeIndexCount;
