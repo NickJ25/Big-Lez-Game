@@ -153,6 +153,7 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\AudioMenu.cpp" />
     <ClCompile Include="src\ControlsMenu.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\GraphicsMenu.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MainMenu.cpp" />

@@ -81,6 +81,9 @@
     <ClCompile Include="src\RenderComponent.cpp">
       <Filter>Source Files\GameObject\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MenuState.h">
