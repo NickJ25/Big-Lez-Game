@@ -8,9 +8,13 @@ using namespace std;
 class TransformComponent {
 private:
 	glm::mat4 matrix;
+	glm::vec4 position;
+
+	// Add all rotations, translations, etc and then use them in Render
+	glm::vec4 rotation;
 public:
-	TransformComponent(glm::mat4 objectMatrix) {
-		matrix = objectMatrix;
+	TransformComponent(glm::vec4 objectMatrix) {
+		position = objectMatrix;
 	};
 	glm::vec3 getPosition();
 	glm::mat4 getMatrix();

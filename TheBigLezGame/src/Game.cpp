@@ -1,4 +1,8 @@
 #include "Game.h"
+
+//test include
+#include "Shader.h"
+
 #define DEG_TO_RADIAN 0.017453293
 
 
@@ -22,6 +26,8 @@ stack<glm::mat4> mvStack;
 
 GLuint toonProgram;
 GLuint skyboxProgram;
+Shader *toonShader; 
+
 
 rt3d::lightStruct light0 = {
 	{1.0f, 1.0f, 1.0f, 1.0f}, // ambient
@@ -117,6 +123,8 @@ GLuint loadCubeMap(const char*fname[6], GLuint *texID)
 
 void Game::init()
 {
+	toonShader = new Shader("src/toonShader.vert", "src/toonShader.frag");
+	toonShader->Pass("in_Constant", f_att_c);
 	std::cout << "Game Startvvvv" << std::endl;
 	// Toon Shader Program
 	toonProgram = rt3d::initShaders("src/toonShader.vert", "src/toonShader.frag");
@@ -134,9 +142,9 @@ void Game::init()
 
 	// Load Skybox
 	const char *cubeTexFiles[6] = {
-		"assets/Skybox/skyrender_left.bmp", "assets/Skybox/skyrender_front.bmp",
-		"assets/Skybox/skyrender_right.bmp", "assets/Skybox/skyrender_back.bmp",
-		"assets/Skybox/skyrender_top.bmp", "assets/Skybox/skyrender_bottom.bmp"
+		"assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
+		"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
+		"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp"
 	};
 	loadCubeMap(cubeTexFiles, &skybox[0]);
 
@@ -188,7 +196,6 @@ void Game::draw()
 {
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glUseProgram(toonProgram);
 	glm::mat4 projection(1.0);
 	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 800.0f / 600.0f, 1.0f, 150.0f);
 	rt3d::setUniformMatrix4fv(toonProgram, "projection", glm::value_ptr(projection));

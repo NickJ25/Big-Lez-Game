@@ -4,10 +4,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <chrono>
+#include <algorithm>
 #include "Menu.h"
+
 
 const static float SCREEN_HEIGHT = 1280;
 const static float SCREEN_WIDTH = 720;
+const static float PREFERED_FPS = 60.0f;
 Menu menuSystem;
 
 using namespace std;
@@ -59,6 +63,10 @@ int main(int argc, char *argv[]) {
 	cout << glGetString(GL_VERSION) << endl;
 
 	cout << "Game Start" << endl;
+	
+	float dt = 1 / PREFERED_FPS;
+	float lastTime = SDL_GetTicks();
+	
 	Menu menuSystem;
 	bool running = true;
 	SDL_Event sdlEvent;  // variable to detect SDL events
@@ -67,6 +75,20 @@ int main(int argc, char *argv[]) {
 			if (sdlEvent.type == SDL_QUIT)
 				running = false;
 		}
+		////////////////////////////////////// Timer - Need more work /////////////////////////
+		//float newTime = SDL_GetTicks();
+		//float frameTime = newTime - lastTime;
+		//lastTime = newTime;
+		//int workLoad = 0;
+		//while (frameTime > 0.0 && workLoad < 6)
+		//{
+		//	float deltaTime = std::min(frameTime, dt);
+		//	cout << deltaTime << endl;
+		//	
+		//	frameTime -= deltaTime;
+		//	workLoad++;
+		//}
+		/////////////////////////////////////////////////////////////////////////////
 		menuSystem.updateMenus();
 		menuSystem.drawMenus();
 		SDL_GL_SwapWindow(hWindow);

@@ -37,6 +37,15 @@
     <Filter Include="Header Files\GameObject\GameObjects">
       <UniqueIdentifier>{d2f3a0b2-d9e5-45e2-8826-cf484f8f880f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameObject\Components\SubComponents">
+      <UniqueIdentifier>{d26b563e-ce30-4cdf-835d-47233f2e82cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Other">
+      <UniqueIdentifier>{f4960844-9ab4-43e6-8129-3d988e152651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Other">
+      <UniqueIdentifier>{b2b95fdc-5309-415f-b5f6-225db8698914}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -82,6 +91,9 @@
       <Filter>Source Files\GameObject\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -145,6 +157,15 @@
     </ClInclude>
     <ClInclude Include="src\CollisionComponent.h">
       <Filter>Header Files\GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectLoader.h">
+      <Filter>Header Files\GameObject\Components\SubComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
