@@ -2,6 +2,8 @@
 
 //test include
 #include "Shader.h"
+#include "Model.h"
+#include "Prop.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -27,6 +29,9 @@ stack<glm::mat4> mvStack;
 GLuint toonProgram;
 GLuint skyboxProgram;
 Shader *toonShader; 
+
+Model* test;
+Prop* test2;
 
 
 rt3d::lightStruct light0 = {
@@ -148,6 +153,9 @@ void Game::init()
 	};
 	loadCubeMap(cubeTexFiles, &skybox[0]);
 
+	test = new Model("assets/Props/Table/table.obj");
+	test2 = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
+
 	vector<GLfloat> verts;
 	vector<GLfloat> norms;
 	vector<GLfloat> tex_coords;
@@ -237,6 +245,16 @@ void Game::draw()
 
 	rt3d::setUniformMatrix4fv(toonProgram, "projection", glm::value_ptr(projection));
 
+	mvStack.push(mvStack.top());
+	mvStack.push(mvStack.top());
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, 0.0f));
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.0f, 1.0f, 1.0f));
+	rt3d::setUniformMatrix4fv(toonProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//test->Draw(*toonShader);
+	test2->setShadertemp(toonShader);
+	test2->componentDraw();
+	mvStack.pop();
+
 	// draw a cube for ground plane
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
 	mvStack.push(mvStack.top());
@@ -247,6 +265,7 @@ void Game::draw()
 	rt3d::drawIndexedMesh(meshObjects[0], cubeIndexCount, GL_TRIANGLES);
 	mvStack.pop();
 
+
 	// draw a cube for light
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
 	mvStack.push(mvStack.top());
@@ -256,6 +275,8 @@ void Game::draw()
 	rt3d::setMaterial(toonProgram, material0);
 	rt3d::drawIndexedMesh(meshObjects[0], cubeIndexCount, GL_TRIANGLES);
 	mvStack.pop();
+
+
 
 
 	mvStack.pop(); // initial matrix

@@ -80,6 +80,11 @@ GLuint Shader::getID()
 	return ID;
 }
 
+void Shader::use()
+{
+	glUseProgram(ID);
+}
+
 //template<typename T>
 //inline void Shader::Pass(const char * location, T value)
 //{

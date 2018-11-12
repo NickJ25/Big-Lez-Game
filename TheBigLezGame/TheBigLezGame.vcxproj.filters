@@ -96,6 +96,18 @@
     <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ModelLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Prop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MenuState.h">
@@ -158,14 +170,23 @@
     <ClInclude Include="src\CollisionComponent.h">
       <Filter>Header Files\GameObject\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectLoader.h">
-      <Filter>Header Files\GameObject\Components\SubComponents</Filter>
-    </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Header Files\Other</Filter>
     </ClInclude>
     <ClInclude Include="src\Shader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModelLoader.h">
+      <Filter>Header Files\GameObject\Components\SubComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model.h">
+      <Filter>Header Files\GameObject\Components\SubComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh.h">
+      <Filter>Header Files\GameObject\Components\SubComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Prop.h">
+      <Filter>Header Files\GameObject\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Shader.h"
+#include "Model.h"
 
 // Assimp Includes
 #include <assimp/Importer.hpp> // C++ importer interface
@@ -37,6 +38,9 @@ private:
 	vector<GLuint> indices;
 	vector<Texture> textures;
 
+	// Object Settings
+	bool m_isAnimated = false;
+	Model* testModel; // TEST
 
 	// Object Render Settings
 	Shader* m_currentShader;
@@ -52,7 +56,7 @@ private:
 	
 public:
 	RenderComponent(const char* mesh_filename) {
-
+		loadObject(mesh_filename); // TEST
 	};
 	void depthMask(GLboolean mode);
 	void cullFace(GLenum mode);

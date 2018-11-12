@@ -14,6 +14,7 @@ private:
 public:
 	Shader(const GLchar *vertexPath, const GLchar *fragmentPath);
 	GLuint getID();
+	void use();
 
 	template <typename T>
 	void Pass(const char* location, T value);
