@@ -17,11 +17,26 @@ private:
 	///////////////////////////////////////////////
 	// Find commmon similarities between Anim and Standard, make a class which does the main task but returns the rest back
 
-	// Object 
-	std::vector<GLfloat> verts;
-	std::vector<GLfloat> norms;
-	std::vector<GLfloat> texCoords;
-	std::vector<GLfloat> indices;
+	// Object Structures
+	struct Vertex
+	{
+		glm::vec3 s_Vertex;
+		glm::vec3 s_Normal;
+		glm::vec3 s_TexCoords;
+	};
+
+	struct Texture
+	{
+		GLuint ID;
+		string type;
+		aiString path;
+	};
+
+	// Mesh Data
+	vector<Vertex> vertices;
+	vector<GLuint> indices;
+	vector<Texture> textures;
+
 
 	// Object Render Settings
 	Shader* m_currentShader;
