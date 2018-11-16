@@ -8,9 +8,14 @@
 #include <vector>
 #include <iostream>
 
+#include "Camera.h"
+
 using namespace std;
 
 class Game {
+private:
+	Camera* mainCamera;
+
 public:
 	Game() {};
 	~Game() {};

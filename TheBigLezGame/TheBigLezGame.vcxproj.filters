@@ -108,6 +108,9 @@
     <ClCompile Include="src\Prop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MenuState.h">
@@ -187,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="src\Prop.h">
       <Filter>Header Files\GameObject\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

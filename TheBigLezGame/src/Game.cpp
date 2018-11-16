@@ -9,6 +9,7 @@
 
 
 GLuint meshObjects[1]; // Change to Vector
+vector<GameObject> gameObjects;
 GLuint textures[1];
 GLuint skybox[5];
 GLuint cubeIndexCount;
@@ -28,11 +29,13 @@ stack<glm::mat4> mvStack;
 
 GLuint toonProgram;
 GLuint skyboxProgram;
-Shader *toonShader; 
-
+Shader *toonShader;
 Model* test;
 Prop* test2;
 
+// Initalize Two Camera
+//Camera lezCamera();
+//Camera debugCamera();
 
 rt3d::lightStruct light0 = {
 	{1.0f, 1.0f, 1.0f, 1.0f}, // ambient

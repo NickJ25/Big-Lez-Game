@@ -1,6 +1,8 @@
 #pragma once
 #include "RenderComponent.h"
 #include "TransformComponent.h"
+#include "CollisionComponent.h"
+#include "PhysicsComponent.h"
 
 
 

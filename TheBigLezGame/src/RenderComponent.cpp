@@ -14,7 +14,6 @@ void RenderComponent::loadAnimObject(const char* mesh_filename)
 
 }
 
-
 void RenderComponent::depthMask(GLboolean mode)
 {
 	m_depthMask = mode;
@@ -36,7 +35,10 @@ void RenderComponent::Draw()
 	glCullFace(m_cullMode);
 	glDepthMask(m_depthMask);
 	glUseProgram(m_currentShader->getID());
+	m_currentShader->Pass("projection", );
+	m_currentShader->Pass("modelview", );
 	testModel->Draw(*m_currentShader); // TEST
+
 	// Do Transformations
 
 	// DRAW
