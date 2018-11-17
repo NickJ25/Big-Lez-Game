@@ -34,7 +34,7 @@ Model* test;
 Prop* test2;
 
 // Initalize Two Camera
-//Camera lezCamera();
+Camera lezCamera(eye, DYNAMIC);
 //Camera debugCamera();
 
 rt3d::lightStruct light0 = {
@@ -185,6 +185,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void Game::update()
 {
+	lezCamera.update();
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	if (keys[SDL_SCANCODE_W]) eye = moveForward(eye, r, 0.1f);
 	if (keys[SDL_SCANCODE_S]) eye = moveForward(eye, r, -0.1f);
@@ -198,6 +199,9 @@ void Game::update()
 	if (keys[SDL_SCANCODE_K]) lightPos[1] -= 0.2;
 	if (keys[SDL_SCANCODE_R]) eye.y += 0.1;
 	if (keys[SDL_SCANCODE_F]) eye.y -= 0.1;
+
+	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
+	else SDL_SetRelativeMouseMode(SDL_TRUE);
 
 	if (keys[SDL_SCANCODE_COMMA]) r -= 1.0f;
 	if (keys[SDL_SCANCODE_PERIOD]) r += 1.0f;
@@ -217,7 +221,7 @@ void Game::draw()
 	mvStack.push(modelview);
 
 	at = moveForward(eye, r, 1.0f);
-	mvStack.top() = glm::lookAt(eye, at, up);
+	mvStack.top() = lezCamera.lookAtMat();//glm::lookAt(eye, at, up);
 
 	glUseProgram(skyboxProgram);
 	rt3d::setUniformMatrix4fv(skyboxProgram, "projection", glm::value_ptr(projection));

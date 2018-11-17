@@ -35,8 +35,8 @@ void RenderComponent::Draw()
 	glCullFace(m_cullMode);
 	glDepthMask(m_depthMask);
 	glUseProgram(m_currentShader->getID());
-	m_currentShader->Pass("projection", );
-	m_currentShader->Pass("modelview", );
+	//m_currentShader->Pass("projection", );
+	//m_currentShader->Pass("modelview", );
 	testModel->Draw(*m_currentShader); // TEST
 
 	// Do Transformations
