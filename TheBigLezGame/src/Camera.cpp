@@ -23,7 +23,8 @@ void Camera::update()
 	if(m_camType = DYNAMIC){
 		//SDL_SetRelativeMouseMode(SDL_TRUE);
 		int xpos, ypos;
-		SDL_GetMouseState(&xpos, &ypos);//((GLint*)&mouseOffsetX, (GLint*)&mouseOffsetY);
+		
+		SDL_GetMouseState(&xpos, &ypos); /////////////////////////////////////////LIMITED, REACHES END OF SCREEN
 
 		if (firstCamLoad) {
 			lastOffsetX = (float)xpos;
@@ -31,19 +32,15 @@ void Camera::update()
 			firstCamLoad = false;
 		}
 		
-		//cout << xpos << " " << ypos << endl;
 		mouseOffsetX = (float)xpos - lastOffsetX;
 		mouseOffsetY =  (float)ypos - lastOffsetY;
 		lastOffsetX = (float)xpos;
 		lastOffsetY = (float)ypos;
 
-		//mouseOffsetX * this->m_mouseSensitivity;
-		//mouseOffsetY * this->m_mouseSensitivity;
-
 		this->m_yaw += mouseOffsetX *this->m_mouseSensitivity;
 		this->m_pitch += mouseOffsetY *this->m_mouseSensitivity;
 		//cout << m_yaw << " " << m_pitch << endl;
-		cout << "Yaw: " << m_yaw << " | Pitch: " << m_pitch << endl;
+		//cout << "Yaw: " << m_yaw << " | Pitch: " << m_pitch << " | MX: " << xpos << " | MY: " << ypos <<endl;
 
 		if (this->m_pitch > 89.0f)
 		{

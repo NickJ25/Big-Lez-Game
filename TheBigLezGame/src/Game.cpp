@@ -4,12 +4,14 @@
 #include "Shader.h"
 #include "Model.h"
 #include "Prop.h"
+#include "Light.h"
+#include "DirectionalLight.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
 
 GLuint meshObjects[1]; // Change to Vector
-vector<GameObject> gameObjects;
+vector<GameObject*> gameObjects;
 GLuint textures[1];
 GLuint skybox[5];
 GLuint cubeIndexCount;
@@ -30,20 +32,18 @@ stack<glm::mat4> mvStack;
 GLuint toonProgram;
 GLuint skyboxProgram;
 Shader *toonShader;
-Model* test;
-Prop* test2;
 
 // Initalize Two Camera
 Camera lezCamera(eye, DYNAMIC);
 //Camera debugCamera();
 
-rt3d::lightStruct light0 = {
-	{1.0f, 1.0f, 1.0f, 1.0f}, // ambient
-	{1.0f, 1.0f, 1.0f, 1.0f}, // diffuse
-	{1.0f, 1.0f, 1.0f, 1.0f}, // specular
-	{-10.0f, 10.0f, 10.0f, 1.0f}  // position
-};
-glm::vec4 lightPos(-7.0f, 3.6f, -7.5f, 1.0f); //light position
+//rt3d::lightStruct light0 = {
+//	{1.0f, 1.0f, 1.0f, 1.0f}, // ambient
+//	{1.0f, 1.0f, 1.0f, 1.0f}, // diffuse
+//	{1.0f, 1.0f, 1.0f, 1.0f}, // specular
+//	{-10.0f, 10.0f, 10.0f, 1.0f}  // position
+//};
+//glm::vec4 lightPos(-7.0f, 3.6f, -7.5f, 1.0f); //light position
 
 rt3d::materialStruct material0 = {
 	{0.0f, 0.8f, 0.2f, 1.0f}, // ambient
@@ -131,23 +131,21 @@ GLuint loadCubeMap(const char*fname[6], GLuint *texID)
 
 void Game::init()
 {
+	mainCamera = &lezCamera;
+	std::cout << "Game.cpp Init" << std::endl;
 	toonShader = new Shader("src/toonShader.vert", "src/toonShader.frag");
-	toonShader->Pass("in_Constant", f_att_c);
-	std::cout << "Game Startvvvv" << std::endl;
-	// Toon Shader Program
-	toonProgram = rt3d::initShaders("src/toonShader.vert", "src/toonShader.frag");
-	rt3d::setLight(toonProgram, light0);
-	rt3d::setMaterial(toonProgram, material0);
-	GLuint uniformIndex = glGetUniformLocation(toonProgram, "in_Constant");
-	glUniform1f(uniformIndex, f_att_c);
-	uniformIndex = glGetUniformLocation(toonProgram, "in_Linear");
-	glUniform1f(uniformIndex, f_att_l);
-	uniformIndex = glGetUniformLocation(toonProgram, "in_Quadratic");
-	glUniform1f(uniformIndex, f_att_q);
+
+	GameObject* dirLight = new DirectionalLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	dirLight->setShader(toonShader);
+	gameObjects.push_back(dirLight);
+	
+	GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
+	table->setShader(toonShader);
+	gameObjects.push_back(table);
+	
 
 	// Skybox Shader Program
 	skyboxProgram = rt3d::initShaders("src/skyboxShader.vert", "src/skyboxShader.frag");
-
 	// Load Skybox
 	const char *cubeTexFiles[6] = {
 		"assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
@@ -155,9 +153,6 @@ void Game::init()
 		"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp"
 	};
 	loadCubeMap(cubeTexFiles, &skybox[0]);
-
-	test = new Model("assets/Props/Table/table.obj");
-	test2 = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
 
 	vector<GLfloat> verts;
 	vector<GLfloat> norms;
@@ -185,18 +180,18 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void Game::update()
 {
+	for (int i = 0; i < gameObjects.size(); i++) {
+		if (gameObjects[i] != nullptr) {
+			gameObjects[i]->componentUpdate();
+			gameObjects[i]->update();
+		}
+	}
 	lezCamera.update();
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	if (keys[SDL_SCANCODE_W]) eye = moveForward(eye, r, 0.1f);
 	if (keys[SDL_SCANCODE_S]) eye = moveForward(eye, r, -0.1f);
 	if (keys[SDL_SCANCODE_A]) eye = moveRight(eye, r, -0.1f);
 	if (keys[SDL_SCANCODE_D]) eye = moveRight(eye, r, 0.1f);
-	if (keys[SDL_SCANCODE_Y]) lightPos[2] -= 0.2;//eye = moveForward(eye, r, 0.1f);
-	if (keys[SDL_SCANCODE_H]) lightPos[2] += 0.2;
-	if (keys[SDL_SCANCODE_G]) lightPos[0] -= 0.2;
-	if (keys[SDL_SCANCODE_J]) lightPos[0] += 0.2;
-	if (keys[SDL_SCANCODE_I]) lightPos[1] += 0.2;
-	if (keys[SDL_SCANCODE_K]) lightPos[1] -= 0.2;
 	if (keys[SDL_SCANCODE_R]) eye.y += 0.1;
 	if (keys[SDL_SCANCODE_F]) eye.y -= 0.1;
 
@@ -209,83 +204,64 @@ void Game::update()
 
 void Game::draw()
 {
+	glm::mat4 projection(1.0);
+	//projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1280.0f / 720.0f, 1.0f, 150.0f);
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glm::mat4 projection(1.0);
-	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 800.0f / 600.0f, 1.0f, 150.0f);
-	rt3d::setUniformMatrix4fv(toonProgram, "projection", glm::value_ptr(projection));
+	for (int i = 0; i < gameObjects.size(); i++) {
+		if (gameObjects[i] != nullptr) {
+			gameObjects[i]->componentDraw(mainCamera->lookAtMat());
+		}
+	}
+	
+	//rt3d::setUniformMatrix4fv(toonProgram, "projection", glm::value_ptr(projection));
 
-	GLfloat scale(1.0f);
+	//glm::mat4 modelview(1.0);
+	//mvStack.push(modelview);
 
-	glm::mat4 modelview(1.0);
-	mvStack.push(modelview);
+	//at = moveForward(eye, r, 1.0f);
+	//mvStack.top() = lezCamera.lookAtMat();//glm::lookAt(eye, at, up);
 
-	at = moveForward(eye, r, 1.0f);
-	mvStack.top() = lezCamera.lookAtMat();//glm::lookAt(eye, at, up);
+	//glUseProgram(skyboxProgram);
+	//rt3d::setUniformMatrix4fv(skyboxProgram, "projection", glm::value_ptr(projection));
 
-	glUseProgram(skyboxProgram);
-	rt3d::setUniformMatrix4fv(skyboxProgram, "projection", glm::value_ptr(projection));
+	//glDepthMask(GL_FALSE); // make sure writing to update depth test is off
+	//glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
+	//mvStack.push(glm::mat4(mvRotOnlyMat3));
+	//glCullFace(GL_FRONT); // drawing inside of cube!
 
-	glDepthMask(GL_FALSE); // make sure writing to update depth test is off
-	glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
-	mvStack.push(glm::mat4(mvRotOnlyMat3));
-	glCullFace(GL_FRONT); // drawing inside of cube!
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, skybox[0]);
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.5f, 1.5f, 1.5f));
+	//rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawIndexedMesh(meshObjects[0], cubeIndexCount, GL_TRIANGLES);
+	//mvStack.pop();
+	//glCullFace(GL_BACK);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox[0]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.5f, 1.5f, 1.5f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], cubeIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-	glCullFace(GL_BACK);
+	//// back to remainder of rendering
+	//glDepthMask(GL_TRUE); // make sure depth test is on
 
-	// back to remainder of rendering
-	glDepthMask(GL_TRUE); // make sure depth test is on
+	//glUseProgram(toonProgram);
 
-	glUseProgram(toonProgram);
+	//rt3d::setUniformMatrix4fv(toonProgram, "projection", glm::value_ptr(projection));
 
-	glm::vec4 tmp = mvStack.top()*lightPos;
-	light0.position[0] = tmp.x;
-	light0.position[1] = tmp.y;
-	light0.position[2] = tmp.z;
-	rt3d::setLightPos(toonProgram, glm::value_ptr(tmp));
+	//mvStack.push(mvStack.top());
+	//mvStack.push(mvStack.top());
+	//mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, 0.0f));
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.0f, 1.0f, 1.0f));
+	//rt3d::setUniformMatrix4fv(toonProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//mvStack.pop();
 
-	rt3d::setUniformMatrix4fv(toonProgram, "projection", glm::value_ptr(projection));
+	//// draw a cube for ground plane
+	//glBindTexture(GL_TEXTURE_2D, textures[0]);
+	//mvStack.push(mvStack.top());
+	//mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.1f, 0.0f));
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(5.0f, 0.1f, 5.0f));
+	//rt3d::setUniformMatrix4fv(toonProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::setMaterial(toonProgram, material0);
+	//rt3d::drawIndexedMesh(meshObjects[0], cubeIndexCount, GL_TRIANGLES);
+	//mvStack.pop();
 
-	mvStack.push(mvStack.top());
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, 0.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.0f, 1.0f, 1.0f));
-	rt3d::setUniformMatrix4fv(toonProgram, "modelview", glm::value_ptr(mvStack.top()));
-	//test->Draw(*toonShader);
-	test2->setShadertemp(toonShader);
-	test2->componentDraw();
-	mvStack.pop();
-
-	// draw a cube for ground plane
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.1f, 0.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(5.0f, 0.1f, 5.0f));
-	rt3d::setUniformMatrix4fv(toonProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::setMaterial(toonProgram, material0);
-	rt3d::drawIndexedMesh(meshObjects[0], cubeIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-
-
-	// draw a cube for light
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(lightPos[0], lightPos[1], lightPos[2]));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.0f, 1.0f, 1.0f));
-	rt3d::setUniformMatrix4fv(toonProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::setMaterial(toonProgram, material0);
-	rt3d::drawIndexedMesh(meshObjects[0], cubeIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-
-
-
-
-	mvStack.pop(); // initial matrix
-	glDepthMask(GL_TRUE);
+	//mvStack.pop(); // initial matrix
+	//glDepthMask(GL_TRUE);
 }

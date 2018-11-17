@@ -3,6 +3,7 @@
 #include "TransformComponent.h"
 #include "CollisionComponent.h"
 #include "PhysicsComponent.h"
+#include "Shader.h"
 
 
 
@@ -13,6 +14,8 @@ protected:
 	TransformComponent* transformComponent;
 	RenderComponent* renderComponent;
 	glm::vec4 objPosition;
+	Shader* objShader;
+
 public:
 	GameObject(glm::vec3 pos) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
 		transformComponent = new TransformComponent(objPosition);
@@ -32,6 +35,7 @@ public:
 	void Move(glm::vec3 moveAmount);
 	void Rotate(glm::vec3 rotateAmount);
 	void Scale(glm::vec3 scaleAmount);
+	void setShader(Shader* shader);
 	void componentUpdate();
-	void componentDraw();
+	void componentDraw(glm::mat4 view);
 };

@@ -2,5 +2,5 @@
 
 void Prop::update()
 {
-	std::cout << "blah" << endl;
+	//std::cout << "blah" << endl;
 }

@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\DirectionalLight.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="src\MainMenu.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\OptionsMenu.cpp" />
+    <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\Prop.cpp" />
     <ClCompile Include="src\RenderComponent.cpp" />
     <ClCompile Include="src\rt3d.cpp" />
@@ -170,9 +172,15 @@
     <ClCompile Include="src\ScoreboardMenu.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\SinglePlayerMenu.cpp" />
+    <ClCompile Include="src\SpotLight.cpp" />
     <ClCompile Include="src\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MapReader.h" />
+    <ClInclude Include="src\PointLight.h" />
+    <ClInclude Include="src\SpotLight.h" />
+    <ClInclude Include="src\DirectionalLight.h" />
+    <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Prop.h" />
     <ClInclude Include="src\Mesh.h" />

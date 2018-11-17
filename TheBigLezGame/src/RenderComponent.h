@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <vector>
+#include <stack>
 
 #include "Shader.h"
 #include "Model.h"
@@ -48,6 +49,10 @@ private:
 	GLenum m_cullMode = GL_BACK;
 	string directory;
 
+	stack<glm::mat4> mvStack;
+	glm::mat4 projection;
+	glm::mat4 m_view;
+
 	GLfloat indexNum;
 	void loadObject(const char* mesh_filename);
 	void loadAnimObject(const char * mesh_filename);
@@ -57,9 +62,11 @@ private:
 public:
 	RenderComponent(const char* mesh_filename) {
 		loadObject(mesh_filename); // TEST
+		projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 	};
 	void depthMask(GLboolean mode);
 	void cullFace(GLenum mode);
+	void setView(glm::mat4 view);
 	void changeShader(Shader* newShader);
 	void Draw();
 
