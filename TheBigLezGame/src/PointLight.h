@@ -14,8 +14,8 @@ private:
 
 	GLuint shaderID;
 public:
-	PointLight(glm::vec3 position, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) : Light(position),
-		m_ambient(ambient), m_diffuse(diffuse), m_specular(specular) {
+	PointLight(glm::vec3 position, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 attenuation) : Light(position),
+		 m_ambient(ambient), m_diffuse(diffuse), m_specular(specular), constant(attenuation.x), linear(attenuation.y), quadratic(attenuation.z) {
 
 	};
 

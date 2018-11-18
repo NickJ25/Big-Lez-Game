@@ -37,6 +37,8 @@ public:
 		delete m_followPos;
 	}
 	glm::mat4 lookAtMat();
+	glm::vec3 getCameraFront();
+	glm::vec3 getCameraPos();
 	//void lookAt(GameObject object);
 	//void lookAt(0);
 	void follow(glm::vec3 &position);

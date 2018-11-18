@@ -19,25 +19,6 @@ private:
 	///////////////////////////////////////////////
 	// Find commmon similarities between Anim and Standard, make a class which does the main task but returns the rest back
 
-	// Object Structures
-	struct Vertex
-	{
-		glm::vec3 s_Vertex;
-		glm::vec3 s_Normal;
-		glm::vec3 s_TexCoords;
-	};
-
-	struct Texture
-	{
-		GLuint ID;
-		string type;
-		aiString path;
-	};
-
-	// Mesh Data
-	vector<Vertex> vertices;
-	vector<GLuint> indices;
-	vector<Texture> textures;
 
 	// Object Settings
 	bool m_isAnimated = false;
@@ -52,6 +33,7 @@ private:
 	stack<glm::mat4> mvStack;
 	glm::mat4 projection;
 	glm::mat4 m_view;
+	glm::mat4 m_model;
 
 	GLfloat indexNum;
 	void loadObject(const char* mesh_filename);
@@ -67,6 +49,7 @@ public:
 	void depthMask(GLboolean mode);
 	void cullFace(GLenum mode);
 	void setView(glm::mat4 view);
+	void setDrawMatrix(glm::mat4 matrix);
 	void changeShader(Shader* newShader);
 	void Draw();
 

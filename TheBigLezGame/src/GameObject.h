@@ -18,7 +18,7 @@ protected:
 
 public:
 	GameObject(glm::vec3 pos) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
-		transformComponent = new TransformComponent(objPosition);
+		transformComponent = new TransformComponent(glm::vec4(pos,1.0f));
 	}
 
 	GameObject(glm::vec3 pos, const char* filename) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
@@ -33,7 +33,7 @@ public:
 
 	virtual void update() = 0;
 	void Move(glm::vec3 moveAmount);
-	void Rotate(glm::vec3 rotateAmount);
+	void Rotate(GLfloat degrees, glm::vec3 rotateAmount);
 	void Scale(glm::vec3 scaleAmount);
 	void setShader(Shader* shader);
 	void componentUpdate();

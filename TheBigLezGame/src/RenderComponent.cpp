@@ -27,6 +27,11 @@ void RenderComponent::setView(glm::mat4 view)
 	m_view = view;
 }
 
+void RenderComponent::setDrawMatrix(glm::mat4 matrix)
+{
+	m_model = matrix;
+}
+
 void RenderComponent::changeShader(Shader* newShader)
 {
 	m_currentShader = newShader;
@@ -45,14 +50,16 @@ void RenderComponent::Draw()
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "view"), 1, GL_FALSE, glm::value_ptr(m_view));
 	cout << "View: " << glGetUniformLocation(shaderID, "view") << endl;
 	glm::mat4 i(1.0);
-	glUniformMatrix4fv(glGetUniformLocation(shaderID, "model"), 1, GL_FALSE, glm::value_ptr(i));
+	//i = glm::translate(i, glm::vec3(0.0, 5.0f, 0.0f));
+	glUniformMatrix4fv(glGetUniformLocation(shaderID, "model"), 1, GL_FALSE, glm::value_ptr(m_model));
 	cout << "Model: " << glGetUniformLocation(shaderID, "model") << endl;
-	mvStack.push(i);
-	mvStack.top() = m_view;
+	//mvStack.push(i);
+	//mvStack.top() = m_view;
+	//mvStack.top() = mvStack.top() * m_model;
 	// Draw Items////////////////
 	testModel->Draw(*m_currentShader); // TEST
 	// End Draw Items////////////
-	mvStack.pop();
+	//mvStack.pop();
 	//m_currentShader->Pass("projection", );
 	//m_currentShader->Pass("model", );
 	//m_currentShader->Pass("view", );

@@ -6,35 +6,23 @@
 #include "Prop.h"
 #include "Light.h"
 #include "DirectionalLight.h"
+#include "SpotLight.h"
+#include "PointLight.h"
 
-#define DEG_TO_RADIAN 0.017453293
-
-
-GLuint meshObjects[1]; // Change to Vector
 vector<GameObject*> gameObjects;
-GLuint textures[1];
 GLuint skybox[5];
-GLuint cubeIndexCount;
-GLfloat r = 0.0f;
 
 // Attenuation Parameters
 GLfloat f_att_c = 1.0f;
 GLfloat f_att_l = 0.0f;
 GLfloat f_att_q = 0.01f;
 
-// Camera Properties
-glm::vec3 eye(0.0f, 1.0f, 3.0f);
-glm::vec3 at(0.0f, 1.0f, 2.0f);
-glm::vec3 up(0.0f, 1.0f, 0.0f);
-
 stack<glm::mat4> mvStack;
 
-GLuint toonProgram;
-GLuint skyboxProgram;
 Shader *toonShader;
 
 // Initalize Two Camera
-Camera lezCamera(eye, DYNAMIC);
+Camera lezCamera(glm::vec3(0.0f, 4.0f, 6.0f), DYNAMIC);
 //Camera debugCamera();
 
 //rt3d::lightStruct light0 = {
@@ -51,6 +39,10 @@ rt3d::materialStruct material0 = {
 	{0.0f, 0.1f, 0.0f, 1.0f}, // specular
 	2.0f  // shininess
 };
+
+int diffuse = 0;
+int specular = 1;
+float shininess = 32.0f;
 
 // A simple texture loading function
 // lots of room for improvement - and better error checking!
@@ -135,48 +127,55 @@ void Game::init()
 	std::cout << "Game.cpp Init" << std::endl;
 	toonShader = new Shader("src/toonShader.vert", "src/toonShader.frag");
 
-	GameObject* dirLight = new DirectionalLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
 	dirLight->setShader(toonShader);
 	gameObjects.push_back(dirLight);
+	GameObject* spotLight = new SpotLight(mainCamera->getCameraPos(), mainCamera->getCameraFront(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.1f), 0.4, 3);
+	spotLight->setShader(toonShader);
+	gameObjects.push_back(spotLight);
+	//GameObject* pointLight = new PointLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.09f, 0.05f, 0.09f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.09f, 0.32f));
+	//pointLight->setShader(toonShader);
+	//gameObjects.push_back(pointLight);
 	
 	GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
 	table->setShader(toonShader);
+	//table->Move(glm::vec3(10.0f, 0.0f, 0.0f));
 	gameObjects.push_back(table);
 	
 
-	// Skybox Shader Program
-	skyboxProgram = rt3d::initShaders("src/skyboxShader.vert", "src/skyboxShader.frag");
-	// Load Skybox
-	const char *cubeTexFiles[6] = {
-		"assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
-		"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
-		"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp"
-	};
-	loadCubeMap(cubeTexFiles, &skybox[0]);
+	//// Skybox Shader Program
+	//skyboxProgram = rt3d::initShaders("src/skyboxShader.vert", "src/skyboxShader.frag");
+	//// Load Skybox
+	//const char *cubeTexFiles[6] = {
+	//	"assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
+	//	"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
+	//	"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp"
+	//};
+	//loadCubeMap(cubeTexFiles, &skybox[0]);
 
-	vector<GLfloat> verts;
-	vector<GLfloat> norms;
-	vector<GLfloat> tex_coords;
-	vector<GLuint> indices;
+	//vector<GLfloat> verts;
+	//vector<GLfloat> norms;
+	//vector<GLfloat> tex_coords;
+	//vector<GLuint> indices;
 
-	rt3d::loadObj("assets/cube.obj", verts, norms, tex_coords, indices);
-	cubeIndexCount = indices.size();
-	meshObjects[0] = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), cubeIndexCount, indices.data());
+	//rt3d::loadObj("assets/cube.obj", verts, norms, tex_coords, indices);
+	//cubeIndexCount = indices.size();
+	//meshObjects[0] = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), cubeIndexCount, indices.data());
 
-	textures[0] = loadBitmap("assets/test.bmp");
+	//textures[0] = loadBitmap("assets/test.bmp");
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d) {
-	return glm::vec3(pos.x + d * std::sin(r*DEG_TO_RADIAN), pos.y, pos.z - d * std::cos(r*DEG_TO_RADIAN));
-}
-
-glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
-	return glm::vec3(pos.x + d * std::cos(r*DEG_TO_RADIAN), pos.y, pos.z + d * std::sin(r*DEG_TO_RADIAN));
-}
+//glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d) {
+//	return glm::vec3(pos.x + d * std::sin(r*DEG_TO_RADIAN), pos.y, pos.z - d * std::cos(r*DEG_TO_RADIAN));
+//}
+//
+//glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
+//	return glm::vec3(pos.x + d * std::cos(r*DEG_TO_RADIAN), pos.y, pos.z + d * std::sin(r*DEG_TO_RADIAN));
+//}
 
 void Game::update()
 {
@@ -188,18 +187,8 @@ void Game::update()
 	}
 	lezCamera.update();
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	if (keys[SDL_SCANCODE_W]) eye = moveForward(eye, r, 0.1f);
-	if (keys[SDL_SCANCODE_S]) eye = moveForward(eye, r, -0.1f);
-	if (keys[SDL_SCANCODE_A]) eye = moveRight(eye, r, -0.1f);
-	if (keys[SDL_SCANCODE_D]) eye = moveRight(eye, r, 0.1f);
-	if (keys[SDL_SCANCODE_R]) eye.y += 0.1;
-	if (keys[SDL_SCANCODE_F]) eye.y -= 0.1;
-
 	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
 	else SDL_SetRelativeMouseMode(SDL_TRUE);
-
-	if (keys[SDL_SCANCODE_COMMA]) r -= 1.0f;
-	if (keys[SDL_SCANCODE_PERIOD]) r += 1.0f;
 }
 
 void Game::draw()
@@ -208,6 +197,16 @@ void Game::draw()
 	//projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1280.0f / 720.0f, 1.0f, 150.0f);
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse"), diffuse);
+	cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
+	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular"), specular);
+	cout << "specular; " << glGetUniformLocation(toonShader->getID(), "material.specular") << endl;
+	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
+	cout << "shininess; " << glGetUniformLocation(toonShader->getID(), "material.shininess") << endl;
+	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainCamera->getCameraPos().x, mainCamera->getCameraPos().y, mainCamera->getCameraPos().z);
+	cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
+
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
 			gameObjects[i]->componentDraw(mainCamera->lookAtMat());

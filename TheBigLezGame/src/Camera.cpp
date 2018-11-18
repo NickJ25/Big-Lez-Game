@@ -5,6 +5,16 @@ glm::mat4 Camera::lookAtMat()
 	return glm::lookAt(m_position, m_position - m_front ,m_up);
 }
 
+glm::vec3 Camera::getCameraFront()
+{
+	return m_front;
+}
+
+glm::vec3 Camera::getCameraPos()
+{
+	return m_position;
+}
+
 void Camera::follow(glm::vec3 &objPosition)
 {
 	m_followPos = &objPosition;
