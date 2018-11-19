@@ -8,6 +8,14 @@
 #include <vector>
 #include <iostream>
 
+//test include
+#include "Shader.h"
+#include "Model.h"
+#include "Prop.h"
+#include "Light.h"
+#include "DirectionalLight.h"
+#include "SpotLight.h"
+#include "PointLight.h"
 #include "Camera.h"
 
 using namespace std;

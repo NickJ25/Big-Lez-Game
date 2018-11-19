@@ -49,12 +49,18 @@
     <Filter Include="Header Files\GameObject\GameObjects\Lights Types">
       <UniqueIdentifier>{afdfe8c3-851b-4174-a230-5a057711fd41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GameObject\Components\SubComponents">
+      <UniqueIdentifier>{7d03f6ea-a6d3-4531-a5ae-48b012c52c62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObject\GameObjects">
+      <UniqueIdentifier>{7a3fcaed-014b-4dc3-9f14-b0d87cdbc339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObject\GameObjects\Light Types">
+      <UniqueIdentifier>{db36dc14-8b8d-45e8-b273-2299905e5a59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AudioMenu.cpp">
@@ -99,29 +105,32 @@
     <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModelLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Prop.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SpotLight.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>Source Files\GameObject\Components\SubComponents</Filter>
     </ClCompile>
-    <ClCompile Include="src\PointLight.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Menu.cpp">
+      <Filter>Source Files\GameObject\Components\SubComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Source Files\GameObject\Components\SubComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelLoader.cpp">
+      <Filter>Source Files\GameObject\Components\SubComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Prop.cpp">
+      <Filter>Source Files\GameObject\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="src\DirectionalLight.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\GameObject\GameObjects\Light Types</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpotLight.cpp">
+      <Filter>Source Files\GameObject\GameObjects\Light Types</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PointLight.cpp">
+      <Filter>Source Files\GameObject\GameObjects\Light Types</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
