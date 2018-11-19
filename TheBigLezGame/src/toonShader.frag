@@ -58,7 +58,7 @@ uniform vec3 viewPos;
 uniform Material material;
 uniform Light light;
 uniform DirLight dirLight;
-uniform PointLight pointLights[NUMBER_OF_POINT_LIGHTS];
+uniform PointLight pointLights[1];
 
 vec3 CalcDirLight( DirLight light, vec3 normal, vec3 viewDir );
 vec3 CalcSpotLight( Light light, vec3 normal, vec3 fragPos, vec3 viewDir );
@@ -82,7 +82,7 @@ void main( )
         result += CalcPointLight( pointLights[i], norm, FragPos, viewDir );
     }
     
-    color = vec4( result, 1.0 );
+    color = vec4( result , 1.0 );
 }
 
 

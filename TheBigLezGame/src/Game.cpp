@@ -38,12 +38,13 @@ void Game::init()
 	GameObject* spotLight = new SpotLight(mainCamera->getCameraPos(), mainCamera->getCameraFront(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.1f), 0.4, 3);
 	spotLight->setShader(toonShader);
 	gameObjects.push_back(spotLight);
-	//GameObject* pointLight = new PointLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.09f, 0.05f, 0.09f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.09f, 0.32f));
-	//pointLight->setShader(toonShader);
-	//gameObjects.push_back(pointLight);
+	GameObject* pointLight = new PointLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.09f, 0.05f, 0.09f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.09f, 0.32f));
+	pointLight->setShader(toonShader);
+	gameObjects.push_back(pointLight);
 	
 	GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
 	table->setShader(toonShader);
+	table->Rotate(90, glm::vec3(1, 1, 1));
 	//table->Move(glm::vec3(10.0f, 0.0f, 0.0f));
 	gameObjects.push_back(table);
 	
