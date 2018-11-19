@@ -1,16 +1,14 @@
-// textured.frag
-#version 330
+#version 430 core
 
-// Some drivers require the following
-precision highp float;
+in vec3 text_coords;
 
-uniform samplerCube textureUnit0;
+out vec4 f_color;
 
-in vec3 ex_TexCoord;
-layout(location = 0) out vec4 out_Color;
- 
-void main(void) {
-    
-	// Fragment colour
-	out_Color = texture(textureUnit0, ex_TexCoord);
+uniform samplerCube skybox;
+
+void main()
+{
+
+	f_color = texture( skybox, text_coords);
+	
 }

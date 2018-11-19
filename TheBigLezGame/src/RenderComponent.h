@@ -28,14 +28,18 @@ private:
 	Shader* m_currentShader;
 	GLboolean m_depthMask = GL_TRUE;
 	GLenum m_cullMode = GL_BACK;
-	string directory;
-
-	stack<glm::mat4> mvStack;
+	GLuint m_overrideTexture; // Override texture before draw
+	
+	//string directory;
+	
+	// Object Transformations
 	glm::mat4 projection;
 	glm::mat4 m_view;
 	glm::mat4 m_model;
 
-	GLfloat indexNum;
+	
+
+	//GLfloat indexNum;
 	void loadObject(const char* mesh_filename);
 	void loadAnimObject(const char * mesh_filename);
 
@@ -50,6 +54,7 @@ public:
 	void cullFace(GLenum mode);
 	void setView(glm::mat4 view);
 	void setDrawMatrix(glm::mat4 matrix);
+	void textureOverride(GLuint textureID);
 	void changeShader(Shader* newShader);
 	void Draw();
 

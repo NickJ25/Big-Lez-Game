@@ -1,23 +1,19 @@
-// textured.vert
-// use textures, but no lighting
-#version 330
+#version 430 core
 
-uniform mat4 modelview;
+layout(location = 0) in vec3 in_position;
+
+out vec3 text_coords;
+
+uniform mat4 view;
 uniform mat4 projection;
+mat4 VP;
 
-in  vec3 in_Position;
-//in  vec3 in_Colour; // colour not used with lighting
-//in  vec3 in_Normal;
-//out vec4 ex_Color;
+void main()
+{
+	VP = view * projection;
+	vec4 pos = VP * vec4( in_position, 1.0);
+	gl_Position = pos.xyww; // optimization !! its work with glDepthFunc(GL_LEQUAL);
+							// and draw skybox after scene !!!
 
-out vec3 ex_TexCoord;
-
-// multiply each vertex position by the MVP matrix
-void main(void) {
-
-	// vertex into eye coordinates
-	vec4 vertexPosition = modelview * vec4(in_Position,1.0);
-    gl_Position = projection * vertexPosition;
-
-	ex_TexCoord = normalize(in_Position);
+	text_coords = in_position;
 }

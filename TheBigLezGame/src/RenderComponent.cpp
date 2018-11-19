@@ -32,6 +32,11 @@ void RenderComponent::setDrawMatrix(glm::mat4 matrix)
 	m_model = matrix;
 }
 
+void RenderComponent::textureOverride(GLuint textureID)
+{
+	m_overrideTexture = textureID;
+}
+
 void RenderComponent::changeShader(Shader* newShader)
 {
 	m_currentShader = newShader;
@@ -44,18 +49,14 @@ void RenderComponent::Draw()
 	glDepthMask(m_depthMask);
 	glUseProgram(m_currentShader->getID());
 
-	int shaderID = m_currentShader->getID();
+	int shaderID = m_currentShader->getID(); // TEMP
+	if(m_overrideTexture == NULL) glBindTexture(m_currentShader->getID(), m_overrideTexture); // Override textures
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-	cout << "Projection: " << glGetUniformLocation(shaderID, "projection") << endl;
+	cout << "Projection: " << glGetUniformLocation(shaderID, "projection") << endl; // TEMP
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "view"), 1, GL_FALSE, glm::value_ptr(m_view));
-	cout << "View: " << glGetUniformLocation(shaderID, "view") << endl;
-	glm::mat4 i(1.0);
-	//i = glm::translate(i, glm::vec3(0.0, 5.0f, 0.0f));
+	cout << "View: " << glGetUniformLocation(shaderID, "view") << endl; // TEMP
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "model"), 1, GL_FALSE, glm::value_ptr(m_model));
-	cout << "Model: " << glGetUniformLocation(shaderID, "model") << endl;
-	//mvStack.push(i);
-	//mvStack.top() = m_view;
-	//mvStack.top() = mvStack.top() * m_model;
+	cout << "Model: " << glGetUniformLocation(shaderID, "model") << endl; // TEMP
 	// Draw Items////////////////
 	testModel->Draw(*m_currentShader); // TEST
 	// End Draw Items////////////
@@ -63,11 +64,4 @@ void RenderComponent::Draw()
 	//m_currentShader->Pass("projection", );
 	//m_currentShader->Pass("model", );
 	//m_currentShader->Pass("view", );
-
-
-	// Do Transformations
-
-	// DRAW
-
-	// Repeat
 }

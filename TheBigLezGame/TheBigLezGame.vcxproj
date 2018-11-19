@@ -172,11 +172,13 @@
     <ClCompile Include="src\ScoreboardMenu.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\SinglePlayerMenu.cpp" />
+    <ClCompile Include="src\Skybox.cpp" />
     <ClCompile Include="src\SpotLight.cpp" />
     <ClCompile Include="src\TransformComponent.cpp" />
+    <ClCompile Include="src\TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MapReader.h" />
+    <ClInclude Include="src\MapReader.h" />
     <ClInclude Include="src\PointLight.h" />
     <ClInclude Include="src\SpotLight.h" />
     <ClInclude Include="src\DirectionalLight.h" />
@@ -207,9 +209,12 @@
     <ClInclude Include="src\ScoreboardMenu.h" />
     <ClInclude Include="src\SinglePlayerMenu.h" />
     <ClInclude Include="src\TransformComponent.h" />
+    <ClInclude Include="src\TextureLoader.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\skyboxShader.frag" />
+    <None Include="src\skyboxShader.vert" />
     <None Include="src\toonShader.frag" />
     <None Include="src\toonShader.vert" />
   </ItemGroup>

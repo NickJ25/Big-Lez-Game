@@ -132,6 +132,12 @@
     <ClCompile Include="src\PointLight.cpp">
       <Filter>Source Files\GameObject\GameObjects\Light Types</Filter>
     </ClCompile>
+    <ClCompile Include="src\Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MenuState.h">
@@ -227,7 +233,10 @@
     <ClInclude Include="src\PointLight.h">
       <Filter>Header Files\GameObject\GameObjects\Lights Types</Filter>
     </ClInclude>
-    <ClInclude Include="MapReader.h">
+    <ClInclude Include="src\MapReader.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureLoader.h">
       <Filter>Header Files\Other</Filter>
     </ClInclude>
   </ItemGroup>
@@ -236,6 +245,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="src\toonShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\skyboxShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\skyboxShader.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

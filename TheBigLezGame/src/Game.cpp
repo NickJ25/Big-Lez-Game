@@ -2,6 +2,7 @@
 
 vector<GameObject*> gameObjects;
 Shader *toonShader;
+Shader *skyBox;
 
 // Initalize Two Camera
 Camera lezCamera(glm::vec3(0.0f, 4.0f, 6.0f), DYNAMIC);
@@ -28,9 +29,17 @@ float shininess = 32.0f;
 
 void Game::init()
 {
+
 	mainCamera = &lezCamera;
 	std::cout << "Game.cpp Init" << std::endl;
 	toonShader = new Shader("src/toonShader.vert", "src/toonShader.frag");
+	skyBox = new Shader("src/skyboxShader.vert", "src/skyboxShader.frag");
+
+	GameObject* skybox = new Skybox("assets\Skybox\back.bmp", "assets\Skybox\front.bmp",
+									"assets\Skybox\left.bmp", "assets\Skybox\right.bmp",
+									"assets\Skybox\top.bmp", "assets\Skybox\bottom.bmp");
+	skybox->setShader(skyBox);
+	gameObjects.push_back(skybox);
 
 	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
 	dirLight->setShader(toonShader);
@@ -44,9 +53,10 @@ void Game::init()
 	
 	GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
 	table->setShader(toonShader);
-	table->Rotate(90, glm::vec3(1, 1, 1));
-	//table->Move(glm::vec3(10.0f, 0.0f, 0.0f));
 	gameObjects.push_back(table);
+	GameObject* couch = new Prop("assets/Props/Couch/couch.obj", glm::vec3(5.0f, 0.0f, 5.0f));
+	couch->setShader(toonShader);
+	gameObjects.push_back(couch);
 	
 
 	glEnable(GL_DEPTH_TEST);

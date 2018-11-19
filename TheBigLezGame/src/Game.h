@@ -17,6 +17,7 @@
 #include "SpotLight.h"
 #include "PointLight.h"
 #include "Camera.h"
+#include "Skybox.h"
 
 using namespace std;
 
