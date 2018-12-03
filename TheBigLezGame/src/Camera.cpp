@@ -2,7 +2,7 @@
 
 glm::mat4 Camera::lookAtMat()
 {
-	return glm::lookAt(m_position, m_position - m_front ,m_up);
+	return glm::lookAt(m_position, m_position - m_front ,m_up); // + ?
 }
 
 glm::vec3 Camera::getCameraFront()

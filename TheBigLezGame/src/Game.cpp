@@ -1,8 +1,8 @@
 #include "Game.h"
 
 vector<GameObject*> gameObjects;
+Skybox* skybox;
 Shader *toonShader;
-Shader *skyBox;
 
 // Initalize Two Camera
 Camera lezCamera(glm::vec3(0.0f, 4.0f, 6.0f), DYNAMIC);
@@ -29,18 +29,15 @@ float shininess = 32.0f;
 
 void Game::init()
 {
-
 	mainCamera = &lezCamera;
 	std::cout << "Game.cpp Init" << std::endl;
 	toonShader = new Shader("src/toonShader.vert", "src/toonShader.frag");
-	skyBox = new Shader("src/skyboxShader.vert", "src/skyboxShader.frag");
 
-	GameObject* skybox = new Skybox("assets\Skybox\back.bmp", "assets\Skybox\front.bmp",
-									"assets\Skybox\left.bmp", "assets\Skybox\right.bmp",
-									"assets\Skybox\top.bmp", "assets\Skybox\bottom.bmp");
-	skybox->setShader(skyBox);
-	gameObjects.push_back(skybox);
+	skybox = new Skybox("assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
+						"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
+						"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp");
 
+	////	Init Objects	////
 	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
 	dirLight->setShader(toonShader);
 	gameObjects.push_back(dirLight);
@@ -82,7 +79,7 @@ void Game::draw()
 {
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	glEnable(GL_DEPTH_TEST);
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse"), diffuse);
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
@@ -91,6 +88,9 @@ void Game::draw()
 	//cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
 	//cout << "specular; " << glGetUniformLocation(toonShader->getID(), "material.specular") << endl;
 	//cout << "shininess; " << glGetUniformLocation(toonShader->getID(), "material.shininess") << endl;
+	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
+
+	skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
 
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {

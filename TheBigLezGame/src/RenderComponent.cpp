@@ -52,11 +52,11 @@ void RenderComponent::Draw()
 	int shaderID = m_currentShader->getID(); // TEMP
 	if(m_overrideTexture == NULL) glBindTexture(m_currentShader->getID(), m_overrideTexture); // Override textures
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-	cout << "Projection: " << glGetUniformLocation(shaderID, "projection") << endl; // TEMP
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "view"), 1, GL_FALSE, glm::value_ptr(m_view));
-	cout << "View: " << glGetUniformLocation(shaderID, "view") << endl; // TEMP
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "model"), 1, GL_FALSE, glm::value_ptr(m_model));
-	cout << "Model: " << glGetUniformLocation(shaderID, "model") << endl; // TEMP
+	//cout << "Projection: " << glGetUniformLocation(shaderID, "projection") << endl; // TEMP
+	//cout << "Model: " << glGetUniformLocation(shaderID, "model") << endl; // TEMP
+	//cout << "View: " << glGetUniformLocation(shaderID, "view") << endl; // TEMP
 	// Draw Items////////////////
 	testModel->Draw(*m_currentShader); // TEST
 	// End Draw Items////////////

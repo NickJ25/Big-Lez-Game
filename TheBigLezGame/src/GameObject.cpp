@@ -23,6 +23,21 @@ void GameObject::setShader(Shader * shader)
 	}
 }
 
+glm::vec3 GameObject::getPosition()
+{
+	return transformComponent->getPosition();
+}
+
+void GameObject::addCollision(glm::vec3 size)
+{
+	collisionComponent = new CollisionComponent(size);
+}
+
+glm::vec3 GameObject::getCollision()
+{
+	return collisionComponent->getCollision();
+}
+
 void GameObject::componentUpdate()
 {
 

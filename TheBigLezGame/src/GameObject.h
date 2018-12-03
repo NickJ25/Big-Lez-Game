@@ -13,6 +13,7 @@ class GameObject {
 protected:
 	TransformComponent* transformComponent;
 	RenderComponent* renderComponent;
+	class CollisionComponent* collisionComponent;
 	glm::vec4 objPosition;
 	Shader* objShader;
 
@@ -36,6 +37,11 @@ public:
 	void Rotate(GLfloat degrees, glm::vec3 rotateAmount);
 	void Scale(glm::vec3 scaleAmount);
 	void setShader(Shader* shader);
+	glm::vec3 getPosition();
+
+	void addCollision(glm::vec3 size);
+	glm::vec3 getCollision();
+
 	void componentUpdate();
 	void componentDraw(glm::mat4 view);
 };
