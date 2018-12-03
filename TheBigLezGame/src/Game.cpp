@@ -84,13 +84,13 @@ void Game::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse"), diffuse);
-	cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular"), specular);
-	cout << "specular; " << glGetUniformLocation(toonShader->getID(), "material.specular") << endl;
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
-	cout << "shininess; " << glGetUniformLocation(toonShader->getID(), "material.shininess") << endl;
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainCamera->getCameraPos().x, mainCamera->getCameraPos().y, mainCamera->getCameraPos().z);
-	cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
+	//cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
+	//cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
+	//cout << "specular; " << glGetUniformLocation(toonShader->getID(), "material.specular") << endl;
+	//cout << "shininess; " << glGetUniformLocation(toonShader->getID(), "material.shininess") << endl;
 
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
