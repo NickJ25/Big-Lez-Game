@@ -7,51 +7,106 @@
 #include <chrono>
 #include <algorithm>
 #include "Menu.h"
+#include <GLFW/glfw3.h>
+#include "Game.h"
 
 
 const static float SCREEN_HEIGHT = 1280;
 const static float SCREEN_WIDTH = 720;
+int SCREENWIDTH, SCREENHEIGHT;
 const static float PREFERED_FPS = 60.0f;
-Menu menuSystem;
 
 using namespace std;
+
+//glfw init stuff
+GLFWwindow *window;
+bool keys[1024];
+GLfloat lastX = 400, lastY = 300;
+bool firstMouse = true;
+
+GLfloat deltaTime = 0.0f;
+GLfloat lastFrame = 0.0f;
 
 #if _DEBUG
 #pragma comment(linker, "/subsystem:\"console\" /entry:\"WinMainCRTStartup\"")
 #endif
 
-SDL_Window * setupRC(SDL_GLContext &context) {
-	SDL_Window * window;
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) // Initialize video
-		rt3d::exitFatalError("Unable to initialize SDL");
+// Is called whenever a key is pressed/released via GLFW
+void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode)
+{
+	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
+	{
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
 
-	// Request an OpenGL 3.0 context.
-
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);  // double buffering on
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8); // 8 bit alpha buffering
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // Turn on x4 multisampling anti-aliasing (MSAA)
-
-	// Create 800x600 window
-	window = SDL_CreateWindow("SDL/GLM/OpenGL Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		SCREEN_HEIGHT, SCREEN_WIDTH, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-	if (!window) // Check window was created OK
-		rt3d::exitFatalError("Unable to create window");
-
-	context = SDL_GL_CreateContext(window); // Create opengl context and attach to window
-	SDL_GL_SetSwapInterval(1); // set swap buffers to sync with monitor's vertical refresh rate
-	return window;
+	if (key >= 0 && key < 1024)
+	{
+		if (action == GLFW_PRESS)
+		{
+			keys[key] = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			keys[key] = false;
+		}
+	}
 }
 
+void MouseCallback(GLFWwindow *window, double xPos, double yPos)
+{
+	if (firstMouse)
+	{
+		lastX = xPos;
+		lastY = yPos;
+		firstMouse = false;
+	}
+
+	GLfloat xOffset = xPos - lastX;
+	GLfloat yOffset = lastY - yPos;  // Reversed since y-coordinates go from bottom to left
+
+	lastX = xPos;
+	lastY = yPos;
+
+	//camera.ProcessMouseMovement(xOffset, yOffset);
+}
+int initGlfw()
+{
+	// Init GLFW
+	glfwInit();
+
+	// Set all the required options for GLFW
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+	// Create a GLFWwindow object that we can use for GLFW's functions
+	window = glfwCreateWindow(SCREEN_HEIGHT, SCREEN_WIDTH, "The Big Lez Game", nullptr, nullptr);
+
+	if (nullptr == window)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+
+		return EXIT_FAILURE;
+	}
+
+	glfwMakeContextCurrent(window);
+
+	glfwGetFramebufferSize(window, &SCREENWIDTH, &SCREENHEIGHT);
+
+	// Set the required callback functions
+	glfwSetKeyCallback(window, KeyCallback);
+	glfwSetCursorPosCallback(window, MouseCallback);
+
+	// GLFW Options
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
 
 int main(int argc, char *argv[]) {
-	SDL_Window * hWindow; // window handle
-	SDL_GLContext glContext; // OpenGL context handle
-	hWindow = setupRC(glContext); // Create window and render context 
+
+	initGlfw();
 
 	// Required on Windows *only* init GLEW to access OpenGL beyond 1.1
 	glewExperimental = GL_TRUE;
@@ -60,42 +115,26 @@ int main(int argc, char *argv[]) {
 		std::cout << "glewInit failed, aborting." << endl;
 		exit(1);
 	}
-	cout << glGetString(GL_VERSION) << endl;
 
+	//glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	//glEnable(GL_DEPTH_TEST);
+
+	cout << glGetString(GL_VERSION) << endl;
 	cout << "Game Start" << endl;
-	
-	float dt = 1 / PREFERED_FPS;
-	float lastTime = SDL_GetTicks();
-	
+
 	Menu menuSystem;
-	bool running = true;
-	SDL_Event sdlEvent;  // variable to detect SDL events
-	while (running) {
-		while (SDL_PollEvent(&sdlEvent)) {
-			if (sdlEvent.type == SDL_QUIT)
-				running = false;
-		}
-		////////////////////////////////////// Timer - Need more work /////////////////////////
-		//float newTime = SDL_GetTicks();
-		//float frameTime = newTime - lastTime;
-		//lastTime = newTime;
-		//int workLoad = 0;
-		//while (frameTime > 0.0 && workLoad < 6)
-		//{
-		//	float deltaTime = std::min(frameTime, dt);
-		//	cout << deltaTime << endl;
-		//	
-		//	frameTime -= deltaTime;
-		//	workLoad++;
-		//}
-		/////////////////////////////////////////////////////////////////////////////
+	while (!glfwWindowShouldClose(window)){
+		// Set frame time
+		GLfloat currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 		menuSystem.updateMenus();
 		menuSystem.drawMenus();
-		SDL_GL_SwapWindow(hWindow);
+
+		glfwSwapBuffers(window);
 	}
-	SDL_GL_DeleteContext(glContext);
-	SDL_DestroyWindow(hWindow);
-	SDL_Quit();
+	glfwTerminate();
 	return 0;
 }
 

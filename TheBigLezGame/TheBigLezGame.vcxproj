@@ -96,7 +96,7 @@
       <AdditionalLibraryDirectories>..\..\..\dev\SDL2-2.0.8\VisualC\Win32\Debug;..\..\..\dev\glew-2.1.0\lib\Debug\Win32;..\..\..\dev\Assimp\lib;..\..\..\dev\SOIL2\lib;..\..\..\dev\glfw-3.2.1.bin.WIN32\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>
       </SubSystem>
-      <AdditionalDependencies>glew32d.lib;opengl32.lib;SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;soil2-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32d.lib;opengl32.lib;SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;soil2-debug.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

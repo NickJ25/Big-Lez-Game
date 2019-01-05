@@ -4,6 +4,7 @@ vector<GameObject*> gameObjects;
 Skybox* skybox;
 Shader *toonShader;
 
+
 // Initalize Two Camera
 Camera lezCamera(glm::vec3(0.0f, 4.0f, 6.0f), DYNAMIC);
 //Camera debugCamera();
