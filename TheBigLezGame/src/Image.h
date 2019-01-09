@@ -35,6 +35,8 @@ private:
 	GLuint m_VBO, m_VBO2, m_EBO;
 	GLuint m_texture;
 	glm::mat4 m_rotation = glm::mat4(1.0);
+	glm::mat4 m_proj = glm::mat4(1.0);
+	glm::mat4 m_view = glm::mat4(1.0);
 public:
 	Image(const char* filename);
 	~Image();

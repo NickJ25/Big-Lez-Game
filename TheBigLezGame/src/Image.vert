@@ -8,10 +8,12 @@ out vec3 o_Colour;
 out vec2 o_texCoord;
 
 uniform mat4 imgRotation;
+uniform mat4 imgProj;
+uniform mat4 imgView;
 
 void main()
 {
-	vec4 newPosition = vec4(position,1.0f) * imgRotation;
+	vec4 newPosition = vec4(position,1.0f) * imgProj * imgRotation; //;* imgView
     gl_Position = vec4(newPosition.xyz, 1.0);
 	o_Colour = colour;
 	o_texCoord = texCoord;

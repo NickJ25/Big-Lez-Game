@@ -45,12 +45,10 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 		if (action == GLFW_PRESS)
 		{
 			keys[key] = true;
-			cout << "CLICK" << endl;
 		}
 		else if (action == GLFW_RELEASE)
 		{
 			keys[key] = false;
-			cout << "RELEASE" << endl;
 		}
 	}
 }
@@ -70,7 +68,7 @@ void MouseCallback(GLFWwindow *window, double xPos, double yPos)
 	lastX = xPos;
 	lastY = yPos;
 
-	//camera.ProcessMouseMovement(xOffset, yOffset);
+	cout << lastX << " " << lastY << endl;
 }
 int initGlfw()
 {
@@ -120,6 +118,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
+	
 	cout << glGetString(GL_VERSION) << endl;
 	cout << "Game Start" << endl;
 
@@ -130,12 +129,11 @@ int main(int argc, char *argv[]) {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		glfwPollEvents();
+		//if (keys[GLFW_KEY_A]) cout << "A";
 		menuSystem.updateMenus();
 		menuSystem.drawMenus();
 
-		if (keys[GLFW_KEY_1]) {
-			cout << "Bip" << endl;
-		}
 
 		glfwSwapBuffers(window);
 	}
