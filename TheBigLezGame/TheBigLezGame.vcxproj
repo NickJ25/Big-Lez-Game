@@ -150,6 +150,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Button.cpp" />
+    <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CollisionComponent.cpp" />
     <ClCompile Include="src\DirectionalLight.cpp" />
@@ -179,6 +181,8 @@
     <ClCompile Include="src\TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Image.h" />
+    <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\MapReader.h" />
     <ClInclude Include="src\PointLight.h" />
     <ClInclude Include="src\SpotLight.h" />
@@ -214,6 +218,8 @@
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Image.frag" />
+    <None Include="src\Image.vert" />
     <None Include="src\skyboxShader.frag" />
     <None Include="src\skyboxShader.vert" />
     <None Include="src\toonShader.frag" />

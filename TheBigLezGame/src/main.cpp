@@ -16,6 +16,7 @@ const static float SCREEN_WIDTH = 720;
 int SCREENWIDTH, SCREENHEIGHT;
 const static float PREFERED_FPS = 60.0f;
 
+
 using namespace std;
 
 //glfw init stuff
@@ -44,10 +45,12 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 		if (action == GLFW_PRESS)
 		{
 			keys[key] = true;
+			cout << "CLICK" << endl;
 		}
 		else if (action == GLFW_RELEASE)
 		{
 			keys[key] = false;
+			cout << "RELEASE" << endl;
 		}
 	}
 }
@@ -99,9 +102,10 @@ int initGlfw()
 	// Set the required callback functions
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetCursorPosCallback(window, MouseCallback);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// GLFW Options
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 int main(int argc, char *argv[]) {
@@ -116,9 +120,6 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	//glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	//glEnable(GL_DEPTH_TEST);
-
 	cout << glGetString(GL_VERSION) << endl;
 	cout << "Game Start" << endl;
 
@@ -131,6 +132,10 @@ int main(int argc, char *argv[]) {
 
 		menuSystem.updateMenus();
 		menuSystem.drawMenus();
+
+		if (keys[GLFW_KEY_1]) {
+			cout << "Bip" << endl;
+		}
 
 		glfwSwapBuffers(window);
 	}

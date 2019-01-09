@@ -141,6 +141,12 @@
     <ClCompile Include="src\CollisionComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MenuState.h">
@@ -242,6 +248,12 @@
     <ClInclude Include="src\TextureLoader.h">
       <Filter>Header Files\Other</Filter>
     </ClInclude>
+    <ClInclude Include="src\Button.h">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\toonShader.frag">
@@ -254,6 +266,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="src\skyboxShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\Image.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\Image.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
