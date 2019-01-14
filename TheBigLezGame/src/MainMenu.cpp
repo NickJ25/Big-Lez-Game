@@ -14,8 +14,8 @@ void MainMenu::handle(Menu * menu)
 		<< "\n (1) Singleplayer "
 		<< "\n (2) Options"
 		<< "\n (3) Quit " << std::endl;
-	background = new Image("assets/Art/tempBackground.png");
-	//buttonTest = new Button(glm::vec2(0.0, 0.0), "djdj");
+	background = new Image("assets/Art/tempBackground.png", glm::vec2(-640,360));
+	buttonTest = new Button(glm::vec2(-640.0, 360.0), "djdj");
 	selectedMenu = menu;
 	//selectedMenu->setCurrent(selectedMenu->getSinglePlayer());
 	//selectedMenu->getCurrentState()->handle(selectedMenu);
@@ -44,5 +44,5 @@ void MainMenu::draw()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	background->draw();
-	//buttonTest->draw();
+	buttonTest->draw();
 }

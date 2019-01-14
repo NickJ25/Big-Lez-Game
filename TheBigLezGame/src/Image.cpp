@@ -1,8 +1,10 @@
 #include "Image.h"
 
-Image::Image(const char* filename) {
+
+void Image::init(unsigned char* image)
+{
 	imageShader = new Shader("src/Image.vert", "src/Image.frag");
-	image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGBA);
+
 	// Generate and load image data
 	glGenTextures(1, &m_texture);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
@@ -10,7 +12,7 @@ Image::Image(const char* filename) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_imgWidth, m_imgHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 
 	// Generate geometry
 	imageShader->use();
@@ -18,7 +20,7 @@ Image::Image(const char* filename) {
 	glGenBuffers(1, &m_VBO);
 	glGenBuffers(1, &m_VBO2);
 	glGenBuffers(1, &m_EBO);
-	
+
 	// Make second buffer for texture coords
 	glGenVertexArrays(1, &m_VAO);
 	glBindVertexArray(m_VAO);
@@ -27,8 +29,8 @@ Image::Image(const char* filename) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(backgroundCoords), backgroundCoords, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3, (GLvoid*)0);
-	m_rotation = glm::rotate(m_rotation, (float)glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	m_rotation = glm::scale(m_rotation, glm::vec3(1.0f, 50.0f, 1.0f));
+	m_model = glm::rotate(m_model, (float)glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	m_model = glm::scale(m_model, glm::vec3(640.0f, 360.0f, 1.0f));
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO2);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoords), textureCoords, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(1);
@@ -41,19 +43,56 @@ Image::Image(const char* filename) {
 	glBindVertexArray(0);
 	SOIL_free_image_data(image);
 
-	m_proj = glm::ortho(0.0f, 1280.0f / 720.0f, 0.0f, 100.0f);
-	m_view = glm::lookAt(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
+	//m_proj = glm::ortho(0.0f, 1280.0f / 720.0f, 0.0f, 100.0f);
+	m_proj = glm::ortho(0.0f, 1280.0f, 720.0f, 0.0f, 0.0f, 100.0f);
+	m_view = glm::lookAt(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 }
+
+Image::Image(const char * filename, glm::vec2 screenPos)
+{
+	m_image = SOIL_load_image(filename, &m_imgWidth, &m_imgHeight, 0, SOIL_LOAD_RGBA);
+	m_model = glm::translate(m_model, glm::vec3(screenPos.x, screenPos.y, 0.0f));
+	if (m_image) {
+		init(m_image);
+	}
+	else {
+		std::cout << "IMAGE ERROR: Image: " << filename << "was not found!" << std::endl;
+	}
+}
+
+Image::Image(const char * filename, glm::vec2 screenPos, int width, int height)
+{
+	m_Width = width;
+	m_Height = height;
+	m_image = SOIL_load_image(filename, &m_imgWidth, &m_imgHeight, 0, SOIL_LOAD_RGBA);
+	m_model = glm::translate(m_model, glm::vec3(screenPos, 0.0f));
+	if (m_image) {
+		init(m_image);
+	}
+	else {
+		std::cout << "IMAGE ERROR: Image: " << filename << "was not found!" << std::endl;
+	}
+}
+
+Image::~Image()
+{
+
+}
+
 void Image::rotate(GLfloat radians) {
-	m_rotation = glm::rotate(m_rotation, (float)glm::radians(radians), glm::vec3(1.0f, 0.0f, 0.0f));
+	m_model = glm::rotate(m_model, (float)glm::radians(radians), glm::vec3(1.0f, 0.0f, 0.0f));
+}
+
+void Image::scale(glm::vec2 scale)
+{
+	m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
 }
 
 void Image::draw()
 {
 	imageShader->use();
-	glUniformMatrix4fv(glGetUniformLocation(imageShader->getID(), "imgRotation"), 1, GL_FALSE, glm::value_ptr(m_rotation));
+	glUniformMatrix4fv(glGetUniformLocation(imageShader->getID(), "imgRotation"), 1, GL_FALSE, glm::value_ptr(m_model));
 	glUniformMatrix4fv(glGetUniformLocation(imageShader->getID(), "imgProj"), 1, GL_FALSE, glm::value_ptr(m_proj));
 	glUniformMatrix4fv(glGetUniformLocation(imageShader->getID(), "imgView"), 1, GL_FALSE, glm::value_ptr(m_view));
 	glActiveTexture(GL_TEXTURE0);

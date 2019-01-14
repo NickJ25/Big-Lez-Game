@@ -90,13 +90,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\dev\glew-2.1.0\include;..\..\..\dev\SDL2-2.0.8\include;..\..\..\dev\glm;..\..\..\dev\Assimp\include;..\..\..\dev\SOIL2\include;..\..\..\dev\glfw-3.2.1.bin.WIN32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dev\glew-2.1.0\include;..\..\..\dev\SDL2-2.0.8\include;..\..\..\dev\glm;..\..\..\dev\Assimp\include;..\..\..\dev\SOIL2\include;..\..\..\dev\glfw-3.2.1.bin.WIN32\include;..\..\..\dev\freetype-windows-binaries-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\dev\SDL2-2.0.8\VisualC\Win32\Debug;..\..\..\dev\glew-2.1.0\lib\Debug\Win32;..\..\..\dev\Assimp\lib;..\..\..\dev\SOIL2\lib;..\..\..\dev\glfw-3.2.1.bin.WIN32\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\dev\SDL2-2.0.8\VisualC\Win32\Debug;..\..\..\dev\glew-2.1.0\lib\Debug\Win32;..\..\..\dev\Assimp\lib;..\..\..\dev\SOIL2\lib;..\..\..\dev\glfw-3.2.1.bin.WIN32\lib-vc2015;..\..\..\dev\freetype-windows-binaries-master\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>
       </SubSystem>
-      <AdditionalDependencies>glew32d.lib;opengl32.lib;SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;soil2-debug.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32d.lib;opengl32.lib;SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;soil2-debug.lib;glfw3.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -179,6 +179,7 @@
     <ClCompile Include="src\SinglePlayerMenu.cpp" />
     <ClCompile Include="src\Skybox.cpp" />
     <ClCompile Include="src\SpotLight.cpp" />
+    <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\TransformComponent.cpp" />
     <ClCompile Include="src\TextureLoader.cpp" />
   </ItemGroup>
@@ -217,6 +218,7 @@
     <ClInclude Include="src\rt3dObjLoader.h" />
     <ClInclude Include="src\ScoreboardMenu.h" />
     <ClInclude Include="src\SinglePlayerMenu.h" />
+    <ClInclude Include="src\Text.h" />
     <ClInclude Include="src\TransformComponent.h" />
     <ClInclude Include="src\TextureLoader.h" />
     <ClInclude Include="Time.h" />
