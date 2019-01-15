@@ -29,7 +29,6 @@ void Image::init(unsigned char* image)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(backgroundCoords), backgroundCoords, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3, (GLvoid*)0);
-	m_model = glm::rotate(m_model, (float)glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	m_model = glm::scale(m_model, glm::vec3(640.0f, 360.0f, 1.0f));
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO2);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoords), textureCoords, GL_STATIC_DRAW);
@@ -43,10 +42,8 @@ void Image::init(unsigned char* image)
 	glBindVertexArray(0);
 	SOIL_free_image_data(image);
 
-	//m_proj = glm::ortho(0.0f, 1280.0f / 720.0f, 0.0f, 100.0f);
-	m_proj = glm::ortho(0.0f, 1280.0f, 720.0f, 0.0f, 0.0f, 100.0f);
-	m_view = glm::lookAt(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
+	m_proj = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, 0.0f, 100.0f);
+	m_view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 Image::Image(const char * filename, glm::vec2 screenPos)

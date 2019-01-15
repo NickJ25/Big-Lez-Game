@@ -19,17 +19,23 @@ struct Character
 class Text
 {
 private:
-	void initText();
+	void initText(const char* font);
 
 	std::map<GLchar, Character> characters;
 	Shader* m_textShader;
 	GLuint m_VAO, m_VBO;
+	glm::vec2 m_textBoxSize;
 
 	glm::mat4 m_model = glm::mat4(1.0);
 	glm::mat4 m_proj = glm::mat4(1.0);
 	glm::mat4 m_view = glm::mat4(1.0);
 public:
-	Text(glm::vec2 position);
+	Text(glm::vec2 position, const char* font);
 	~Text();
+
+	void move(glm::vec2 position);
+	void scale(glm::vec2 scale);
+
+	glm::vec2 getSize();
 	void draw(std::string text, glm::vec3 colour);
 };

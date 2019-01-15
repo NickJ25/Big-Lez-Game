@@ -14,8 +14,12 @@ void MainMenu::handle(Menu * menu)
 		<< "\n (1) Singleplayer "
 		<< "\n (2) Options"
 		<< "\n (3) Quit " << std::endl;
-	background = new Image("assets/Art/tempBackground.png", glm::vec2(-640,360));
-	buttonTest = new Button(glm::vec2(-640.0, 360.0), "djdj");
+	//background = new Image("assets/Art/tempBackground.png", glm::vec2(-640,360));
+	background = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
+	buttonTest = new Button(glm::vec2(640.0, 360.0), "djdj");
+	testText = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
+	testText->scale(glm::vec2(0.5, 0.5));
+
 	selectedMenu = menu;
 	//selectedMenu->setCurrent(selectedMenu->getSinglePlayer());
 	//selectedMenu->getCurrentState()->handle(selectedMenu);
@@ -45,4 +49,5 @@ void MainMenu::draw()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	background->draw();
 	buttonTest->draw();
+	testText->draw("Developed by Group 3", glm::vec3(1.0,1.0,1.0));
 }

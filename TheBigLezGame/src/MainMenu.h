@@ -3,6 +3,7 @@
 #include "Menu.h"
 #include "Button.h"
 #include "Image.h"
+#include "Text.h"
 
 #include "GLFW/glfw3.h"
 
@@ -10,6 +11,7 @@ class MainMenu : public MenuState {
 private:
 	Image* background;
 	Button* buttonTest;
+	Text* testText;
 	bool keys[1024];
 public:
 	MainMenu();
