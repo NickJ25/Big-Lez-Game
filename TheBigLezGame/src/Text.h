@@ -18,11 +18,18 @@ struct Character
 
 class Text
 {
+private:
+	void initText();
+
+	std::map<GLchar, Character> characters;
+	Shader* m_textShader;
+	GLuint m_VAO, m_VBO;
+
+	glm::mat4 m_model = glm::mat4(1.0);
+	glm::mat4 m_proj = glm::mat4(1.0);
+	glm::mat4 m_view = glm::mat4(1.0);
 public:
 	Text(glm::vec2 position);
 	~Text();
 	void draw(std::string text, glm::vec3 colour);
-private:
-	void initText();
-	std::map<GLchar, Character> characters;
 };
