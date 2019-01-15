@@ -130,7 +130,6 @@ int main(int argc, char *argv[]) {
 		lastFrame = currentFrame;
 
 		glfwPollEvents();
-		//if (keys[GLFW_KEY_A]) cout << "A";
 		menuSystem.updateMenus();
 		menuSystem.drawMenus();
 

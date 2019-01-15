@@ -12,7 +12,6 @@ private:
 	Image* background;
 	Button* buttonTest;
 	Text* testText;
-	bool keys[1024];
 public:
 	MainMenu();
 	virtual ~MainMenu() {};

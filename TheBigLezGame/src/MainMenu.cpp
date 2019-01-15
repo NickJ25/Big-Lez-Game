@@ -14,9 +14,8 @@ void MainMenu::handle(Menu * menu)
 		<< "\n (1) Singleplayer "
 		<< "\n (2) Options"
 		<< "\n (3) Quit " << std::endl;
-	//background = new Image("assets/Art/tempBackground.png", glm::vec2(-640,360));
 	background = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
-	buttonTest = new Button(glm::vec2(640.0, 360.0), "djdj");
+	buttonTest = new Button(glm::vec2(640.0, 360.0), "Start");
 	testText = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
 	testText->scale(glm::vec2(0.5, 0.5));
 
@@ -27,7 +26,7 @@ void MainMenu::handle(Menu * menu)
 
 void MainMenu::update()
 {
-		
+
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	if (keys[SDL_SCANCODE_1]) {
 		selectedMenu->setCurrent(selectedMenu->getSinglePlayer());

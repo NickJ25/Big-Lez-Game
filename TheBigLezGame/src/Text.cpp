@@ -77,7 +77,7 @@ void Text::initText(const char* font)
 
 void Text::move(glm::vec2 position)
 {
-	m_model = glm::translate(m_model, glm::vec3(position.x, position.y, 0.0f));
+	m_model = glm::translate(glm::mat4(1.0), glm::vec3(position.x, position.y, 0.0f));
 }
 
 void Text::scale(glm::vec2 scale)
