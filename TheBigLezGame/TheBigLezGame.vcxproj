@@ -182,6 +182,7 @@
     <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\TransformComponent.cpp" />
     <ClCompile Include="src\TextureLoader.cpp" />
+    <ClCompile Include="src\windowGLFW.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AnimMesh.h" />
@@ -221,6 +222,7 @@
     <ClInclude Include="src\Text.h" />
     <ClInclude Include="src\TransformComponent.h" />
     <ClInclude Include="src\TextureLoader.h" />
+    <ClInclude Include="src\windowGLFW.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
