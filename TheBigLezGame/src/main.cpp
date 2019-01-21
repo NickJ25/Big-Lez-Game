@@ -36,8 +36,6 @@ GLfloat lastFrame = 0.0f;
 #pragma comment(linker, "/subsystem:\"console\" /entry:\"WinMainCRTStartup\"")
 #endif
 
-
-
 #pragma region Old GLFW Code
 
 //// Is called whenever a key is pressed/released via GLFW
@@ -139,6 +137,7 @@ int main(int argc, char *argv[]) {
 
 	Menu menuSystem;
 	MainMenu::mainWindow = window;
+
 	
 	while (!glfwWindowShouldClose(window->getWindow())){
 		// Set frame time

@@ -9,7 +9,7 @@ private:
 	bool keys[1024];
 	void checkWindow(GLFWwindow* window);
 
-	//void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
+	void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
 
 
 public:

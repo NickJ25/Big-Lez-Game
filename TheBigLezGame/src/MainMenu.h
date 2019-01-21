@@ -8,6 +8,8 @@
 
 #include "GLFW/glfw3.h"
 
+
+
 class MainMenu : public MenuState {
 private:
 	Image* background;
@@ -17,11 +19,13 @@ private:
 	void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
 	
 public:
+	static windowGLFW* mainWindow;
+
 	MainMenu();
 	virtual ~MainMenu() {};
 	void handle(Menu* menu);
 	void update();
 	void draw();
 
-	static windowGLFW* mainWindow;
+	
 };
