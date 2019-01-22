@@ -18,6 +18,7 @@ public:
 
 	void setKeyCallback(GLFWkeyfun function);
 	void setCursorPosCallback(GLFWcursorposfun function);
+	void setMouseButtonCallback(GLFWmousebuttonfun function);
 	void setInputMode(int mode, int value);
 
 	bool checkKey(int key);

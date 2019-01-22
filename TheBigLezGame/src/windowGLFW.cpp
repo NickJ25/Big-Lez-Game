@@ -75,6 +75,11 @@ void windowGLFW::setCursorPosCallback(GLFWcursorposfun function)
 	glfwSetCursorPosCallback(m_window, function);
 }
 
+void windowGLFW::setMouseButtonCallback(GLFWmousebuttonfun function)
+{
+	glfwSetMouseButtonCallback(m_window, function);
+}
+
 void windowGLFW::setInputMode(int mode, int value)
 {
 	glfwSetInputMode(m_window, mode, value);

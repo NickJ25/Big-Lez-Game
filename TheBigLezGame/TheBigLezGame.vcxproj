@@ -157,6 +157,7 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CollisionComponent.cpp" />
     <ClCompile Include="src\DirectionalLight.cpp" />
+    <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="src\MainMenu.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\OptionsMenu.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\Prop.cpp" />
     <ClCompile Include="src\RenderComponent.cpp" />
@@ -189,7 +191,9 @@
     <ClInclude Include="src\AnimModel.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Button.h" />
+    <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\MapReader.h" />
+    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PointLight.h" />
     <ClInclude Include="src\SpotLight.h" />
     <ClInclude Include="src\DirectionalLight.h" />
