@@ -17,6 +17,8 @@ void windowGLFW::KeyCallback(GLFWwindow * window, int key, int scancode, int act
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 
+	std::cout << "TEST" << std::endl;
+
 	if (key >= 0 && key < 1024)
 	{
 		if (action == GLFW_PRESS)
@@ -53,6 +55,7 @@ windowGLFW::windowGLFW(int windowWidth, int windowHeight, const char* windowTitl
 
 	// Set the required callback functions
 	//glfwSetKeyCallback(m_window, static_cast<GLFWkeyfun>(glfwGetWindowUserPointer(m_window)));
+	//glfwSetKeyCallback(m_window, KeyCallback);
 	//glfwSetCursorPosCallback(m_window, MouseCallback);
 	//glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
@@ -75,6 +78,20 @@ void windowGLFW::setCursorPosCallback(GLFWcursorposfun function)
 void windowGLFW::setInputMode(int mode, int value)
 {
 	glfwSetInputMode(m_window, mode, value);
+}
+
+bool windowGLFW::checkKey(int key)
+{
+	bool keyStatus;
+	//std::cout << "Key check: " << key << std::endl;
+	if (keys[key]) {
+		keyStatus = true;
+	}
+	else {
+		keyStatus = false;
+	}
+
+	return keyStatus;
 }
 
 glm::vec2 windowGLFW::getWindowSize()

@@ -39,25 +39,25 @@ GLfloat lastFrame = 0.0f;
 #pragma region Old GLFW Code
 
 //// Is called whenever a key is pressed/released via GLFW
-//void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode)
-//{
-//	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
-//	{
-//		glfwSetWindowShouldClose(window, GL_TRUE);
-//	}
-//
-//	if (key >= 0 && key < 1024)
-//	{
-//		if (action == GLFW_PRESS)
-//		{
-//			keys[key] = true;
-//		}
-//		else if (action == GLFW_RELEASE)
-//		{
-//			keys[key] = false;
-//		}
-//	}
-//}
+void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode)
+{
+	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
+	{
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
+
+	if (key >= 0 && key < 1024)
+	{
+		if (action == GLFW_PRESS)
+		{
+			keys[key] = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			keys[key] = false;
+		}
+	}
+}
 //
 //void MouseCallback(GLFWwindow *window, double xPos, double yPos)
 //{
@@ -122,6 +122,7 @@ int main(int argc, char *argv[]) {
 	//initGlfw();
 	window = new windowGLFW(1280, 720, "The Big Lez Game");
 	window->setInputMode(GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	window->setKeyCallback(KeyCallback);
 
 	// Required on Windows *only* init GLEW to access OpenGL beyond 1.1
 	glewExperimental = GL_TRUE;
@@ -136,7 +137,7 @@ int main(int argc, char *argv[]) {
 	cout << "Game Start" << endl;
 
 	Menu menuSystem;
-	MainMenu::mainWindow = window;
+	//MainMenu::mainWindow = window;
 
 	
 	while (!glfwWindowShouldClose(window->getWindow())){
@@ -144,8 +145,11 @@ int main(int argc, char *argv[]) {
 		GLfloat currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-
+		if (keys[GLFW_KEY_D]) {
+			cout << "BAH" << endl;
+		}
 		glfwPollEvents();
+
 		menuSystem.updateMenus();
 		menuSystem.drawMenus();
 

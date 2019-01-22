@@ -13,7 +13,8 @@
 class MainMenu : public MenuState {
 private:
 	Image* background;
-	Button* buttonTest;
+	Image* logo;
+	Button* singlePlayerBtn, *optionsBtn, *quitBtn;
 	Text* testText;
 
 	void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);

@@ -20,6 +20,7 @@ public:
 	void setCursorPosCallback(GLFWcursorposfun function);
 	void setInputMode(int mode, int value);
 
+	bool checkKey(int key);
 	glm::vec2 getWindowSize();
 
 	GLFWwindow* getWindow();

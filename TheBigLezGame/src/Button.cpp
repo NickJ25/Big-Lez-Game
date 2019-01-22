@@ -10,7 +10,7 @@ Button::Button(glm::vec2 position, std::string button_text) //, MenuState * dest
 	m_texClick = new Image("assets/Art/button-click.png", position);
 	m_texClick->scale(glm::vec2(0.24f, 0.15f));
 
-	m_textBox = new Text(position, "assets/Fonts/ariali.ttf");
+	m_textBox = new Text(position, "assets/Fonts/Another_.ttf");
 	m_text = button_text;
 	//m_buttonCollision->centre = position;
 	//m_buttonCollision->height = 120;
@@ -31,7 +31,7 @@ void Button::update(glm::vec2* mousePos)
 void Button::draw()
 {
 	m_texNormal->draw();
-	m_textBox->move(glm::vec2(m_position.x - (m_textBox->getSize().x / 2), m_position.y - (m_textBox->getSize().y / 2) - 15));
+	m_textBox->move(glm::vec2(m_position.x - (m_textBox->getSize().x / 2), m_position.y - (m_textBox->getSize().y / 2) - 12));
 	m_textBox->draw(m_text, glm::vec3(1.0, 1.0, 1.0));
 	
 }
