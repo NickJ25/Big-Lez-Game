@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <SDL.h>
+#include "Input.h"
 enum Camera_Type
 {
 	STATIC,

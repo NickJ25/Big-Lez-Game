@@ -22,6 +22,8 @@ void MainMenu::handle(Menu * menu)
 void MainMenu::update()
 {
 	if (singlePlayerBtn->buttonClick()) {
+		m_window = glfwGetCurrentContext();
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		selectedMenu->setCurrent(selectedMenu->getSinglePlayer());
 		selectedMenu->getCurrentState()->handle(selectedMenu);
 	}

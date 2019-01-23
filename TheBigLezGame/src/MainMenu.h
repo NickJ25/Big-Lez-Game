@@ -14,6 +14,7 @@ private:
 	Image* logo;
 	Button* singlePlayerBtn, *optionsBtn, *quitBtn;
 	Text* testText;
+	GLFWwindow* m_window;
 public:
 	MainMenu();
 	virtual ~MainMenu() {};

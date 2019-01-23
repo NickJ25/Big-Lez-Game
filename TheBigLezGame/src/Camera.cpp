@@ -31,26 +31,25 @@ void Camera::update()
 		m_position = *m_followPos;
 	}
 	if(m_camType = DYNAMIC){
-		//SDL_SetRelativeMouseMode(SDL_TRUE);
 		int xpos, ypos;
 		
-		SDL_GetMouseState(&xpos, &ypos); /////////////////////////////////////////LIMITED, REACHES END OF SCREEN
+		xpos = Input::mouse1.current_Xpos;
+		ypos = Input::mouse1.current_Ypos;
 
-		if (firstCamLoad) {
+		if (firstCamLoad) { // Add start position for camera?
 			lastOffsetX = (float)xpos;
 			lastOffsetY = (float)ypos;
 			firstCamLoad = false;
 		}
-		
+
 		mouseOffsetX = (float)xpos - lastOffsetX;
-		mouseOffsetY =  (float)ypos - lastOffsetY;
+		mouseOffsetY = lastOffsetY - (float)ypos;
 		lastOffsetX = (float)xpos;
 		lastOffsetY = (float)ypos;
 
-		this->m_yaw += mouseOffsetX *this->m_mouseSensitivity;
-		this->m_pitch += mouseOffsetY *this->m_mouseSensitivity;
-		//cout << m_yaw << " " << m_pitch << endl;
-		//cout << "Yaw: " << m_yaw << " | Pitch: " << m_pitch << " | MX: " << xpos << " | MY: " << ypos <<endl;
+		this->m_yaw += mouseOffsetX *= this->m_mouseSensitivity;
+		this->m_pitch += mouseOffsetY *= this->m_mouseSensitivity;
+
 
 		if (this->m_pitch > 89.0f)
 		{

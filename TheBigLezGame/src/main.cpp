@@ -59,18 +59,6 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 
 void MouseCallback(GLFWwindow *window, double xPos, double yPos)
 {
-	if (firstMouse)
-	{
-		lastX = xPos;
-		lastY = yPos;
-		firstMouse = false;
-	}
-
-	Input::mouse1.offset_Xpos = xPos - lastX;
-	Input::mouse1.offset_Ypos = lastY - yPos;  // Reversed since y-coordinates go from bottom to left
-
-	lastX = xPos;
-	lastY = yPos;
 	Input::mouse1.current_Xpos = xPos;
 	Input::mouse1.current_Ypos = 720 - yPos;
 }

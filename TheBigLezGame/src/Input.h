@@ -10,7 +10,6 @@ private:
 	struct Mouse {
 		bool buttons[16];
 		int current_Xpos, current_Ypos;
-		float offset_Xpos, offset_Ypos;
 		bool Press, Release;
 	};
 public:

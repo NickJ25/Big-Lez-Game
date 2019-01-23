@@ -17,8 +17,6 @@ void windowGLFW::KeyCallback(GLFWwindow * window, int key, int scancode, int act
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 
-	std::cout << "TEST" << std::endl;
-
 	if (key >= 0 && key < 1024)
 	{
 		if (action == GLFW_PRESS)
@@ -88,7 +86,6 @@ void windowGLFW::setInputMode(int mode, int value)
 bool windowGLFW::checkKey(int key)
 {
 	bool keyStatus;
-	//std::cout << "Key check: " << key << std::endl;
 	if (keys[key]) {
 		keyStatus = true;
 	}
