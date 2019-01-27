@@ -10,37 +10,44 @@ OptionsMenu::OptionsMenu()
 
 void OptionsMenu::handle(Menu * menu)
 {
-	std::cout << "Options"
-		<< "\n (1) Audio "
-		<< "\n (2) Controls"
-		<< "\n (3) Graphics "
-		<< "\n (4) Back " << std::endl;
+	background = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
 	selectedMenu = menu;
+	backBtn = new Button(glm::vec2(640.0, 100.0), "Back");
+	graphicsBtn = new Button(glm::vec2(640.0, 580.0), "Graphics");
+	controlsBtn = new Button(glm::vec2(640.0, 460.0), "Controls");
+	audioBtn = new Button(glm::vec2(640.0, 340.0), "Audio");
 }
 
 void OptionsMenu::update()
 {
-	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	if (keys[SDL_SCANCODE_1]) {
-		selectedMenu->setCurrent(selectedMenu->getSinglePlayer());
-		selectedMenu->getCurrentState()->handle(selectedMenu);
-	}
-	if (keys[SDL_SCANCODE_2]) {
-		selectedMenu->setCurrent(selectedMenu->getControls());
-		selectedMenu->getCurrentState()->handle(selectedMenu);
-	}
-	if (keys[SDL_SCANCODE_3]) {
-		selectedMenu->setCurrent(selectedMenu->getGraphics());
-		selectedMenu->getCurrentState()->handle(selectedMenu);
-	}
-	if (keys[SDL_SCANCODE_3]) {
+	if (backBtn->buttonClick()) {
 		selectedMenu->setCurrent(selectedMenu->getMainMenu());
 		selectedMenu->getCurrentState()->handle(selectedMenu);
 	}
-	std::cout << "Options Update" << std::endl;
+
+	if (graphicsBtn->buttonClick()) {
+		selectedMenu->setCurrent(selectedMenu->getGraphics());
+		selectedMenu->getCurrentState()->handle(selectedMenu);
+	}
+
+	if (controlsBtn->buttonClick()) {
+		selectedMenu->setCurrent(selectedMenu->getControls());
+		selectedMenu->getCurrentState()->handle(selectedMenu);
+	}
+
+	if (audioBtn->buttonClick()) {
+		selectedMenu->setCurrent(selectedMenu->getAudio());
+		selectedMenu->getCurrentState()->handle(selectedMenu);
+	}
 }
 
 void OptionsMenu::draw()
 {
-	std::cout << "Options Draw" << std::endl;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	background->draw();
+	backBtn->draw();
+	graphicsBtn->draw();
+	controlsBtn->draw();
+	audioBtn->draw();
 }

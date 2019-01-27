@@ -158,6 +158,7 @@
     <ClCompile Include="src\CollisionComponent.cpp" />
     <ClCompile Include="src\DirectionalLight.cpp" />
     <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\LobbyMenu.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
@@ -187,6 +188,7 @@
     <ClCompile Include="src\windowGLFW.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\LobbyMenu.h" />
     <ClInclude Include="src\AnimMesh.h" />
     <ClInclude Include="src\AnimModel.h" />
     <ClInclude Include="src\Image.h" />

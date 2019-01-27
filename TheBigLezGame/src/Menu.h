@@ -11,6 +11,7 @@ private:
 	MenuState* graphics;
 	MenuState* audio;
 	MenuState* scoreboard;
+	MenuState* lobby;
 public:
 	Menu();
 	virtual ~Menu()
@@ -35,4 +36,5 @@ public:
 	MenuState* getGraphics();
 	MenuState* getAudio();
 	MenuState* getScoreboard();
+	MenuState* getLobby();
 };

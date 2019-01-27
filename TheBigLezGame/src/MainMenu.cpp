@@ -14,17 +14,16 @@ void MainMenu::handle(Menu * menu)
 	optionsBtn = new Button(glm::vec2(640.0, 220.0), "Options");
 	quitBtn = new Button(glm::vec2(640.0, 100.0), "Quit");
 	testText = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
-	testText->scale(glm::vec2(0.5, 0.5));
+	testText->scale(glm::vec2(0.8, 0.8));
 
+	m_window = glfwGetCurrentContext();
 	selectedMenu = menu;
 }
 
 void MainMenu::update()
 {
 	if (singlePlayerBtn->buttonClick()) {
-		m_window = glfwGetCurrentContext();
-		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		selectedMenu->setCurrent(selectedMenu->getSinglePlayer());
+		selectedMenu->setCurrent(selectedMenu->getLobby());
 		selectedMenu->getCurrentState()->handle(selectedMenu);
 	}
 
@@ -34,7 +33,7 @@ void MainMenu::update()
 	}
 
 	if (quitBtn->buttonClick()) {
-
+		glfwDestroyWindow(m_window);
 	}
 }
 

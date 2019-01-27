@@ -6,13 +6,14 @@
 #include "Text.h"
 #include "windowGLFW.h"
 
-class OptionsMenu : public MenuState {
+class LobbyMenu : public MenuState {
 private:
 	Image* background;
-	Button* backBtn, *graphicsBtn, *controlsBtn, *audioBtn;
+	Button* backBtn, *startBtn;
+	GLFWwindow* m_window;
 public:
-	OptionsMenu();
-	virtual ~OptionsMenu() {};
+	LobbyMenu();
+	virtual ~LobbyMenu() {};
 	void handle(Menu* menu);
 	void update();
 	void draw();

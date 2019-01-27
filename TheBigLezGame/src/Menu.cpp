@@ -6,6 +6,7 @@
 #include "GraphicsMenu.h"
 #include "AudioMenu.h"
 #include "ScoreboardMenu.h"
+#include "LobbyMenu.h"
 
 
 Menu::Menu()
@@ -17,6 +18,7 @@ Menu::Menu()
 	graphics = new GraphicsMenu();
 	audio = new AudioMenu();
 	scoreboard = new ScoreboardMenu();
+	lobby = new LobbyMenu();
 	current = mainMenu;
 	current->handle(this);
 }
@@ -74,4 +76,9 @@ MenuState * Menu::getAudio()
 MenuState * Menu::getScoreboard()
 {
 	return scoreboard;
+}
+
+MenuState * Menu::getLobby()
+{
+	return lobby;
 }
