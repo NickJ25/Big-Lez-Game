@@ -55,7 +55,10 @@ void Game::init()
 	GameObject* couch = new Prop("assets/Props/Couch/couch.obj", glm::vec3(5.0f, 0.0f, 5.0f));
 	couch->setShader(toonShader);
 	gameObjects.push_back(couch);
-	
+
+	GameObject* environment = new Prop("assets/Props/Map/environment.obj", glm::vec3(0.0f, 0.0f, 0.0f));
+	environment->setShader(toonShader);
+	gameObjects.push_back(environment);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
