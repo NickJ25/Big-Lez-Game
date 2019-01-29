@@ -117,9 +117,6 @@
     <ClCompile Include="src\Model.cpp">
       <Filter>Source Files\GameObject\Components\SubComponents</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModelLoader.cpp">
-      <Filter>Source Files\GameObject\Components\SubComponents</Filter>
-    </ClCompile>
     <ClCompile Include="src\Prop.cpp">
       <Filter>Source Files\GameObject\GameObjects</Filter>
     </ClCompile>
@@ -235,9 +232,6 @@
     </ClInclude>
     <ClInclude Include="src\Shader.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModelLoader.h">
-      <Filter>Header Files\GameObject\Components\SubComponents</Filter>
     </ClInclude>
     <ClInclude Include="src\Model.h">
       <Filter>Header Files\GameObject\Components\SubComponents</Filter>

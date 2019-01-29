@@ -6,6 +6,7 @@
 
 #include "Shader.h"
 #include "Model.h"
+#include "AnimModel.h"
 
 // Assimp Includes
 #include <assimp/Importer.hpp> // C++ importer interface
@@ -22,7 +23,9 @@ private:
 
 	// Object Settings
 	bool m_isAnimated = false;
+
 	Model* testModel; // TEST
+	AnimModel* m_objModel;
 
 	// Object Render Settings
 	Shader* m_currentShader;

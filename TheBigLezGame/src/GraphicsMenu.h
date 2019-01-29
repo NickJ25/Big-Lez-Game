@@ -5,11 +5,18 @@
 #include "Image.h"
 #include "Text.h"
 #include "windowGLFW.h"
+#include <string>
 
 class GraphicsMenu : public MenuState {
 private:
 	Image* background;
-	Button* backBtn;
+	Text* resolutionTxt;
+	Button* backBtn, *resolutionBtn, *applyBtn;
+	GLFWwindow* m_window;
+
+	// Resolution button
+	int newWidth, newHeight;
+	int mode;
 public:
 	GraphicsMenu();
 	virtual ~GraphicsMenu() {};
