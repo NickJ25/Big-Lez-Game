@@ -78,7 +78,7 @@ Image::~Image()
 }
 
 void Image::rotate(GLfloat radians) {
-	m_model = glm::rotate(m_model, (float)glm::radians(radians), glm::vec3(1.0f, 0.0f, 0.0f));
+	m_model = glm::rotate(m_model, (float)glm::radians(radians), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void Image::scale(glm::vec2 scale)

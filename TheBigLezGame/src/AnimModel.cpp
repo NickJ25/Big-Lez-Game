@@ -66,7 +66,7 @@ void AnimModel::draw(GLuint shaders_program, bool isAnimated)
 	vector<aiMatrix4x4> transforms;
 	if (isAnimated == true)
 	{  // if not explicitly set, just find the time
-		boneTransform((double)SDL_GetTicks() / 1000.0f, transforms);
+		boneTransform((double)glfwGetTime() / 1000.0f, transforms);
 	}
 	else
 	{

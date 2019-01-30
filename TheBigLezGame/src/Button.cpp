@@ -1,28 +1,43 @@
 #include "Button.h"
 
-Button::Button(glm::vec2 position, std::string button_text) //, MenuState * destination
+Button::Button(BUTTON_TYPE type, glm::vec2 position, std::string button_text) //, MenuState * destination
 {
 	m_position = position;
 	
 	// Button Art
-	m_texNormal = new Image("assets/Art/button-normal.png", position);
-	m_texNormal->scale(glm::vec2(0.24f, 0.15f));
-	m_texHover = new Image("assets/Art/button-hover.png", position);
-	m_texHover->scale(glm::vec2(0.24f, 0.15f));
-	m_texClick = new Image("assets/Art/button-click.png", position);
-	m_texClick->scale(glm::vec2(0.24f, 0.15f));
+	if (type == NORMAL) {
+		m_texNormal = new Image("assets/Art/button_normal.png", position);
+		m_texNormal->scale(glm::vec2(0.24f, 0.12f));
+		m_texHover = new Image("assets/Art/button_hover.png", position);
+		m_texHover->scale(glm::vec2(0.24f, 0.12f));
+		m_texClick = new Image("assets/Art/button_click.png", position);
+		m_texClick->scale(glm::vec2(0.24f, 0.12f));
 
+		// Button Collision Box
+		m_buttonCollision = new AABB();
+		m_buttonCollision->centre = position;
+		m_buttonCollision->height = 55;
+		m_buttonCollision->width = 150;
+	}
+	else if (type == ARROW) {
+		m_texNormal = new Image("assets/Art/arrow_normal.png", position);
+		m_texNormal->scale(glm::vec2(0.05f, 0.12f));
+		m_texHover = new Image("assets/Art/arrow_hover.png", position);
+		m_texHover->scale(glm::vec2(0.05f, 0.12f));
+		m_texClick = new Image("assets/Art/arrow_click.png", position);
+		m_texClick->scale(glm::vec2(0.05f, 0.12f));
+
+		// Button Collision Box
+		m_buttonCollision = new AABB();
+		m_buttonCollision->centre = position;
+		m_buttonCollision->height = 55;
+		m_buttonCollision->width = 40;
+	}
 	m_currentImage = m_texNormal;
 
 	// Button Text
 	m_textBox = new Text(position, "assets/Fonts/Another_.ttf");
 	m_text = button_text;
-
-	// Button Collision Box
-	m_buttonCollision = new AABB();
-	m_buttonCollision->centre = position;
-	m_buttonCollision->height = 55;
-	m_buttonCollision->width = 150;
 
 	// Click State
 	m_buttonClick = false;
@@ -60,4 +75,11 @@ void Button::draw()
 	m_textBox->draw(m_text, glm::vec3(1.0, 1.0, 1.0));
 	m_currentImage = m_texNormal;
 	
+}
+
+void Button::rotate(GLfloat radians)
+{
+	m_texNormal->rotate(radians);
+	m_texHover->rotate(radians);
+	m_texClick->rotate(radians);
 }

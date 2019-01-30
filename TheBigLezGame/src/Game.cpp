@@ -49,16 +49,22 @@ void Game::init()
 	pointLight->setShader(toonShader);
 	gameObjects.push_back(pointLight);
 	
-	GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
-	table->setShader(toonShader);
-	gameObjects.push_back(table);
-	GameObject* couch = new Prop("assets/Props/Couch/couch.obj", glm::vec3(5.0f, 0.0f, 5.0f));
-	couch->setShader(toonShader);
-	gameObjects.push_back(couch);
+	//GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
+	//table->setShader(toonShader);
+	//gameObjects.push_back(table);
+	//GameObject* couch = new Prop("assets/Props/Couch/couch.obj", glm::vec3(5.0f, 0.0f, 5.0f));
+	//couch->setShader(toonShader);
+	//gameObjects.push_back(couch);
 
-	GameObject* environment = new Prop("assets/Props/Map/environment.obj", glm::vec3(0.0f, 0.0f, 0.0f));
-	environment->setShader(toonShader);
-	gameObjects.push_back(environment);
+	//GameObject* environment = new Prop("assets/Props/Map/environment.obj", glm::vec3(0.0f, 0.0f, 0.0f));
+	//environment->setShader(toonShader);
+	//gameObjects.push_back(environment);
+
+	GameObject* lezTest = new Prop("assets/Characters/BigLez.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+	lezTest->setShader(toonShader);
+	gameObjects.push_back(lezTest);
+
+	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -101,4 +107,5 @@ void Game::draw()
 			gameObjects[i]->componentDraw(mainCamera->lookAtMat());
 		}
 	}
+	testtxt->draw("test", glm::vec3(1.0f, 1.0f, 1.0f));
 }

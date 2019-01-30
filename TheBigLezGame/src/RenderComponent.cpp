@@ -3,7 +3,10 @@
 // Load Standard Object
 void RenderComponent::loadObject(const char* mesh_filename)
 {
-	testModel = new Model(mesh_filename); // TEST
+	//testModel = new Model(mesh_filename); // TEST
+	m_objModel = new AnimModel();
+	m_objModel->loadModel(mesh_filename);
+
 }
 
 // Load Animated Object
@@ -58,7 +61,11 @@ void RenderComponent::Draw()
 	//cout << "Model: " << glGetUniformLocation(shaderID, "model") << endl; // TEMP
 	//cout << "View: " << glGetUniformLocation(shaderID, "view") << endl; // TEMP
 	// Draw Items////////////////
-	testModel->Draw(*m_currentShader); // TEST
+
+	m_objModel->draw(m_currentShader->getID(), false);
+
+	//testModel->Draw(*m_currentShader); // TEST
+
 	// End Draw Items////////////
 	//mvStack.pop();
 	//m_currentShader->Pass("projection", );

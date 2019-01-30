@@ -10,9 +10,9 @@ void MainMenu::handle(Menu * menu)
 	background = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
 	logo = new Image("assets/Art/bigLezLogo.png", glm::vec2(640.0, 560.0));
 	logo->scale(glm::vec2(0.5, 0.4));
-	singlePlayerBtn = new Button(glm::vec2(640.0, 340.0), "Singleplayer");
-	optionsBtn = new Button(glm::vec2(640.0, 220.0), "Options");
-	quitBtn = new Button(glm::vec2(640.0, 100.0), "Quit");
+	singlePlayerBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Singleplayer");
+	optionsBtn = new Button(Button::NORMAL, glm::vec2(640.0, 220.0), "Options");
+	quitBtn = new Button(Button::NORMAL, glm::vec2(640.0, 100.0), "Quit");
 	testText = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
 	testText->scale(glm::vec2(0.8, 0.8));
 

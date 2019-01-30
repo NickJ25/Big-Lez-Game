@@ -19,12 +19,14 @@
 #include "Camera.h"
 #include "Skybox.h"
 
+#include "Text.h"
+
 using namespace std;
 
 class Game {
 private:
 	Camera* mainCamera;
-	
+	Text* testtxt;
 
 public:
 	Game() {};

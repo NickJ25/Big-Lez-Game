@@ -10,8 +10,8 @@ void LobbyMenu::handle(Menu * menu)
 	background = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
 	
 	m_window = glfwGetCurrentContext();
-	backBtn = new Button(glm::vec2(640.0, 100.0), "Back");
-	startBtn = new Button(glm::vec2(640.0, 340.0), "Start");
+	backBtn = new Button(Button::NORMAL, glm::vec2(640.0, 100.0), "Back");
+	startBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Start");
 
 	selectedMenu = menu;
 }

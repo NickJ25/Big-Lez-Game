@@ -11,12 +11,14 @@ class GraphicsMenu : public MenuState {
 private:
 	Image* background;
 	Text* resolutionTxt;
-	Button* backBtn, *resolutionBtn, *applyBtn;
+	Button* backBtn, *resolutionBtn, *antiAlisBtn, *applyBtn;
+	Button* leftResoBtn, *rightResoBtn;
+	Button* leftAABtn, *rightAABtn;
 	GLFWwindow* m_window;
 
 	// Resolution button
 	int newWidth, newHeight;
-	int mode;
+	int resoMode, aaMode;
 public:
 	GraphicsMenu();
 	virtual ~GraphicsMenu() {};

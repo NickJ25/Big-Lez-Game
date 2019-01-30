@@ -33,8 +33,10 @@ private:
 
 	// Add audio for hoovering over the button
 public:
-	Button(glm::vec2 position, std::string button_text); // ,MenuState* destination
+	const enum BUTTON_TYPE { NORMAL, ARROW };
+	Button(BUTTON_TYPE type, glm::vec2 position, std::string button_text); // ,MenuState* destination
 	~Button();
 	bool buttonClick();
 	void draw();
+	void rotate(GLfloat radians);
 };

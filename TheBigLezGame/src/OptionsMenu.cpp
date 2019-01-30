@@ -12,10 +12,10 @@ void OptionsMenu::handle(Menu * menu)
 {
 	background = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
 	selectedMenu = menu;
-	backBtn = new Button(glm::vec2(640.0, 100.0), "Back");
-	graphicsBtn = new Button(glm::vec2(640.0, 580.0), "Graphics");
-	controlsBtn = new Button(glm::vec2(640.0, 460.0), "Controls");
-	audioBtn = new Button(glm::vec2(640.0, 340.0), "Audio");
+	backBtn = new Button(Button::NORMAL, glm::vec2(640.0, 100.0), "Back");
+	graphicsBtn = new Button(Button::NORMAL, glm::vec2(640.0, 580.0), "Graphics");
+	controlsBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Controls");
+	audioBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Audio");
 }
 
 void OptionsMenu::update()
