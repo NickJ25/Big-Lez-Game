@@ -43,6 +43,7 @@ void RenderComponent::textureOverride(GLuint textureID)
 void RenderComponent::changeShader(Shader* newShader)
 {
 	m_currentShader = newShader;
+	m_objModel->initShaders(newShader->getID());
 }
 
 void RenderComponent::Draw()
@@ -57,6 +58,7 @@ void RenderComponent::Draw()
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "view"), 1, GL_FALSE, glm::value_ptr(m_view));
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "model"), 1, GL_FALSE, glm::value_ptr(m_model));
+	glUniformMatrix4fv(glGetUniformLocation(shaderID, "normals"), 1, GL_FALSE, glm::value_ptr(glm::mat4(glm::transpose(glm::inverse(m_model)))));
 	//cout << "Projection: " << glGetUniformLocation(shaderID, "projection") << endl; // TEMP
 	//cout << "Model: " << glGetUniformLocation(shaderID, "model") << endl; // TEMP
 	//cout << "View: " << glGetUniformLocation(shaderID, "view") << endl; // TEMP

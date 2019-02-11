@@ -60,7 +60,7 @@ void Game::init()
 	//environment->setShader(toonShader);
 	//gameObjects.push_back(environment);
 
-	GameObject* lezTest = new Prop("assets/Characters/BigLez.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+	GameObject* lezTest = new Prop("assets/Characters/Sassy/sassy.dae", glm::vec3(0.0f, 0.0f, 0.0f)); //"assets/Props/Table/Table.dae" "assets/Characters/BigLez.dae" "assets/Characters/Sassy/sassy.dae"
 	lezTest->setShader(toonShader);
 	gameObjects.push_back(lezTest);
 
@@ -90,8 +90,8 @@ void Game::draw()
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse"), diffuse);
-	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular"), specular);
+	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
+	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainCamera->getCameraPos().x, mainCamera->getCameraPos().y, mainCamera->getCameraPos().z);
 	//cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
