@@ -28,6 +28,10 @@ private:
 	GLfloat lastOffsetX = 640, lastOffsetY = 360;
 	bool firstCamLoad = true;
 
+	// Attributes
+	glm::vec3 frontDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 rightDirection = glm::normalize(glm::cross(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+
 	glm::vec3* m_followPos;
 	bool isFollowing = false;
 	bool isLookAt = false;
