@@ -154,60 +154,24 @@ void main( )
    // vec3 norm = normalize( Normal );
     vec3 viewDir = normalize( viewPos - FragPos );
     
-	vec3 calcLight = vec3(0.0f, 0.0f, 0.0f);
+	//vec3 calcLight = vec3(0.0f, 0.0f, 0.0f);
 
 
     // Directional lighting
-   // vec3 calcLight = CalcDirLight( dirLight, Normal, viewDir );
+   vec3 calcLight = CalcDirLight( dirLight, Normal, viewDir );
     
     
     // Spot light
-   // calcLight += CalcSpotLight( light, Normal, FragPos, viewDir );
+   //calcLight += CalcSpotLight( light, Normal, FragPos, viewDir );
 
     // Point lights
     for ( int i = 0; i < NUMBER_OF_POINT_LIGHTS; i++ )
     {
-   //     calcLight += CalcPointLight( pointLights[i], Normal, FragPos, viewDir );
+     //   calcLight += CalcPointLight( pointLights[i], Normal, FragPos, viewDir );
     }
 
+	color = vec4(calcLight, 1.0f);
 
-	////////////////////////////////fog shading //////////////////////////////
-
-	vec3 RimColor = vec3(0.2, 0.2, 0.2);
-	vec3 tex1 = texture(material.texture_diffuse1, TexCoords).rgb;
- 
-
-	//get light an view directions
-	vec3 L = normalize( LightDirection_cameraspace);
-	vec3 V = normalize( EyeDirection_cameraspace);
- 
-	//diffuse lighting
-	vec3 fogNorm = normalize( Normal );
-	vec3 diffuse = light.diffuse * max(0, dot(L, fogNorm));
- 
-	//rim lighting
-	float rim = 1 - max(dot(V, fogNorm), 0.0);
-	rim = smoothstep(0.6, 1.0, rim);
-	vec3 finalRim = RimColor * vec3(rim, rim, rim);
-	//get all lights and texture
-	vec3 lightColor = finalRim + diffuse + tex1;
- 
-	vec3 finalColor = vec3(0, 0, 0);
- 
-	//distance
-	float dist = 0;
-	float fogFactor = 0;
-
-	//compute distance used in fog equations
-
-   //range based
-   dist = length(ModelView);
-
-   fogFactor = 1.0 /exp( (dist * FogDensity)* (dist * FogDensity));
-   fogFactor = clamp( fogFactor, 0.0, 1.0 );
-   finalColor = mix(fogColor, vec3(calcLight), fogFactor);
-
-   color = vec4(finalColor,1);
 }
 
 

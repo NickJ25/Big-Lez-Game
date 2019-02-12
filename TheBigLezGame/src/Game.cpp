@@ -60,7 +60,7 @@ void Game::init()
 	//environment->setShader(toonShader);
 	//gameObjects.push_back(environment);
 	Player::Character BigLez;
-	BigLez.fileLocation = "assets/Characters/BigLez/BigLez.dae";
+	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
 	BigLez.name = "Leslie";
 
 	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -101,6 +101,7 @@ void Game::draw()
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainCamera->getCameraPos().x, mainCamera->getCameraPos().y, mainCamera->getCameraPos().z);
+	cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
 	//cout << "specular; " << glGetUniformLocation(toonShader->getID(), "material.specular") << endl;
