@@ -16,7 +16,7 @@ private:
 	glm::vec3 m_position;
 	glm::vec3 m_up = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec3 m_right;
-	glm::vec3 m_front;
+	glm::vec3 m_front = glm::vec3(0.0f, 0.0f, -1.0f);
 	Camera_Type m_camType;
 
 	GLfloat m_mouseSensitivity = 0.25f;
@@ -29,7 +29,6 @@ private:
 	bool firstCamLoad = true;
 
 	// Attributes
-	glm::vec3 frontDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 rightDirection = glm::normalize(glm::cross(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
 	glm::vec3* m_followPos;

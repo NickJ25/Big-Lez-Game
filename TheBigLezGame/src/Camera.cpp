@@ -2,7 +2,7 @@
 
 glm::mat4 Camera::lookAtMat()
 {
-	return glm::lookAt(m_position, m_position - m_front ,m_up); // + ?
+	return glm::lookAt(m_position, m_position - m_front, m_up); // + ?
 }
 
 glm::vec3 Camera::getCameraFront()
@@ -34,33 +34,38 @@ void Camera::update()
 	// Different types of camera movement
 	switch (m_camType) {
 	case FREECAM: // Aka noclip
-
-		break;
-	case DYNAMIC: // Standard player
 		if (Input::keyboard1.keys[GLFW_KEY_W]) {
-			cout << "Forward" << endl;
-			m_position += frontDirection * 1.0f;
+			m_position -= m_front * 1.0f;
 		}
 		if (Input::keyboard1.keys[GLFW_KEY_S]) {
-			cout << "Backward" << endl;
-			m_position -= frontDirection * 1.0f;
+			m_position += m_front * 1.0f;
 		}
 		if (Input::keyboard1.keys[GLFW_KEY_A]) {
-			cout << "Left" << endl;
-			m_position -= rightDirection * 1.0f;
+			m_position += glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
 		}
 		if (Input::keyboard1.keys[GLFW_KEY_D]) {
-			cout << "Right" << endl;
-			m_position += rightDirection * 1.0f;
+			m_position -= glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
 		}
 
 		if (Input::keyboard1.keys[GLFW_KEY_LEFT_SHIFT]) {
-			cout << "Down" << endl;
 			m_position -= glm::vec3(0.0f, 1.0f, 0.0f);
 		}
 		if (Input::keyboard1.keys[GLFW_KEY_SPACE]) {
-			cout << "Up" << endl;
 			m_position += glm::vec3(0.0f, 1.0f, 0.0f);
+		}
+		break;
+	case DYNAMIC: // Standard player
+		if (Input::keyboard1.keys[GLFW_KEY_W]) {
+			m_position -= m_front * 1.0f;
+		}
+		if (Input::keyboard1.keys[GLFW_KEY_S]) {
+			m_position += m_front * 1.0f;
+		}
+		if (Input::keyboard1.keys[GLFW_KEY_A]) {
+			m_position += glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
+		}
+		if (Input::keyboard1.keys[GLFW_KEY_D]) {
+			m_position -= glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
 		}
 		break;
 	case STATIC: // No movement
