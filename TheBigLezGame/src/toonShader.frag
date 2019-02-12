@@ -1,6 +1,6 @@
 #version 330 core
 
-#define NUMBER_OF_POINT_LIGHTS 4
+#define NUMBER_OF_POINT_LIGHTS 1
 
 struct PointLight
 {
@@ -154,17 +154,20 @@ void main( )
    // vec3 norm = normalize( Normal );
     vec3 viewDir = normalize( viewPos - FragPos );
     
+	vec3 calcLight = vec3(0.0f, 0.0f, 0.0f);
+
+
     // Directional lighting
-    vec3 calcLight = CalcDirLight( dirLight, Normal, viewDir );
+   // vec3 calcLight = CalcDirLight( dirLight, Normal, viewDir );
     
     
     // Spot light
-    calcLight += CalcSpotLight( light, Normal, FragPos, viewDir );
+   // calcLight += CalcSpotLight( light, Normal, FragPos, viewDir );
 
     // Point lights
     for ( int i = 0; i < NUMBER_OF_POINT_LIGHTS; i++ )
     {
-        calcLight += CalcPointLight( pointLights[i], Normal, FragPos, viewDir );
+   //     calcLight += CalcPointLight( pointLights[i], Normal, FragPos, viewDir );
     }
 
 

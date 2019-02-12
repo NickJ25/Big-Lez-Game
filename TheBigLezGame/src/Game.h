@@ -18,6 +18,7 @@
 #include "PointLight.h"
 #include "Camera.h"
 #include "Skybox.h"
+#include "Player.h"
 
 #include "Text.h"
 

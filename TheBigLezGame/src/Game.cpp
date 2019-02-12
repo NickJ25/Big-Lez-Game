@@ -42,12 +42,12 @@ void Game::init()
 	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
 	dirLight->setShader(toonShader);
 	gameObjects.push_back(dirLight);
-	GameObject* spotLight = new SpotLight(mainCamera->getCameraPos(), mainCamera->getCameraFront(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.1f), 0.4, 3);
-	spotLight->setShader(toonShader);
-	gameObjects.push_back(spotLight);
-	GameObject* pointLight = new PointLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.09f, 0.05f, 0.09f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.09f, 0.32f));
-	pointLight->setShader(toonShader);
-	gameObjects.push_back(pointLight);
+	//GameObject* spotLight = new SpotLight(mainCamera->getCameraPos(), mainCamera->getCameraFront(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.1f), 0.4, 3);
+	//spotLight->setShader(toonShader);
+	//gameObjects.push_back(spotLight);
+	//GameObject* pointLight = new PointLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.09f, 0.05f, 0.09f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.09f, 0.32f));
+	//pointLight->setShader(toonShader);
+	//gameObjects.push_back(pointLight);
 	
 	//GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
 	//table->setShader(toonShader);
@@ -59,8 +59,15 @@ void Game::init()
 	//GameObject* environment = new Prop("assets/Props/Map/environment.obj", glm::vec3(0.0f, 0.0f, 0.0f));
 	//environment->setShader(toonShader);
 	//gameObjects.push_back(environment);
+	Player::Character BigLez;
+	BigLez.fileLocation = "assets/Characters/BigLez/BigLez.dae";
+	BigLez.name = "Leslie";
 
-	GameObject* lezTest = new Prop("assets/Characters/Sassy/sassy.dae", glm::vec3(0.0f, 0.0f, 0.0f)); //"assets/Props/Table/Table.dae" "assets/Characters/BigLez.dae" "assets/Characters/Sassy/sassy.dae"
+	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
+	bigLez->setShader(toonShader);
+	gameObjects.push_back(bigLez);
+
+	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f)); //"assets/Props/Table/Table.dae" "assets/Characters/BigLez.dae" "assets/Characters/Sassy/sassy.dae"
 	lezTest->setShader(toonShader);
 	gameObjects.push_back(lezTest);
 
