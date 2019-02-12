@@ -7,7 +7,6 @@ Shader *toonShader;
 
 // Initalize Two Camera
 Camera lezCamera(glm::vec3(0.0f, 4.0f, 6.0f), DYNAMIC);
-//Camera debugCamera();
 
 //rt3d::lightStruct light0 = {
 //	{1.0f, 1.0f, 1.0f, 1.0f}, // ambient
@@ -56,18 +55,28 @@ void Game::init()
 	//couch->setShader(toonShader);
 	//gameObjects.push_back(couch);
 
-	//GameObject* environment = new Prop("assets/Props/Map/environment.obj", glm::vec3(0.0f, 0.0f, 0.0f));
+	//GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	//environment->setShader(toonShader);
 	//gameObjects.push_back(environment);
+
+	GameObject* roof = new Prop("assets/Props/Map/roof.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+	roof->setShader(toonShader);
+	gameObjects.push_back(roof);
+
+	// Characters
 	Player::Character BigLez;
 	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
 	BigLez.name = "Leslie";
+
+	Player::Character Sassy;
+	Sassy.fileLocation = "assets/Characters/BigLez/lez.dae";
+	Sassy.name = "Sassy";
 
 	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
 	bigLez->setShader(toonShader);
 	gameObjects.push_back(bigLez);
 
-	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f)); //"assets/Props/Table/Table.dae" "assets/Characters/BigLez.dae" "assets/Characters/Sassy/sassy.dae"
+	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	lezTest->setShader(toonShader);
 	gameObjects.push_back(lezTest);
 
