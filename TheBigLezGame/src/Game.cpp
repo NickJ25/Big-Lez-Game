@@ -56,7 +56,7 @@ void Game::init()
 	//gameObjects.push_back(couch);
 
 	GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 0.0f, 0.0f));
-	environment->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//environment->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	environment->setShader(toonShader);
 	gameObjects.push_back(environment);
 

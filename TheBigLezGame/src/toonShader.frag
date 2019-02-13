@@ -67,7 +67,7 @@ uniform PointLight pointLights[1];
 
 //fog variables
 const vec3 fogColor = vec3(0.5, 0.5,0.5);
-const float FogDensity = 0.1;
+const float FogDensity = 0.01;
 
 vec3 CalcSpotLight( Light light, vec3 normal, vec3 fragPos, vec3 viewDir )
 {
@@ -173,7 +173,7 @@ void main( )
 	
 ////////////////////////////////fog shading //////////////////////////////
 
-vec3 RimColor = vec3(0.2, 0.2, 0.2);
+color = vec4(calcLight, 1.0f);vec3 RimColor = vec3(0.2, 0.2, 0.2);
 vec3 tex1 = texture(material.texture_diffuse1, TexCoords).rgb;
 
 
