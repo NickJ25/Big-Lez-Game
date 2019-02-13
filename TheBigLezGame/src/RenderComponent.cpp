@@ -6,7 +6,6 @@ void RenderComponent::loadObject(const char* mesh_filename)
 	//testModel = new Model(mesh_filename); // TEST
 	m_objModel = new AnimModel();
 	m_objModel->loadModel(mesh_filename);
-
 }
 
 // Load Animated Object
@@ -46,6 +45,11 @@ void RenderComponent::changeShader(Shader* newShader)
 	m_objModel->initShaders(newShader->getID());
 }
 
+void RenderComponent::setAnim(int n)
+{
+	m_objModel->setAnim(n);
+}
+
 void RenderComponent::Draw()
 {
 	// Select Modes
@@ -64,7 +68,7 @@ void RenderComponent::Draw()
 	//cout << "View: " << glGetUniformLocation(shaderID, "view") << endl; // TEMP
 	// Draw Items////////////////
 
-	m_objModel->draw(m_currentShader->getID(), false);
+	m_objModel->draw(m_currentShader->getID(), true);
 
 	//testModel->Draw(*m_currentShader); // TEST
 

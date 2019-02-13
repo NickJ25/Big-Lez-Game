@@ -37,6 +37,7 @@ public:
 	void Rotate(GLfloat degrees, glm::vec3 rotateAmount);
 	void Scale(glm::vec3 scaleAmount);
 	void setShader(Shader* shader);
+	void setAnim(int n);
 	glm::vec3 getPosition();
 
 	void addCollision(glm::vec3 size);

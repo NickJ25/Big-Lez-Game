@@ -1,4 +1,4 @@
-#include "AnimModel.h"
+﻿#include "AnimModel.h"
 //#include "Game.h"
 //#include "InputHandler.h"
 
@@ -66,7 +66,7 @@ void AnimModel::draw(GLuint shaders_program, bool isAnimated)
 	vector<aiMatrix4x4> transforms;
 	if (isAnimated == true)
 	{  // if not explicitly set, just find the time
-		boneTransform((double)glfwGetTime() / 1000.0f, transforms);
+		boneTransform((double)glfwGetTime(), transforms);
 	}
 	else
 	{
@@ -509,12 +509,23 @@ void AnimModel::readNodeHierarchy(float p_animation_time, const aiNode* p_node, 
 
 }
 
+void AnimModel::setAnim(int n)
+{
+	lefthand = n;
+}
+
 void AnimModel::boneTransform(double time_in_sec, vector<aiMatrix4x4>& transforms)
 {
 	aiMatrix4x4 identity_matrix;
 
 	double time_in_ticks = time_in_sec * ticks_per_second;
 	float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration);
+
+	if (lefthand == 1)
+	{
+		cout << "calling right hand" << endl;
+		animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration / 2);
+	}
 
 	readNodeHierarchy(animation_time, scene->mRootNode, identity_matrix);
 	transforms.resize(m_num_bones);

@@ -55,9 +55,10 @@ void Game::init()
 	//couch->setShader(toonShader);
 	//gameObjects.push_back(couch);
 
-	//GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 0.0f, 0.0f));
-	//environment->setShader(toonShader);
-	//gameObjects.push_back(environment);
+	GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+	environment->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	environment->setShader(toonShader);
+	gameObjects.push_back(environment);
 
 	GameObject* roof = new Prop("assets/Props/Map/roof.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	roof->setShader(toonShader);
@@ -69,15 +70,26 @@ void Game::init()
 	BigLez.name = "Leslie";
 
 	Player::Character Sassy;
-	Sassy.fileLocation = "assets/Characters/BigLez/lez.dae";
+	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
 	Sassy.name = "Sassy";
 
 	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
 	bigLez->setShader(toonShader);
+	bigLez->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	bigLez->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
+	bigLez->setAnim(0);
 	gameObjects.push_back(bigLez);
+
+	GameObject* sassy = new Player(Sassy, glm::vec3(5.0f, 0.0f, 0.0f));
+	sassy->setShader(toonShader);
+	sassy->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	sassy->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
+	sassy->setAnim(0);
+	gameObjects.push_back(sassy);
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	lezTest->setShader(toonShader);
+	lezTest->Rotate(-90.0f, glm::vec3(1.0, 0.0, 0.0));
 	gameObjects.push_back(lezTest);
 
 	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
@@ -89,6 +101,7 @@ void Game::init()
 
 void Game::update()
 {
+
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
 			gameObjects[i]->componentUpdate();

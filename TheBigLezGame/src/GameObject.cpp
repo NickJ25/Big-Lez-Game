@@ -23,6 +23,11 @@ void GameObject::setShader(Shader * shader)
 	}
 }
 
+void GameObject::setAnim(int n) 
+{
+	renderComponent->setAnim(n);
+}
+
 glm::vec3 GameObject::getPosition()
 {
 	return transformComponent->getPosition();

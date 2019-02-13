@@ -35,6 +35,9 @@ public:
 	void playSound();
 	void showNodeName(aiNode* node);
 
+	void setAnim(int n); // TEST TEST TEST
+
+
 	GLuint TextureFromFile(const char * path);
 
 	glm::mat4 aiToGlm(aiMatrix4x4 ai_matr);
@@ -45,6 +48,8 @@ private:
 	const aiScene* scene;
 	vector<AnimMesh> meshes; // one mesh in one object
 	string directory;
+
+	int lefthand = 2;
 
 	map<string, uint> m_bone_mapping; // maps a bone name and their index
 	uint m_num_bones = 0;
