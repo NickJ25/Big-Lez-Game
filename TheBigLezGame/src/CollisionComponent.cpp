@@ -4,7 +4,7 @@ glm::vec3 CollisionComponent::getCollision()
 {
 	return m_collisionSize;
 }
-
+//
 //bool CollisionComponent::checkCollisions(GameObject * a, GameObject * b)
 //{
 //	if (abs(a->getPosition().x - b->getPosition().x) > (a->getCollision().x + b->getCollision().x)) return false;

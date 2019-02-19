@@ -41,22 +41,9 @@ void Game::init()
 	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
 	dirLight->setShader(toonShader);
 	gameObjects.push_back(dirLight);
-	//GameObject* spotLight = new SpotLight(mainCamera->getCameraPos(), mainCamera->getCameraFront(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.1f), 0.4, 3);
-	//spotLight->setShader(toonShader);
-	//gameObjects.push_back(spotLight);
-	//GameObject* pointLight = new PointLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.09f, 0.05f, 0.09f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.09f, 0.32f));
-	//pointLight->setShader(toonShader);
-	//gameObjects.push_back(pointLight);
-	
-	//GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
-	//table->setShader(toonShader);
-	//gameObjects.push_back(table);
-	//GameObject* couch = new Prop("assets/Props/Couch/couch.obj", glm::vec3(5.0f, 0.0f, 5.0f));
-	//couch->setShader(toonShader);
-	//gameObjects.push_back(couch);
+
 
 	GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 0.0f, 0.0f));
-	//environment->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	environment->setShader(toonShader);
 	gameObjects.push_back(environment);
 
@@ -73,14 +60,14 @@ void Game::init()
 	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
 	Sassy.name = "Sassy";
 
-	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
+	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, -15.0f, 50.0f));
 	bigLez->setShader(toonShader);
 	bigLez->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	bigLez->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	bigLez->setAnim(0);
 	gameObjects.push_back(bigLez);
 
-	GameObject* sassy = new Player(Sassy, glm::vec3(5.0f, 0.0f, 0.0f));
+	GameObject* sassy = new Player(Sassy, glm::vec3(150.0f, -15.0f, 50.0f));
 	sassy->setShader(toonShader);
 	sassy->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	sassy->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
