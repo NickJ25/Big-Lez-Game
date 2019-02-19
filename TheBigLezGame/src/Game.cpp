@@ -60,7 +60,7 @@ void Game::init()
 	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
 	Sassy.name = "Sassy";
 
-	waveSpawner = new WaveSpawner(150, glm::vec3(0, 0, 0));
+	waveSpawner = new WaveSpawner(150, glm::vec3(0, -12.5, 50));
 	waveSpawner->spawnWave(gameObjects, 0, toonShader);
 
 	cout << "first check: " << gameObjects.size() << endl;
