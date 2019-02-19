@@ -19,8 +19,10 @@
 #include "Camera.h"
 #include "Skybox.h"
 #include "Player.h"
+#include "WaveSpawner.h"
 
 #include "Text.h"
+#include "WaveSpawner.h"
 
 using namespace std;
 

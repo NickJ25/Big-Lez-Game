@@ -187,6 +187,7 @@
     <ClCompile Include="src\windowGLFW.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\WaveSpawner.h" />
     <ClInclude Include="src\LobbyMenu.h" />
     <ClInclude Include="src\AnimMesh.h" />
     <ClInclude Include="src\AnimModel.h" />

@@ -3,7 +3,7 @@
 vector<GameObject*> gameObjects;
 Skybox* skybox;
 Shader *toonShader;
-
+WaveSpawner* waveSpawner;
 
 // Initalize Two Camera
 Camera lezCamera(glm::vec3(0.0f, 4.0f, 6.0f), DYNAMIC);
@@ -60,19 +60,26 @@ void Game::init()
 	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
 	Sassy.name = "Sassy";
 
-	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, -15.0f, 50.0f));
+	waveSpawner = new WaveSpawner(150, glm::vec3(0, 0, 0));
+	waveSpawner->spawnWave(gameObjects, 0, toonShader);
+
+	cout << "first check: " << gameObjects.size() << endl;
+
+	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, -12.5f, 50.0f));
 	bigLez->setShader(toonShader);
 	bigLez->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	bigLez->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	bigLez->setAnim(0);
 	gameObjects.push_back(bigLez);
 
-	GameObject* sassy = new Player(Sassy, glm::vec3(150.0f, -15.0f, 50.0f));
+	GameObject* sassy = new Player(Sassy, glm::vec3(150.0f, -12.5f, 50.0f));
 	sassy->setShader(toonShader);
 	sassy->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	sassy->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	sassy->setAnim(0);
 	gameObjects.push_back(sassy);
+	
+	cout << "second check" << gameObjects.size() << endl;
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	lezTest->setShader(toonShader);
@@ -110,7 +117,7 @@ void Game::draw()
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainCamera->getCameraPos().x, mainCamera->getCameraPos().y, mainCamera->getCameraPos().z);
-	cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
+	//cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
 	//cout << "specular; " << glGetUniformLocation(toonShader->getID(), "material.specular") << endl;

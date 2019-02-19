@@ -1,6 +1,4 @@
 ﻿#include "AnimModel.h"
-//#include "Game.h"
-//#include "InputHandler.h"
 
 
 #include "SDL.h"
@@ -128,30 +126,30 @@ void AnimModel::loadModel(const string& path)
 	// directoru = container for model.obj and textures and other files
 	directory = path.substr(0, path.find_last_of('/'));
 
-	cout << "scene->HasAnimations() 1: " << scene->HasAnimations() << endl;
-	cout << "scene->mNumMeshes 1: " << scene->mNumMeshes << endl;
-	cout << "scene->mAnimations[0]->mNumChannels 1: " << scene->mAnimations[0]->mNumChannels << endl;
-	cout << "scene->mAnimations[0]->mDuration 1: " << scene->mAnimations[0]->mDuration << endl;
-	cout << "scene->mAnimations[0]->mTicksPerSecond 1: " << scene->mAnimations[0]->mTicksPerSecond << endl << endl;
+	//cout << "scene->HasAnimations() 1: " << scene->HasAnimations() << endl;
+	//cout << "scene->mNumMeshes 1: " << scene->mNumMeshes << endl;
+	//cout << "scene->mAnimations[0]->mNumChannels 1: " << scene->mAnimations[0]->mNumChannels << endl;
+	//cout << "scene->mAnimations[0]->mDuration 1: " << scene->mAnimations[0]->mDuration << endl;
+	//cout << "scene->mAnimations[0]->mTicksPerSecond 1: " << scene->mAnimations[0]->mTicksPerSecond << endl << endl;
 
-	cout << "		name nodes : " << endl;
-	showNodeName(scene->mRootNode);
-	cout << endl;
+	//cout << "		name nodes : " << endl;
+	//showNodeName(scene->mRootNode);
+	//cout << endl;
 
-	cout << "		name bones : " << endl;
+	//cout << "		name bones : " << endl;
 	processNode(scene->mRootNode, scene);
 
-	cout << "		name nodes animation : " << endl;
+	//cout << "		name nodes animation : " << endl;
 	for (uint i = 0; i < scene->mAnimations[0]->mNumChannels; i++)
 	{
-		cout << scene->mAnimations[0]->mChannels[i]->mNodeName.C_Str() << endl;
+		//cout << scene->mAnimations[0]->mChannels[i]->mNodeName.C_Str() << endl;
 	}
-	cout << endl;
+	//cout << endl;
 }
 
 void AnimModel::showNodeName(aiNode* node)
 {
-	cout << node->mName.data << endl;
+	//cout << node->mName.data << endl;
 	for (uint i = 0; i < node->mNumChildren; i++)
 	{
 		showNodeName(node->mChildren[i]);
@@ -172,7 +170,7 @@ void AnimModel::processNode(aiNode* node, const aiScene* scene)
 
 AnimMesh AnimModel::processMesh(aiMesh* mesh, const aiScene* scene)
 {
-	std::cout << "bones: " << mesh->mNumBones << " vertices: " << mesh->mNumVertices << std::endl;
+	//std::cout << "bones: " << mesh->mNumBones << " vertices: " << mesh->mNumVertices << std::endl;
 
 	vector<AnimVertex> vertices;
 	vector<GLuint> indices;
@@ -267,7 +265,7 @@ AnimMesh AnimModel::processMesh(aiMesh* mesh, const aiScene* scene)
 		uint bone_index = 0;
 		string bone_name(mesh->mBones[i]->mName.data);
 
-		cout << mesh->mBones[i]->mName.data << endl;
+		//cout << mesh->mBones[i]->mName.data << endl;
 
 		if (m_bone_mapping.find(bone_name) == m_bone_mapping.end())
 		{
@@ -523,7 +521,7 @@ void AnimModel::boneTransform(double time_in_sec, vector<aiMatrix4x4>& transform
 
 	if (lefthand == 1)
 	{
-		cout << "calling right hand" << endl;
+		//cout << "calling right hand" << endl;
 		animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration / 2);
 	}
 
