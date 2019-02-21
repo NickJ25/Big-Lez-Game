@@ -54,21 +54,22 @@ void Game::init()
 
 	// Characters
 	Player::Character BigLez;
-	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
+	BigLez.fileLocation = "assets/Props/Map/gridblock.dae";
 	BigLez.name = "Leslie";
 
 	Player::Character Sassy;
 	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
 	Sassy.name = "Sassy";
 
-	pathFindingGrid = new Grid(glm::vec2(160,160), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+	pathFindingGrid = new Grid(glm::vec2(200,200), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+	pathFindingGrid->buildGrid(gameObjects, toonShader);
 
 	waveSpawner = new WaveSpawner(150, glm::vec3(0, -12.5, 50));
 	waveSpawner->spawnWave(gameObjects, 0, toonShader);
 
 	cout << "first check: " << gameObjects.size() << endl;
 
-	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, -12.5f, 50.0f));
+	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, 20.5f, 50.0f));
 	bigLez->setShader(toonShader);
 	bigLez->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	bigLez->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
