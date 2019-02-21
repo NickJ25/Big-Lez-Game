@@ -23,6 +23,7 @@
 
 #include "Text.h"
 #include "WaveSpawner.h"
+#include "Grid.h"
 
 using namespace std;
 

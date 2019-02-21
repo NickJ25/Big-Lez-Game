@@ -4,6 +4,7 @@ vector<GameObject*> gameObjects;
 Skybox* skybox;
 Shader *toonShader;
 WaveSpawner* waveSpawner;
+Grid* pathFindingGrid;
 
 // Initalize Two Camera
 Camera lezCamera(glm::vec3(0.0f, 4.0f, 6.0f), DYNAMIC);
@@ -59,6 +60,8 @@ void Game::init()
 	Player::Character Sassy;
 	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
 	Sassy.name = "Sassy";
+
+	pathFindingGrid = new Grid(glm::vec2(160,160), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	waveSpawner = new WaveSpawner(150, glm::vec3(0, -12.5, 50));
 	waveSpawner->spawnWave(gameObjects, 0, toonShader);
