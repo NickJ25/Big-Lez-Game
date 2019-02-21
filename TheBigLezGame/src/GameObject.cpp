@@ -33,14 +33,14 @@ glm::vec3 GameObject::getPosition()
 	return transformComponent->getPosition();
 }
 
-void GameObject::addCollision(glm::vec3 size)
+void GameObject::addCollision(float hw, float hh, glm::vec3 scale)
 {
-	collisionComponent = new CollisionComponent(size);
+	collisionComponent = new CollisionComponent(this->getPosition(), scale, hw, hh);
 }
 
-glm::vec3 GameObject::getCollision()
+CollisionComponent GameObject::getCollider()
 {
-	return collisionComponent->getCollision();
+	return *collisionComponent;
 }
 
 void GameObject::componentUpdate()

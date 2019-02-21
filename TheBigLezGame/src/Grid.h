@@ -11,7 +11,13 @@ public:
 
 	void buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader);
 
+	bool checkGridCollision(GameObject* object, Node* current);
+
 	void update() override;
+
+	glm::vec3 getPosition();
+
+	float getSize();
 
 private:
 

@@ -1,8 +1,21 @@
 #include "CollisionComponent.h"
 
-glm::vec3 CollisionComponent::getCollision()
+
+glm::vec3 CollisionComponent::getPos()
 {
-	return m_collisionSize;
+	return centre;
+}
+glm::vec3 CollisionComponent::getScale()
+{
+	return scale;
+}
+float CollisionComponent::getHW()
+{
+	return halfWidth;
+}
+float CollisionComponent::getHH()
+{
+	return halfHeight;
 }
 //
 //bool CollisionComponent::checkCollisions(GameObject * a, GameObject * b)

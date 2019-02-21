@@ -54,7 +54,7 @@ void Game::init()
 
 	// Characters
 	Player::Character BigLez;
-	BigLez.fileLocation = "assets/Props/Map/gridblock.dae";
+	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
 	BigLez.name = "Leslie";
 
 	Player::Character Sassy;
@@ -69,11 +69,12 @@ void Game::init()
 
 	cout << "first check: " << gameObjects.size() << endl;
 
-	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, 20.5f, 50.0f));
+	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, -12.5f, 50.0f));
 	bigLez->setShader(toonShader);
 	bigLez->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	bigLez->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	bigLez->setAnim(0);
+	bigLez->addCollision(1.5f, 1.5f, glm::vec3(0.6f, 0.6f, 0.6f));
 	gameObjects.push_back(bigLez);
 
 	GameObject* sassy = new Player(Sassy, glm::vec3(150.0f, -12.5f, 50.0f));
@@ -104,6 +105,11 @@ void Game::update()
 		if (gameObjects[i] != nullptr) {
 			gameObjects[i]->componentUpdate();
 			gameObjects[i]->update();
+
+			if (gameObjects[i]->getCollider)
+			{
+				//do collision with grid
+			}
 		}
 	}
 	lezCamera.update();
