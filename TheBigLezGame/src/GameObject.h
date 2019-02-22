@@ -40,8 +40,8 @@ public:
 	void setAnim(int n);
 	glm::vec3 getPosition();
 
-	void addCollision(float hw, float hh, glm::vec3 scale);
-	CollisionComponent getCollider();
+	void addCollision(glm::vec3 pos, float hw, float hh, glm::vec3 scale);
+	CollisionComponent* getCollider();
 
 	void componentUpdate();
 	void componentDraw(glm::mat4 view);

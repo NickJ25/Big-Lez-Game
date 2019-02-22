@@ -12,7 +12,6 @@ public:
 	CollisionComponent(glm::vec3 pos, glm::vec3 s, float hw, float hh) : centre(pos), scale(s), halfWidth(hw), halfHeight(hh)
 	{
 
-
 	}
 
 	glm::vec3 getPos();

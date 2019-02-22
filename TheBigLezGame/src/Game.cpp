@@ -58,11 +58,8 @@ void Game::init()
 	BigLez.name = "Leslie";
 
 	Player::Character Sassy;
-	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
+	Sassy.fileLocation = "assets/Props/Map/gridblock.dae";
 	Sassy.name = "Sassy";
-
-	pathFindingGrid = new Grid(glm::vec2(200,200), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f));
-	pathFindingGrid->buildGrid(gameObjects, toonShader);
 
 	waveSpawner = new WaveSpawner(150, glm::vec3(0, -12.5, 50));
 	waveSpawner->spawnWave(gameObjects, 0, toonShader);
@@ -74,8 +71,17 @@ void Game::init()
 	bigLez->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	bigLez->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	bigLez->setAnim(0);
-	bigLez->addCollision(1.5f, 1.5f, glm::vec3(0.6f, 0.6f, 0.6f));
+	bigLez->addCollision(glm::vec3(0.0f, -12.5f, 50.0f), 0.6f, 0.6f, glm::vec3(0.6f, 0.6f, 0.6f));
 	gameObjects.push_back(bigLez);
+
+	GameObject* bigLezCollider = new Player(Sassy, glm::vec3(0.0f, -12.5f, 50.0f));
+	bigLezCollider->setShader(toonShader);
+	bigLezCollider->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	bigLezCollider->Scale(glm::vec3(1.0f, 1.0f, 1.0f));
+	bigLezCollider->setAnim(0);
+	//bigLezCollider->addCollision(glm::vec3(0.0f, -12.5f, 50.0f), 0.6f, 0.6f, glm::vec3(0.6f, 0.6f, 0.6f));
+	gameObjects.push_back(bigLezCollider);
+
 
 	GameObject* sassy = new Player(Sassy, glm::vec3(150.0f, -12.5f, 50.0f));
 	sassy->setShader(toonShader);
@@ -90,6 +96,10 @@ void Game::init()
 	lezTest->setShader(toonShader);
 	lezTest->Rotate(-90.0f, glm::vec3(1.0, 0.0, 0.0));
 	gameObjects.push_back(lezTest);
+
+	//grid has to be added last
+	pathFindingGrid = new Grid(glm::vec2(200, 200), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+	pathFindingGrid->buildGrid(gameObjects, toonShader);
 
 	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
 
@@ -106,10 +116,10 @@ void Game::update()
 			gameObjects[i]->componentUpdate();
 			gameObjects[i]->update();
 
-			if (gameObjects[i]->getCollider)
-			{
-				//do collision with grid
-			}
+			//if (gameObjects[i]->getCollider() != nullptr)
+			//{
+			//	//do collision with grid
+			//}
 		}
 	}
 	lezCamera.update();
