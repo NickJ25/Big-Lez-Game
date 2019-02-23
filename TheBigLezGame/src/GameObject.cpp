@@ -38,9 +38,9 @@ glm::vec3 GameObject::getPosition()
 	return transformComponent->getPosition();
 }
 
-void GameObject::addCollision(glm::vec3 pos, float hw, float hh, glm::vec3 scale)
+void GameObject::addCollision(glm::vec3 pos, float hw, float hh)
 {
-	collisionComponent = new CollisionComponent(pos, scale, hw, hh);
+	collisionComponent = new CollisionComponent(pos, hw, hh);
 }
 
 CollisionComponent* GameObject::getCollider()

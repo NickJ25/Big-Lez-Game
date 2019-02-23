@@ -39,16 +39,16 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			GameObject* choomah;
 
 			//generate the choomahs from the vector
-			if (j == 0)      choomah = new Player(normalChoomah, glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
-			else if (j == 1) choomah = new Player(chargerChoomah, glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
-			else if (j == 2) choomah = new Player(brawlerChoomah, glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
-			else if (j == 3) choomah = new Player(bossChoomah, glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
-			else		     choomah = new Player(normalChoomah, glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
+			if (j == 0)      choomah = new Player(normalChoomah);
+			else if (j == 1) choomah = new Player(chargerChoomah);
+			else if (j == 2) choomah = new Player(brawlerChoomah);
+			else if (j == 3) choomah = new Player(bossChoomah);
+			else		     choomah = new Player(normalChoomah);
 
 			//set their properties and add them to the gameplay vector reference
 			choomah->setShader(shader);
 			choomah->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-			choomah->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
+			choomah->Move(glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
 			choomah->setAnim(0);
 			gameObjects.push_back(choomah);
 		}

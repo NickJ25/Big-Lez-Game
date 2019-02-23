@@ -13,7 +13,7 @@ public:
 		bool isLocked;
 	};
 
-	Player(Character character, glm::vec3 startPos);
+	Player(Character character);
 	~Player();
 
 	void update() override;

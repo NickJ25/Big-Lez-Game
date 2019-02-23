@@ -34,10 +34,12 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 
 			//create object to represent node
 			GameObject* gridsquare;
-			gridsquare = new Player(cube, glm::vec3(tmpNode.position.x, -12.5f, tmpNode.position.z));
+			gridsquare = new Player(cube);
 			gridsquare->setShader(shader);
-			gridsquare->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-			gridsquare->Scale(glm::vec3(10.0, 10.0, 1.0));
+			//gridsquare->Scale(glm::vec3(10.0, 1.0, 10.0));
+			//gridsquare->Rotate(0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+			gridsquare->Move(glm::vec3(tmpNode.position.x, 0.5f , tmpNode.position.z));
+			gridsquare->Scale(glm::vec3(10.0, 1.0, 10.0));
 			gridsquare->setAnim(0);
 
 			std::vector<GameObject*>::iterator it;
@@ -48,7 +50,7 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 				{
 					if (checkaltGridCollision(*it, tmpNode) == true)
 					{
-						gridsquare->Move(glm::vec3(0.0f, 0.0f, 5.0f)); // to check the bastard is working
+						gridsquare->Move(glm::vec3(0.0f, 5.0f, 0.0f)); // to check the bastard is working
 						tmpNode.isBlocked = true;
 					}
 					else {
@@ -57,6 +59,7 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 				}
 			}
 			//add game object to the render loop
+			cout << " ( " << gridsquare->getPosition().x << " , " << gridsquare->getPosition().y << " , " << gridsquare->getPosition().z << " ) " << endl;
 			gameObjects.push_back(gridsquare);
 
 			//add the node to the column
@@ -90,10 +93,11 @@ void Grid::updateGrid(std::vector<GameObject*> &gameObjects, Shader* shader)
 						if ((*it1).isBlocked == false)
 						{
 							GameObject* gridsquare;
-							gridsquare = new Player(cube, glm::vec3((*it1).position.x, 17.5f, (*it1).position.z));
+							gridsquare = new Player(cube);
 							gridsquare->setShader(shader);
-							gridsquare->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 							gridsquare->Scale(glm::vec3(10.0, 10.0, 1.0));
+							//gridsquare->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+							gridsquare->Move(glm::vec3((*it1).position.x, -17.5f, (*it1).position.z));
 							gridsquare->setAnim(0);
 							gameObjects.push_back(gridsquare);
 							(*it1).isBlocked = true;

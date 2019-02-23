@@ -27,6 +27,12 @@ public:
 		renderComponent = new RenderComponent(filename);
 	}
 
+	GameObject( const char* filename) : objPosition(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
+		transformComponent = new TransformComponent(objPosition);
+		renderComponent = new RenderComponent(filename);
+	}
+
+
 	virtual ~GameObject() {
 		delete transformComponent;
 		delete renderComponent;
@@ -40,7 +46,7 @@ public:
 	void setAnim(int n);
 	glm::vec3 getPosition();
 
-	void addCollision(glm::vec3 pos, float hw, float hh, glm::vec3 scale);
+	void addCollision(glm::vec3 pos, float hw, float hh);
 	CollisionComponent* getCollider();
 
 	void componentUpdate();

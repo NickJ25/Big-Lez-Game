@@ -15,7 +15,7 @@ private:
 	glm::vec4 rotation;
 public:
 	TransformComponent(glm::vec4 objectMatrix) {
-		m_matrix = glm::translate(m_matrix, glm::vec3(objectMatrix.x, objectMatrix.y, objectMatrix.z));
+
 		m_position = glm::vec3(objectMatrix.x, objectMatrix.y, objectMatrix.z);
 	};
 	glm::vec3 getPosition();

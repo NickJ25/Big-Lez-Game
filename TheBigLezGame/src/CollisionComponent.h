@@ -9,7 +9,7 @@ private:
 	float halfHeight;
 
 public:
-	CollisionComponent(glm::vec3 pos, glm::vec3 s, float hw, float hh) : centre(pos), scale(s), halfWidth(hw), halfHeight(hh)
+	CollisionComponent(glm::vec3 pos, float hw, float hh) : centre(pos), halfWidth(hw), halfHeight(hh)
 	{
 
 	}
