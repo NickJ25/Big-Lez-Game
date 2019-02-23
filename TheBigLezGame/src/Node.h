@@ -6,6 +6,6 @@ struct Node {
 	Node();
 
 	glm::vec3 position;
-	bool isBlocked;
+	bool isBlocked = false;
 
 };

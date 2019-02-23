@@ -46,6 +46,7 @@ void Game::init()
 
 	GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	environment->setShader(toonShader);
+	environment->Scale(glm::vec3(1.7f, 1.7f, 1.7f));
 	gameObjects.push_back(environment);
 
 	GameObject* roof = new Prop("assets/Props/Map/roof.dae", glm::vec3(0.0f, 0.0f, 0.0f));
@@ -64,24 +65,13 @@ void Game::init()
 	waveSpawner = new WaveSpawner(150, glm::vec3(0, -12.5, 50));
 	waveSpawner->spawnWave(gameObjects, 0, toonShader);
 
-	cout << "first check: " << gameObjects.size() << endl;
-
-	GameObject* bigLez = new Player(BigLez, glm::vec3(0.0f, -12.5f, 50.0f));
+	GameObject* bigLez = new Player(BigLez, glm::vec3(10.0f, -12.5f, 50.0f));
 	bigLez->setShader(toonShader);
 	bigLez->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	bigLez->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
+	//bigLez->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	bigLez->setAnim(0);
-	bigLez->addCollision(glm::vec3(0.0f, -12.5f, 50.0f), 0.6f, 0.6f, glm::vec3(0.6f, 0.6f, 0.6f));
+	bigLez->addCollision(glm::vec3(10.0f, -12.5f, 50.0f), 0.6f, 0.6f, glm::vec3(0.6f, 0.6f, 0.6f));
 	gameObjects.push_back(bigLez);
-
-	GameObject* bigLezCollider = new Player(Sassy, glm::vec3(0.0f, -12.5f, 50.0f));
-	bigLezCollider->setShader(toonShader);
-	bigLezCollider->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	bigLezCollider->Scale(glm::vec3(1.0f, 1.0f, 1.0f));
-	bigLezCollider->setAnim(0);
-	//bigLezCollider->addCollision(glm::vec3(0.0f, -12.5f, 50.0f), 0.6f, 0.6f, glm::vec3(0.6f, 0.6f, 0.6f));
-	gameObjects.push_back(bigLezCollider);
-
 
 	GameObject* sassy = new Player(Sassy, glm::vec3(150.0f, -12.5f, 50.0f));
 	sassy->setShader(toonShader);
@@ -89,16 +79,9 @@ void Game::init()
 	sassy->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	sassy->setAnim(0);
 	gameObjects.push_back(sassy);
-	
-	cout << "second check" << gameObjects.size() << endl;
-
-	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
-	lezTest->setShader(toonShader);
-	lezTest->Rotate(-90.0f, glm::vec3(1.0, 0.0, 0.0));
-	gameObjects.push_back(lezTest);
 
 	//grid has to be added last
-	pathFindingGrid = new Grid(glm::vec2(200, 200), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+	pathFindingGrid = new Grid(glm::vec2(200, 200), 10.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 	pathFindingGrid->buildGrid(gameObjects, toonShader);
 
 	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
@@ -111,15 +94,27 @@ void Game::init()
 void Game::update()
 {
 
+
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
 			gameObjects[i]->componentUpdate();
 			gameObjects[i]->update();
 
-			//if (gameObjects[i]->getCollider() != nullptr)
-			//{
-			//	//do collision with grid
-			//}
+		}
+	}
+
+
+	if (Input::keyboard1.keys[GLFW_KEY_1]) {
+		std::vector<GameObject*>::iterator it;
+		for (it = gameObjects.begin(); it != gameObjects.end(); it++) {
+			if ((*it)->getCollider())
+			{
+				(*it)->Move(glm::vec3(2.0f, 0.0f, 0.0f));
+				pathFindingGrid->updateGrid(gameObjects, toonShader);             
+
+				cout << "object pos " << (*it)->getPosition().x << " , " << (*it)->getPosition().y << " , " << (*it)->getPosition().z << endl;
+				cout << "collider pos "  << (*it)->getCollider()->getPos().x << " , " << (*it)->getCollider()->getPos().y << " , " << (*it)->getCollider()->getPos().z << endl;
+			}
 		}
 	}
 	lezCamera.update();

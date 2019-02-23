@@ -14,6 +14,8 @@ public:
 
 	}
 
+	void move(glm::vec3 moveAmount);
+
 	glm::vec3 getPos();
 	glm::vec3 getScale();
 	float getHW();

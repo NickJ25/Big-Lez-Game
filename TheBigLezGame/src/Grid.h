@@ -3,6 +3,8 @@
 #include "GameObject.h"
 #include "Player.h"
 
+using namespace std;
+
 class Grid: public GameObject{
 
 public:
@@ -12,8 +14,11 @@ public:
 	void buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader);
 
 	bool checkGridCollision(GameObject* object, Node* current);
+	bool checkaltGridCollision(GameObject* object, Node current);
 
 	void update() override;
+
+	void updateGrid(std::vector<GameObject*> &gameObjects, Shader* shader);
 
 	glm::vec3 getPosition();
 
@@ -21,7 +26,8 @@ public:
 
 private:
 
-	Node **thisGrid;
+	//Node **thisGrid;
+	std::vector<std::vector<Node>> rowVector;
 	float nodeDiameter;
 	glm::vec2 gridSize;
 	int gridX, gridY;

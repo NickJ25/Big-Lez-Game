@@ -3,6 +3,11 @@
 void GameObject::Move(glm::vec3 moveAmount)
 {
 	transformComponent->move(moveAmount);
+
+	if (collisionComponent)
+	{
+		collisionComponent->move(moveAmount);
+	}
 }
 
 void GameObject::Rotate(GLfloat degrees, glm::vec3 rotateAmount)

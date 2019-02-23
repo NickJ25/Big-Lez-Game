@@ -17,6 +17,12 @@ float CollisionComponent::getHH()
 {
 	return halfHeight;
 }
+
+void CollisionComponent::move(glm::vec3 moveAmount)
+{
+	centre += moveAmount;
+}
+
 //
 //bool CollisionComponent::checkCollisions(GameObject * a, GameObject * b)
 //{

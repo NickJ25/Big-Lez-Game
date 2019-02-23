@@ -22,78 +22,105 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 
 
 	glm::vec3 bottomLeft = position - rightVector * (gridSize.x / 2) - forwardVector * (gridSize.y / 2);
-	thisGrid = new Node*[gridX]; 
-
+	//thisGrid = new Node*[gridX]; 
 	for (int i = 0; i < gridX; i++) {
+		std::vector<Node> columnVector;
 		for (int j = 0; j < gridY; j++) {
-			glm::vec3 nodePos = bottomLeft + rightVector * (i* nodeDiameter + (nodeDiameter / 2)) + forwardVector * (j * nodeDiameter + (nodeDiameter / 2));
-			thisGrid[i] = new Node[gridY];
-			thisGrid[i]->position = nodePos;
-			std::cout << thisGrid[i]->position.x << " , " << thisGrid[i]->position.z << endl;
 
+			//find node position and initialise it to a temporary node
+			glm::vec3 nodePos = bottomLeft + rightVector * (i* nodeDiameter + (nodeDiameter / 2)) + forwardVector * (j * nodeDiameter + (nodeDiameter / 2));
+			Node tmpNode;
+			tmpNode.position = nodePos;
+
+			//create object to represent node
 			GameObject* gridsquare;
-			gridsquare = new Player(cube, glm::vec3(thisGrid[i]->position.x, -12.5f, thisGrid[i]->position.z));
+			gridsquare = new Player(cube, glm::vec3(tmpNode.position.x, -12.5f, tmpNode.position.z));
 			gridsquare->setShader(shader);
 			gridsquare->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-			gridsquare->Scale(glm::vec3(1.0,1.0,1.0));
+			gridsquare->Scale(glm::vec3(10.0, 10.0, 1.0));
 			gridsquare->setAnim(0);
 
-			//cycle through game objects, check for obstructions, and assign accordingly
 			std::vector<GameObject*>::iterator it;
 			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 			{
-				bool tmpbool = (*it)->getCollider();
 
-				if (tmpbool)
+				if ((*it)->getCollider())
 				{
-					//for (int i = 0; i < gridX; i++) {
-					//	for (int j = 0; j < gridY; j++) {
-							if (checkGridCollision(*it, thisGrid[i]) == true)
-							{
-								gridsquare->Move(glm::vec3(0.0f, 20.0f, 0.0f)); // to check the bastard is working
-								thisGrid[i]->isBlocked == true;
-							}
-							else {
-								thisGrid[i] == false;
-								gridsquare->Move(glm::vec3(0.0f, -20.0f, 0.0f)); // to check the bastard is working
-							}
-					//	}
-					//}
+					if (checkaltGridCollision(*it, tmpNode) == true)
+					{
+						gridsquare->Move(glm::vec3(0.0f, 0.0f, 5.0f)); // to check the bastard is working
+						tmpNode.isBlocked = true;
+					}
+					else {
+						tmpNode.isBlocked = false;
+					}
 				}
 			}
-
+			//add game object to the render loop
 			gameObjects.push_back(gridsquare);
+
+			//add the node to the column
+			columnVector.push_back(tmpNode);
 		}
+		//add the column to the row
+		rowVector.push_back(columnVector);
 	}
 }
 
-bool Grid::checkGridCollision(GameObject* a, Node* b)
+void Grid::updateGrid(std::vector<GameObject*> &gameObjects, Shader* shader)
+{
+	//iterate through each row
+	std::vector<std::vector<Node>>::iterator it;
+	for (it = rowVector.begin(); it != rowVector.end(); it++)
+	{
+		//iterate through each colum of each row
+		std::vector<Node>::iterator it1;
+		for (it1 = (*it).begin(); it1 != (*it).end(); it1++)
+		{
+			std::vector<GameObject*>::iterator it2;
+			for (it2 = gameObjects.begin(); it2 != gameObjects.end(); it2++)
+			{
+				//cycle through all the game objects
+				if ((*it2)->getCollider())
+				{
+					//check
+					if (checkaltGridCollision(*it2, *it1) == true)
+					{
+						cout << "getting here" << endl;
+						if ((*it1).isBlocked == false)
+						{
+							GameObject* gridsquare;
+							gridsquare = new Player(cube, glm::vec3((*it1).position.x, 17.5f, (*it1).position.z));
+							gridsquare->setShader(shader);
+							gridsquare->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+							gridsquare->Scale(glm::vec3(10.0, 10.0, 1.0));
+							gridsquare->setAnim(0);
+							gameObjects.push_back(gridsquare);
+							(*it1).isBlocked = true;
+							
+						}
+					}
+				}
+			}
+		}
+
+	}
+}
+
+bool Grid::checkaltGridCollision(GameObject* a, Node b)
 {
 
+	if (abs(a->getCollider()->getPos().x - b.position.x) > (a->getCollider()->getHW() + (nodeDiameter/2))) return false;
+	if (abs(a->getCollider()->getPos().z - b.position.z) > (a->getCollider()->getHH() + (nodeDiameter/2))) return false;
 
-	//float centreZero = a->getPosition().x - b->position.x;
-	//float centreOne = a->getPosition().y - b->position.y;
-	//float centreTwo = a->getPosition().z - b->position.z;
-
-
-	//if (centreZero < 0) centreZero = -centreZero;
-	//if (centreOne < 0) centreOne = -centreOne;
-	//if (centreTwo < 0) centreTwo = -centreTwo;
-	//cout << "manamajeff" << endl;
-	//if (centreTwo >= a->getCollider()->getHW() + nodeDiameter)
-	//{
-
-	//	return false;
-	//}
-	//cout << "manamajeff" << endl;
-	//if (centreZero >= a->getCollider()->getHW() + nodeDiameter)
-	//{
-	//	return false;
-	//}
-	//cout << "manamajeff" << endl;
+	return true;
+}
+bool Grid::checkGridCollision(GameObject* a, Node* b)
+{
 		// Basic 2D collsion detection
-		if (abs(a->getPosition().x - b->position.x) > (a->getCollider()->getHW() + (nodeDiameter/2))) return false;
-		if (abs(a->getPosition().z - b->position.z) > (a->getCollider()->getHH() + (nodeDiameter / 2))) return false;
+
+		if (abs(a->getCollider()->getPos().x - b->position.x) > (a->getCollider()->getHW() + (nodeDiameter/2))) return false;
+		if (abs(a->getCollider()->getPos().z - b->position.z) > (a->getCollider()->getHH() + (nodeDiameter / 2))) return false;
 		return true;
 
 }
