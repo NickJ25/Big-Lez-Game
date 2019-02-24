@@ -1,14 +1,22 @@
 #include "WaveSpawner.h"
 
-WaveSpawner::WaveSpawner(float r, glm::vec3 pos) : GameObject(pos)
+WaveSpawner::WaveSpawner() : GameObject(glm::vec3(0.0f,0.0f,0.0f))
 {
-	radius = r;
-	position = pos;
 
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1;
 	wave1.push_back(5), wave1.push_back(3), wave1.push_back(3), wave1.push_back(2);
-	waves.push_back(wave1);
+	waves.push_back(wave1); 
+
+	//set some random spawn points, 4 on each side out of view of the main building
+	spawnPoints.push_back(glm::vec2(-120.0f, -165.0f));
+	spawnPoints.push_back(glm::vec2(-60.0f, -165.0f));
+	spawnPoints.push_back(glm::vec2(60.0f, -165.0f));
+	spawnPoints.push_back(glm::vec2(120.0f, -165.0f));
+	spawnPoints.push_back(glm::vec2(-120.0f, 195.0f));
+	spawnPoints.push_back(glm::vec2(-60.0f, 195.0f));
+	spawnPoints.push_back(glm::vec2(60.0f, 195.0f));
+	spawnPoints.push_back(glm::vec2(120.0f, 195.0f));
 
 	initNPCs();
 }
@@ -16,10 +24,8 @@ WaveSpawner::WaveSpawner(float r, glm::vec3 pos) : GameObject(pos)
 glm::vec2 WaveSpawner::getSpawnCoord()
 {
 	srand(time(0));
-	float randomAngle = (rand() % 360);
-	glm::vec2 spawnCoord = glm::vec2(cos(randomAngle)*radius, sin(randomAngle)*radius);
-
-	return spawnCoord;
+	float randomNumber = (rand() % 8);
+	return spawnPoints.at(randomNumber);
 }
 
 void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader)
@@ -48,8 +54,9 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			//set their properties and add them to the gameplay vector reference
 			choomah->setShader(shader);
 			choomah->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-			choomah->Move(glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
+			choomah->Move(glm::vec3(getSpawnCoord().x, getSpawnCoord().y, 0.0f));
 			choomah->setAnim(0);
+			choomah->addCollision(glm::vec3(choomah->getPosition().x, 0.0f, -choomah->getPosition().y), 1.0, 1.0);
 			gameObjects.push_back(choomah);
 		}
 	}

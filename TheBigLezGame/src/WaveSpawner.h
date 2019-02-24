@@ -14,7 +14,7 @@ class WaveSpawner : public GameObject
 {
 public:
 	//object is a big circle
-	WaveSpawner(float r, glm::vec3 pos);
+	WaveSpawner();
 
 
 	//function to get random co-ordinates
@@ -36,6 +36,9 @@ private:
 
 	//wave container
 	std::vector<vector<int>> waves;
+
+	//spawn points
+	std::vector<glm::vec2> spawnPoints;
 
 	//enemies
 	Player::Character normalChoomah;
