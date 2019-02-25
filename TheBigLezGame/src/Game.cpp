@@ -114,6 +114,7 @@ void Game::update()
 	else SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
+
 void Game::draw()
 {
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
