@@ -23,5 +23,6 @@ Camera* Player::getCamera()
 
 void Player::update()
 {
-	m_playerCamera->follow(this->getPosition());
+	//m_playerCamera->follow(this->getPosition());
+	m_playerCamera->update();
 }

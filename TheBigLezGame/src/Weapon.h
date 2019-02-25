@@ -9,7 +9,5 @@ public:
 
 	};
 
-	~Weapon();
-
 	virtual void update() = 0;
 };

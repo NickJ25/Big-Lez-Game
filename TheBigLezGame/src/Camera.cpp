@@ -36,6 +36,8 @@ void Camera::update()
 		m_position = *m_followPos;
 	}
 
+	std::cout << m_yaw << std::endl;
+
 	// Different types of camera movement
 	switch (m_camType) {
 	case FREECAM: // Aka noclip

@@ -24,4 +24,5 @@ void ControlsMenu::update()
 
 void ControlsMenu::draw()
 {
+
 }
