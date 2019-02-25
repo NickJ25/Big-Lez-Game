@@ -15,6 +15,11 @@ glm::vec3 Camera::getCameraPos()
 	return m_position;
 }
 
+GLfloat Camera::getYaw()
+{
+	return m_yaw;
+}
+
 void Camera::follow(glm::vec3 &objPosition)
 {
 	m_followPos = &objPosition;

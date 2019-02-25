@@ -153,6 +153,7 @@
     <ClCompile Include="src\AnimMesh.cpp" />
     <ClCompile Include="src\AnimModel.cpp" />
     <ClCompile Include="src\Button.cpp" />
+    <ClCompile Include="src\Gun.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CollisionComponent.cpp" />
@@ -187,6 +188,7 @@
     <ClCompile Include="src\windowGLFW.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Gun.h" />
     <ClInclude Include="src\LobbyMenu.h" />
     <ClInclude Include="src\AnimMesh.h" />
     <ClInclude Include="src\AnimModel.h" />
@@ -226,6 +228,7 @@
     <ClInclude Include="src\Text.h" />
     <ClInclude Include="src\TransformComponent.h" />
     <ClInclude Include="src\TextureLoader.h" />
+    <ClInclude Include="src\Weapon.h" />
     <ClInclude Include="src\windowGLFW.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>

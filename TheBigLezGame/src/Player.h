@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
-#include "Shader.h"
+#include "Camera.h"
+#include "Weapon.h"
+//#include "Shader.h"
 #include <iostream>
 #include <string>
 
@@ -16,10 +18,15 @@ public:
 	Player(Character character, glm::vec3 startPos);
 	~Player();
 
+	void playAnimation();
+	Camera* getCamera();
 	void update() override;
 
 private:
 	Character selectCharacter;
+	Camera* m_playerCamera;
+	Weapon* m_playerInventory[];
+
 };
 
 // Make camera unique
