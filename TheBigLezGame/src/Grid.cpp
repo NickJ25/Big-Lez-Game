@@ -29,7 +29,7 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 
 			//find node position and initialise it to a temporary node
 			glm::vec3 nodePos = bottomLeft + rightVector * (i* nodeDiameter + (nodeDiameter / 2)) + forwardVector * (j * nodeDiameter + (nodeDiameter / 2));
-			Node tmpNode;
+			Node tmpNode(nodeDiameter);
 			tmpNode.position = nodePos;
 
 			//create object to represent node
@@ -140,4 +140,66 @@ glm::vec3 Grid::getPosition()
 float Grid::getSize()
 {
 	return nodeDiameter / 2;
+}
+
+
+Node Grid::getNodeFromPoint(glm::vec3 point)
+{
+	float xPercentage = (point.x + gridSize.x / 2) / gridSize.x;
+	float zPercentage = (point.z + gridSize.y / 2) / gridSize.y;
+
+	xPercentage = clamp(xPercentage, 0, 1);
+	zPercentage = clamp(zPercentage, 0, 1);
+	
+	int x = round((gridX - 1)*xPercentage);
+	int y = round((gridY - 1)*zPercentage);
+
+	return rowVector.at(x).at(y);
+}
+
+float Grid::clamp(float n, float upper, float lower)
+{
+	n = (n > lower) * n + !(n > lower) * lower;
+	return (n < upper) * n + !(n < upper) * upper;
+}
+
+void Grid::AStarPath(glm::vec3 start, glm::vec3 finish)
+{
+
+	float currentSpot = 0;
+	Node startNode = getNodeFromPoint(start);
+	Node endNode = getNodeFromPoint(finish);
+
+	std::vector<Node> openSet;
+	std::vector<Node> closedSet;
+
+	openSet.push_back(startNode);
+
+	while (openSet.size > 0) {
+		Node current = openSet.at(currentSpot);
+		for (int i = 1; i < openSet.size(); i++)
+		{
+			if (openSet.at(i).fCost < current.fCost || openSet.at(i).fCost == current.fCost && openSet.at(i).hCost < current.hCost)
+				current = openSet.at(i);
+		}
+
+		openSet.erase(openSet.begin() + (currentSpot - 1));
+		closedSet.push_back(current);
+
+		if (current.position == endNode.position)
+		{
+			return;
+		}
+
+		for each (Node neighbour in getNeighbour(current))
+		{
+
+		}
+	}
+
+}
+
+std::vector<Node> getNeighbour(Node current)
+{
+
 }

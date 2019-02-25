@@ -3,9 +3,9 @@
 
 struct Node {
 
-	Node();
+	Node(float size);
 
 	glm::vec3 position;
 	bool isBlocked = false;
-
+	float fCost, gCost, hCost;
 };

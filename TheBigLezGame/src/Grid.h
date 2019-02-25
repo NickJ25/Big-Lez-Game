@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Player.h"
 
+#include <algorithm>
 using namespace std;
 
 class Grid: public GameObject{
@@ -24,6 +25,13 @@ public:
 
 	float getSize();
 
+	Node getNodeFromPoint(glm::vec3 point);
+
+	float clamp(float n, float upper, float lower);
+
+	void AStarPath(glm::vec3 start, glm::vec3 finish);
+
+	std::vector<Node> getNeighbour(Node current);
 private:
 
 	//Node **thisGrid;

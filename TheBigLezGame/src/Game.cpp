@@ -37,7 +37,6 @@ void Game::init()
 	skybox = new Skybox("assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
 						"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
 						"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp");
-
 	////	Init Objects	////
 	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
 	dirLight->setShader(toonShader);
