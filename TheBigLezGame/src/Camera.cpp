@@ -22,7 +22,8 @@ glm::vec3 Camera::getRotation()
 
 void Camera::follow(glm::vec3 &objPosition)
 {
-	m_followPos = &objPosition;
+	//m_followPos = &objPosition;
+	objPosition = *m_followPos;
 }
 
 void Camera::unfollow()
@@ -41,6 +42,7 @@ void Camera::update()
 	case FREECAM: // Aka noclip
 		if (Input::keyboard1.keys[GLFW_KEY_W]) {
 			m_position -= m_front * 1.0f;
+			if(m_followPos != nullptr) *m_followPos -= m_front * 1.0f;
 		}
 		if (Input::keyboard1.keys[GLFW_KEY_S]) {
 			m_position += m_front * 1.0f;
