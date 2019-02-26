@@ -26,7 +26,7 @@ void Player::update()
 {
 	//m_playerCamera->follow();
 	m_playerCamera->update();
-	int nowYaw = prevYaw - m_playerCamera->getYaw();
+	GLfloat nowYaw = prevYaw - m_playerCamera->getYaw();
 	this->Rotate(nowYaw, glm::vec3(0.0, 0.0, 1.0));
 	prevYaw = m_playerCamera->getYaw();
 }
