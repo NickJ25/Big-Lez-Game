@@ -4,10 +4,6 @@ vector<GameObject*> gameObjects;
 Skybox* skybox;
 Shader *toonShader;
 
-
-// Initalize Two Camera
-Camera lezCamera(glm::vec3(0.0f, 4.0f, 6.0f), DYNAMIC);
-
 //rt3d::lightStruct light0 = {
 //	{1.0f, 1.0f, 1.0f, 1.0f}, // ambient
 //	{1.0f, 1.0f, 1.0f, 1.0f}, // diffuse
@@ -29,7 +25,6 @@ float shininess = 32.0f;
 
 void Game::init()
 {
-	mainCamera = &lezCamera;
 	std::cout << "Game.cpp Init" << std::endl;
 	toonShader = new Shader("src/toonShader.vert", "src/toonShader.frag");
 
@@ -79,7 +74,6 @@ void Game::init()
 	mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	mainPlayer->setAnim(0);
 	gameObjects.push_back(mainPlayer);
-	mainCamera = mainPlayer->getCamera();
 
 	GameObject* sassy = new Player(Sassy, glm::vec3(5.0f, 0.0f, 0.0f));
 	sassy->setShader(toonShader);
@@ -109,7 +103,6 @@ void Game::update()
 			gameObjects[i]->update();
 		}
 	}
-	lezCamera.update();
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
 	else SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -123,7 +116,7 @@ void Game::draw()
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
-	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainCamera->getCameraPos().x, mainCamera->getCameraPos().y, mainCamera->getCameraPos().z);
+	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
 	cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
@@ -131,11 +124,10 @@ void Game::draw()
 	//cout << "shininess; " << glGetUniformLocation(toonShader->getID(), "material.shininess") << endl;
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
-	skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
-
+	skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
-			gameObjects[i]->componentDraw(mainCamera->lookAtMat());
+			gameObjects[i]->componentDraw(mainPlayer->getCamera()->lookAtMat());
 		}
 	}
 	testtxt->draw("test", glm::vec3(1.0f, 1.0f, 1.0f));

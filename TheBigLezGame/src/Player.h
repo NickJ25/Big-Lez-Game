@@ -25,7 +25,10 @@ public:
 private:
 	Character selectCharacter;
 	Camera* m_playerCamera;
-	Weapon* m_playerInventory[];
+	//Weapon* m_playerInventory[];
+	GLfloat prevYaw;
+
+	GLuint m_health;
 
 };
 

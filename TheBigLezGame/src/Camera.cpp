@@ -15,11 +15,6 @@ glm::vec3 Camera::getCameraPos()
 	return m_position;
 }
 
-GLfloat Camera::getYaw()
-{
-	return m_yaw;
-}
-
 void Camera::follow(glm::vec3 &objPosition)
 {
 	m_followPos = &objPosition;
@@ -35,8 +30,6 @@ void Camera::update()
 	if (m_followPos != nullptr) {
 		m_position = *m_followPos;
 	}
-
-	std::cout << m_yaw << std::endl;
 
 	// Different types of camera movement
 	switch (m_camType) {
@@ -95,8 +88,11 @@ void Camera::update()
 	lastOffsetX = (float)xpos;
 	lastOffsetY = (float)ypos;
 
-	this->m_yaw += mouseOffsetX *= this->m_mouseSensitivity;
-	this->m_pitch += mouseOffsetY *= this->m_mouseSensitivity;
+	this->m_yaw += (mouseOffsetX *= this->m_mouseSensitivity);
+	this->m_pitch += (mouseOffsetY *= this->m_mouseSensitivity);
+
+	if (m_yaw > 360) m_yaw = 0;
+	if (m_yaw < 0) m_yaw = 360;
 
 
 	if (this->m_pitch > 89.0f)
@@ -113,4 +109,9 @@ void Camera::update()
 	front.y = sin(glm::radians(m_pitch));
 	front.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
 	m_front = glm::normalize(front);
+}
+
+GLfloat Camera::getYaw()
+{
+	return m_yaw;
 }

@@ -27,7 +27,6 @@ using namespace std;
 class Game {
 private:
 	Player* mainPlayer;
-	Camera* mainCamera;
 	Text* testtxt;
 
 public:
