@@ -29,9 +29,15 @@ public:
 
 	float clamp(float n, float upper, float lower);
 
-	void AStarPath(glm::vec3 start, glm::vec3 finish);
+	void AStarPath(glm::vec3 start, glm::vec3 finish, std::vector<GameObject*>& gameObjects, Shader* shader);
 
 	std::vector<Node> getNeighbour(Node current);
+
+	int getDistance(Node nodeA, Node nodeB);
+
+	void retracePath(std::vector<Node> path, std::vector<GameObject*>& gameObjects, Shader* shader);
+
+	std::vector<Node> getPath();
 private:
 
 	//Node **thisGrid;
@@ -42,5 +48,7 @@ private:
 	glm::vec3 position;
 
 	Player::Character cube;
+
+	std::vector<Node> path;
 
 };

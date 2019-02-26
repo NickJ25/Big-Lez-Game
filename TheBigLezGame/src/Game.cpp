@@ -7,7 +7,7 @@ WaveSpawner* waveSpawner;
 Grid* pathFindingGrid;
 
 // Initalize Two Camera
-Camera lezCamera(glm::vec3(0.0f, 4.0f, 6.0f), DYNAMIC);
+Camera lezCamera(glm::vec3(-120.0f, 0.0f, -160.0f), DYNAMIC);
 
 //rt3d::lightStruct light0 = {
 //	{1.0f, 1.0f, 1.0f, 1.0f}, // ambient
@@ -145,6 +145,11 @@ void Game::init()
 	pathFindingGrid = new Grid(glm::vec2(500, 500), 10.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 	pathFindingGrid->buildGrid(gameObjects, toonShader);
 
+	cout << "check one" << gameObjects.size() << endl;
+
+	pathFindingGrid->AStarPath(glm::vec3(-120.0f, 0.0f, -220.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
+
+	cout << "check two" << gameObjects.size() << endl;
 	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
 
 	glEnable(GL_DEPTH_TEST);
@@ -154,7 +159,7 @@ void Game::init()
 
 void Game::update()
 {
-
+	//std::cout << "c: " << mainCamera->getCameraPos().x << " " << mainCamera->getCameraPos().z << std::endl;
 
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
@@ -188,6 +193,7 @@ void Game::draw()
 
 	skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
 
+	std::cout << "gosize:" << gameObjects.size() << std::endl;
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
 			gameObjects[i]->componentDraw(mainCamera->lookAtMat());

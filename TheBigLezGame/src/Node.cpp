@@ -2,8 +2,6 @@
 
 Node::Node(float size)
 {
-	gCost = size;
-	hCost = size;
-
-	fCost = size * 2;
+	//gCost = size;
+	//hCost = size;
 }
