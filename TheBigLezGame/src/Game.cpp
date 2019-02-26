@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <Windows.h>
 
 vector<GameObject*> gameObjects;
 Skybox* skybox;
@@ -26,6 +27,7 @@ rt3d::materialStruct material0 = {
 int diffuse = 0;
 int specular = 1;
 float shininess = 32.0f;
+
 
 void Game::init()
 {
@@ -99,19 +101,32 @@ void Game::init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+
 void Game::update()
 {
-
-	for (int i = 0; i < gameObjects.size(); i++) {
-		if (gameObjects[i] != nullptr) {
-			gameObjects[i]->componentUpdate();
-			gameObjects[i]->update();
+	if(isGameRunning == true)
+	{
+		for (int i = 0; i < gameObjects.size(); i++) {
+			if (gameObjects[i] != nullptr) {
+				gameObjects[i]->componentUpdate();
+				gameObjects[i]->update();
+			}
 		}
+		lezCamera.update();
+		const Uint8 *keys = SDL_GetKeyboardState(NULL);
+		if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
+		else SDL_SetRelativeMouseMode(SDL_TRUE);
 	}
-	lezCamera.update();
-	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
-	else SDL_SetRelativeMouseMode(SDL_TRUE);
+	
+	if (Input::keyboard1.keys[GLFW_KEY_P])
+	{
+		isGameRunning = false;	
+		g_window = glfwGetCurrentContext();
+		glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Resume");
+		resumeBtn->draw();
+	}
+
 }
 
 
@@ -132,6 +147,8 @@ void Game::draw()
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
 	skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
+
+	
 
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {

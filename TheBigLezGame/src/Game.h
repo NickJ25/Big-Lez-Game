@@ -19,6 +19,7 @@
 #include "Camera.h"
 #include "Skybox.h"
 #include "Player.h"
+#include "Button.h"
 
 #include "Text.h"
 
@@ -28,7 +29,9 @@ class Game {
 private:
 	Camera* mainCamera;
 	Text* testtxt;
-
+	bool isGameRunning = true; 
+	Button* resumeBtn;
+	GLFWwindow* g_window;
 public:
 	Game() {};
 	~Game() {};

@@ -15,12 +15,11 @@ using namespace std;
 class SinglePlayerMenu : public MenuState {
 private:
 	Game singleplayerGame;
-	bool gameRunning; 
 public:
 	SinglePlayerMenu();
 	virtual ~SinglePlayerMenu() {};
 	void handle(Menu* menu);
 	void update();
 	void draw();
-	void pause();
+	
 };
