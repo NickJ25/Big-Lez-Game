@@ -30,8 +30,10 @@ private:
 	Camera* mainCamera;
 	Text* testtxt;
 	bool isGameRunning = true; 
-	Button* resumeBtn;
+	Button* resumeBtn, *mainMenuBtn;
 	GLFWwindow* g_window;
+	Text* pauseText;
+	Menu* selectedMenu;
 public:
 	Game() {};
 	~Game() {};

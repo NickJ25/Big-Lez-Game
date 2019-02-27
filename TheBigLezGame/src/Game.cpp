@@ -94,6 +94,9 @@ void Game::init()
 	lezTest->Rotate(-90.0f, glm::vec3(1.0, 0.0, 0.0));
 	gameObjects.push_back(lezTest);
 
+	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
+	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
+
 	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
 
 	glEnable(GL_DEPTH_TEST);
@@ -123,10 +126,25 @@ void Game::update()
 		isGameRunning = false;	
 		g_window = glfwGetCurrentContext();
 		glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Resume");
-		resumeBtn->draw();
+		
+		
 	}
 
+	if (isGameRunning == false) 
+	{
+		if (resumeBtn->buttonClick()) 
+		{
+			isGameRunning = true;
+			glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+
+		if (mainMenuBtn->buttonClick()) 
+		{
+			glfwDestroyWindow(g_window);
+			exit(0);
+		}
+
+	}
 }
 
 
@@ -148,8 +166,16 @@ void Game::draw()
 
 	skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
 
-	
+	if (isGameRunning == false)
+	{
+		
 
+		
+		resumeBtn->draw();
+		mainMenuBtn->draw();
+		
+		//}
+	}
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
 			gameObjects[i]->componentDraw(mainCamera->lookAtMat());

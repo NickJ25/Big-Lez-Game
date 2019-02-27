@@ -34,6 +34,7 @@ void MainMenu::update()
 
 	if (quitBtn->buttonClick()) {
 		glfwDestroyWindow(m_window);
+		exit(0);
 	}
 }
 
