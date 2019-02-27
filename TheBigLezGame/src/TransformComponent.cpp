@@ -5,6 +5,7 @@
 glm::vec3 TransformComponent::getPosition()
 {
 	glm::vec3 tempPos = glm::vec3(m_matrix[0][3], m_matrix[1][3], m_matrix[2][3]);
+	//cout << "tempPos: " << tempPos.x << " " << tempPos.y << " " << tempPos.z << endl;
 	return tempPos;
 }
 
@@ -15,9 +16,8 @@ glm::mat4 TransformComponent::getMatrix()
 
 void TransformComponent::setPosition(glm::vec3 newPos)
 {
-	m_matrix[0][3] = newPos.x;
-	m_matrix[1][3] = newPos.y;
-	m_matrix[2][3] = newPos.z;
+	m_matrix = glm::translate(m_matrix, -this->getPosition());
+	m_matrix = glm::translate(m_matrix, newPos);
 }
 
 

@@ -42,7 +42,9 @@ public:
 	glm::mat4 lookAtMat();
 	glm::vec3 getCameraFront();
 	glm::vec3 getCameraPos();
+	void setCameraPos(glm::vec3 newPos);
 	glm::vec3 getFront();
+	glm::vec3 getRight();
 	GLfloat getYaw();
 	//void lookAt(GameObject object);
 	//void lookAt(0);

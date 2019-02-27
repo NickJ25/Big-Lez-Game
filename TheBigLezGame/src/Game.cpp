@@ -70,7 +70,7 @@ void Game::init()
 
 	mainPlayer = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
 	mainPlayer->setShader(toonShader);
-	mainPlayer->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//mainPlayer->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	mainPlayer->setAnim(0);
 	gameObjects.push_back(mainPlayer);

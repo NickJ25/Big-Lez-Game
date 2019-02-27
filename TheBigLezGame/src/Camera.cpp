@@ -15,15 +15,25 @@ glm::vec3 Camera::getCameraPos()
 	return m_position;
 }
 
+void Camera::setCameraPos(glm::vec3 newPos)
+{
+	m_position = newPos;
+}
+
 glm::vec3 Camera::getFront()
 {
 	return m_front;
 }
 
+glm::vec3 Camera::getRight()
+{
+	return glm::vec3();
+}
+
 void Camera::follow(glm::vec3 &objPosition)
 {
 	//m_followPos = &objPosition;
-	objPosition = *m_followPos;
+	m_position = objPosition;
 }
 
 void Camera::unfollow()
@@ -33,16 +43,11 @@ void Camera::unfollow()
 
 void Camera::update()
 {
-	if (m_followPos != nullptr) {
-		m_position = *m_followPos;
-	}
-
 	// Different types of camera movement
 	switch (m_camType) {
 	case FREECAM: // Aka noclip
 		if (Input::keyboard1.keys[GLFW_KEY_W]) {
 			m_position -= m_front * 1.0f;
-			if(m_followPos != nullptr) *m_followPos -= m_front * 1.0f;
 		}
 		if (Input::keyboard1.keys[GLFW_KEY_S]) {
 			m_position += m_front * 1.0f;
@@ -112,10 +117,12 @@ void Camera::update()
 		this->m_pitch = -89.0f;
 	}
 	glm::vec3 front;
-	front.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+	front.x = cos(glm::radians(m_yaw)) *cos(glm::radians(m_pitch));
 	front.y = sin(glm::radians(m_pitch));
-	front.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+	front.z = sin(glm::radians(m_yaw)) *cos(glm::radians(m_pitch));
 	m_front = glm::normalize(front);
+	m_right = glm::normalize(glm::cross(m_front, m_up));
+	cout << "Right: " << m_right.x << " " << m_right.y << " " << m_right.z << endl;
 }
 
 GLfloat Camera::getYaw()
