@@ -15,9 +15,9 @@ glm::vec3 Camera::getCameraPos()
 	return m_position;
 }
 
-glm::vec3 Camera::getRotation()
+glm::vec3 Camera::getFront()
 {
-	return glm::vec3();
+	return m_front;
 }
 
 void Camera::follow(glm::vec3 &objPosition)

@@ -39,6 +39,7 @@ public:
 	void setShader(Shader* shader);
 	void setAnim(int n);
 	glm::vec3 getPosition();
+	void setPosition(glm::vec3 newPos);
 
 	void addCollision(glm::vec3 size);
 	glm::vec3 getCollision();

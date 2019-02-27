@@ -4,7 +4,7 @@ Player::Player(Character character, glm::vec3 startPos) : GameObject(startPos, c
 {
 	m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f) , DYNAMIC);
 	prevYaw = -90;
-	prevPos = m_playerCamera->getCameraPos();
+	prevPos = this->getPosition();
 	m_charLabel = new Text(glm::vec2(6.0f, 5.0f), "assets/Fonts/ariali.ttf");
 	
 }
@@ -26,9 +26,23 @@ Camera* Player::getCamera()
 
 void Player::update()
 {
-	glm::vec3 nowPos = prevPos - m_playerCamera->getCameraPos;
-	this->Move(nowPos);
-	prevPos = pos;
+	glm::vec3 tempPos = this->getPosition();
+	if (Input::keyboard1.keys[GLFW_KEY_W]) {
+		tempPos -= m_playerCamera->getFront() * 1.0f;
+	}
+	if (Input::keyboard1.keys[GLFW_KEY_S]) {
+		tempPos += m_playerCamera->getFront() * 1.0f;
+	}
+	if (Input::keyboard1.keys[GLFW_KEY_A]) {
+		tempPos += m_playerCamera->getFront() * 1.0f;
+	}
+	if (Input::keyboard1.keys[GLFW_KEY_D]) {
+		tempPos -= m_playerCamera->getFront() * 1.0f;
+	}
+	this->setPosition(tempPos);
+	//glm::vec3 nowPos = prevPos - tempPos;
+	//this->Move(nowPos);
+	//prevPos = tempPos;
 
 	m_playerCamera->update();
 	GLfloat nowYaw = prevYaw - m_playerCamera->getYaw();
