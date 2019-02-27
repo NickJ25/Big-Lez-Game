@@ -17,6 +17,8 @@ protected:
 	glm::vec4 objPosition;
 	Shader* objShader;
 
+	bool isDrawing = true;
+
 public:
 	GameObject(glm::vec3 pos) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
 		transformComponent = new TransformComponent(glm::vec4(pos,1.0f));
@@ -44,6 +46,8 @@ public:
 	void Scale(glm::vec3 scaleAmount);
 	void setShader(Shader* shader);
 	void setAnim(int n);
+	void setDraw(bool d);
+
 	glm::vec3 getPosition();
 
 	void addCollision(glm::vec3 pos, float hw, float hh);

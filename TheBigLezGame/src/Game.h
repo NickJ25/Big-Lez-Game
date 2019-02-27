@@ -32,6 +32,8 @@ private:
 	Camera* mainCamera;
 	Text* testtxt;
 
+	bool showBoundingBoxes;
+
 public:
 	Game() {};
 	~Game() {};

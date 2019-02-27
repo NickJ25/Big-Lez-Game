@@ -1,13 +1,14 @@
 #include "Game.h"
 
 vector<GameObject*> gameObjects;
+vector<GameObject*> collisionObjs;
 Skybox* skybox;
 Shader *toonShader;
 WaveSpawner* waveSpawner;
 Grid* pathFindingGrid;
 
 // Initalize Two Camera
-Camera lezCamera(glm::vec3(-120.0f, 0.0f, -160.0f), DYNAMIC);
+Camera lezCamera(glm::vec3(200.0f, 0.0f, 100.0f), DYNAMIC);
 
 //rt3d::lightStruct light0 = {
 //	{1.0f, 1.0f, 1.0f, 1.0f}, // ambient
@@ -37,6 +38,9 @@ void Game::init()
 	skybox = new Skybox("assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
 						"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
 						"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp");
+
+	showBoundingBoxes = false;
+
 	////	Init Objects	////
 	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
 	dirLight->setShader(toonShader);
@@ -63,7 +67,7 @@ void Game::init()
 
 	Player::Character cube;
 	cube.fileLocation = "assets/Props/Map/gridblock.dae";
-	cube.name = "anything";
+	cube.name = "boundingbox";
 
 	//waveSpawner = new WaveSpawner(150, glm::vec3(0, -12.5, 50));
 	//waveSpawner->spawnWave(gameObjects, 0, toonShader);
@@ -134,22 +138,25 @@ void Game::init()
 			//if (i == 18) { scaleFactor = test; Fence->Move(glm::vec3(38.0f, 0.0f, -2.5f));  pos = glm::vec3(38.0f*scaleFactor.x, 0.0f*scaleFactor.y, -2.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 			//if (i == 19) { scaleFactor = test; Fence->Move(glm::vec3(38.0f, 0.0f, 14.5f));  pos = glm::vec3(38.0f*scaleFactor.x, 0.0f*scaleFactor.y, 14.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 
-		//gameObjects.push_back(Fence);
+		gameObjects.push_back(Fence);
 
 	}
 
 	waveSpawner = new WaveSpawner();
 	waveSpawner->spawnWave(gameObjects, 0, toonShader);
 
+	cout << "check two" << gameObjects.size() << endl;
 	//grid has to be added last
 	pathFindingGrid = new Grid(glm::vec2(500, 500), 10.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 	pathFindingGrid->buildGrid(gameObjects, toonShader);
 
 	cout << "check one" << gameObjects.size() << endl;
 
+	pathFindingGrid->AStarPath(glm::vec3(-20.0f, 0.0f, -200.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
 	pathFindingGrid->AStarPath(glm::vec3(-120.0f, 0.0f, -220.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
+	pathFindingGrid->AStarPath(glm::vec3( 120.0f, 0.0f, 160.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
 
-	cout << "check two" << gameObjects.size() << endl;
+
 	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
 
 	glEnable(GL_DEPTH_TEST);
@@ -159,13 +166,53 @@ void Game::init()
 
 void Game::update()
 {
-	//std::cout << "c: " << mainCamera->getCameraPos().x << " " << mainCamera->getCameraPos().z << std::endl;
+	std::cout << "c: " << mainCamera->getCameraPos().x << " " << mainCamera->getCameraPos().z << std::endl;
+
 
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
 			gameObjects[i]->componentUpdate();
 			gameObjects[i]->update();
 
+		}
+	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_1]) {
+
+		if (showBoundingBoxes == false) {
+			vector<GameObject*>::iterator it;
+			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+			{
+				Player *tmp = dynamic_cast<Player*>(*it);
+				if (tmp != nullptr)
+				{
+					if (tmp->getCharacter().name == "boundingbox")
+					{
+						if (showBoundingBoxes == false)
+							(*it)->setDraw(true);
+					}
+				}
+			}
+			showBoundingBoxes = true;
+		}
+	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_2]) {
+
+		if (showBoundingBoxes == true) {
+			vector<GameObject*>::iterator it;
+			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+			{
+				Player *tmp = dynamic_cast<Player*>(*it);
+				if (tmp != nullptr)
+				{
+					if (tmp->getCharacter().name == "boundingbox")
+					{
+							(*it)->setDraw(false);
+					}
+				}
+			}
+			showBoundingBoxes = false;
 		}
 	}
 
@@ -193,9 +240,9 @@ void Game::draw()
 
 	skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
 
-	std::cout << "gosize:" << gameObjects.size() << std::endl;
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
+			
 			gameObjects[i]->componentDraw(mainCamera->lookAtMat());
 		}
 	}

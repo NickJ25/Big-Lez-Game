@@ -1,7 +1,6 @@
 #include "Node.h"
 
-Node::Node(float size)
+Node::Node()
 {
-	//gCost = size;
-	//hCost = size;
+
 }

@@ -3,18 +3,41 @@
 
 struct Node {
 
-	Node(float size);
+	Node();
 
 	glm::vec3 position;
-	bool isBlocked = false;
+
+	void setBlocked(bool b)
+	{
+		isBlocked = b;
+	}
+	bool getBlocked()
+	{
+		return isBlocked;
+	}
 	float fCost, gCost = 0, hCost = 0;
 
 	float gridX, gridY;
-	Node *parent;
+
 
 	float getFCost()
 	{
 		fCost = gCost + hCost;
 		return fCost;
 	}
+
+	void SetParent(Node *p)
+	{
+			parent = p;
+	}
+
+	Node* getParent()
+	{
+		return parent;
+	}
+
+private:
+	bool isBlocked = false;
+	Node* parent;
+
 };

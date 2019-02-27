@@ -11,7 +11,7 @@ Grid::Grid(glm::vec2 gridsize, float noderadius, glm::vec3 pos): GameObject(pos)
 	gridY = int(gridsize.y / nodeDiameter);
 
 	cube.fileLocation = "assets/Props/Map/gridblock.dae";
-	cube.name = "anything";
+	cube.name = "boundingbox";
 }
 
 void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
@@ -22,19 +22,19 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 
 
 	glm::vec3 bottomLeft = position - rightVector * (gridSize.x / 2) - forwardVector * (gridSize.y / 2);
-	//thisGrid = new Node*[gridX]; 
+
 	for (int i = 0; i < gridX; i++) {
-		std::vector<Node> columnVector;
+		std::vector<Node*> columnVector;
 		for (int j = 0; j < gridY; j++) {
 
 			//find node position and initialise it to a temporary node
 			glm::vec3 nodePos = bottomLeft + rightVector * (i* nodeDiameter + (nodeDiameter / 2)) + forwardVector * (j * nodeDiameter + (nodeDiameter / 2));
-			Node tmpNode(nodeDiameter);
-			tmpNode.position = nodePos;
-			tmpNode.gridX = i;
-			tmpNode.gridY = j;
+			Node *tmpNode = new Node();
+			tmpNode->position = nodePos;
+			tmpNode->gridX = i;
+			tmpNode->gridY = j;
 
-			////create object to represent node
+			//////create object to represent node
 			//GameObject* gridsquare;
 			//gridsquare = new Player(cube);
 			//gridsquare->setShader(shader);
@@ -43,21 +43,20 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 			//gridsquare->setAnim(0);
 
 			std::vector<GameObject*>::iterator it;
+
 			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 			{
-
 				if ((*it)->getCollider())
 				{
-					if (checkaltGridCollision(*it, tmpNode) == true)
+					if (checkaltGridCollision(*it, *tmpNode) == true)
 					{
 						//gridsquare->Move(glm::vec3(0.0f, 5.0f, 0.0f)); // to check the bastard is working
-						tmpNode.isBlocked = true;
-						cout<< "n " << tmpNode.position.x << tmpNode.position.z << endl;
+						tmpNode->setBlocked(true);
+						break;
 					}
 				}
 			}
 			//add game object to the render loop
-			//cout << " ( " << gridsquare->getPosition().x << " , " << gridsquare->getPosition().y << " , " << gridsquare->getPosition().z << " ) " << endl;
 			//gameObjects.push_back(gridsquare);
 
 			//add the node to the column
@@ -71,11 +70,11 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 void Grid::updateGrid(std::vector<GameObject*> &gameObjects, Shader* shader)
 {
 	//iterate through each row
-	std::vector<std::vector<Node>>::iterator it;
+	std::vector<std::vector<Node*>>::iterator it;
 	for (it = rowVector.begin(); it != rowVector.end(); it++)
 	{
 		//iterate through each colum of each row
-		std::vector<Node>::iterator it1;
+		std::vector<Node*>::iterator it1;
 		for (it1 = (*it).begin(); it1 != (*it).end(); it1++)
 		{
 			std::vector<GameObject*>::iterator it2;
@@ -85,20 +84,20 @@ void Grid::updateGrid(std::vector<GameObject*> &gameObjects, Shader* shader)
 				if ((*it2)->getCollider())
 				{
 					//check
-					if (checkaltGridCollision(*it2, *it1) == true)
+					if (checkaltGridCollision(*it2, **it1) == true)
 					{
 						cout << "getting here" << endl;
-						if ((*it1).isBlocked == false)
+						if ((**it1).getBlocked() == false)
 						{
 							GameObject* gridsquare;
 							gridsquare = new Player(cube);
 							gridsquare->setShader(shader);
 							gridsquare->Scale(glm::vec3(10.0, 10.0, 1.0));
 							gridsquare->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-							gridsquare->Move(glm::vec3((*it1).position.x, -17.5f, (*it1).position.z));
+							gridsquare->Move(glm::vec3((**it1).position.x, -17.5f, (**it1).position.z));
 							gridsquare->setAnim(0);
 							gameObjects.push_back(gridsquare);
-							(*it1).isBlocked = true;
+							(**it1).setBlocked(true);
 							cout << "checker " << endl;
 						}
 					}
@@ -112,7 +111,7 @@ void Grid::updateGrid(std::vector<GameObject*> &gameObjects, Shader* shader)
 bool Grid::checkaltGridCollision(GameObject* a, Node b)
 {
 
-	if (abs(a->getCollider()->getPos().x - b.position.x) > (a->getCollider()->getHW() + (nodeDiameter/2))) return false;
+	if (abs(a->getCollider()->getPos().x - b.position.x) > (a->getCollider()->getHW() + (nodeDiameter / 2))) return false;
 	if (abs(a->getCollider()->getPos().z - b.position.z) > (a->getCollider()->getHH() + (nodeDiameter/2))) return false;
 
 	return true;
@@ -143,7 +142,7 @@ float Grid::getSize()
 }
 
 
-Node Grid::getNodeFromPoint(glm::vec3 point)
+Node* Grid::getNodeFromPoint(glm::vec3 point)
 {
 	float xPercentage = (point.x + gridSize.x / 2) / gridSize.x;
 	float zPercentage = (point.z + gridSize.y / 2) / gridSize.y;
@@ -172,79 +171,78 @@ void Grid::AStarPath(glm::vec3 start, glm::vec3 finish, std::vector<GameObject*>
 {
 
 	float currentSpot = 0;
-	Node startNode = getNodeFromPoint(start);
-	Node endNode = getNodeFromPoint(finish);
+	Node *startNode = new Node();
+	startNode = getNodeFromPoint(start);
+	Node *endNode = new Node();
+	endNode = getNodeFromPoint(finish);
 
-	cout<< "( " << "startnode position" << startNode.position.x << " , " << startNode.position.y << " , " << startNode.position.z << " ) " << endl;
-	cout<< "( " <<  "endnode position" << endNode.position.x << " , " << endNode.position.y << " , " << endNode.position.z << " ) " << endl;
-	std::vector<Node> openSet;
-	std::vector<Node> closedSet;
+	std::vector<Node*> openSet;
+	std::vector<Node*> closedSet;
 
 	openSet.push_back(startNode);
-
+	
 	while (openSet.size() > 0) {
-		Node current = openSet.at(currentSpot);
+		Node* current = new Node();
+		current = openSet.at(0);
+		currentSpot = 0;
 		for (int i = 1; i < openSet.size(); i++)
 		{
-			if (openSet.at(i).fCost < current.fCost || openSet.at(i).fCost == current.fCost && openSet.at(i).hCost < current.hCost) {
+			if (openSet.at(i)->fCost < current->fCost || openSet.at(i)->fCost == current->fCost && openSet.at(i)->hCost < current->hCost) {
 				current = openSet.at(i);
 				currentSpot = i;
 			}
 		}
 
-		if(currentSpot != 0)
-		openSet.erase(openSet.begin() + (currentSpot-1));
-		else
-		openSet.erase(openSet.begin() + (currentSpot));
-
-
-		openSet.size();
+		openSet.erase(openSet.begin() + currentSpot);
 		closedSet.push_back(current);
 
-		if (current.gridX == endNode.gridX && current.gridY == endNode.gridY)
+		if (current->gridX == endNode->gridX && current->gridY == endNode->gridY)
 		{
-			endNode.parent = current.parent;
-			retracePath(closedSet, gameObjects, shader);
+//			closedSet.back()->SetParent(closedSet.back() - 1);
+			endNode = closedSet.back();
+			retracePath(startNode, endNode, gameObjects, shader);
 			return;
 		}
 
-		for each (Node neighbour in getNeighbour(current))
+
+		for each (Node* neighbour in getNeighbour(current))
 		{
-			std::vector<Node>::iterator it;
+			std::vector<Node*>::iterator it;
 
 			bool containsNeighbourClosed = false;
 			for (it = closedSet.begin(); it != closedSet.end(); it++)
 			{
-				if ((*it).gridX == neighbour.gridX && (*it).gridY == neighbour.gridY)
+				if ((**it).gridX == neighbour->gridX && (**it).gridY == neighbour->gridY)
 				{
 					containsNeighbourClosed = true;
 				}
 			}
-			if (neighbour.isBlocked == true || containsNeighbourClosed == true)
+			if (neighbour->getBlocked() == true || containsNeighbourClosed == true)
 			{
 				continue;
 			}
 
-			int newMovementCost = current.gCost + getDistance(current, neighbour);
-			std::vector<Node>::iterator it1;
+			int newMovementCost = current->gCost + getDistance(*current, *neighbour);
+			std::vector<Node*>::iterator it1;
 
 			bool containsNeighbourOpen = false;
-			//THIS IS WHERE THE PROBLEM IS
+
 			for (it1 = openSet.begin(); it1 != openSet.end(); it1++)
 			{
-				if ((*it1).gridX == neighbour.gridX && (*it1).gridY == neighbour.gridY)
+				if ((**it1).gridX == neighbour->gridX && (**it1).gridY == neighbour->gridY)
 				{
 					containsNeighbourOpen = true;
 				}
 			}
 			
-			if (newMovementCost < neighbour.gCost || containsNeighbourOpen == false) {
-				neighbour.gCost = newMovementCost;
-				neighbour.hCost = getDistance(current, endNode);
-				neighbour.parent = &current;
-				neighbour.getFCost();
+			if (newMovementCost < neighbour->gCost || containsNeighbourOpen == false) {
+				neighbour->gCost = newMovementCost;
+				neighbour->hCost = getDistance(*current, *endNode);
+				neighbour->SetParent(current);
+				cout << "spot check" << endl;
+				neighbour->getFCost();
 
-				if (containsNeighbourOpen == false && neighbour.isBlocked == false)
+				if (containsNeighbourOpen == false && neighbour->getBlocked() == false)
 				{
 					openSet.push_back(neighbour);
 				
@@ -254,7 +252,7 @@ void Grid::AStarPath(glm::vec3 start, glm::vec3 finish, std::vector<GameObject*>
 	}
 }
 
-std::vector<Node> Grid::getPath()
+std::vector<Node*> Grid::getPath()
 {
 	return path;
 }
@@ -271,9 +269,9 @@ int Grid::getDistance(Node nodeA, Node nodeB)
 	return 14 * distX + 10 * (distY - distX);
 }
 
-std::vector<Node> Grid::getNeighbour(Node current)
+std::vector<Node*> Grid::getNeighbour(Node* current)
 {
-	std::vector<Node> neighbours;
+	std::vector<Node*> neighbours;
 
 	for (int x = -1; x <= 1; x++)
 	{
@@ -283,10 +281,10 @@ std::vector<Node> Grid::getNeighbour(Node current)
 				continue;
 			}
 
-			int checkX = current.gridX + x;
-			int checkY = current.gridY + y;
+			int checkX = current->gridX + x;
+			int checkY = current->gridY + y;
 
-			if (checkX >= 0 && checkX < gridSize.x && checkY >= 0 && checkY < gridSize.y)
+			if (checkX >= 0 && checkX < gridSize.x && checkY >= 0 && checkY < gridSize.y && rowVector.at(checkX).at(checkY)->getBlocked() == false)
 			{
 				neighbours.push_back(rowVector.at(checkX).at(checkY));
 			}
@@ -296,22 +294,29 @@ std::vector<Node> Grid::getNeighbour(Node current)
 	return neighbours;
 }
 
-void Grid::retracePath(std::vector<Node> path, std::vector<GameObject*>& gameObjects, Shader* shader)
+void Grid::retracePath(Node* startNode, Node* endNode, std::vector<GameObject*>& gameObjects, Shader* shader)
 {
+	GameObject* gridsquare;
 	cube.fileLocation = "assets/Props/Map/gridblock.dae";
-	cube.name = "anything";
+	cube.name = "boundingbox";
 
-	std::vector<Node>::iterator it;
-	for (it = path.begin(); it != path.end(); it++)
+	std::vector<Node*> path;
+	Node *currentNode = new Node();
+	currentNode = endNode;
+
+	while (currentNode->gridX != startNode->gridX && currentNode->gridY != startNode->gridY)
 	{
-		GameObject* gridsquare;
+		path.push_back(currentNode);
+
 		gridsquare = new Player(cube);
-		cout << (*it).isBlocked << endl;
 		gridsquare->setShader(shader);
-		std::cout << (*it).position.x << " " << (*it).position.z << std::endl;
-		gridsquare->Move(glm::vec3((*it).position.x, 1.0f, (*it).position.z));
+		std::cout << currentNode->position.x << " " << currentNode->position.z << std::endl;
+		gridsquare->Move(glm::vec3(currentNode->position.x, 1.0f, currentNode->position.z));
 		gridsquare->Scale(glm::vec3(10.0, 1.0, 10.0));
 		gridsquare->setAnim(0);
 		gameObjects.push_back(gridsquare);
+
+		currentNode = currentNode->getParent();
+
 	}
 }

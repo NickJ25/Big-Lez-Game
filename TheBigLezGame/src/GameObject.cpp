@@ -33,6 +33,10 @@ void GameObject::setAnim(int n)
 	renderComponent->setAnim(n);
 }
 
+void GameObject::setDraw(bool d)
+{
+	isDrawing = d;
+}
 glm::vec3 GameObject::getPosition()
 {
 	return transformComponent->getPosition();
@@ -55,9 +59,15 @@ void GameObject::componentUpdate()
 
 void GameObject::componentDraw(glm::mat4 view)
 {
-	if (renderComponent != nullptr) {
-		renderComponent->setDrawMatrix(transformComponent->getMatrix());
-		renderComponent->setView(view);
-		renderComponent->Draw();
+	if (isDrawing == true) {
+		if (renderComponent != nullptr) {
+			renderComponent->setDrawMatrix(transformComponent->getMatrix());
+			renderComponent->setView(view);
+			renderComponent->Draw();
+		}
+	}
+	else
+	{
+		cout << "breakpoint" << endl;
 	}
 }

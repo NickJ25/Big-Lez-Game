@@ -17,6 +17,11 @@ public:
 	~Player();
 
 	void update() override;
+	
+	Character getCharacter()
+	{
+		return selectCharacter;
+	}
 
 private:
 	Character selectCharacter;

@@ -25,23 +25,23 @@ public:
 
 	float getSize();
 
-	Node getNodeFromPoint(glm::vec3 point);
+	Node* getNodeFromPoint(glm::vec3 point);
 
 	float clamp(float n, float upper, float lower);
 
 	void AStarPath(glm::vec3 start, glm::vec3 finish, std::vector<GameObject*>& gameObjects, Shader* shader);
 
-	std::vector<Node> getNeighbour(Node current);
+	std::vector<Node*> getNeighbour(Node* current);
 
 	int getDistance(Node nodeA, Node nodeB);
 
-	void retracePath(std::vector<Node> path, std::vector<GameObject*>& gameObjects, Shader* shader);
+	void retracePath(Node* startNode, Node* endNode, std::vector<GameObject*>& gameObjects, Shader* shader);
 
-	std::vector<Node> getPath();
+	std::vector<Node*> getPath();
 private:
 
 	//Node **thisGrid;
-	std::vector<std::vector<Node>> rowVector;
+	std::vector<std::vector<Node*>> rowVector;
 	float nodeDiameter;
 	glm::vec2 gridSize;
 	int gridX, gridY;
@@ -49,6 +49,6 @@ private:
 
 	Player::Character cube;
 
-	std::vector<Node> path;
+	std::vector<Node*> path;
 
 };
