@@ -173,6 +173,7 @@
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\OptionsMenu.cpp" />
+    <ClCompile Include="src\PathManager.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\Prop.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\Node.h" />
+    <ClInclude Include="src\PathManager.h" />
     <ClInclude Include="src\WaveSpawner.h" />
     <ClInclude Include="src\LobbyMenu.h" />
     <ClInclude Include="src\AnimMesh.h" />

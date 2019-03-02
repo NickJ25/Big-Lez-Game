@@ -24,6 +24,7 @@
 #include "Text.h"
 #include "WaveSpawner.h"
 #include "Grid.h"
+#include "PathManager.h"
 
 using namespace std;
 

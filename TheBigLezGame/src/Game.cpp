@@ -6,17 +6,10 @@ Skybox* skybox;
 Shader *toonShader;
 WaveSpawner* waveSpawner;
 Grid* pathFindingGrid;
+PathManager* pathManager;
 
 // Initalize Two Camera
-Camera lezCamera(glm::vec3(200.0f, 0.0f, 100.0f), DYNAMIC);
-
-//rt3d::lightStruct light0 = {
-//	{1.0f, 1.0f, 1.0f, 1.0f}, // ambient
-//	{1.0f, 1.0f, 1.0f, 1.0f}, // diffuse
-//	{1.0f, 1.0f, 1.0f, 1.0f}, // specular
-//	{-10.0f, 10.0f, 10.0f, 1.0f}  // position
-//};
-//glm::vec4 lightPos(-7.0f, 3.6f, -7.5f, 1.0f); //light position
+Camera lezCamera(glm::vec3(-120.0f, 0.0f, 195.0f), DYNAMIC);
 
 rt3d::materialStruct material0 = {
 	{0.0f, 0.8f, 0.2f, 1.0f}, // ambient
@@ -52,10 +45,6 @@ void Game::init()
 	environment->Move(glm::vec3(0.0f, 100.0f, 0.0f));
 	gameObjects.push_back(environment);
 
-	//GameObject* roof = new Prop("assets/Props/Map/roof.dae", glm::vec3(0.0f, 0.0f, 0.0f));
-	//roof->setShader(toonShader);
-	//gameObjects.push_back(roof);
-
 	// Characters
 	Player::Character BigLez;
 	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
@@ -69,22 +58,17 @@ void Game::init()
 	cube.fileLocation = "assets/Props/Map/gridblock.dae";
 	cube.name = "boundingbox";
 
-	//waveSpawner = new WaveSpawner(150, glm::vec3(0, -12.5, 50));
-	//waveSpawner->spawnWave(gameObjects, 0, toonShader);
-
-	//GameObject* bigLez = new Player(BigLez, glm::vec3(20.0f, -10.5f, 0.0f));
+	//GameObject* bigLez = new Player(BigLez);
 	//bigLez->setShader(toonShader);
 	//bigLez->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	////bigLez->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	//bigLez->setAnim(0);
-	//bigLez->addCollision(glm::vec3(20.0f, -10.5f, 0.0f), 1.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+	//bigLez->addCollision(glm::vec3(20.0f, -10.5f, 0.0f), 1.0f, 1.0f);
 	//gameObjects.push_back(bigLez);
 
 
-	//GameObject* sassy = new Player(Sassy, glm::vec3(150.0f, -12.5f, 50.0f));
+	//GameObject* sassy = new Player(Sassy);
 	//sassy->setShader(toonShader);
 	//sassy->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//sassy->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	//sassy->setAnim(0);
 	//gameObjects.push_back(sassy);
 
@@ -95,11 +79,12 @@ void Game::init()
 	glm::vec3 test = glm::vec3(2.5, 2.5, 2.5);
 	GameObject* Fence;
 
-	for (int i = 0; i < 14; i++)
+	for (int i = 0; i < 17; i++)
 	{
 		Fence = new Player(cube);
 		Fence->setShader(toonShader);
 		Fence->setAnim(0);
+
 
 		glm::vec3 scaleFactor = fenceScaleVertical;
 		if (i >= 4) scaleFactor = fenceScaleHorizontal;
@@ -128,33 +113,41 @@ void Game::init()
 			if (i == 12) { Fence->Move(glm::vec3(-5.0f, 0.0f, 5.0f));  pos = glm::vec3(-5.0f*scaleFactor.x, 0.0f*scaleFactor.y, 5.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 			if (i == 13) { Fence->Move(glm::vec3(-5.0f, 0.0f, 10.0f));  pos = glm::vec3(-5.0f*scaleFactor.x, 0.0f*scaleFactor.y, 10.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 
-			//front and back windows
-			//if (i == 14) { scaleFactor = test; Fence->Move(glm::vec3(15.0f, 0.0f, -10.0f));  pos = glm::vec3(15.0f*scaleFactor.x, 0.0f*scaleFactor.y, -10.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			//if (i == 15) { scaleFactor = test; Fence->Move(glm::vec3(15.0f, 0.0f, 15.0f));  pos = glm::vec3(15.0f*scaleFactor.x, 0.0f*scaleFactor.y, 15.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			//if (i == 16) { scaleFactor = test; Fence->Move(glm::vec3(30.0f, 0.0f, -10.0f));  pos = glm::vec3(30.0f*scaleFactor.x, 0.0f*scaleFactor.y, -10.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			//if (i == 17) { scaleFactor = test; Fence->Move(glm::vec3(30.0f, 0.0f, 15.0f));  pos = glm::vec3(30.0f*scaleFactor.x, 0.0f*scaleFactor.y, 15.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-
-			////side windows
-			//if (i == 18) { scaleFactor = test; Fence->Move(glm::vec3(38.0f, 0.0f, -2.5f));  pos = glm::vec3(38.0f*scaleFactor.x, 0.0f*scaleFactor.y, -2.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			//if (i == 19) { scaleFactor = test; Fence->Move(glm::vec3(38.0f, 0.0f, 14.5f));  pos = glm::vec3(38.0f*scaleFactor.x, 0.0f*scaleFactor.y, 14.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+			//house in the middle 
+			if (i == 14) { Fence->Move(glm::vec3(2.0f, 0.0f, 0.0f));  pos = glm::vec3(2.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+			if (i == 15) { Fence->Move(glm::vec3(2.0f, 0.0f, 5.0f));  pos = glm::vec3(2.0f*scaleFactor.x, 0.0f*scaleFactor.y, 5.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+			if (i == 16) { Fence->Move(glm::vec3(2.0f, 0.0f, 10.0f));  pos = glm::vec3(2.0f*scaleFactor.x, 0.0f*scaleFactor.y, 10.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 
 		gameObjects.push_back(Fence);
 
 	}
 
-	waveSpawner = new WaveSpawner();
-	waveSpawner->spawnWave(gameObjects, 0, toonShader);
+	//first initialise a vector containing door information
+	std::vector<glm::vec3> doors;
+	doors.push_back(glm::vec3(37.5f, 0.0, -25.0f));
+	doors.push_back(glm::vec3(37.5f, 0.0, 37.5f));
+	doors.push_back(glm::vec3(75.0f, 0.0, -25.0f));
+	doors.push_back(glm::vec3(75.0f, 0.0, 37.5f));
+	doors.push_back(glm::vec3(95.0f, 0.0, -6.25f));
+	doors.push_back(glm::vec3(95.0f, 0.0, 36.25f));
 
-	cout << "check two" << gameObjects.size() << endl;
-	//grid has to be added last
+	//grid has to be the last game object added
 	pathFindingGrid = new Grid(glm::vec2(500, 500), 10.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 	pathFindingGrid->buildGrid(gameObjects, toonShader);
+	pathFindingGrid->addEndPoints(doors);
 
-	cout << "check one" << gameObjects.size() << endl;
 
-	pathFindingGrid->AStarPath(glm::vec3(-20.0f, 0.0f, -200.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
-	pathFindingGrid->AStarPath(glm::vec3(-120.0f, 0.0f, -220.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
-	pathFindingGrid->AStarPath(glm::vec3( 120.0f, 0.0f, 160.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
+	//initialise the path manager
+	pathManager = new PathManager(pathFindingGrid);
+
+	//set up the wavespawner
+	waveSpawner = new WaveSpawner(pathFindingGrid);
+	waveSpawner->setEndCoords(doors);
+	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager);
+
+
+	//pathFindingGrid->AStarPath(glm::vec3(-20.0f, 0.0f, -200.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
+	//pathFindingGrid->AStarPath(glm::vec3(-120.0f, 0.0f, -220.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
 
 
 	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
@@ -174,6 +167,12 @@ void Game::update()
 			gameObjects[i]->componentUpdate();
 			gameObjects[i]->update();
 
+			Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
+			if (e)
+			{
+				e->getPath();
+				e->update();
+			}
 		}
 	}
 
@@ -215,6 +214,14 @@ void Game::update()
 			showBoundingBoxes = false;
 		}
 	}
+
+	//update one path per frame so the computer doesnt melt
+	if (pathManager->working == false) {
+		pathManager->update(gameObjects, toonShader);
+	}
+	if (pathManager->working == true)
+		pathManager->working = false;
+
 
 	lezCamera.update();
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);

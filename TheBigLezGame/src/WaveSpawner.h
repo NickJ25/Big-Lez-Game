@@ -9,21 +9,24 @@
 #include <vector>
 
 #include "Player.h"
+#include "PathManager.h"
+#include "Grid.h"
 
 class WaveSpawner : public GameObject
 {
 public:
-	//object is a big circle
-	WaveSpawner();
+	WaveSpawner(Grid* g);
 
-
-	//function to get random co-ordinates
+	//function to get random co-ordinates from the preset coordinates
 	glm::vec2 getSpawnCoord();
+
+	void setEndCoords(std::vector<glm::vec3> e);
+	glm::vec3 getEndCoord();
 	
 	//array of predefined numbers to correspond to enemies in each wave
-	void spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader);
+	void spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager);
 	
-
+	//set up the enemy gameobjects for spawning
 	void initNPCs();
 
 	void update() override {}
@@ -39,10 +42,14 @@ private:
 
 	//spawn points
 	std::vector<glm::vec2> spawnPoints;
+	std::vector<glm::vec3> endPoints;
 
 	//enemies
-	Player::Character normalChoomah;
-	Player::Character chargerChoomah;
-	Player::Character brawlerChoomah;
-	Player::Character bossChoomah;
+	Enemy::Character normalChoomah;
+	Enemy::Character chargerChoomah;
+	Enemy::Character brawlerChoomah;
+	Enemy::Character bossChoomah;
+
+	//the worlds grid
+	Grid* grid;
 };
