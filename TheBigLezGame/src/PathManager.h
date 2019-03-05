@@ -8,11 +8,11 @@
 class PathManager {
 
 public:
-	PathManager(Grid* g);
+	PathManager();
 
 	void addToQueue(GameObject* obj);
 
-	std::vector<glm::vec3> findPath(GameObject* obj, glm::vec3 end, std::vector<GameObject*> gameObjects, Shader* shader);
+	std::vector<glm::vec3> findPath(GameObject* obj, glm::vec3 end, std::vector<GameObject*> gameObjects, Shader* shader, int grid);
 
 	std::queue<GameObject*> getQueue();
 
@@ -20,8 +20,11 @@ public:
 
 	bool working;
 
+	void addGrid(Grid* g);
+
 private:
-	Grid* grid;
+
+	std::vector<Grid*> grids;
 	std::queue<GameObject*> pathQueue;
 
 };

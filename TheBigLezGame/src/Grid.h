@@ -10,7 +10,7 @@ class Grid: public GameObject{
 
 public:
 
-	Grid(glm::vec2 gridsize, float noderadius, glm::vec3 pos);
+	Grid(glm::vec2 gridsize, float noderadius, glm::vec3 pos, std::string b);
 
 	void buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader);
 
@@ -56,4 +56,5 @@ private:
 
 	std::vector<glm::vec3> doors;
 
+	std::string boundingType;
 };

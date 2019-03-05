@@ -21,6 +21,7 @@ public:
 	glm::vec2 getSpawnCoord();
 
 	void setEndCoords(std::vector<glm::vec3> e);
+
 	glm::vec3 getEndCoord();
 	
 	//array of predefined numbers to correspond to enemies in each wave
@@ -40,7 +41,7 @@ private:
 	//wave container
 	std::vector<vector<int>> waves;
 
-	//spawn points
+	//points of interest
 	std::vector<glm::vec2> spawnPoints;
 	std::vector<glm::vec3> endPoints;
 

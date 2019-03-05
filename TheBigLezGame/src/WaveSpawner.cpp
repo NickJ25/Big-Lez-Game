@@ -11,7 +11,7 @@ WaveSpawner::WaveSpawner(Grid* g) : GameObject(glm::vec3(0.0f,0.0f,0.0f))
 	waves.push_back(wave1); 
 
 	//set some random spawn points, 4 on each side out of view of the main building
-	spawnPoints.push_back(glm::vec2(-120.0f, -205.0f));
+	spawnPoints.push_back(glm::vec2(120.0f, 215.0f));
 	//spawnPoints.push_back(glm::vec2(-60.0f, -165.0f));
 	//spawnPoints.push_back(glm::vec2(60.0f, -165.0f));
 	//spawnPoints.push_back(glm::vec2(120.0f, -165.0f));
@@ -40,14 +40,16 @@ glm::vec2 WaveSpawner::getSpawnCoord()
 
 void WaveSpawner::setEndCoords(std::vector<glm::vec3> e)
 {
-	endPoints = e;
+		endPoints = e;
 }
 
 glm::vec3 WaveSpawner::getEndCoord()
 {
 	srand(time(0));
+
 	float randomNumber = (rand() % endPoints.size());
 	return endPoints.at(randomNumber);
+
 }
 void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager)
 {
@@ -75,9 +77,9 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			//set their properties
 			choomah->setShader(shader);
 			//choomah->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-			choomah->Move(glm::vec3(getSpawnCoord().x, 0.0f, getSpawnCoord().y));
+			choomah->Move(glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
 			choomah->setAnim(0);
-			choomah->addCollision(glm::vec3(choomah->getPosition().x, 0.0f, -choomah->getPosition().y), 1.0, 1.0);
+			choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
 
 			cout << "choomah spawn position = " << choomah->getPosition().x << " , " << choomah->getPosition().y << " , " << choomah->getPosition().z << " ) " << endl;
 

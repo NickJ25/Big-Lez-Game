@@ -517,13 +517,9 @@ void AnimModel::boneTransform(double time_in_sec, vector<aiMatrix4x4>& transform
 	aiMatrix4x4 identity_matrix;
 
 	double time_in_ticks = time_in_sec * ticks_per_second;
-	float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration);
+	//float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration);
 
-	if (lefthand == 1)
-	{
-		//cout << "calling right hand" << endl;
-		animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration / 2);
-	}
+	float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration/6.17);
 
 	readNodeHierarchy(animation_time, scene->mRootNode, identity_matrix);
 	transforms.resize(m_num_bones);

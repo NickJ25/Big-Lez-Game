@@ -1,7 +1,10 @@
 #include "Grid.h"
 
-Grid::Grid(glm::vec2 gridsize, float noderadius, glm::vec3 pos): GameObject(pos)
+Grid::Grid(glm::vec2 gridsize, float noderadius, glm::vec3 pos, std::string b): GameObject(pos)
 {
+
+	//get the grid variables
+	boundingType = b;
 
 	//initialise node variables
 	nodeDiameter = noderadius * 2;
@@ -35,7 +38,7 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 			//find node position and initialise it to a temporary node
 			glm::vec3 nodePos = bottomLeft + rightVector * (i* nodeDiameter + (nodeDiameter / 2)) + forwardVector * (j * nodeDiameter + (nodeDiameter / 2));
 			Node *tmpNode = new Node();
-			tmpNode->position = nodePos;
+			tmpNode->position = glm::vec3(nodePos.x, -12.5, nodePos.z);
 			tmpNode->gridX = i;
 			tmpNode->gridY = j;
 
@@ -43,7 +46,7 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 			//GameObject* gridsquare;
 			//gridsquare = new Player(cube);
 			//gridsquare->setShader(shader);
-			//gridsquare->Move(glm::vec3(tmpNode.position.x, 0.5f , tmpNode.position.z));
+			//gridsquare->Move(glm::vec3(tmpNode->position.x, 0.5f, tmpNode->position.z));
 			//gridsquare->Scale(glm::vec3(10.0, 1.0, 10.0));
 			//gridsquare->setAnim(0);
 
@@ -52,18 +55,27 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 			{
 				if ((*it)->getCollider())
 				{
-					if (checkGridCollision(*it, *tmpNode) == true)
+					//find out what type of obstruction it is
+					Player *p = dynamic_cast<Player*>((*it));
+
+					if (p)
 					{
-						//uncomment for debugging purposes
-						//gridsquare->Move(glm::vec3(0.0f, 5.0f, 0.0f)); 
-						tmpNode->setBlocked(true);
-						break;
+						if (p->getCharacter().name == boundingType) {
+
+							if (checkGridCollision(*it, *tmpNode) == true)
+							{
+								//uncomment for debugging purposes
+								/*gridsquare->Move(glm::vec3(0.0f, 5.0f, 0.0f)); */
+								tmpNode->setBlocked(true);
+								break;
+							}
+						}
 					}
 				}
 			}
 			//uncomment for debugging purposes
 			//add game object to the render loop
-			//gameObjects.push_back(gridsquare);
+			/*gameObjects.push_back(gridsquare);*/
 
 			//add the node to the column
 			columnVector.push_back(tmpNode);
@@ -302,8 +314,9 @@ std::vector<Node*> Grid::getNeighbour(Node* current)
 			int checkY = current->gridY + y;
 
 			//if the node position falls inside the perimeter of the grid and is not blocked, add it to the neighbours
-			if (checkX >= 0 && checkX < gridSize.x && checkY >= 0 && checkY < gridSize.y && rowVector.at(checkX).at(checkY)->getBlocked() == false)
+			if (checkX >= 0 && checkX < gridSize.x/nodeDiameter && checkY >= 0 && checkY < gridSize.y/nodeDiameter)
 			{
+				if(rowVector.at(checkX).at(checkY)->getBlocked() == false)
 				neighbours.push_back(rowVector.at(checkX).at(checkY));
 			}
 		}
