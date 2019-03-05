@@ -96,8 +96,10 @@ void Game::init()
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
 	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
+	pauseBackground = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
 
-	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
+	testtxt = new Text(glm::vec2(590.0, 445.0), "assets/Fonts/Another_.ttf");
+	testtxt2 = new Text(glm::vec2(600.0, 325.0), "assets/Fonts/Another_.ttf");
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -168,18 +170,18 @@ void Game::draw()
 
 	if (isGameRunning == false)
 	{
-		
-
-		
+		testtxt->draw("Resume", glm::vec3(1.0f, 1.0f, 1.0f));
+		testtxt2->draw("Quit", glm::vec3(1.0f, 1.0f, 1.0f));
 		resumeBtn->draw();
 		mainMenuBtn->draw();
+		pauseBackground->draw();
 		
-		//}
+	
 	}
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
 			gameObjects[i]->componentDraw(mainCamera->lookAtMat());
 		}
 	}
-	testtxt->draw("test", glm::vec3(1.0f, 1.0f, 1.0f));
+	
 }

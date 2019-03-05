@@ -20,6 +20,7 @@
 #include "Skybox.h"
 #include "Player.h"
 #include "Button.h"
+#include "Image.h"
 
 #include "Text.h"
 
@@ -32,8 +33,9 @@ private:
 	bool isGameRunning = true; 
 	Button* resumeBtn, *mainMenuBtn;
 	GLFWwindow* g_window;
-	Text* pauseText;
 	Menu* selectedMenu;
+	Image* pauseBackground;
+	Text* testtxt2;
 public:
 	Game() {};
 	~Game() {};
