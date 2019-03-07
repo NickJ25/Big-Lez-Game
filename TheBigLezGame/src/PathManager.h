@@ -12,7 +12,7 @@ public:
 
 	void addToQueue(GameObject* obj);
 
-	std::vector<glm::vec3> findPath(GameObject* obj, glm::vec3 end, std::vector<GameObject*> gameObjects, Shader* shader, int grid);
+	std::vector<glm::vec3> findPath(GameObject* obj, glm::vec3 end, std::vector<GameObject*> gameObjects, Shader* shader, int grid, bool ignoreCollision);
 
 	std::queue<GameObject*> getQueue();
 

@@ -54,6 +54,7 @@ void Enemy::update()
 		}
 	}
 	else {
+		if(outsideMovement == true)
 		inside = true;
 	}
 

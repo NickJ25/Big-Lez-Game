@@ -76,7 +76,6 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 
 			//set their properties
 			choomah->setShader(shader);
-			//choomah->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 			choomah->Move(glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
 			choomah->setAnim(0);
 			choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
@@ -87,6 +86,15 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 		    Enemy *e = dynamic_cast<Enemy*>(choomah);
 			if (e)
 				e->setPathEnd(getEndCoord(), true);
+			for (std::vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
+			{
+				Player *tmp = dynamic_cast<Player*>((*it));
+				if (tmp)
+				{
+					e->setTarget(tmp);
+					break;
+				}
+			}
 			pathManager->addToQueue(choomah);
 
 			// add them to the gameplay vector reference

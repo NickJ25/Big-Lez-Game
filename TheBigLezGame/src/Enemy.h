@@ -35,20 +35,38 @@ public:
 		target = p;
 	}
 
-	glm::vec3 getPathEnd()
+	Player* getTarget()
 	{
-		return outerPathEnd;
+		return target;
+	}
+
+	glm::vec3 getPathEnd(bool outer)
+	{
+		if (outer == true)
+			return outerPathEnd;
+		else
+			return innerPathEnd;
 	}
 
 	bool getLocation()
 	{
 		return inside;
 	}
-	std::vector<glm::vec3> Enemy::getPath();
+	std::vector<glm::vec3> getPath();
 
 	void update() override;
 
 	glm::vec3 rotation;
+
+	glm::vec3 getCurrentTargetPosition()
+	{
+		return currentTargetPosition;
+	}
+
+	void setCurrentTargetPosition(glm::vec3 p)
+	{
+		currentTargetPosition = p;
+	}
 private:
 	
 	std::vector<glm::vec3> outerPath;
@@ -63,5 +81,6 @@ private:
 	float velocity;
 
 	Player* target;
+	glm::vec3 currentTargetPosition;
 };
 

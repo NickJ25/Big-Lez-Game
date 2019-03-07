@@ -47,7 +47,7 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 			//gridsquare = new Player(cube);
 			//gridsquare->setShader(shader);
 			//gridsquare->Move(glm::vec3(tmpNode->position.x, 0.5f, tmpNode->position.z));
-			//gridsquare->Scale(glm::vec3(10.0, 1.0, 10.0));
+			//gridsquare->Scale(glm::vec3(3.0, 1.0, 3.0));
 			//gridsquare->setAnim(0);
 
 			std::vector<GameObject*>::iterator it;
@@ -65,7 +65,7 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 							if (checkGridCollision(*it, *tmpNode) == true)
 							{
 								//uncomment for debugging purposes
-								/*gridsquare->Move(glm::vec3(0.0f, 5.0f, 0.0f)); */
+								//gridsquare->Move(glm::vec3(0.0f, 5.0f, 0.0f)); 
 								tmpNode->setBlocked(true);
 								break;
 							}
@@ -75,7 +75,7 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 			}
 			//uncomment for debugging purposes
 			//add game object to the render loop
-			/*gameObjects.push_back(gridsquare);*/
+			//gameObjects.push_back(gridsquare);
 
 			//add the node to the column
 			columnVector.push_back(tmpNode);
@@ -110,14 +110,14 @@ void Grid::updateGrid(std::vector<GameObject*> &gameObjects, Shader* shader)
 						{
 							//uncomment for debugging purposes
 							//draw cube do describe blocked
-							GameObject* gridsquare;
-			/* 				gridsquare = new Player(cube);
-							gridsquare->setShader(shader);
-							gridsquare->Scale(glm::vec3(10.0, 10.0, 1.0));
-							gridsquare->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-							gridsquare->Move(glm::vec3((**it1).position.x, -17.5f, (**it1).position.z));
-							gridsquare->setAnim(0);
-							gameObjects.push_back(gridsquare);*/
+							//GameObject* gridsquare;
+			 			//	gridsquare = new Player(cube);
+							//gridsquare->setShader(shader);
+							//gridsquare->Scale(glm::vec3(10.0, 10.0, 1.0));
+							//gridsquare->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+							//gridsquare->Move(glm::vec3((**it1).position.x, -17.5f, (**it1).position.z));
+							//gridsquare->setAnim(0);
+							//gameObjects.push_back(gridsquare);
 							(**it1).setBlocked(true);
 						}
 					}
@@ -179,7 +179,7 @@ float Grid::clamp(float n, float upper, float lower)
 	return n;
 }
 
-std::vector<glm::vec3> Grid::AStarPath(glm::vec3 start, glm::vec3 finish, std::vector<GameObject*>& gameObjects, Shader* shader)
+std::vector<glm::vec3> Grid::AStarPath(glm::vec3 start, glm::vec3 finish, std::vector<GameObject*>& gameObjects, Shader* shader, bool ignoreCollision)
 {
 
 	float currentSpot = 0;
@@ -242,9 +242,17 @@ std::vector<glm::vec3> Grid::AStarPath(glm::vec3 start, glm::vec3 finish, std::v
 			}
 
 			//if the neighbour is blocked or already contained, ignore this neighbour
-			if (neighbour->getBlocked() == true || containsNeighbourClosed == true)
-			{
-				continue;
+			if (ignoreCollision == false) {
+				if (neighbour->getBlocked() == true || containsNeighbourClosed == true)
+				{
+					continue;
+				}
+			}
+			else {
+				if ( containsNeighbourClosed == true)
+				{
+					continue;
+				}
 			}
 
 			//calculate the neighbours cost
@@ -270,9 +278,18 @@ std::vector<glm::vec3> Grid::AStarPath(glm::vec3 start, glm::vec3 finish, std::v
 				neighbour->getFCost();
 
 				//if not already in openset and not blocked, add it to the vector to be checked
-				if (containsNeighbourOpen == false && neighbour->getBlocked() == false)
+				if (ignoreCollision == false) {
+					if (containsNeighbourOpen == false && neighbour->getBlocked() == false)
+					{
+						openSet.push_back(neighbour);
+					}
+				}
+				else
 				{
-					openSet.push_back(neighbour);
+					if (containsNeighbourOpen == false )
+					{
+						openSet.push_back(neighbour);
+					}
 				}
 			}
 		}
@@ -346,7 +363,7 @@ std::vector<glm::vec3> Grid::retracePath(Node* startNode, Node* endNode, std::ve
 		//draw a node to represent it
 		gridsquare = new Player(cube);
 		gridsquare->setShader(shader);
-		std::cout << currentNode->position.x << " " << currentNode->position.z << std::endl;
+		//std::cout << currentNode->position.x << " " << currentNode->position.z << std::endl;
 		gridsquare->Move(glm::vec3(currentNode->position.x, 1.0f, currentNode->position.z));
 		gridsquare->Scale(glm::vec3(10.0, 1.0, 10.0));
 		gridsquare->setAnim(0);

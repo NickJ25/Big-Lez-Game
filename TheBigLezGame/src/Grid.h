@@ -28,7 +28,7 @@ public:
 
 	float clamp(float n, float upper, float lower);
 
-	std::vector<glm::vec3> AStarPath(glm::vec3 start, glm::vec3 finish, std::vector<GameObject*>& gameObjects, Shader* shader);
+	std::vector<glm::vec3> AStarPath(glm::vec3 start, glm::vec3 finish, std::vector<GameObject*>& gameObjects, Shader* shader, bool ignoreCollision);
 
 	std::vector<Node*> getNeighbour(Node* current);
 

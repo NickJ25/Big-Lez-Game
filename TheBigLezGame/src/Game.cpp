@@ -6,11 +6,12 @@ Skybox* skybox;
 Shader *toonShader;
 WaveSpawner* waveSpawner;
 Grid* pathFindingGrid;
-Grid* innerGrid;
 PathManager* pathManager;
 
+GameObject* sassy;
+
 // Initalize Two Camera
-Camera lezCamera(glm::vec3(120.0f, 0.0f, 215.0f), DYNAMIC);
+Camera lezCamera(glm::vec3(0.0f, 12.5f, 0.0f), DYNAMIC);
 
 rt3d::materialStruct material0 = {
 	{0.0f, 0.8f, 0.2f, 1.0f}, // ambient
@@ -52,26 +53,30 @@ void Game::init()
 	BigLez.name = "Leslie";
 
 	Player::Character Sassy;
-	Sassy.fileLocation = "assets/Props/Map/gridblock.dae";
+	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
 	Sassy.name = "Sassy";
 
 	Player::Character cube;
 	cube.fileLocation = "assets/Props/Map/gridblock.dae";
 	cube.name = "boundingbox";
 
-	//GameObject* bigLez = new Player(BigLez);
+	//Player::Character doorCollider;
+	//cube.fileLocation = "assets/Props/Map/gridblock.dae";
+	//cube.name = "doorbox";
+
+	//GameObject* bigLez = new Player(doorCollider);
 	//bigLez->setShader(toonShader);
-	//bigLez->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	//bigLez->setAnim(0);
-	//bigLez->addCollision(glm::vec3(20.0f, -10.5f, 0.0f), 1.0f, 1.0f);
+	//bigLez->Move(glm::vec3(45.0f, -12.5f, -26.0f));
+	//bigLez->addCollision(glm::vec3(45.0f, -12.5f, -26.0f), 1.0f, 1.0f);
 	//gameObjects.push_back(bigLez);
 
 
-	//GameObject* sassy = new Player(Sassy);
-	//sassy->setShader(toonShader);
-	//sassy->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//sassy->setAnim(0);
-	//gameObjects.push_back(sassy);
+	sassy = new Player(Sassy);
+	sassy->setShader(toonShader);
+	sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
+	sassy->setAnim(0);
+	gameObjects.push_back(sassy);
 
 
 	// add environmental collision boxes for pathfinding an' such
@@ -80,7 +85,7 @@ void Game::init()
 	glm::vec3 test = glm::vec3(2.5, 2.5, 2.5);
 	GameObject* Fence;
 
-	for (int i = 0; i < 15; i++)
+	for (int i = 0; i < 20; i++)
 	{
 		Fence = new Player(cube);
 		Fence->setShader(toonShader);
@@ -90,9 +95,14 @@ void Game::init()
 		glm::vec3 scaleFactor = fenceScaleVertical;
 		if (i >= 4 && i < 14) 
 			scaleFactor = fenceScaleHorizontal;
-		if (i >= 14) 
-			scaleFactor = glm::vec3(30.0f, 4.0, 20.0f);
-
+		if (i == 14) 
+			scaleFactor = glm::vec3(2.0f, 4.0, 25.0f);
+		if (i == 15 || i == 16)
+			scaleFactor = glm::vec3(18.0f, 4.0, 2.0);
+		if (i == 17 || i == 18)
+			scaleFactor = glm::vec3(8.0f, 4.0, 2.0);
+		if (i == 19)
+			scaleFactor = glm::vec3(2.0f, 4.0, 4.0);
 			Fence->Scale(scaleFactor);
 			
 			glm::vec3 pos;
@@ -119,15 +129,35 @@ void Game::init()
 
 			//house in the middle 
 			if (i == 14) 
-			{ Fence->Move(glm::vec3(1.5f, 0.0f, 0.0f));  pos = glm::vec3(1.5f*scaleFactor.x, 0.0f*scaleFactor.y, 0.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-		
+			{ Fence->Move(glm::vec3(2.0f, 0.0f, 0.5f));  pos = glm::vec3(2.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+			if (i == 15)
+			{
+			Fence->Move(glm::vec3(1.0f, 0.0f, -7.5f));  pos = glm::vec3(1.0f*scaleFactor.x, 0.0f*scaleFactor.y, -7.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); 
+			}
+			if (i == 16)
+			{
+				Fence->Move(glm::vec3(1.0f, 0.0f, 17.0f));  pos = glm::vec3(1.0f*scaleFactor.x, 0.0f*scaleFactor.y, 17.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);
+			}
+			if (i == 17)
+			{
+				Fence->Move(glm::vec3(8.0f, 0.0f, -7.5f));  pos = glm::vec3(8.0f*scaleFactor.x, 0.0f*scaleFactor.y, -7.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);
+			}
+			if (i == 18)
+			{
+				Fence->Move(glm::vec3(8.0f, 0.0f, 17.0f));  pos = glm::vec3(8.0f*scaleFactor.x, 0.0f*scaleFactor.y, 17.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);
+			}
+			if (i == 19)
+			{
+				Fence->Move(glm::vec3(47.0f, 0.0f, 3.0f));  pos = glm::vec3(47.0f*scaleFactor.x, 0.0f*scaleFactor.y, 3.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);
+			}
+
 			gameObjects.push_back(Fence);
 
 	}
 
 	//first initialise a vector containing door information
 	std::vector<glm::vec3> doors;
-	doors.push_back(glm::vec3(50.0f, -12.5f, -45.0f));
+	doors.push_back(glm::vec3(45.0f, -12.5f, -26.0f));
 	//doors.push_back(glm::vec3(37.5f, 0.0, 37.5f));
 	//doors.push_back(glm::vec3(75.0f, 0.0, -25.0f));
 	//doors.push_back(glm::vec3(75.0f, 0.0, 37.5f));
@@ -135,27 +165,18 @@ void Game::init()
 	//doors.push_back(glm::vec3(95.0f, 0.0, 36.25f));
 
 	//grid has to be the last game object added
-	pathFindingGrid = new Grid(glm::vec2(500, 500), 10.0f, glm::vec3(0.0f, 0.0f, 0.0f), "boundingbox");
+	pathFindingGrid = new Grid(glm::vec2(500, 500), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f), "boundingbox");
 	pathFindingGrid->buildGrid(gameObjects, toonShader);
 	pathFindingGrid->addEndPoints(doors);
-
-	innerGrid = new Grid(glm::vec2(100, 50), 5.0f, glm::vec3(50.0f, 0.0f, 15.0f), "innerboundingbox");
-	innerGrid->buildGrid(gameObjects, toonShader);
 
 	//initialise the path manager
 	pathManager = new PathManager();
 	pathManager->addGrid(pathFindingGrid);
-	pathManager->addGrid(innerGrid);
 
 	//set up the wavespawner
 	waveSpawner = new WaveSpawner(pathFindingGrid);
 	waveSpawner->setEndCoords(doors);
 	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager);
-
-
-	//pathFindingGrid->AStarPath(glm::vec3(-20.0f, 0.0f, -200.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
-	//pathFindingGrid->AStarPath(glm::vec3(-120.0f, 0.0f, -220.0f), glm::vec3(37.5f, 0.0f, -30.0f), gameObjects, toonShader);
-
 
 	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");
 
@@ -182,7 +203,12 @@ void Game::update()
 			}
 		}
 	}
-
+	if (Input::keyboard1.keys[GLFW_KEY_C]) {
+		sassy->Move(glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+	if (Input::keyboard1.keys[GLFW_KEY_V]) {
+		sassy->Move(glm::vec3(-1.0f, 0.0f, 0.0f));
+	}
 	if (Input::keyboard1.keys[GLFW_KEY_1]) {
 
 		if (showBoundingBoxes == false) {
