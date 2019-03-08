@@ -77,6 +77,7 @@ void Enemy::update()
 			innerPath.pop_back();
 		}
 		//get him to jump then calculate new path with new grid to nearest player
+		cout << "innerpathsize" << innerPath.size() << endl;
 	}
 }
 

@@ -198,7 +198,6 @@ void Game::update()
 			Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
 			if (e)
 			{
-				e->getPath();
 				e->update();
 			}
 		}

@@ -222,6 +222,11 @@ std::vector<glm::vec3> Grid::AStarPath(glm::vec3 start, glm::vec3 finish, std::v
 		{
 			//connect endnode with the last item in closed set
 			endNode = closedSet.back();
+
+			//deallocate all the vector memory by swapping it with an empty vector
+			vector<Node*>().swap(closedSet);
+			vector<Node*>().swap(openSet);
+
 			//retrace the closed set to get the path
 			return retracePath(startNode, endNode, gameObjects, shader);
 		}
@@ -344,11 +349,6 @@ std::vector<Node*> Grid::getNeighbour(Node* current)
 
 std::vector<glm::vec3> Grid::retracePath(Node* startNode, Node* endNode, std::vector<GameObject*>& gameObjects, Shader* shader)
 {
-	//initialise a boundingbox object for debugging
-	GameObject* gridsquare;
-	cube.fileLocation = "assets/Props/Map/gridblock.dae";
-	cube.name = "boundingbox";
-
 	//create a path and set the current node to the end.
 	std::vector<glm::vec3> path;
 	Node *currentNode = new Node();
@@ -359,15 +359,6 @@ std::vector<glm::vec3> Grid::retracePath(Node* startNode, Node* endNode, std::ve
 	{
 		//add this node to the path
 		path.push_back(currentNode->position);
-
-		//draw a node to represent it
-		gridsquare = new Player(cube);
-		gridsquare->setShader(shader);
-		//std::cout << currentNode->position.x << " " << currentNode->position.z << std::endl;
-		gridsquare->Move(glm::vec3(currentNode->position.x, 1.0f, currentNode->position.z));
-		gridsquare->Scale(glm::vec3(10.0, 1.0, 10.0));
-		gridsquare->setAnim(0);
-		gameObjects.push_back(gridsquare);
 
 		//set current to the parent of this object.
 		currentNode = currentNode->getParent();

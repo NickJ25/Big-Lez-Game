@@ -26,6 +26,8 @@ void PathManager::update(std::vector<GameObject*>& gameObjects, Shader* shader)
 			if (e->getLocation() == false && e->getPath().empty()) 
 			{
 				e->setPath(findPath(pathQueue.front(), e->getPathEnd(true), gameObjects, shader, 0 , false), true);
+				pathQueue.pop();
+				pathQueue.push(obj);
 			}
 			else
 			{
@@ -33,11 +35,13 @@ void PathManager::update(std::vector<GameObject*>& gameObjects, Shader* shader)
 				{
 					e->setCurrentTargetPosition(e->getTarget()->getPosition());
 					e->setPath(findPath(pathQueue.front(), e->getCurrentTargetPosition(), gameObjects, shader, 0, true), false);
+					pathQueue.pop();
+					pathQueue.push(obj);
 				}
-			}
-			pathQueue.pop();
-			pathQueue.push(obj);
 
+			}
+
+			cout << pathQueue.size() << endl;
 			working = true;
 		}
 
@@ -46,14 +50,7 @@ void PathManager::update(std::vector<GameObject*>& gameObjects, Shader* shader)
 
 std::vector<glm::vec3> PathManager::findPath(GameObject* obj, glm::vec3 end, std::vector<GameObject*> gameObjects, Shader* shader, int grid, bool ignoreCollsion)
 {
-
-	Enemy *e;
-	e = dynamic_cast<Enemy*>(obj);
-
-	if (e)
-	{
-		return grids.at(grid)->AStarPath(obj->getPosition(), end, gameObjects, shader, ignoreCollsion);
-	}
+	return grids.at(grid)->AStarPath(obj->getPosition(), end, gameObjects, shader, ignoreCollsion);
 }
 std::queue<GameObject*> PathManager::getQueue()
 {
