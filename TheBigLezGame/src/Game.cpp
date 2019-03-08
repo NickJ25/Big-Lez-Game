@@ -75,7 +75,7 @@ void Game::init()
 	sassy = new Player(Sassy);
 	sassy->setShader(toonShader);
 	sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
-	sassy->setAnim(0);
+	sassy->setAnimation(0.0f, 6.17f);
 	gameObjects.push_back(sassy);
 
 
@@ -89,7 +89,7 @@ void Game::init()
 	{
 		Fence = new Player(cube);
 		Fence->setShader(toonShader);
-		Fence->setAnim(0);
+		Fence->setAnimation(0.0f,1.0f);
 
 
 		glm::vec3 scaleFactor = fenceScaleVertical;

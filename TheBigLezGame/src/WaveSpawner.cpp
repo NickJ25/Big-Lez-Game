@@ -77,7 +77,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			//set their properties
 			choomah->setShader(shader);
 			choomah->Move(glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
-			choomah->setAnim(0);
+			choomah->setAnimation(0.0f, 6.17f);
 			choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
 
 			cout << "choomah spawn position = " << choomah->getPosition().x << " , " << choomah->getPosition().y << " , " << choomah->getPosition().z << " ) " << endl;

@@ -34,6 +34,7 @@ public:
 		renderComponent = new RenderComponent(filename);
 	}
 
+	void setAnimation(float s, float e);
 
 	virtual ~GameObject() {
 		delete transformComponent;
@@ -45,7 +46,6 @@ public:
 	void Rotate(GLfloat degrees, glm::vec3 rotateAmount);
 	void Scale(glm::vec3 scaleAmount);
 	void setShader(Shader* shader);
-	void setAnim(int n);
 	void setDraw(bool d);
 
 	glm::vec3 getPosition();

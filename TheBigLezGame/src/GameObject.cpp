@@ -28,9 +28,11 @@ void GameObject::setShader(Shader * shader)
 	}
 }
 
-void GameObject::setAnim(int n) 
+void GameObject::setAnimation(float s, float e) 
 {
-	renderComponent->setAnim(n);
+	if (renderComponent != nullptr) {
+		renderComponent->setAnim(s, e);
+	}
 }
 
 void GameObject::setDraw(bool d)

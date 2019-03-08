@@ -4,6 +4,7 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 {
 	inside = false;
 	outsideMovement = false;
+	jumpingCounter = 0;
 
 	velocity = 0.05f;
 
@@ -56,10 +57,22 @@ void Enemy::update()
 	else {
 		if(outsideMovement == true)
 		inside = true;
+
+		//set animation to jumping 
+		jumpingCounter = 3;
 	}
 
 	if (outsideMovement == true && outerPath.empty() == true && innerPath.empty() == false)
 	{
+
+		if (jumpingCounter != 0)
+		{
+			//set animation here
+		}
+		else
+		{
+
+		}
 		//enemy has reached a window
 		setPathEnd(target->getPosition(), false);
 		current = getPosition();
@@ -75,6 +88,7 @@ void Enemy::update()
 		if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 		{
 			innerPath.pop_back();
+			jumpingCounter--;
 		}
 		//get him to jump then calculate new path with new grid to nearest player
 		cout << "innerpathsize" << innerPath.size() << endl;

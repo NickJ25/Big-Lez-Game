@@ -76,6 +76,7 @@ private:
 
 	bool inside;
 	bool outsideMovement;
+	int jumpingCounter;
 	
 
 	float velocity;

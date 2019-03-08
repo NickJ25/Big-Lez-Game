@@ -35,21 +35,18 @@ public:
 	void playSound();
 	void showNodeName(aiNode* node);
 
-	void setAnim(int n); // TEST TEST TEST
-
-
 	GLuint TextureFromFile(const char * path);
 
 	glm::mat4 aiToGlm(aiMatrix4x4 ai_matr);
-	aiQuaternion nlerp(aiQuaternion a, aiQuaternion b, float blend); // super super n lerp =)
+	aiQuaternion nlerp(aiQuaternion a, aiQuaternion b, float blend); 
+
+	void setAnimation(float s, float e);
 
 private:
 	Assimp::Importer import;
 	const aiScene* scene;
 	vector<AnimMesh> meshes; // one mesh in one object
 	string directory;
-
-	int lefthand = 2;
 
 	map<string, uint> m_bone_mapping; // maps a bone name and their index
 	uint m_num_bones = 0;
@@ -79,6 +76,8 @@ private:
 	// rotate Head
 	glm::quat rotate_head_xz = glm::quat(cos(glm::radians(0.0f)), sin(glm::radians(0.0f)) * glm::vec3(1.0f, 0.0f, 0.0f)); // this quad do nothingggggg!!!!!
 
+	float animStart = 0;
+	float animEnd = 0;
 };
 
 #endif

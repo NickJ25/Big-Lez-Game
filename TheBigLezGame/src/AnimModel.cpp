@@ -62,14 +62,9 @@ void AnimModel::update()
 void AnimModel::draw(GLuint shaders_program, bool isAnimated)
 {
 	vector<aiMatrix4x4> transforms;
-	if (isAnimated == true)
-	{  // if not explicitly set, just find the time
-		boneTransform((double)glfwGetTime(), transforms);
-	}
-	else
-	{
-		boneTransform(0.55f / 1000.0f, transforms);
-	}
+	// if not explicitly set, just find the time
+	boneTransform((double)glfwGetTime(), transforms);
+
 
 	for (uint i = 0; i < transforms.size(); i++) // move all matrices for actual model position to shader
 	{
@@ -265,7 +260,6 @@ AnimMesh AnimModel::processMesh(aiMesh* mesh, const aiScene* scene)
 		uint bone_index = 0;
 		string bone_name(mesh->mBones[i]->mName.data);
 
-		//cout << mesh->mBones[i]->mName.data << endl;
 
 		if (m_bone_mapping.find(bone_name) == m_bone_mapping.end())
 		{
@@ -277,7 +271,6 @@ AnimMesh AnimModel::processMesh(aiMesh* mesh, const aiScene* scene)
 			m_bone_matrices[bone_index].offset_matrix = mesh->mBones[i]->mOffsetMatrix;
 			m_bone_mapping[bone_name] = bone_index;
 
-			//cout << "bone_name: " << bone_name << "			 bone_index: " << bone_index << endl;
 		}
 		else
 		{
@@ -305,8 +298,6 @@ vector<AnimTexture> AnimModel::LoadMaterialTexture(aiMaterial* mat, aiTextureTyp
 
 		string filename = string(ai_str.C_Str());
 		filename = directory + '/' + filename;
-
-		//cout << filename << endl;
 
 		AnimTexture texture;
 		texture.id = TextureFromFile(filename.c_str()); // return prepaired openGL texture
@@ -398,13 +389,6 @@ aiQuaternion AnimModel::calcInterpolatedRotation(float p_animation_time, const a
 
 	float factor = (p_animation_time - (float)p_node_anim->mRotationKeys[rotation_index].mTime) / delta_time;
 
-	//cout << "p_node_anim->mRotationKeys[rotation_index].mTime: " << p_node_anim->mRotationKeys[rotation_index].mTime << endl;
-	//cout << "p_node_anim->mRotationKeys[next_rotaion_index].mTime: " << p_node_anim->mRotationKeys[next_rotation_index].mTime << endl;
-	//cout << "delta_time: " << delta_time << endl;
-	//cout << "animation_time: " << p_animation_time << endl;
-	//cout << "animation_time - mRotationKeys[rotation_index].mTime: " << (p_animation_time - (float)p_node_anim->mRotationKeys[rotation_index].mTime) << endl;
-	//cout << "factor: " << factor << endl << endl << endl;
-
 	assert(factor >= 0.0f && factor <= 1.0f);
 	aiQuaternion start_quat = p_node_anim->mRotationKeys[rotation_index].mValue;
 	aiQuaternion end_quat = p_node_anim->mRotationKeys[next_rotation_index].mValue;
@@ -435,7 +419,6 @@ aiVector3D AnimModel::calcInterpolatedScaling(float p_animation_time, const aiNo
 const aiNodeAnim * AnimModel::findNodeAnim(const aiAnimation * p_animation, const string p_node_name)
 {
 	// channel in animation contains aiNodeAnim (aiNodeAnim its transformation for bones)
-	// numChannels == numBones
 	for (uint i = 0; i < p_animation->mNumChannels; i++)
 	{
 		const aiNodeAnim* node_anim = p_animation->mChannels[i];
@@ -479,16 +462,7 @@ void AnimModel::readNodeHierarchy(float p_animation_time, const aiNode* p_node, 
 		aiMatrix4x4 translate_matr;
 		aiMatrix4x4::Translation(translate_vector, translate_matr);
 
-		if (string(node_anim->mNodeName.data) == string("Head"))
-		{
-			aiQuaternion rotate_head = aiQuaternion(rotate_head_xz.w, rotate_head_xz.x, rotate_head_xz.y, rotate_head_xz.z);
-
-			node_transform = translate_matr * (rotate_matr * aiMatrix4x4(rotate_head.GetMatrix())) * scaling_matr;
-		}
-		else
-		{
-			node_transform = translate_matr * rotate_matr * scaling_matr;
-		}
+		node_transform = translate_matr * rotate_matr * scaling_matr;
 
 	}
 
@@ -507,19 +481,20 @@ void AnimModel::readNodeHierarchy(float p_animation_time, const aiNode* p_node, 
 
 }
 
-void AnimModel::setAnim(int n)
+void AnimModel::setAnimation(float s, float e)
 {
-	lefthand = n;
+	animStart = s;
+	animEnd = e;
+
 }
 
 void AnimModel::boneTransform(double time_in_sec, vector<aiMatrix4x4>& transforms)
 {
 	aiMatrix4x4 identity_matrix;
 
-	double time_in_ticks = time_in_sec * ticks_per_second;
-	//float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration);
+	double time_in_ticks = time_in_sec * ticks_per_second;;
 
-	float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration/6.17);
+	float animation_time = fmod(time_in_ticks, animStart + scene->mAnimations[0]->mDuration/animEnd);
 
 	readNodeHierarchy(animation_time, scene->mRootNode, identity_matrix);
 	transforms.resize(m_num_bones);
