@@ -77,7 +77,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			//set their properties
 			choomah->setShader(shader);
 			choomah->Move(glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
-			choomah->setAnimation(1.95f, 1.94f);
+			choomah->setAnimation(1.95f, 1.94f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
 			choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
 
 			cout << "choomah spawn position = " << choomah->getPosition().x << " , " << choomah->getPosition().y << " , " << choomah->getPosition().z << " ) " << endl;

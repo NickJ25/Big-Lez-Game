@@ -18,23 +18,30 @@ protected:
 	Shader* objShader;
 
 	bool isDrawing = true;
+	bool paused;
 
 public:
 	GameObject(glm::vec3 pos) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
 		transformComponent = new TransformComponent(glm::vec4(pos,1.0f));
+		paused = false;
 	}
 
 	GameObject(glm::vec3 pos, const char* filename) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
 		transformComponent = new TransformComponent(objPosition);
 		renderComponent = new RenderComponent(filename);
+		paused = false;
 	}
 
 	GameObject( const char* filename) : objPosition(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
 		transformComponent = new TransformComponent(objPosition);
 		renderComponent = new RenderComponent(filename);
+		paused = false;
 	}
 
 	void setAnimation(float s, float e);
+
+	void setPaused(bool p);
+	bool getPaused();
 
 	virtual ~GameObject() {
 		delete transformComponent;

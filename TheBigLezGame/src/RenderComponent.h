@@ -60,6 +60,8 @@ public:
 	void textureOverride(GLuint textureID);
 	void changeShader(Shader* newShader);
 	void setAnim(float s, float e);
+	void setPaused(bool p);
+	bool getPaused();
 	void Draw();
 
 };

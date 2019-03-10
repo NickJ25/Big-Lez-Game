@@ -35,6 +35,19 @@ void GameObject::setAnimation(float s, float e)
 	}
 }
 
+void GameObject::setPaused(bool p)
+{
+	if (renderComponent != nullptr) {
+		renderComponent->setPaused(p);
+	}
+	paused = p;
+}
+
+bool GameObject::getPaused()
+{
+	return paused;
+}
+
 void GameObject::setDraw(bool d)
 {
 	isDrawing = d;
@@ -61,6 +74,7 @@ void GameObject::componentUpdate()
 
 void GameObject::componentDraw(glm::mat4 view)
 {
+
 	if (isDrawing == true) {
 		if (renderComponent != nullptr) {
 			renderComponent->setDrawMatrix(transformComponent->getMatrix());

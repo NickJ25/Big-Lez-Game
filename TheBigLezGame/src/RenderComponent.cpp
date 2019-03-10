@@ -50,6 +50,15 @@ void RenderComponent::setAnim(float s, float e)
 	m_objModel->setAnimation(s, e);
 }
 
+void RenderComponent::setPaused(bool p)
+{
+	m_objModel->setPaused(p);
+}
+bool RenderComponent::getPaused()
+{
+	return m_objModel->getPaused();
+}
+
 void RenderComponent::Draw()
 {
 	// Select Modes

@@ -41,6 +41,9 @@ public:
 	aiQuaternion nlerp(aiQuaternion a, aiQuaternion b, float blend); 
 
 	void setAnimation(float s, float e);
+	
+	void setPaused(bool p);
+	bool getPaused();
 
 private:
 	Assimp::Importer import;
@@ -78,6 +81,10 @@ private:
 
 	float animStart = 0.0;
 	float animEnd = 1.0;
+
+	bool paused = false;
+	double pauseFrame;
+	bool pauseFrameSet = false;
 };
 
 #endif

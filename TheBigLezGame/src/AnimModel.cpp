@@ -63,7 +63,16 @@ void AnimModel::draw(GLuint shaders_program, bool isAnimated)
 {
 	vector<aiMatrix4x4> transforms;
 	// if not explicitly set, just find the time
-	boneTransform((double)glfwGetTime(), transforms);
+	if (paused == false) {
+		pauseFrame = false;
+		boneTransform((double)glfwGetTime(), transforms);
+	}
+	else {
+		if (pauseFrameSet == false)
+			pauseFrame = (double)glfwGetTime();
+		boneTransform(pauseFrame, transforms);
+		pauseFrameSet = true;
+	}
 
 
 	for (uint i = 0; i < transforms.size(); i++) // move all matrices for actual model position to shader
@@ -494,28 +503,29 @@ void AnimModel::setAnimation(float s, float e)
 
 void AnimModel::boneTransform(double time_in_sec, vector<aiMatrix4x4>& transforms)
 {
-	aiMatrix4x4 identity_matrix;
 
-	double time_in_ticks = time_in_sec * ticks_per_second;
+		aiMatrix4x4 identity_matrix;
 
-	float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration/animEnd);
+		double time_in_ticks = time_in_sec * ticks_per_second;
 
-	float animation_size = (scene->mAnimations[0]->mDuration / animEnd) - animStart;
+		float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration / animEnd);
 
-	if (animation_time < animStart)
-		animation_time += animStart;
-	while (animation_time > animation_size + animStart) {
-		float difference = animation_time - (animation_size + animStart);
-		animation_time = animStart + difference;
-	}
+		float animation_size = (scene->mAnimations[0]->mDuration / animEnd) - animStart;
 
-	readNodeHierarchy(animation_time, scene->mRootNode, identity_matrix);
-	transforms.resize(m_num_bones);
+		if (animation_time < animStart)
+			animation_time += animStart;
+		while (animation_time > animation_size + animStart) {
+			float difference = animation_time - (animation_size + animStart);
+			animation_time = animStart + difference;
+		}
 
-	for (uint i = 0; i < m_num_bones; i++)
-	{
-		transforms[i] = m_bone_matrices[i].final_world_transform;
-	}
+		readNodeHierarchy(animation_time, scene->mRootNode, identity_matrix);
+		transforms.resize(m_num_bones);
+
+		for (uint i = 0; i < m_num_bones; i++)
+		{
+			transforms[i] = m_bone_matrices[i].final_world_transform;
+		}
 }
 
 glm::mat4 AnimModel::aiToGlm(aiMatrix4x4 ai_matr)
@@ -586,4 +596,13 @@ GLuint AnimModel::TextureFromFile(const char *path)
 	return textureID;
 }
 
+void AnimModel::setPaused(bool p)
+{
+	paused = p;
+}
+
+bool AnimModel::getPaused()
+{
+	return paused;
+}
 

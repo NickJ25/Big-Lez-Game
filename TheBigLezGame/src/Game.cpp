@@ -208,6 +208,7 @@ void Game::update()
 	if (Input::keyboard1.keys[GLFW_KEY_V]) {
 		sassy->Move(glm::vec3(-1.0f, 0.0f, 0.0f));
 	}
+
 	if (Input::keyboard1.keys[GLFW_KEY_1]) {
 
 		if (showBoundingBoxes == false) {
@@ -227,6 +228,33 @@ void Game::update()
 			showBoundingBoxes = true;
 		}
 	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_Q]) {
+
+		vector<GameObject*>::iterator it;
+		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+		{
+			Player *tmp = dynamic_cast<Player*>(*it);
+			if (tmp != nullptr)
+			{
+				if ((*it)->getPaused() == false)
+					(*it)->setPaused(true);
+
+			}
+		}
+	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_E]) {
+
+		vector<GameObject*>::iterator it;
+		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+		{
+			if ((*it)->getPaused() == true)
+				(*it)->setPaused(false);
+
+		}
+	}
+
 
 	if (Input::keyboard1.keys[GLFW_KEY_2]) {
 
