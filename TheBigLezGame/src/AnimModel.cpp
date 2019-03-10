@@ -343,7 +343,7 @@ uint AnimModel::findScaling(float p_animation_time, const aiNodeAnim* p_node_ani
 
 	for (uint i = 0; i < p_node_anim->mNumScalingKeys - 1; i++)
 	{
-		if (p_animation_time < (float)p_node_anim->mScalingKeys[i + 1].mTime)
+		if ( p_animation_time < (float)p_node_anim->mScalingKeys[i + 1].mTime)
 		{
 			return i;
 		}
@@ -360,12 +360,14 @@ aiVector3D AnimModel::calcInterpolatedPosition(float p_animation_time, const aiN
 		return p_node_anim->mPositionKeys[0].mValue;
 	}
 
-	uint position_index = findPosition(p_animation_time, p_node_anim);
+	double time_in_ticks = (double)glfwGetTime() * ticks_per_second;
+	uint position_index;
+	position_index = findPosition(p_animation_time, p_node_anim);
 	uint next_position_index = position_index + 1;
 	assert(next_position_index < p_node_anim->mNumPositionKeys);
 	float delta_time = (float)(p_node_anim->mPositionKeys[next_position_index].mTime - p_node_anim->mPositionKeys[position_index].mTime);
 
-	float factor = (p_animation_time - (float)p_node_anim->mPositionKeys[position_index].mTime) / delta_time;
+	float  factor = ((p_animation_time)-(float)p_node_anim->mPositionKeys[position_index].mTime) / delta_time;
 	assert(factor >= 0.0f && factor <= 1.0f);
 	aiVector3D start = p_node_anim->mPositionKeys[position_index].mValue;
 	aiVector3D end = p_node_anim->mPositionKeys[next_position_index].mValue;
@@ -380,15 +382,16 @@ aiQuaternion AnimModel::calcInterpolatedRotation(float p_animation_time, const a
 	{
 		return p_node_anim->mRotationKeys[0].mValue;
 	}
+	uint rotation_index;
 
-	uint rotation_index = findRotation(p_animation_time, p_node_anim); 
+	rotation_index = findRotation(p_animation_time, p_node_anim);
+
 	uint next_rotation_index = rotation_index + 1;
 	assert(next_rotation_index < p_node_anim->mNumRotationKeys);
 
 	float delta_time = (float)(p_node_anim->mRotationKeys[next_rotation_index].mTime - p_node_anim->mRotationKeys[rotation_index].mTime);
 
-	float factor = (p_animation_time - (float)p_node_anim->mRotationKeys[rotation_index].mTime) / delta_time;
-
+	float  factor = ((p_animation_time)-(float)p_node_anim->mRotationKeys[rotation_index].mTime) / delta_time;
 	assert(factor >= 0.0f && factor <= 1.0f);
 	aiQuaternion start_quat = p_node_anim->mRotationKeys[rotation_index].mValue;
 	aiQuaternion end_quat = p_node_anim->mRotationKeys[next_rotation_index].mValue;
@@ -398,16 +401,20 @@ aiQuaternion AnimModel::calcInterpolatedRotation(float p_animation_time, const a
 
 aiVector3D AnimModel::calcInterpolatedScaling(float p_animation_time, const aiNodeAnim* p_node_anim)
 {
+
 	if (p_node_anim->mNumScalingKeys == 1)
 	{
 		return p_node_anim->mScalingKeys[0].mValue;
 	}
 
-	uint scaling_index = findScaling(p_animation_time, p_node_anim);
+	uint scaling_index;
+
+	scaling_index = findScaling(p_animation_time, p_node_anim);
+
 	uint next_scaling_index = scaling_index + 1; 
 	assert(next_scaling_index < p_node_anim->mNumScalingKeys);
 	float delta_time = (float)(p_node_anim->mScalingKeys[next_scaling_index].mTime - p_node_anim->mScalingKeys[scaling_index].mTime);
-	float  factor = (p_animation_time - (float)p_node_anim->mScalingKeys[scaling_index].mTime) / delta_time;
+	float  factor = ((p_animation_time) - (float)p_node_anim->mScalingKeys[scaling_index].mTime) / delta_time;
 	assert(factor >= 0.0f && factor <= 1.0f);
 	aiVector3D start = p_node_anim->mScalingKeys[scaling_index].mValue;
 	aiVector3D end = p_node_anim->mScalingKeys[next_scaling_index].mValue;
@@ -446,18 +453,15 @@ void AnimModel::readNodeHierarchy(float p_animation_time, const aiNode* p_node, 
 	{
 
 		//scaling
-		//aiVector3D scaling_vector = node_anim->mScalingKeys[2].mValue;
 		aiVector3D scaling_vector = calcInterpolatedScaling(p_animation_time, node_anim);
 		aiMatrix4x4 scaling_matr;
 		aiMatrix4x4::Scaling(scaling_vector, scaling_matr);
 
 		//rotation
-		//aiQuaternion rotate_quat = node_anim->mRotationKeys[2].mValue;
 		aiQuaternion rotate_quat = calcInterpolatedRotation(p_animation_time, node_anim);
 		aiMatrix4x4 rotate_matr = aiMatrix4x4(rotate_quat.GetMatrix());
 
 		//translation
-		//aiVector3D translate_vector = node_anim->mPositionKeys[2].mValue;
 		aiVector3D translate_vector = calcInterpolatedPosition(p_animation_time, node_anim);
 		aiMatrix4x4 translate_matr;
 		aiMatrix4x4::Translation(translate_vector, translate_matr);
@@ -492,9 +496,18 @@ void AnimModel::boneTransform(double time_in_sec, vector<aiMatrix4x4>& transform
 {
 	aiMatrix4x4 identity_matrix;
 
-	double time_in_ticks = time_in_sec * ticks_per_second;;
+	double time_in_ticks = time_in_sec * ticks_per_second;
 
-	float animation_time = fmod(time_in_ticks, animStart + scene->mAnimations[0]->mDuration/animEnd);
+	float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration/animEnd);
+
+	float animation_size = (scene->mAnimations[0]->mDuration / animEnd) - animStart;
+
+	if (animation_time < animStart)
+		animation_time += animStart;
+	while (animation_time > animation_size + animStart) {
+		float difference = animation_time - (animation_size + animStart);
+		animation_time = animStart + difference;
+	}
 
 	readNodeHierarchy(animation_time, scene->mRootNode, identity_matrix);
 	transforms.resize(m_num_bones);

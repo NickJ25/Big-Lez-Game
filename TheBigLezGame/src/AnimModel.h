@@ -76,8 +76,8 @@ private:
 	// rotate Head
 	glm::quat rotate_head_xz = glm::quat(cos(glm::radians(0.0f)), sin(glm::radians(0.0f)) * glm::vec3(1.0f, 0.0f, 0.0f)); // this quad do nothingggggg!!!!!
 
-	float animStart = 0;
-	float animEnd = 0;
+	float animStart = 0.0;
+	float animEnd = 1.0;
 };
 
 #endif

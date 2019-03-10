@@ -75,7 +75,7 @@ void Game::init()
 	sassy = new Player(Sassy);
 	sassy->setShader(toonShader);
 	sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
-	sassy->setAnimation(0.0f, 6.17f);
+	sassy->setAnimation(5.0f, 1.0f);
 	gameObjects.push_back(sassy);
 
 

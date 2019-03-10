@@ -77,7 +77,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			//set their properties
 			choomah->setShader(shader);
 			choomah->Move(glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
-			choomah->setAnimation(0.0f, 6.17f);
+			choomah->setAnimation(1.95f, 1.94f);
 			choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
 
 			cout << "choomah spawn position = " << choomah->getPosition().x << " , " << choomah->getPosition().y << " , " << choomah->getPosition().z << " ) " << endl;
@@ -108,7 +108,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 void WaveSpawner::initNPCs()
 {
 
-	normalChoomah.fileLocation = "assets/Characters/Choomah-normal/choomahnormal.dae";
+	normalChoomah.fileLocation = "assets/Characters/Choomah-normal/choomahbasic.dae";
 	normalChoomah.name = "normal";
 
 	chargerChoomah.fileLocation = "assets/Characters/Choomah-charger/choomahcharger.dae";

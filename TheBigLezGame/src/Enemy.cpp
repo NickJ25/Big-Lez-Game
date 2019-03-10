@@ -67,11 +67,13 @@ void Enemy::update()
 
 		if (jumpingCounter != 0)
 		{
-			//set animation here
+			//jumping animation
+			setAnimation(4.58f, 1.18f);
 		}
 		else
 		{
-
+			//running animation
+			setAnimation(0.0f, 6.17f);
 		}
 		//enemy has reached a window
 		setPathEnd(target->getPosition(), false);
