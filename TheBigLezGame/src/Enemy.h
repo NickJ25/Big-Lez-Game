@@ -25,6 +25,9 @@ public:
 	void setPath(std::vector<glm::vec3> p ,bool outer);
 	void setPathEnd(glm::vec3 p, bool outer);
 
+	void setPaused(bool p);
+	bool getPaused();
+
 	void getPlayerPosition(glm::vec3 p)
 	{
 		innerPathEnd = p;
@@ -78,6 +81,7 @@ private:
 	bool outsideMovement;
 	int jumpingCounter;
 	
+	bool paused;
 
 	float velocity;
 

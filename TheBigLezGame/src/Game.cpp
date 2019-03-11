@@ -234,12 +234,11 @@ void Game::update()
 		vector<GameObject*>::iterator it;
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
-			Player *tmp = dynamic_cast<Player*>(*it);
-			if (tmp != nullptr)
-			{
-				if ((*it)->getPaused() == false)
-					(*it)->setPaused(true);
+			(*it)->setPaused(true);
 
+			Enemy *tmp = dynamic_cast<Enemy*>(*it);
+			if (tmp != nullptr) {
+				tmp->setPaused(true);
 			}
 		}
 	}
@@ -249,8 +248,12 @@ void Game::update()
 		vector<GameObject*>::iterator it;
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
-			if ((*it)->getPaused() == true)
-				(*it)->setPaused(false);
+			(*it)->setPaused(false);
+
+			Enemy *tmp = dynamic_cast<Enemy*>(*it);
+			if (tmp != nullptr) {
+				tmp->setPaused(false);
+			}
 
 		}
 	}
