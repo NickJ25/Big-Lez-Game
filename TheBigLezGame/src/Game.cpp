@@ -68,19 +68,19 @@ void Game::init()
 	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
 	Sassy.name = "Sassy";
 
+	GameObject* sassy = new Player(Sassy, glm::vec3(5.0f, 0.0f, 0.0f));
+	sassy->setShader(toonShader);
+	//sassy->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	sassy->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
+	sassy->setAnim(0);
+	gameObjects.push_back(sassy);
+
 	mainPlayer = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
 	mainPlayer->setShader(toonShader);
 	//mainPlayer->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	mainPlayer->setAnim(0);
 	gameObjects.push_back(mainPlayer);
-
-	GameObject* sassy = new Player(Sassy, glm::vec3(5.0f, 0.0f, 0.0f));
-	sassy->setShader(toonShader);
-	sassy->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	sassy->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
-	sassy->setAnim(0);
-	gameObjects.push_back(sassy);
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	lezTest->setShader(toonShader);

@@ -35,8 +35,11 @@ void Player::update()
 	glm::vec3 tempPos = this->getPosition();
 	if (Input::keyboard1.keys[GLFW_KEY_W]) {
 		m_playerCamera->setCameraPos(m_playerCamera->getCameraPos() - m_playerCamera->getFront() * 1.0f);
+		GameObject::Move(glm::vec3(0.0, 0.0, 1.0 * m_playerCamera->getFront().z));
+		//cout << (m_playerCamera->getCameraPos() - m_playerCamera->getFront()).x << " " << (m_playerCamera->getCameraPos() - m_playerCamera->getFront()).y << " " << (m_playerCamera->getCameraPos() - m_playerCamera->getFront()).z << endl;
 		//tempPos.x -= m_playerCamera->getFront().x * 1.0f;
-		this->Move(glm::vec3(0.0, -1.4, 0.0));
+		//this->Move(glm::vec3(-(prevPos - m_playerCamera->getCameraPos()).x, 0.0, -(prevPos - m_playerCamera->getCameraPos()).z));
+		//this->setPosition(m_playerCamera->getCameraPos() - m_playerCamera->getFront());
 		//tempPos.z -= m_playerCamera->getFront().z * 1.0f;
 	}
 	if (Input::keyboard1.keys[GLFW_KEY_S]) {
@@ -58,8 +61,8 @@ void Player::update()
 		//tempPos.z -= m_playerCamera->getRight().z * 1.0f;
 		this->Move(glm::vec3(-0.1, 0.0, 0.0));
 	}
-	cout << "tempPos: " << m_playerCamera->getFront().x << " " << m_playerCamera->getFront().y << " " << m_playerCamera->getFront().z << endl;
-	cout << "tempPos: " << tempPos.x << " " << tempPos.y << " " << tempPos.z << endl;
+	//cout << "tempPos: " << m_playerCamera->getFront().x << " " << m_playerCamera->getFront().y << " " << m_playerCamera->getFront().z << endl;
+	//cout << "tempPos: " << tempPos.x << " " << tempPos.y << " " << tempPos.z << endl;
 	//this->Move(glm::vec3(tempPos));
 	
 
@@ -71,7 +74,7 @@ void Player::update()
 
 	m_playerCamera->update();
 	GLfloat nowYaw = prevYaw - m_playerCamera->getYaw();
-	this->Rotate(nowYaw, glm::vec3(0.0, 0.0, 1.0));
+	this->Rotate(nowYaw, glm::vec3(0.0, 1.0, 0.0));
 	prevYaw = m_playerCamera->getYaw();
 
 	//m_charLabel->draw("Big Lez", colourTemp);
