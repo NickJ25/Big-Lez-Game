@@ -38,6 +38,11 @@ void GameObject::setPosition(glm::vec3 newPos)
 	transformComponent->setPosition(newPos);
 }
 
+void GameObject::setMatrix(glm::mat4 newMat)
+{
+	transformComponent->setMatrix(newMat);
+}
+
 void GameObject::addCollision(glm::vec3 size)
 {
 	collisionComponent = new CollisionComponent(size);

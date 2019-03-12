@@ -13,6 +13,8 @@ public:
 		std::string name;
 		std::string fileLocation;
 		bool isLocked;
+		GLint health;
+		GLint walkSpeed;
 	};
 
 	Player(Character character, glm::vec3 startPos);
@@ -28,8 +30,7 @@ private:
 	Text* m_charLabel;
 	//Weapon* m_playerInventory[];
 
-	GLfloat prevYaw;
-	glm::vec3 prevPos;
+	GLfloat prevYaw, currentYaw;
 
 	GLuint m_health;
 

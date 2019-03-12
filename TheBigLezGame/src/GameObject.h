@@ -40,6 +40,7 @@ public:
 	void setAnim(int n);
 	glm::vec3 getPosition();
 	void setPosition(glm::vec3 newPos);
+	void setMatrix(glm::mat4 newMat);
 
 	void addCollision(glm::vec3 size);
 	glm::vec3 getCollision();

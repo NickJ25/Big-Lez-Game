@@ -69,7 +69,6 @@ void RenderComponent::Draw()
 	// Draw Items////////////////
 
 	m_objModel->draw(m_currentShader->getID(), true);
-
 	//testModel->Draw(*m_currentShader); // TEST
 
 	// End Draw Items////////////

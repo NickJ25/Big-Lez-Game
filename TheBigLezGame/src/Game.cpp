@@ -51,7 +51,6 @@ void Game::init()
 	//gameObjects.push_back(couch);
 
 	GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 0.0f, 0.0f));
-	//environment->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	environment->setShader(toonShader);
 	gameObjects.push_back(environment);
 
@@ -63,12 +62,14 @@ void Game::init()
 	Player::Character BigLez;
 	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
 	BigLez.name = "Leslie";
+	BigLez.health = 100;
+	BigLez.walkSpeed = 10;
 
 	Player::Character Sassy;
 	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
 	Sassy.name = "Sassy";
 
-	GameObject* sassy = new Player(Sassy, glm::vec3(5.0f, 0.0f, 0.0f));
+	GameObject* sassy = new Prop("assets/Characters/Sassy/sassy.dae", glm::vec3(5.0f, 0.0f, 0.0f));
 	sassy->setShader(toonShader);
 	//sassy->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	sassy->Scale(glm::vec3(0.6f, 0.6f, 0.6f));

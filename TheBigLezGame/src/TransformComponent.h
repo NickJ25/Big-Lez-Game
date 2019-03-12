@@ -18,6 +18,7 @@ public:
 	};
 	glm::vec3 getPosition();
 	glm::mat4 getMatrix();
+	void setMatrix(glm::mat4 newMat);
 	void setPosition(glm::vec3 newPos);
 	void move(glm::vec3 position);
 	void rotate(GLfloat radians, glm::vec3 rotation);
