@@ -1,6 +1,4 @@
 ﻿#include "AnimModel.h"
-//#include "Game.h"
-//#include "InputHandler.h"
 
 
 #include "SDL.h"
@@ -64,14 +62,18 @@ void AnimModel::update()
 void AnimModel::draw(GLuint shaders_program, bool isAnimated)
 {
 	vector<aiMatrix4x4> transforms;
-	if (isAnimated == true)
-	{  // if not explicitly set, just find the time
+	// if not explicitly set, just find the time
+	if (paused == false) {
+		pauseFrame = false;
 		boneTransform((double)glfwGetTime(), transforms);
 	}
-	else
-	{
-		boneTransform(0.55f / 1000.0f, transforms);
+	else {
+		if (pauseFrameSet == false)
+			pauseFrame = (double)glfwGetTime();
+		boneTransform(pauseFrame, transforms);
+		pauseFrameSet = true;
 	}
+
 
 	for (uint i = 0; i < transforms.size(); i++) // move all matrices for actual model position to shader
 	{
@@ -128,30 +130,30 @@ void AnimModel::loadModel(const string& path)
 	// directoru = container for model.obj and textures and other files
 	directory = path.substr(0, path.find_last_of('/'));
 
-	cout << "scene->HasAnimations() 1: " << scene->HasAnimations() << endl;
-	cout << "scene->mNumMeshes 1: " << scene->mNumMeshes << endl;
-	cout << "scene->mAnimations[0]->mNumChannels 1: " << scene->mAnimations[0]->mNumChannels << endl;
-	cout << "scene->mAnimations[0]->mDuration 1: " << scene->mAnimations[0]->mDuration << endl;
-	cout << "scene->mAnimations[0]->mTicksPerSecond 1: " << scene->mAnimations[0]->mTicksPerSecond << endl << endl;
+	//cout << "scene->HasAnimations() 1: " << scene->HasAnimations() << endl;
+	//cout << "scene->mNumMeshes 1: " << scene->mNumMeshes << endl;
+	//cout << "scene->mAnimations[0]->mNumChannels 1: " << scene->mAnimations[0]->mNumChannels << endl;
+	//cout << "scene->mAnimations[0]->mDuration 1: " << scene->mAnimations[0]->mDuration << endl;
+	//cout << "scene->mAnimations[0]->mTicksPerSecond 1: " << scene->mAnimations[0]->mTicksPerSecond << endl << endl;
 
-	cout << "		name nodes : " << endl;
-	showNodeName(scene->mRootNode);
-	cout << endl;
+	//cout << "		name nodes : " << endl;
+	//showNodeName(scene->mRootNode);
+	//cout << endl;
 
-	cout << "		name bones : " << endl;
+	//cout << "		name bones : " << endl;
 	processNode(scene->mRootNode, scene);
 
-	cout << "		name nodes animation : " << endl;
+	//cout << "		name nodes animation : " << endl;
 	for (uint i = 0; i < scene->mAnimations[0]->mNumChannels; i++)
 	{
-		cout << scene->mAnimations[0]->mChannels[i]->mNodeName.C_Str() << endl;
+		//cout << scene->mAnimations[0]->mChannels[i]->mNodeName.C_Str() << endl;
 	}
-	cout << endl;
+	//cout << endl;
 }
 
 void AnimModel::showNodeName(aiNode* node)
 {
-	cout << node->mName.data << endl;
+	//cout << node->mName.data << endl;
 	for (uint i = 0; i < node->mNumChildren; i++)
 	{
 		showNodeName(node->mChildren[i]);
@@ -172,7 +174,7 @@ void AnimModel::processNode(aiNode* node, const aiScene* scene)
 
 AnimMesh AnimModel::processMesh(aiMesh* mesh, const aiScene* scene)
 {
-	std::cout << "bones: " << mesh->mNumBones << " vertices: " << mesh->mNumVertices << std::endl;
+	//std::cout << "bones: " << mesh->mNumBones << " vertices: " << mesh->mNumVertices << std::endl;
 
 	vector<AnimVertex> vertices;
 	vector<GLuint> indices;
@@ -267,7 +269,6 @@ AnimMesh AnimModel::processMesh(aiMesh* mesh, const aiScene* scene)
 		uint bone_index = 0;
 		string bone_name(mesh->mBones[i]->mName.data);
 
-		cout << mesh->mBones[i]->mName.data << endl;
 
 		if (m_bone_mapping.find(bone_name) == m_bone_mapping.end())
 		{
@@ -279,7 +280,6 @@ AnimMesh AnimModel::processMesh(aiMesh* mesh, const aiScene* scene)
 			m_bone_matrices[bone_index].offset_matrix = mesh->mBones[i]->mOffsetMatrix;
 			m_bone_mapping[bone_name] = bone_index;
 
-			//cout << "bone_name: " << bone_name << "			 bone_index: " << bone_index << endl;
 		}
 		else
 		{
@@ -307,8 +307,6 @@ vector<AnimTexture> AnimModel::LoadMaterialTexture(aiMaterial* mat, aiTextureTyp
 
 		string filename = string(ai_str.C_Str());
 		filename = directory + '/' + filename;
-
-		//cout << filename << endl;
 
 		AnimTexture texture;
 		texture.id = TextureFromFile(filename.c_str()); // return prepaired openGL texture
@@ -354,7 +352,7 @@ uint AnimModel::findScaling(float p_animation_time, const aiNodeAnim* p_node_ani
 
 	for (uint i = 0; i < p_node_anim->mNumScalingKeys - 1; i++)
 	{
-		if (p_animation_time < (float)p_node_anim->mScalingKeys[i + 1].mTime)
+		if ( p_animation_time < (float)p_node_anim->mScalingKeys[i + 1].mTime)
 		{
 			return i;
 		}
@@ -371,12 +369,14 @@ aiVector3D AnimModel::calcInterpolatedPosition(float p_animation_time, const aiN
 		return p_node_anim->mPositionKeys[0].mValue;
 	}
 
-	uint position_index = findPosition(p_animation_time, p_node_anim);
+	double time_in_ticks = (double)glfwGetTime() * ticks_per_second;
+	uint position_index;
+	position_index = findPosition(p_animation_time, p_node_anim);
 	uint next_position_index = position_index + 1;
 	assert(next_position_index < p_node_anim->mNumPositionKeys);
 	float delta_time = (float)(p_node_anim->mPositionKeys[next_position_index].mTime - p_node_anim->mPositionKeys[position_index].mTime);
 
-	float factor = (p_animation_time - (float)p_node_anim->mPositionKeys[position_index].mTime) / delta_time;
+	float  factor = ((p_animation_time)-(float)p_node_anim->mPositionKeys[position_index].mTime) / delta_time;
 	assert(factor >= 0.0f && factor <= 1.0f);
 	aiVector3D start = p_node_anim->mPositionKeys[position_index].mValue;
 	aiVector3D end = p_node_anim->mPositionKeys[next_position_index].mValue;
@@ -391,22 +391,16 @@ aiQuaternion AnimModel::calcInterpolatedRotation(float p_animation_time, const a
 	{
 		return p_node_anim->mRotationKeys[0].mValue;
 	}
+	uint rotation_index;
 
-	uint rotation_index = findRotation(p_animation_time, p_node_anim); 
+	rotation_index = findRotation(p_animation_time, p_node_anim);
+
 	uint next_rotation_index = rotation_index + 1;
 	assert(next_rotation_index < p_node_anim->mNumRotationKeys);
 
 	float delta_time = (float)(p_node_anim->mRotationKeys[next_rotation_index].mTime - p_node_anim->mRotationKeys[rotation_index].mTime);
 
-	float factor = (p_animation_time - (float)p_node_anim->mRotationKeys[rotation_index].mTime) / delta_time;
-
-	//cout << "p_node_anim->mRotationKeys[rotation_index].mTime: " << p_node_anim->mRotationKeys[rotation_index].mTime << endl;
-	//cout << "p_node_anim->mRotationKeys[next_rotaion_index].mTime: " << p_node_anim->mRotationKeys[next_rotation_index].mTime << endl;
-	//cout << "delta_time: " << delta_time << endl;
-	//cout << "animation_time: " << p_animation_time << endl;
-	//cout << "animation_time - mRotationKeys[rotation_index].mTime: " << (p_animation_time - (float)p_node_anim->mRotationKeys[rotation_index].mTime) << endl;
-	//cout << "factor: " << factor << endl << endl << endl;
-
+	float  factor = ((p_animation_time)-(float)p_node_anim->mRotationKeys[rotation_index].mTime) / delta_time;
 	assert(factor >= 0.0f && factor <= 1.0f);
 	aiQuaternion start_quat = p_node_anim->mRotationKeys[rotation_index].mValue;
 	aiQuaternion end_quat = p_node_anim->mRotationKeys[next_rotation_index].mValue;
@@ -416,16 +410,20 @@ aiQuaternion AnimModel::calcInterpolatedRotation(float p_animation_time, const a
 
 aiVector3D AnimModel::calcInterpolatedScaling(float p_animation_time, const aiNodeAnim* p_node_anim)
 {
+
 	if (p_node_anim->mNumScalingKeys == 1)
 	{
 		return p_node_anim->mScalingKeys[0].mValue;
 	}
 
-	uint scaling_index = findScaling(p_animation_time, p_node_anim);
+	uint scaling_index;
+
+	scaling_index = findScaling(p_animation_time, p_node_anim);
+
 	uint next_scaling_index = scaling_index + 1; 
 	assert(next_scaling_index < p_node_anim->mNumScalingKeys);
 	float delta_time = (float)(p_node_anim->mScalingKeys[next_scaling_index].mTime - p_node_anim->mScalingKeys[scaling_index].mTime);
-	float  factor = (p_animation_time - (float)p_node_anim->mScalingKeys[scaling_index].mTime) / delta_time;
+	float  factor = ((p_animation_time) - (float)p_node_anim->mScalingKeys[scaling_index].mTime) / delta_time;
 	assert(factor >= 0.0f && factor <= 1.0f);
 	aiVector3D start = p_node_anim->mScalingKeys[scaling_index].mValue;
 	aiVector3D end = p_node_anim->mScalingKeys[next_scaling_index].mValue;
@@ -437,7 +435,6 @@ aiVector3D AnimModel::calcInterpolatedScaling(float p_animation_time, const aiNo
 const aiNodeAnim * AnimModel::findNodeAnim(const aiAnimation * p_animation, const string p_node_name)
 {
 	// channel in animation contains aiNodeAnim (aiNodeAnim its transformation for bones)
-	// numChannels == numBones
 	for (uint i = 0; i < p_animation->mNumChannels; i++)
 	{
 		const aiNodeAnim* node_anim = p_animation->mChannels[i];
@@ -465,32 +462,20 @@ void AnimModel::readNodeHierarchy(float p_animation_time, const aiNode* p_node, 
 	{
 
 		//scaling
-		//aiVector3D scaling_vector = node_anim->mScalingKeys[2].mValue;
 		aiVector3D scaling_vector = calcInterpolatedScaling(p_animation_time, node_anim);
 		aiMatrix4x4 scaling_matr;
 		aiMatrix4x4::Scaling(scaling_vector, scaling_matr);
 
 		//rotation
-		//aiQuaternion rotate_quat = node_anim->mRotationKeys[2].mValue;
 		aiQuaternion rotate_quat = calcInterpolatedRotation(p_animation_time, node_anim);
 		aiMatrix4x4 rotate_matr = aiMatrix4x4(rotate_quat.GetMatrix());
 
 		//translation
-		//aiVector3D translate_vector = node_anim->mPositionKeys[2].mValue;
 		aiVector3D translate_vector = calcInterpolatedPosition(p_animation_time, node_anim);
 		aiMatrix4x4 translate_matr;
 		aiMatrix4x4::Translation(translate_vector, translate_matr);
 
-		if (string(node_anim->mNodeName.data) == string("Head"))
-		{
-			aiQuaternion rotate_head = aiQuaternion(rotate_head_xz.w, rotate_head_xz.x, rotate_head_xz.y, rotate_head_xz.z);
-
-			node_transform = translate_matr * (rotate_matr * aiMatrix4x4(rotate_head.GetMatrix())) * scaling_matr;
-		}
-		else
-		{
-			node_transform = translate_matr * rotate_matr * scaling_matr;
-		}
+		node_transform = translate_matr * rotate_matr * scaling_matr;
 
 	}
 
@@ -509,31 +494,38 @@ void AnimModel::readNodeHierarchy(float p_animation_time, const aiNode* p_node, 
 
 }
 
-void AnimModel::setAnim(int n)
+void AnimModel::setAnimation(float s, float e)
 {
-	lefthand = n;
+	animStart = s;
+	animEnd = e;
+
 }
 
 void AnimModel::boneTransform(double time_in_sec, vector<aiMatrix4x4>& transforms)
 {
-	aiMatrix4x4 identity_matrix;
 
-	double time_in_ticks = time_in_sec * ticks_per_second;
-	float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration);
+		aiMatrix4x4 identity_matrix;
 
-	if (lefthand == 1)
-	{
-		cout << "calling right hand" << endl;
-		animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration / 2);
-	}
+		double time_in_ticks = time_in_sec * ticks_per_second;
 
-	readNodeHierarchy(animation_time, scene->mRootNode, identity_matrix);
-	transforms.resize(m_num_bones);
+		float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration / animEnd);
 
-	for (uint i = 0; i < m_num_bones; i++)
-	{
-		transforms[i] = m_bone_matrices[i].final_world_transform;
-	}
+		float animation_size = (scene->mAnimations[0]->mDuration / animEnd) - animStart;
+
+		if (animation_time < animStart)
+			animation_time += animStart;
+		while (animation_time > animation_size + animStart) {
+			float difference = animation_time - (animation_size + animStart);
+			animation_time = animStart + difference;
+		}
+
+		readNodeHierarchy(animation_time, scene->mRootNode, identity_matrix);
+		transforms.resize(m_num_bones);
+
+		for (uint i = 0; i < m_num_bones; i++)
+		{
+			transforms[i] = m_bone_matrices[i].final_world_transform;
+		}
 }
 
 glm::mat4 AnimModel::aiToGlm(aiMatrix4x4 ai_matr)
@@ -604,4 +596,13 @@ GLuint AnimModel::TextureFromFile(const char *path)
 	return textureID;
 }
 
+void AnimModel::setPaused(bool p)
+{
+	paused = p;
+}
+
+bool AnimModel::getPaused()
+{
+	return paused;
+}
 

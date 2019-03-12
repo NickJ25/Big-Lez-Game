@@ -59,7 +59,9 @@ public:
 	void setDrawMatrix(glm::mat4 matrix);
 	void textureOverride(GLuint textureID);
 	void changeShader(Shader* newShader);
-	void setAnim(int n);
+	void setAnim(float s, float e);
+	void setPaused(bool p);
+	bool getPaused();
 	void Draw();
 
 };

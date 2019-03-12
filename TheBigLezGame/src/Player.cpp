@@ -1,9 +1,8 @@
 #include "Player.h"
 
-Player::Player(Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
+Player::Player(Character character) : GameObject( character.fileLocation.c_str())
 {
-
-	
+	selectCharacter = character;
 }
 
 Player::~Player()

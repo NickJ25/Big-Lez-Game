@@ -1,10 +1,29 @@
 #include "CollisionComponent.h"
 
-glm::vec3 CollisionComponent::getCollision()
+
+glm::vec3 CollisionComponent::getPos()
 {
-	return m_collisionSize;
+	return centre;
+}
+glm::vec3 CollisionComponent::getScale()
+{
+	return scale;
+}
+float CollisionComponent::getHW()
+{
+	return halfWidth;
+}
+float CollisionComponent::getHH()
+{
+	return halfHeight;
 }
 
+void CollisionComponent::move(glm::vec3 moveAmount)
+{
+	centre += moveAmount;
+}
+
+//
 //bool CollisionComponent::checkCollisions(GameObject * a, GameObject * b)
 //{
 //	if (abs(a->getPosition().x - b->getPosition().x) > (a->getCollision().x + b->getCollision().x)) return false;

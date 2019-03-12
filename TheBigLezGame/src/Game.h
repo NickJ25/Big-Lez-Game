@@ -21,8 +21,12 @@
 #include "Player.h"
 #include "Button.h"
 #include "Image.h"
+#include "WaveSpawner.h"
 
 #include "Text.h"
+#include "WaveSpawner.h"
+#include "Grid.h"
+#include "PathManager.h"
 
 using namespace std;
 
@@ -36,6 +40,8 @@ private:
 	Menu* selectedMenu;
 	Image* pauseBackground;
 	Text* testtxt2;
+	bool showBoundingBoxes;
+
 public:
 	Game() {};
 	~Game() {};

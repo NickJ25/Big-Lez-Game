@@ -13,6 +13,7 @@ glm::mat4 TransformComponent::getMatrix()
 void TransformComponent::move(glm::vec3 position)
 {
 	m_matrix = glm::translate(m_matrix, position);
+	m_position += position;
 }
 
 void TransformComponent::rotate(GLfloat radians, glm::vec3 rotation)

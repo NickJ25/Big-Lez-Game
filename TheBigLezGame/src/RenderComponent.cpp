@@ -45,9 +45,18 @@ void RenderComponent::changeShader(Shader* newShader)
 	m_objModel->initShaders(newShader->getID());
 }
 
-void RenderComponent::setAnim(int n)
+void RenderComponent::setAnim(float s, float e)
 {
-	m_objModel->setAnim(n);
+	m_objModel->setAnimation(s, e);
+}
+
+void RenderComponent::setPaused(bool p)
+{
+	m_objModel->setPaused(p);
+}
+bool RenderComponent::getPaused()
+{
+	return m_objModel->getPaused();
 }
 
 void RenderComponent::Draw()

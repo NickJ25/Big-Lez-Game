@@ -17,15 +17,31 @@ protected:
 	glm::vec4 objPosition;
 	Shader* objShader;
 
+	bool isDrawing = true;
+	bool paused;
+
 public:
 	GameObject(glm::vec3 pos) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
 		transformComponent = new TransformComponent(glm::vec4(pos,1.0f));
+		paused = false;
 	}
 
 	GameObject(glm::vec3 pos, const char* filename) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
 		transformComponent = new TransformComponent(objPosition);
 		renderComponent = new RenderComponent(filename);
+		paused = false;
 	}
+
+	GameObject( const char* filename) : objPosition(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
+		transformComponent = new TransformComponent(objPosition);
+		renderComponent = new RenderComponent(filename);
+		paused = false;
+	}
+
+	void setAnimation(float s, float e);
+
+	void setPaused(bool p);
+	bool getPaused();
 
 	virtual ~GameObject() {
 		delete transformComponent;
@@ -37,11 +53,12 @@ public:
 	void Rotate(GLfloat degrees, glm::vec3 rotateAmount);
 	void Scale(glm::vec3 scaleAmount);
 	void setShader(Shader* shader);
-	void setAnim(int n);
+	void setDraw(bool d);
+
 	glm::vec3 getPosition();
 
-	void addCollision(glm::vec3 size);
-	glm::vec3 getCollision();
+	void addCollision(glm::vec3 pos, float hw, float hh);
+	CollisionComponent* getCollider();
 
 	void componentUpdate();
 	void componentDraw(glm::mat4 view);
