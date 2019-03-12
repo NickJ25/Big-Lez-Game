@@ -89,9 +89,9 @@ void Game::init()
 	//gameObjects.push_back(bigLez);
 
 
-	sassy = new Player(Sassy); // Change to prop is issue?
+	sassy = new Player(Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
 	sassy->setShader(toonShader);
-	sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
+	//sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
 	sassy->setAnimation(5.0f, 1.0f);
 	gameObjects.push_back(sassy);
 
@@ -99,7 +99,8 @@ void Game::init()
 	mainPlayer->setShader(toonShader);
 	//mainPlayer->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
-	mainPlayer->setAnim(0);
+	//mainPlayer->setAnim(0);
+	mainPlayer->setAnimation(5.0f, 1.0f);
 	gameObjects.push_back(mainPlayer);
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
@@ -115,7 +116,7 @@ void Game::init()
 
 	for (int i = 0; i < 20; i++)
 	{
-		Fence = new Player(cube);
+		Fence = new Player(cube, glm::vec3(0.0,0.0,0.0));
 		Fence->setShader(toonShader);
 		Fence->setAnimation(0.0f,1.0f);
 

@@ -17,7 +17,7 @@ public:
 		GLint walkSpeed;
 	};
 
-	Player(Character character);
+	Player(Character character, glm::vec3 startPos);
 	~Player();
 
 	void playAnimation();
