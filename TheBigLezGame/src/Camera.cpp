@@ -15,9 +15,25 @@ glm::vec3 Camera::getCameraPos()
 	return m_position;
 }
 
+void Camera::setCameraPos(glm::vec3 newPos)
+{
+	m_position = newPos;
+}
+
+glm::vec3 Camera::getFront()
+{
+	return m_front;
+}
+
+glm::vec3 Camera::getRight()
+{
+	return glm::vec3();
+}
+
 void Camera::follow(glm::vec3 &objPosition)
 {
-	m_followPos = &objPosition;
+	//m_followPos = &objPosition;
+	m_position = objPosition;
 }
 
 void Camera::unfollow()
@@ -27,10 +43,6 @@ void Camera::unfollow()
 
 void Camera::update()
 {
-	if (m_followPos != nullptr) {
-		m_position = *m_followPos;
-	}
-
 	// Different types of camera movement
 	switch (m_camType) {
 	case FREECAM: // Aka noclip
@@ -56,16 +68,20 @@ void Camera::update()
 		break;
 	case DYNAMIC: // Standard player
 		if (Input::keyboard1.keys[GLFW_KEY_W]) {
-			m_position -= m_front * 1.0f;
+			m_position = m_position - getFront() * 1.0f;
+			m_position.y = 0;
 		}
 		if (Input::keyboard1.keys[GLFW_KEY_S]) {
-			m_position += m_front * 1.0f;
+			m_position = m_position + m_front * 1.0f;
+			m_position.y = 0;
 		}
 		if (Input::keyboard1.keys[GLFW_KEY_A]) {
-			m_position += glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
+			m_position = m_position + glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
+			m_position.y = 0;
 		}
 		if (Input::keyboard1.keys[GLFW_KEY_D]) {
-			m_position -= glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
+			m_position = m_position - glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
+			m_position.y = 0;
 		}
 		break;
 	case STATIC: // No movement
@@ -88,8 +104,11 @@ void Camera::update()
 	lastOffsetX = (float)xpos;
 	lastOffsetY = (float)ypos;
 
-	this->m_yaw += mouseOffsetX *= this->m_mouseSensitivity;
-	this->m_pitch += mouseOffsetY *= this->m_mouseSensitivity;
+	this->m_yaw += (mouseOffsetX *= this->m_mouseSensitivity);
+	this->m_pitch += (mouseOffsetY *= this->m_mouseSensitivity);
+
+	if (m_yaw > 360) m_yaw = 0;
+	if (m_yaw < 0) m_yaw = 360;
 
 
 	if (this->m_pitch > 89.0f)
@@ -102,8 +121,14 @@ void Camera::update()
 		this->m_pitch = -89.0f;
 	}
 	glm::vec3 front;
-	front.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+	front.x = cos(glm::radians(m_yaw)) *cos(glm::radians(m_pitch));
 	front.y = sin(glm::radians(m_pitch));
-	front.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+	front.z = sin(glm::radians(m_yaw)) *cos(glm::radians(m_pitch));
 	m_front = glm::normalize(front);
+	m_right = glm::normalize(glm::cross(m_front, m_up));
+}
+
+GLfloat Camera::getYaw()
+{
+	return m_yaw;
 }

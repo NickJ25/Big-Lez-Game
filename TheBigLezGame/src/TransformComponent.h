@@ -11,6 +11,7 @@ private:
 	glm::mat4 m_matrix = glm::mat4(1.0);
 	glm::vec3 m_position;
 
+
 	// Add all rotations, translations, etc and then use them in Render
 	glm::vec4 rotation;
 public:
@@ -20,6 +21,8 @@ public:
 	};
 	glm::vec3 getPosition();
 	glm::mat4 getMatrix();
+	void setMatrix(glm::mat4 newMat);
+	void setPosition(glm::vec3 newPos);
 	void move(glm::vec3 position);
 	void rotate(GLfloat radians, glm::vec3 rotation);
 	void scale(glm::vec3 scale);

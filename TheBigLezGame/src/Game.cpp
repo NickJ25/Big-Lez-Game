@@ -28,7 +28,6 @@ float shininess = 32.0f;
 
 void Game::init()
 {
-	mainCamera = &lezCamera;
 	std::cout << "Game.cpp Init" << std::endl;
 	toonShader = new Shader("src/toonShader.vert", "src/toonShader.frag");
 
@@ -43,8 +42,22 @@ void Game::init()
 	dirLight->setShader(toonShader);
 	gameObjects.push_back(dirLight);
 
-
 	GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 100.0f, 0.0f));
+
+	//GameObject* spotLight = new SpotLight(mainCamera->getCameraPos(), mainCamera->getCameraFront(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.1f), 0.4, 3);
+	//spotLight->setShader(toonShader);
+	//gameObjects.push_back(spotLight);
+	//GameObject* pointLight = new PointLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.09f, 0.05f, 0.09f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.09f, 0.32f));
+	//pointLight->setShader(toonShader);
+	//gameObjects.push_back(pointLight);
+	
+	//GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
+	//table->setShader(toonShader);
+	//gameObjects.push_back(table);
+	//GameObject* couch = new Prop("assets/Props/Couch/couch.obj", glm::vec3(5.0f, 0.0f, 5.0f));
+	//couch->setShader(toonShader);
+	//gameObjects.push_back(couch);
+
 	environment->setShader(toonShader);
 	environment->Move(glm::vec3(0.0f, 100.0f, 0.0f));
 	gameObjects.push_back(environment);
@@ -53,6 +66,8 @@ void Game::init()
 	Player::Character BigLez;
 	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
 	BigLez.name = "Leslie";
+	BigLez.health = 100;
+	BigLez.walkSpeed = 10;
 
 	Player::Character Sassy;
 	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
@@ -74,12 +89,23 @@ void Game::init()
 	//gameObjects.push_back(bigLez);
 
 
-	sassy = new Player(Sassy);
+	sassy = new Player(Sassy); // Change to prop is issue?
 	sassy->setShader(toonShader);
 	sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
 	sassy->setAnimation(5.0f, 1.0f);
 	gameObjects.push_back(sassy);
 
+	mainPlayer = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
+	mainPlayer->setShader(toonShader);
+	//mainPlayer->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
+	mainPlayer->setAnim(0);
+	gameObjects.push_back(mainPlayer);
+
+	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+	lezTest->setShader(toonShader);
+	lezTest->Rotate(-90.0f, glm::vec3(1.0, 0.0, 0.0));
+	gameObjects.push_back(lezTest);
 
 	// add environmental collision boxes for pathfinding an' such
 	glm::vec3 fenceScaleVertical = glm::vec3(4.0f, 4.0f, 30.0f);
@@ -327,8 +353,8 @@ void Game::update()
 		pathManager->working = false;
 
 
-	lezCamera.update();
-	const Uint8 *keys = SDL_GetKeyboardState(NULL);
+	lezCamera.update();/// ----------------------------------------------------------------------CHECK
+	const Uint8 *keys = SDL_GetKeyboardState(NULL); /// ----------------------------------------------------------------------REMOVE
 	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
 	else SDL_SetRelativeMouseMode(SDL_TRUE);
 }
@@ -342,16 +368,17 @@ void Game::draw()
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
-	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainCamera->getCameraPos().x, mainCamera->getCameraPos().y, mainCamera->getCameraPos().z);
 	//cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
+	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
+	cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
 	//cout << "specular; " << glGetUniformLocation(toonShader->getID(), "material.specular") << endl;
 	//cout << "shininess; " << glGetUniformLocation(toonShader->getID(), "material.shininess") << endl;
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
-	skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
-
+	//skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
+	skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));
 	if (isGameRunning == false)
 	{
 		testtxt->draw("Resume", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -359,13 +386,11 @@ void Game::draw()
 		resumeBtn->draw();
 		mainMenuBtn->draw();
 		pauseBackground->draw();
-		
-	
 	}
+
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
-			
-			gameObjects[i]->componentDraw(mainCamera->lookAtMat());
+			gameObjects[i]->componentDraw(mainPlayer->getCamera()->lookAtMat());
 		}
 	}
 	

@@ -56,6 +56,8 @@ public:
 	void setDraw(bool d);
 
 	glm::vec3 getPosition();
+	void setPosition(glm::vec3 newPos);
+	void setMatrix(glm::mat4 newMat);
 
 	void addCollision(glm::vec3 pos, float hw, float hh);
 	CollisionComponent* getCollider();

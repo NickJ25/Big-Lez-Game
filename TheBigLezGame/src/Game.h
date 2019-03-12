@@ -32,7 +32,7 @@ using namespace std;
 
 class Game {
 private:
-	Camera* mainCamera;
+	Player* mainPlayer;
 	Text* testtxt;
 	bool isGameRunning = true; 
 	Button* resumeBtn, *mainMenuBtn;

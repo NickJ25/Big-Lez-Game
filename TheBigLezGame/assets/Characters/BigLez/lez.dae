@@ -5,27 +5,23 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.79.0 commit date:2018-03-22, commit time:14:10, hash:f4dc9f9d68b</authoring_tool>
     </contributor>
-    <created>2019-01-31T01:20:02</created>
-    <modified>2019-01-31T01:20:02</modified>
+    <created>2019-03-02T12:25:52</created>
+    <modified>2019-03-02T12:25:52</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images>
-    <image id="lezUV" name="lezUV">
-      <init_from>lezUV.png</init_from>
-    </image>
-  </library_images>
+  <library_images/>
   <library_effects>
-    <effect id="Material-effect">
+    <effect id="Material1_001-effect">
       <profile_COMMON>
-        <newparam sid="lezUV-surface">
+        <newparam sid="LezV2UV_png_001-surface">
           <surface type="2D">
-            <init_from>lezUV</init_from>
+            <init_from>LezV2UV_png_001</init_from>
           </surface>
         </newparam>
-        <newparam sid="lezUV-sampler">
+        <newparam sid="LezV2UV_png_001-sampler">
           <sampler2D>
-            <source>lezUV-surface</source>
+            <source>LezV2UV_png_001-surface</source>
           </sampler2D>
         </newparam>
         <technique sid="common">
@@ -37,14 +33,17 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <texture texture="lezUV-sampler"/>
+              <texture texture="LezV2UV_png_001-sampler"/>
             </diffuse>
             <specular>
-              <color sid="specular">0.5 0.5 0.5 1</color>
+              <color sid="specular">0.2 0.2 0.2 1</color>
             </specular>
             <shininess>
-              <float sid="shininess">50</float>
+              <float sid="shininess">1</float>
             </shininess>
+            <transparent opaque="A_ONE">
+              <color>1 1 1 1</color>
+            </transparent>
             <index_of_refraction>
               <float sid="index_of_refraction">1</float>
             </index_of_refraction>
@@ -54,8 +53,8 @@
     </effect>
   </library_effects>
   <library_materials>
-    <material id="Material-material" name="Material">
-      <instance_effect url="#Material-effect"/>
+    <material id="Material1_001-material" name="Material1_001">
+      <instance_effect url="#Material1_001-effect"/>
     </material>
   </library_materials>
   <library_geometries>
@@ -97,7 +96,7 @@
           <input semantic="VERTEX" source="#lowman_shoes_001-mesh-vertices" offset="0"/>
           <p>972 963</p>
         </lines>
-        <triangles material="Material-material" count="1942">
+        <triangles material="Material1_001-material" count="1942">
           <input semantic="VERTEX" source="#lowman_shoes_001-mesh-vertices" offset="0"/>
           <input semantic="NORMAL" source="#lowman_shoes_001-mesh-normals" offset="1"/>
           <input semantic="TEXCOORD" source="#lowman_shoes_001-mesh-map-0" offset="2" set="0"/>
@@ -655,7 +654,7 @@
   <library_controllers>
     <controller id="Armature_001_lowman_shoes_001-skin" name="Armature.001">
       <skin source="#lowman_shoes_001-mesh">
-        <bind_shape_matrix>1 0 0 0.01822782 0 -1.62921e-7 -1 0 0 1 -1.62921e-7 0 0 0 0 1</bind_shape_matrix>
+        <bind_shape_matrix>1 0 0 0.01822782 0 1 -1.19209e-7 0 0 1.19209e-7 1 0 0 0 0 1</bind_shape_matrix>
         <source id="Armature_001_lowman_shoes_001-skin-joints">
           <Name_array id="Armature_001_lowman_shoes_001-skin-joints-array" count="17">Left_Foot Lower_Left_Leg Upper_Left_Leg Right_Foot Lower_Right_Leg Upper_Right_Leg Torso Chest Neck Heid Upper_Left_Arm Lower_Left_Arm Left_Hand Upper_Right_Arm Lower_Right_Arm Right_Hand Mouth</Name_array>
           <technique_common>
@@ -665,7 +664,7 @@
           </technique_common>
         </source>
         <source id="Armature_001_lowman_shoes_001-skin-bind_poses">
-          <float_array id="Armature_001_lowman_shoes_001-skin-bind_poses-array" count="272">-0.9473034 -0.31981 -0.01841175 1.919076 0.2996014 -0.8641686 -0.4042916 0.2429814 0.1133853 -0.3885027 0.9144449 -0.6482788 0 0 0 1 0.9220535 -0.3745563 0.09760046 -1.533597 0.1524355 0.1196168 -0.9810481 3.062946 0.3557832 0.9194561 0.1673887 -1.294432 0 0 0 1 0.1248689 -0.9837443 -0.1290548 0.5046211 0.1786912 0.1502438 -0.9723665 5.574142 0.9759494 0.09835737 0.1945471 -2.054232 0 0 0 1 -0.792968 0.1305264 0.5951172 -1.444867 -0.2164425 -0.9734182 -0.07490122 0.3092016 0.5695212 -0.1882027 0.800141 0.8953056 0 0 0 1 0.5233873 0.8510891 0.04139739 0.2645282 -0.1470052 0.1380441 -0.9794557 3.002713 -0.8393185 0.5065487 0.1973649 -1.699666 0 0 0 1 -0.4243403 0.8978015 0.1178461 -1.06032 -0.1723482 0.04768651 -0.9838812 5.538516 -0.88895 -0.4378111 0.1344993 -1.341137 0 0 0 1 0.9802885 0.1964684 -0.02085781 -0.06853473 -0.03791767 0.08347594 -0.9957879 8.218563 -0.1938998 0.9769503 0.08928024 -1.166345 0 0 0 1 -0.8619295 -0.4981102 -0.09469342 1.148831 -0.01596909 -0.1599984 0.9869881 -8.106389 -0.5067822 0.8522247 0.1299528 -1.393629 0 0 0 1 -0.939016 -0.2301297 -0.2555255 2.81837 -0.1520381 -0.3886633 0.9087495 -9.481793 -0.3084458 0.8921778 0.329972 -3.521316 0 0 0 1 -0.87265 -0.4636884 -0.1532258 1.672715 -0.0359596 -0.2518989 0.967085 -10.62176 -0.4870259 0.8494353 0.2031452 -2.12776 0 0 0 1 0.2635403 -0.9646133 0.008309304 -0.2959327 0.6661579 0.1757538 -0.7248086 6.410188 0.6977004 0.1965503 0.6888999 -7.848893 0 0 0 1 -0.2046641 -0.9647429 0.1654796 -0.3825836 0.8598484 -0.257983 -0.4405795 1.585013 0.4677383 0.05211549 0.8823297 -8.81163 0 0 0 1 -0.4420002 -0.8497208 0.287422 -0.3381305 0.5950516 -0.5175178 -0.6148928 2.297736 0.6712341 -0.1007522 0.7343675 -8.510509 0 0 0 1 -0.06817483 0.9976545 -0.006144642 -0.2106724 -0.8027909 -0.05851233 -0.5933851 5.025684 -0.5923546 -0.03552007 0.8048949 -8.580365 0 0 0 1 -0.3045035 0.9517947 -0.03695148 -0.5693011 -0.7552362 -0.2648932 -0.5995439 3.223519 -0.5804327 -0.1546547 0.7994883 -8.491693 0 0 0 1 -0.5300757 0.8479515 0 -1.814301 -0.5545411 -0.3466551 -0.7565153 3.318879 -0.6414895 -0.401009 0.6539762 -7.741568 0 0 0 1 0 -1 1.19209e-7 -0.3695474 1.000005 -2.26499e-6 -6.25965e-7 -0.001929581 0 2.38419e-7 1 -12.02394 0 0 0 1</float_array>
+          <float_array id="Armature_001_lowman_shoes_001-skin-bind_poses-array" count="272">-0.9473033 -0.01841169 0.3198099 1.919075 0.2996013 -0.4042915 0.8641685 0.2429815 0.1133854 0.9144449 0.3885026 -0.6482788 0 0 0 1 0.9220535 0.09760046 0.3745562 -1.533597 0.1524355 -0.9810481 -0.1196168 3.062947 0.3557832 0.1673887 -0.9194561 -1.294432 0 0 0 1 0.1248689 -0.1290547 0.9837443 0.504621 0.1786912 -0.9723665 -0.1502437 5.574142 0.9759494 0.1945471 -0.09835737 -2.054231 0 0 0 1 -0.792968 0.5951172 -0.1305264 -1.444867 -0.2164425 -0.07490116 0.9734181 0.3092015 0.5695212 0.800141 0.1882026 0.8953056 0 0 0 1 0.5233873 0.04139733 -0.851089 0.2645282 -0.1470053 -0.9794557 -0.1380439 3.002713 -0.8393185 0.1973648 -0.5065488 -1.699667 0 0 0 1 -0.4243403 0.117846 -0.8978015 -1.06032 -0.1723481 -0.9838811 -0.04768645 5.538515 -0.8889499 0.1344993 0.4378112 -1.341137 0 0 0 1 0.9802885 -0.02085781 -0.1964684 -0.06853473 -0.03791773 -0.9957879 -0.08347588 8.218563 -0.1938998 0.08928018 -0.9769503 -1.166345 0 0 0 1 -0.8619294 -0.09469342 0.4981102 1.148831 -0.01596909 0.9869881 0.1599984 -8.106388 -0.5067822 0.1299527 -0.8522248 -1.393628 0 0 0 1 -0.939016 -0.2555255 0.2301298 2.81837 -0.1520381 0.9087494 0.3886633 -9.481792 -0.3084458 0.329972 -0.8921778 -3.521316 0 0 0 1 -0.87265 -0.1532258 0.4636884 1.672715 -0.0359596 0.967085 0.2518988 -10.62176 -0.4870259 0.2031453 -0.8494353 -2.12776 0 0 0 1 0.2635403 0.008309304 0.9646133 -0.2959325 0.6661581 -0.7248086 -0.1757539 6.410187 0.6977001 0.6888998 -0.1965502 -7.848891 0 0 0 1 -0.2046641 0.1654796 0.9647429 -0.3825835 0.8598486 -0.4405795 0.257983 1.585014 0.4677378 0.8823298 -0.05211561 -8.81163 0 0 0 1 -0.4420002 0.287422 0.8497208 -0.3381304 0.5950515 -0.6148927 0.5175177 2.297736 0.6712341 0.7343673 0.1007522 -8.510508 0 0 0 1 -0.06817489 -0.006144702 -0.9976544 -0.2106725 -0.8027906 -0.5933852 0.05851238 5.025686 -0.5923552 0.8048952 0.03552001 -8.580368 0 0 0 1 -0.3045035 -0.03695148 -0.9517947 -0.569301 -0.755236 -0.5995439 0.2648932 3.223519 -0.5804327 0.7994883 0.1546546 -8.491693 0 0 0 1 -0.5300757 0 -0.8479516 -1.814301 -0.5545412 -0.7565153 0.3466551 3.318879 -0.6414894 0.6539761 0.4010089 -7.741567 0 0 0 1 0 1.6205e-7 1 -0.3695474 1.000005 -6.25965e-7 2.26499e-6 -0.001929581 0 1 -2.8213e-7 -12.02394 0 0 0 1</float_array>
           <technique_common>
             <accessor source="#Armature_001_lowman_shoes_001-skin-bind_poses-array" count="17" stride="16">
               <param name="TRANSFORM" type="float4x4"/>
@@ -696,7 +695,7 @@
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
       <node id="Armature_001" name="Armature_001" type="NODE">
-        <matrix sid="transform">1 0 0 0.01822782 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0.01822782 0 -4.37114e-8 1 0 0 -1 -4.37114e-8 0 0 0 0 1</matrix>
         <node id="Armature_001_Torso" name="Torso" sid="Torso" type="JOINT">
           <matrix sid="transform">0.9802883 -0.03791784 -0.1938998 -0.001567814 0.1964684 0.08347616 0.9769503 0.4668713 -0.02085783 -0.9957882 0.08928026 7.041802 0 0 0 1</matrix>
           <node id="Armature_001_Upper_Left_Leg" name="Upper Left Leg" sid="Upper_Left_Leg" type="JOINT">
@@ -890,7 +889,7 @@
           <skeleton>#Armature_001_Torso</skeleton>
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material-material" target="#Material-material"/>
+              <instance_material symbol="Material1_001-material" target="#Material1_001-material"/>
             </technique_common>
           </bind_material>
         </instance_controller>
