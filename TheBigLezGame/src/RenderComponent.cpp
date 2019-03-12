@@ -79,7 +79,7 @@ void RenderComponent::Draw()
 
 	m_objModel->draw(m_currentShader->getID(), true);
 	//testModel->Draw(*m_currentShader); // TEST
-
+	glUseProgram(0);
 	// End Draw Items////////////
 	//mvStack.pop();
 	//m_currentShader->Pass("projection", );

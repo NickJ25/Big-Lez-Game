@@ -28,10 +28,11 @@ public:
 	Player::Character getCharacter();
 
 private:
-	Character* m_character;
+	Character m_character;
 	Camera* m_playerCamera;
 	Text* m_charLabel;
 	Weapon* m_playerInventory[2];
+	Weapon* currentWeapon = NULL;
 
 	GLfloat prevYaw, currentYaw;
 

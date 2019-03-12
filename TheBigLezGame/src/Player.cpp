@@ -3,7 +3,7 @@
 Player::Player(Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
 {
 	m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f) , DYNAMIC);
-	*m_character = character;
+	m_character = character;
 	prevYaw = -90;
 	currentYaw = 0;
 	m_charLabel = new Text(glm::vec2(6.0f, 5.0f), "assets/Fonts/ariali.ttf");
@@ -28,8 +28,10 @@ Camera* Player::getCamera()
 void Player::update()
 {
 	m_playerCamera->update();
+
+	// Create a matrix and apply the rotations and translations o nit.
 	glm::mat4 tempMat(1.0f);
-	tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -7.5f, 0.0f)));
+	tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -8.0f, 0.0f)));
 
 	tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
 
@@ -37,25 +39,47 @@ void Player::update()
 
 	this->setMatrix(tempMat);
 
-	if (Input::keyboard1.keys[GLFW_KEY_A]) {
+	// Apply the same matrix to the gun model
+	if (currentWeapon != NULL) {
+		currentWeapon->setMatrix(tempMat);
+		currentWeapon->update();
+	}
 
+	setAnimation(0, 120);
+
+	// Gun controls
+	if (Input::keyboard1.keys[GLFW_MOUSE_BUTTON_LEFT]) {
+		if (currentWeapon != NULL) {
+			currentWeapon->primaryMove();
+		}
+	}
+	if (Input::keyboard1.keys[GLFW_MOUSE_BUTTON_RIGHT]) {
+		if (currentWeapon != NULL) {
+			currentWeapon->secondaryMove();
+		}
+	}
+	if (Input::keyboard1.keys[GLFW_KEY_R]) {
+		if (currentWeapon != NULL) {
+			currentWeapon->action();
+		}
 	}
 }
 
 void Player::addWeapon(Weapon * weapon)
 {
-	if (m_playerInventory[0] != nullptr) {
+	if (m_playerInventory[0] == NULL) {
 		m_playerInventory[0] = weapon;
+		currentWeapon = m_playerInventory[0];
 	}
-	else if (m_playerInventory[1] != nullptr) {
+	else if (m_playerInventory[1] == NULL) {
 		m_playerInventory[1] = weapon;
 	}
 	else {
-		std::cout << "Error: " << m_character->name << " inventory is full!" << std::endl;
+		std::cout << "Error: " << m_character.name << " inventory is full!" << std::endl;
 	}
 }
 
 Player::Character Player::getCharacter()
 {
-	return *m_character;
+	return m_character;
 }

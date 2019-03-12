@@ -67,22 +67,22 @@ void Camera::update()
 		}
 		break;
 	case DYNAMIC: // Standard player
-		//if (Input::keyboard1.keys[GLFW_KEY_W]) {
-		//	m_position = m_position - getFront() * 1.0f;
-		//	m_position.y = 0;
-		//}
-		//if (Input::keyboard1.keys[GLFW_KEY_S]) {
-		//	m_position = m_position + m_front * 1.0f;
-		//	m_position.y = 0;
-		//}
-		//if (Input::keyboard1.keys[GLFW_KEY_A]) {
-		//	m_position = m_position + glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
-		//	m_position.y = 0;
-		//}
-		//if (Input::keyboard1.keys[GLFW_KEY_D]) {
-		//	m_position = m_position - glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
-		//	m_position.y = 0;
-		//}
+		if (Input::keyboard1.keys[GLFW_KEY_W]) {
+			m_position = m_position - getFront() * 1.0f;
+			m_position.y = 0;
+		}
+		if (Input::keyboard1.keys[GLFW_KEY_S]) {
+			m_position = m_position + m_front * 1.0f;
+			m_position.y = 0;
+		}
+		if (Input::keyboard1.keys[GLFW_KEY_A]) {
+			m_position = m_position + glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
+			m_position.y = 0;
+		}
+		if (Input::keyboard1.keys[GLFW_KEY_D]) {
+			m_position = m_position - glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
+			m_position.y = 0;
+		}
 		break;
 	case STATIC: // No movement
 		break;

@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <Windows.h>
+#include "Gun.h"
 
 vector<GameObject*> gameObjects;
 vector<GameObject*> collisionObjs;
@@ -12,7 +13,7 @@ PathManager* pathManager;
 GameObject* sassy;
 
 // Initalize Two Camera
-Camera lezCamera(glm::vec3(0.0f, 12.5f, 0.0f), FREECAM);
+//Camera lezCamera(glm::vec3(0.0f, 12.5f, 0.0f), FREECAM);
 
 rt3d::materialStruct material0 = {
 	{0.0f, 0.8f, 0.2f, 1.0f}, // ambient
@@ -102,6 +103,11 @@ void Game::init()
 	//mainPlayer->setAnim(0);
 	mainPlayer->setAnimation(5.0f, 1.0f);
 	gameObjects.push_back(mainPlayer);
+
+	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8);
+	lezShotgun->setShader(toonShader);
+	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
+	gameObjects.push_back(lezShotgun);
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	lezTest->setShader(toonShader);
@@ -239,7 +245,7 @@ void Game::update()
 				}
 			}
 		}
-		lezCamera.update();
+		//lezCamera.update();
 		const Uint8 *keys = SDL_GetKeyboardState(NULL);
 		if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
 		else SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -250,8 +256,6 @@ void Game::update()
 		isGameRunning = false;	
 		g_window = glfwGetCurrentContext();
 		glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		
-		
 	}
 
 	if (isGameRunning == false) 
@@ -363,8 +367,8 @@ void Game::update()
 	if (pathManager->working == true)
 		pathManager->working = false;
 
-	cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
-	lezCamera.update();/// ----------------------------------------------------------------------CHECK
+	//cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
+	//lezCamera.update();/// ----------------------------------------------------------------------CHECK
 	const Uint8 *keys = SDL_GetKeyboardState(NULL); /// ----------------------------------------------------------------------REMOVE
 	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
 	else SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -381,8 +385,8 @@ void Game::draw()
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 	//cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 
-	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), lezCamera.getCameraPos().x, lezCamera.getCameraPos().y, lezCamera.getCameraPos().z);
-	//glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
+	//glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), lezCamera.getCameraPos().x, lezCamera.getCameraPos().y, lezCamera.getCameraPos().z);
+	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
 
 	cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
@@ -393,8 +397,8 @@ void Game::draw()
 
 	//skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
 
-	//skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));
-	skybox->draw(projection * glm::mat4(glm::mat3(lezCamera.lookAtMat())));
+	skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));
+	//skybox->draw(projection * glm::mat4(glm::mat3(lezCamera.lookAtMat())));
 
 	if (isGameRunning == false)
 	{
@@ -407,8 +411,8 @@ void Game::draw()
 
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
-			//gameObjects[i]->componentDraw(mainPlayer->getCamera()->lookAtMat());
-			gameObjects[i]->componentDraw(lezCamera.lookAtMat());
+			gameObjects[i]->componentDraw(mainPlayer->getCamera()->lookAtMat());
+			//gameObjects[i]->componentDraw(lezCamera.lookAtMat());
 		}
 	}
 	
