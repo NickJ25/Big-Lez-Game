@@ -54,7 +54,7 @@ private:
 
 	std::vector<Node*> path;
 
-	std::vector<glm::vec3> doors;
+	//std::vector<glm::vec3> doors;
 
 	std::string boundingType;
 };

@@ -5,6 +5,7 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	inside = false;
 	outsideMovement = false;
 	paused = false;
+	setJump = false;
 	jumpingCounter = 0;
 
 	velocity = 0.05f;
@@ -68,22 +69,28 @@ void Enemy::update()
 			if (outsideMovement == true)
 				inside = true;
 
-			//set animation to jumping 
-			jumpingCounter = 3;
+			if (setJump == false) {
+				//set animation to jumping 
+				jumpingCounter = 2;
+				setJump = true;
+			}
 		}
 
 		if (outsideMovement == true && outerPath.empty() == true && innerPath.empty() == false)
 		{
 
-			if (jumpingCounter != 0)
+			if (jumpingCounter > 0)
 			{
 				//jumping animation
-				setAnimation(4.58f, 1.18f);
+				setAnimation(4.58f, 1.0f);
+				velocity = 0.1;
 			}
 			else
 			{
 				//running animation
-				setAnimation(0.0f, 6.1667f);
+				setAnimation(0.0f, 8.3f);
+				velocity = 0.05;
+				
 			}
 			//enemy has reached a window
 			setPathEnd(target->getPosition(), false);
@@ -96,14 +103,14 @@ void Enemy::update()
 			movementStep = glm::normalize(distanceToBeCovered) * velocity;
 
 			Move(glm::vec3(movementStep));
-			//cout << std::round(getPosition().x) << std::round(getPosition().y) << std::round(getPosition().z) << endl;
+
 			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 			{
 				innerPath.pop_back();
-				jumpingCounter--;
+				jumpingCounter = 0;
 			}
 			//get him to jump then calculate new path with new grid to nearest player
-			cout << "innerpathsize" << innerPath.size() << endl;
+
 		}
 	}
 }

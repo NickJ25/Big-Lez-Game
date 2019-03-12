@@ -156,18 +156,18 @@ void Game::init()
 	}
 
 	//first initialise a vector containing door information
-	std::vector<glm::vec3> doors;
-	doors.push_back(glm::vec3(45.0f, -12.5f, -26.0f));
-	//doors.push_back(glm::vec3(37.5f, 0.0, 37.5f));
-	//doors.push_back(glm::vec3(75.0f, 0.0, -25.0f));
-	//doors.push_back(glm::vec3(75.0f, 0.0, 37.5f));
+	std::vector<glm::vec3> bottomDoors, topDoors, leftDoors, rightDoors;
+	leftDoors.push_back(glm::vec3(45.0f, -12.5f, -26.0f));
+	topDoors.push_back(glm::vec3(37.5f, -12.5f, 37.5f));
+	bottomDoors.push_back(glm::vec3(75.0f, -12.5f, -25.0f));
+	rightDoors.push_back(glm::vec3(75.0f, -12.5f, -25.0f));
 	//doors.push_back(glm::vec3(95.0f, 0.0, -6.25f));
 	//doors.push_back(glm::vec3(95.0f, 0.0, 36.25f));
 
 	//grid has to be the last game object added
 	pathFindingGrid = new Grid(glm::vec2(500, 500), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f), "boundingbox");
 	pathFindingGrid->buildGrid(gameObjects, toonShader);
-	pathFindingGrid->addEndPoints(doors);
+	//pathFindingGrid->addEndPoints(bottomDoors);
 
 	//initialise the path manager
 	pathManager = new PathManager();
@@ -175,7 +175,10 @@ void Game::init()
 
 	//set up the wavespawner
 	waveSpawner = new WaveSpawner(pathFindingGrid);
-	waveSpawner->setEndCoords(doors);
+	waveSpawner->setEndCoords(bottomDoors, "Bottom");
+	waveSpawner->setEndCoords(topDoors, "Top");
+	waveSpawner->setEndCoords(leftDoors, "Left");
+	waveSpawner->setEndCoords(rightDoors, "Right");
 	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager);
 
 	testtxt = new Text(glm::vec2(5.0, 5.0), "assets/Fonts/ariali.ttf");

@@ -80,6 +80,7 @@ private:
 	bool inside;
 	bool outsideMovement;
 	int jumpingCounter;
+	bool setJump;
 	
 	bool paused;
 

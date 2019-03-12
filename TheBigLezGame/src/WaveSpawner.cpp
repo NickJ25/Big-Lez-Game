@@ -11,14 +11,14 @@ WaveSpawner::WaveSpawner(Grid* g) : GameObject(glm::vec3(0.0f,0.0f,0.0f))
 	waves.push_back(wave1); 
 
 	//set some random spawn points, 4 on each side out of view of the main building
-	spawnPoints.push_back(glm::vec2(120.0f, 215.0f));
-	//spawnPoints.push_back(glm::vec2(-60.0f, -165.0f));
-	//spawnPoints.push_back(glm::vec2(60.0f, -165.0f));
-	//spawnPoints.push_back(glm::vec2(120.0f, -165.0f));
-	//spawnPoints.push_back(glm::vec2(-120.0f, 195.0f));
-	//spawnPoints.push_back(glm::vec2(-60.0f, 195.0f));
-	//spawnPoints.push_back(glm::vec2(60.0f, 195.0f));
-	//spawnPoints.push_back(glm::vec2(120.0f, 195.0f));
+	spawnPointsBottom.push_back(glm::vec2(120.0f, 215.0f));
+	spawnPointsTop.push_back(glm::vec2(120.0f, 215.0f));
+	spawnPointsRight.push_back(glm::vec2(210.0f, 105.0f));
+	spawnPointsLeft.push_back(glm::vec2(-130.0f, 95.0f));
+	//spawnPointsBottom.push_back(glm::vec2(120.0f, 215.0f));
+	//spawnPointsTop.push_back(glm::vec2(120.0f, 215.0f));
+	//spawnPointsLeft.push_back(glm::vec2(120.0f, 215.0f));
+	//spawnPointsRight.push_back(glm::vec2(120.0f, 215.0f));
 	//spawnPoints.push_back(glm::vec2(-130.0f, -155.0f));
 	//spawnPoints.push_back(glm::vec2(-70.0f, -160.0f));
 	//spawnPoints.push_back(glm::vec2(70.0f, -155.0f));
@@ -31,25 +31,73 @@ WaveSpawner::WaveSpawner(Grid* g) : GameObject(glm::vec3(0.0f,0.0f,0.0f))
 	initNPCs();
 }
 
-glm::vec2 WaveSpawner::getSpawnCoord()
+glm::vec2 WaveSpawner::getSpawnCoord(string type)
 {
 	srand(time(0));
-	float randomNumber = (rand() % spawnPoints.size());
-	return spawnPoints.at(randomNumber);
+	float randomNumber = 0;
+
+	if (type == "Bottom" && spawnPointsBottom.size() > 0) {
+		randomNumber = (rand() % spawnPointsBottom.size());
+		return spawnPointsBottom.at(randomNumber);
+	}
+	if (type == "Top" && spawnPointsTop.size() > 0) {
+		randomNumber = (rand() % spawnPointsTop.size());
+		return spawnPointsTop.at(randomNumber);
+	}
+	if (type == "Left" && spawnPointsLeft.size() > 0) {
+		randomNumber = (rand() % spawnPointsLeft.size());
+		return spawnPointsLeft.at(randomNumber);
+	}
+	if (type == "Right" && spawnPointsRight.size() > 0) {
+		randomNumber = (rand() % spawnPointsRight.size());
+		return spawnPointsLeft.at(randomNumber);
+	}
+	cout << "incorrect string entered" << endl;
+	return glm::vec2(0, 0);
 }
 
-void WaveSpawner::setEndCoords(std::vector<glm::vec3> e)
+void WaveSpawner::setEndCoords(std::vector<glm::vec3> e, string type)
 {
-		endPoints = e;
+	if (type == "Bottom")
+		endPointsBottom = e;
+	if (type == "Top")
+		endPointsTop = e;
+	if (type == "Left")
+		endPointsLeft = e;
+	if (type == "Right")
+		endPointsRight = e;
 }
 
-glm::vec3 WaveSpawner::getEndCoord()
+glm::vec3 WaveSpawner::getEndCoord(string type)
 {
 	srand(time(0));
+	float randomNumber;
 
-	float randomNumber = (rand() % endPoints.size());
-	return endPoints.at(randomNumber);
+	if (type == "Bottom" && endPointsBottom.size() > 0) {
+		float randomNumber = (rand() % endPointsBottom.size());
+		return endPointsBottom.at(randomNumber);
+	}
+	if (type == "Top" && endPointsTop.size() > 0) {
+		float randomNumber = (rand() % endPointsTop.size());
+		return endPointsTop.at(randomNumber);
+	}
+	if (type == "Left" && endPointsLeft.size() > 0) {
+		float randomNumber = (rand() % endPointsLeft.size());
+		return endPointsLeft.at(randomNumber);
+	}
+	if (type == "Right" && endPointsRight.size() > 0) {
+		float randomNumber = (rand() % endPointsRight.size());
+		return endPointsRight.at(randomNumber);
+	}
 
+}
+
+string WaveSpawner::getType()
+{
+	//srand(time(0));
+	//int randomNumber = (rand() % types->size());
+	//return types[randomNumber];
+	return "Right";
 }
 void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager)
 {
@@ -74,10 +122,12 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			else if (j == 3) choomah = new Enemy(bossChoomah);
 			else		     choomah = new Enemy(normalChoomah);
 
+			//select a spawn direction to spawn from
+			currentType = getType();
 			//set their properties
 			choomah->setShader(shader);
-			choomah->Move(glm::vec3(getSpawnCoord().x, -12.5f, getSpawnCoord().y));
-			choomah->setAnimation(0.0f, 6.1667f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
+			choomah->Move(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
+			choomah->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
 			choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
 
 			cout << "choomah spawn position = " << choomah->getPosition().x << " , " << choomah->getPosition().y << " , " << choomah->getPosition().z << " ) " << endl;
@@ -85,7 +135,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			//get their path from the spawn point to a door
 		    Enemy *e = dynamic_cast<Enemy*>(choomah);
 			if (e)
-				e->setPathEnd(getEndCoord(), true);
+				e->setPathEnd(getEndCoord(currentType), true);
 			for (std::vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
 			{
 				Player *tmp = dynamic_cast<Player*>((*it));
