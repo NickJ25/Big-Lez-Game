@@ -23,17 +23,15 @@ public:
 	void playAnimation();
 	Camera* getCamera();
 	void update() override;
+	void addWeapon(Weapon* weapon);
 	
-	Character getCharacter()
-	{
-		return selectCharacter;
-	}
+	Player::Character getCharacter();
 
 private:
-	Character selectCharacter;
+	Character* m_character;
 	Camera* m_playerCamera;
 	Text* m_charLabel;
-	//Weapon* m_playerInventory[];
+	Weapon* m_playerInventory[2];
 
 	GLfloat prevYaw, currentYaw;
 

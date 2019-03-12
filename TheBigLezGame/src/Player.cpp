@@ -3,7 +3,7 @@
 Player::Player(Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
 {
 	m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f) , DYNAMIC);
-	selectCharacter = character;
+	*m_character = character;
 	prevYaw = -90;
 	currentYaw = 0;
 	m_charLabel = new Text(glm::vec2(6.0f, 5.0f), "assets/Fonts/ariali.ttf");
@@ -36,4 +36,26 @@ void Player::update()
 	tempMat = glm::scale(tempMat, glm::vec3(0.6f, 0.6f, 0.6f));
 
 	this->setMatrix(tempMat);
+
+	if (Input::keyboard1.keys[GLFW_KEY_A]) {
+
+	}
+}
+
+void Player::addWeapon(Weapon * weapon)
+{
+	if (m_playerInventory[0] != nullptr) {
+		m_playerInventory[0] = weapon;
+	}
+	else if (m_playerInventory[1] != nullptr) {
+		m_playerInventory[1] = weapon;
+	}
+	else {
+		std::cout << "Error: " << m_character->name << " inventory is full!" << std::endl;
+	}
+}
+
+Player::Character Player::getCharacter()
+{
+	return *m_character;
 }
