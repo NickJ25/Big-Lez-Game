@@ -97,7 +97,7 @@ string WaveSpawner::getType()
 	//srand(time(0));
 	//int randomNumber = (rand() % types->size());
 	//return types[randomNumber];
-	return "Right";
+	return "Bottom";
 }
 void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager)
 {
@@ -158,7 +158,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 void WaveSpawner::initNPCs()
 {
 
-	normalChoomah.fileLocation = "assets/Characters/Choomah-normal/choomahbasic.dae";
+	normalChoomah.fileLocation = "assets/Characters/Choomah-charger/choomahcharger.dae"; //"assets/Characters/Choomah-normal/choomahbasic1.dae";
 	normalChoomah.name = "normal";
 
 	chargerChoomah.fileLocation = "assets/Characters/Choomah-charger/choomahcharger.dae";

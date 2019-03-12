@@ -12,7 +12,7 @@ PathManager* pathManager;
 GameObject* sassy;
 
 // Initalize Two Camera
-Camera lezCamera(glm::vec3(0.0f, 12.5f, 0.0f), DYNAMIC);
+Camera lezCamera(glm::vec3(0.0f, 12.5f, 0.0f), FREECAM);
 
 rt3d::materialStruct material0 = {
 	{0.0f, 0.8f, 0.2f, 1.0f}, // ambient
@@ -188,7 +188,7 @@ void Game::init()
 	std::vector<glm::vec3> bottomDoors, topDoors, leftDoors, rightDoors;
 	leftDoors.push_back(glm::vec3(45.0f, -12.5f, -26.0f));
 	topDoors.push_back(glm::vec3(37.5f, -12.5f, 37.5f));
-	bottomDoors.push_back(glm::vec3(75.0f, -12.5f, -25.0f));
+	bottomDoors.push_back(glm::vec3(80.0f, -12.5f,  50.0f));
 	rightDoors.push_back(glm::vec3(75.0f, -12.5f, -25.0f));
 	//doors.push_back(glm::vec3(95.0f, 0.0, -6.25f));
 	//doors.push_back(glm::vec3(95.0f, 0.0, 36.25f));
@@ -256,8 +256,18 @@ void Game::update()
 
 	if (isGameRunning == false) 
 	{
+		vector<GameObject*>::iterator it;
+		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+		{
+			(*it)->setPaused(true);
+		}
 		if (resumeBtn->buttonClick()) 
 		{
+			vector<GameObject*>::iterator it;
+			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+			{
+				(*it)->setPaused(false);
+			}
 			isGameRunning = true;
 			glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
@@ -353,7 +363,7 @@ void Game::update()
 	if (pathManager->working == true)
 		pathManager->working = false;
 
-
+	cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
 	lezCamera.update();/// ----------------------------------------------------------------------CHECK
 	const Uint8 *keys = SDL_GetKeyboardState(NULL); /// ----------------------------------------------------------------------REMOVE
 	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
@@ -370,7 +380,10 @@ void Game::draw()
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 	//cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
-	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
+
+	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), lezCamera.getCameraPos().x, lezCamera.getCameraPos().y, lezCamera.getCameraPos().z);
+	//glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
+
 	cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
@@ -379,19 +392,23 @@ void Game::draw()
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
 	//skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
-	skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));
+
+	//skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));
+	skybox->draw(projection * glm::mat4(glm::mat3(lezCamera.lookAtMat())));
+
 	if (isGameRunning == false)
 	{
 		testtxt->draw("Resume", glm::vec3(1.0f, 1.0f, 1.0f));
 		testtxt2->draw("Quit", glm::vec3(1.0f, 1.0f, 1.0f));
 		resumeBtn->draw();
 		mainMenuBtn->draw();
-		pauseBackground->draw();
+		//pauseBackground->draw();
 	}
 
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
-			gameObjects[i]->componentDraw(mainPlayer->getCamera()->lookAtMat());
+			//gameObjects[i]->componentDraw(mainPlayer->getCamera()->lookAtMat());
+			gameObjects[i]->componentDraw(lezCamera.lookAtMat());
 		}
 	}
 	
