@@ -17,6 +17,9 @@ void Gun::shoot()
 	if (m_currentClip >= 0) {
 		m_currentClip--;
 	}
+	if (m_currentClip < 0) {
+		m_currentClip = 0;
+	}
 }
 
 void Gun::reload()
