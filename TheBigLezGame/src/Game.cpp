@@ -106,9 +106,8 @@ void Game::init()
 
 	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8);
 	lezShotgun->setShader(toonShader);
-	lezShotgun->setAnimation(0.0f, 5.0f);
+	lezShotgun->setAnimation(0.0f, 1.0f);
 	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
-	
 	gameObjects.push_back(lezShotgun);
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
