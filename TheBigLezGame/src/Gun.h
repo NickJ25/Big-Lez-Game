@@ -11,7 +11,7 @@ private:
 	std::string m_gunName;
 	GLuint m_maxAmmo;
 	GLuint m_clipSize;
-	GLuint m_currentClip;
+	GLuint m_currentClip = m_clipSize;
 
 	Text* t_ammoCount;
 	Text* t_gunName;

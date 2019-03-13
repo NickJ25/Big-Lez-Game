@@ -48,12 +48,12 @@ void Player::update()
 	setAnimation(0, 120);
 
 	// Gun controls
-	if (Input::keyboard1.keys[GLFW_MOUSE_BUTTON_LEFT]) {
+	if (Input::mouse1.buttons[GLFW_MOUSE_BUTTON_LEFT]) {
 		if (currentWeapon != NULL) {
 			currentWeapon->primaryMove();
 		}
 	}
-	if (Input::keyboard1.keys[GLFW_MOUSE_BUTTON_RIGHT]) {
+	if (Input::mouse1.buttons[GLFW_MOUSE_BUTTON_RIGHT]) {
 		if (currentWeapon != NULL) {
 			currentWeapon->secondaryMove();
 		}

@@ -106,7 +106,9 @@ void Game::init()
 
 	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8);
 	lezShotgun->setShader(toonShader);
+	lezShotgun->setAnimation(0.0f, 5.0f);
 	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
+	
 	gameObjects.push_back(lezShotgun);
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
@@ -377,36 +379,29 @@ void Game::update()
 
 void Game::draw()
 {
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
+	glUseProgram(toonShader->getID());
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
-	//cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 
 	//glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), lezCamera.getCameraPos().x, lezCamera.getCameraPos().y, lezCamera.getCameraPos().z);
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
 
-	cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
-	//cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
-	//cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
-	//cout << "specular; " << glGetUniformLocation(toonShader->getID(), "material.specular") << endl;
-	//cout << "shininess; " << glGetUniformLocation(toonShader->getID(), "material.shininess") << endl;
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
-	//skybox->draw(projection * glm::mat4(glm::mat3(mainCamera->lookAtMat())));
-
 	skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));
+
 	//skybox->draw(projection * glm::mat4(glm::mat3(lezCamera.lookAtMat())));
 
 	if (isGameRunning == false)
 	{
+		// Draws pause menu
+		resumeBtn->draw();
+		mainMenuBtn->draw(); 
 		testtxt->draw("Resume", glm::vec3(1.0f, 1.0f, 1.0f));
 		testtxt2->draw("Quit", glm::vec3(1.0f, 1.0f, 1.0f));
-		resumeBtn->draw();
-		mainMenuBtn->draw();
-		//pauseBackground->draw();
+		pauseBackground->draw();
 	}
 
 	for (int i = 0; i < gameObjects.size(); i++) {
