@@ -83,6 +83,11 @@ void windowGLFW::setInputMode(int mode, int value)
 	glfwSetInputMode(m_window, mode, value);
 }
 
+void windowGLFW::setJoystickCallback(GLFWjoystickfun function)
+{
+	glfwSetJoystickCallback(function);
+}
+
 bool windowGLFW::checkKey(int key)
 {
 	bool keyStatus;

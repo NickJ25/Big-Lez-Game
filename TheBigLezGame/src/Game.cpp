@@ -90,13 +90,13 @@ void Game::init()
 	//gameObjects.push_back(bigLez);
 
 
-	sassy = new Player(Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
+	sassy = new Player(2, Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
 	sassy->setShader(toonShader);
 	//sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
 	sassy->setAnimation(5.0f, 1.0f);
 	gameObjects.push_back(sassy);
 
-	mainPlayer = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
+	mainPlayer = new Player(1, BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
 	mainPlayer->setShader(toonShader);
 	//mainPlayer->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
@@ -121,9 +121,10 @@ void Game::init()
 	glm::vec3 test = glm::vec3(2.5, 2.5, 2.5);
 	GameObject* Fence;
 
+
 	for (int i = 0; i < 20; i++)
 	{
-		Fence = new Player(cube, glm::vec3(0.0,0.0,0.0));
+		Fence = new Player(2, cube, glm::vec3(0.0,0.0,0.0));
 		Fence->setShader(toonShader);
 		Fence->setAnimation(0.0f,1.0f);
 
@@ -283,6 +284,52 @@ void Game::update()
 			exit(0);
 		}
 
+	}
+
+	if (Input::controller1.buttons[0]) {
+		cout << "A" << endl;
+	}
+	if (Input::controller1.buttons[1]) {
+		cout << "B" << endl;
+	}
+	if (Input::controller1.buttons[2]) {
+		cout << "X" << endl;
+	}
+	if (Input::controller1.buttons[3]) {
+		cout << "Y" << endl;
+	}
+	if (Input::controller1.buttons[4]) {
+		cout << "Left Bumper" << endl;
+	}
+	if (Input::controller1.buttons[5]) {
+		cout << "Right Bumper" << endl;
+	}
+	if (Input::controller1.buttons[6]) {
+		cout << "Back" << endl;
+	}
+	if (Input::controller1.buttons[7]) {
+		cout << "Start" << endl;
+	}
+	if (Input::controller1.buttons[8]) {
+		cout << "Left Thumb" << endl;
+	}
+	if (Input::controller1.buttons[9]) {
+		cout << "Right Thumb" << endl;
+	}
+	if (Input::controller1.buttons[10]) {
+		cout << "DPad UP" << endl;
+	}
+	if (Input::controller1.buttons[11]) {
+		cout << "DPad RIGHT" << endl;
+	}
+	if (Input::controller1.buttons[12]) {
+		cout << "DPad DOWN" << endl;
+	}
+	if (Input::controller1.buttons[13]) {
+		cout << "DPad LEFT" << endl;
+	}
+	if (Input::controller1.buttons[14]) {
+		cout << "Guide" << endl;
 	}
 
 	if (Input::keyboard1.keys[GLFW_KEY_C]) {

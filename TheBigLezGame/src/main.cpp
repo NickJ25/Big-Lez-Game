@@ -78,6 +78,35 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	}
 }
 
+void JoystickCallback(int joy, int event)
+{
+	if (event == GLFW_CONNECTED)
+	{
+		cout << "Controller " << joy << " has been connected!" << endl;
+	}
+	else if (event == GLFW_DISCONNECTED)
+	{
+		cout << "Controller " << joy << " has been disconnected!" << endl;
+	}
+}
+
+void ControllerHandle() {
+	if (glfwJoystickPresent(GLFW_JOYSTICK_1) == GLFW_TRUE) {
+		Input::controller1.connected = true;
+		Input::controller1.name = glfwGetJoystickName(GLFW_JOYSTICK_1);
+		// Buttons
+		int count;
+		const unsigned char* axes = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
+		for (int i = 0; i < count; i++) {
+			if (axes[i] == GLFW_PRESS)Input::controller1.buttons[i] = true;
+			if (axes[i] == GLFW_RELEASE) Input::controller1.buttons[i] = false;
+		}
+	}
+	else {
+		Input::controller1.connected = false;
+	}
+}
+
 
 int main(int argc, char *argv[]) {
 
@@ -87,6 +116,7 @@ int main(int argc, char *argv[]) {
 	window->setKeyCallback(KeyCallback);
 	window->setCursorPosCallback(MouseCallback);
 	window->setMouseButtonCallback(MouseButtonCallback);
+	window->setJoystickCallback(JoystickCallback);
 
 	// Required on Windows *only* init GLEW to access OpenGL beyond 1.1
 	glewExperimental = GL_TRUE;
@@ -108,13 +138,11 @@ int main(int argc, char *argv[]) {
 		GLfloat currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		//if (Input::keyboard1.keys[GLFW_KEY_D]) {
-		//	cout << "BAH" << endl;
-		//}
 
 		glfwPollEvents();
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		ControllerHandle();
 		menuSystem.updateMenus();
 		menuSystem.drawMenus();
 
