@@ -41,9 +41,14 @@ void TransformComponent::move(glm::vec3 position)
 void TransformComponent::rotate(GLfloat radians, glm::vec3 rotation)
 {
 	glm::vec3 tempVec = this->getPosition();
-	m_matrix = glm::translate(m_matrix, (this->getPosition()));
+	m_matrix = glm::translate(m_matrix, -(this->getPosition()));
 	m_matrix = glm::rotate(m_matrix, glm::radians(radians), rotation);
 	m_matrix = glm::translate(m_matrix, tempVec);
+}
+
+glm::vec3 TransformComponent::getRotation()
+{
+	return glm::normalize(glm::column(m_matrix, 0));
 }
 
 void TransformComponent::scale(glm::vec3 scale)

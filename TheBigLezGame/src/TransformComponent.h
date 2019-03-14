@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include"glm\gtc\matrix_access.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include "GL/glew.h"
 
@@ -27,4 +28,6 @@ public:
 	void rotate(GLfloat radians, glm::vec3 rotation);
 	void scale(glm::vec3 scale);
 	void setView(glm::mat4 view);
+
+	glm::vec3 getRotation();
 };

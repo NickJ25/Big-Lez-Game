@@ -15,6 +15,11 @@ void GameObject::Rotate(GLfloat degrees, glm::vec3 rotateAmount)
 	transformComponent->rotate(degrees, rotateAmount);
 }
 
+glm::vec3 GameObject::getRotation()
+{
+	return transformComponent->getRotation();
+}
+
 void GameObject::Scale(glm::vec3 scaleAmount)
 {
 	transformComponent->scale(scaleAmount);

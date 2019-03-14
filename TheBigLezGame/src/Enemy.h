@@ -85,6 +85,7 @@ private:
 	bool paused;
 
 	float velocity;
+	float angularVelocity;
 
 	Player* target;
 	glm::vec3 currentTargetPosition;

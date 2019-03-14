@@ -12,7 +12,7 @@ PathManager* pathManager;
 GameObject* sassy;
 
 // Initalize Two Camera
-Camera lezCamera(glm::vec3(0.0f, 12.5f, 0.0f), FREECAM);
+Camera lezCamera(glm::vec3(80.0f, 12.5f, 205.0f), FREECAM);
 
 rt3d::materialStruct material0 = {
 	{0.0f, 0.8f, 0.2f, 1.0f}, // ambient

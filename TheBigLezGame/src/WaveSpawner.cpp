@@ -158,7 +158,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 void WaveSpawner::initNPCs()
 {
 
-	normalChoomah.fileLocation = "assets/Characters/Choomah-charger/choomahcharger.dae"; //"assets/Characters/Choomah-normal/choomahbasic1.dae";
+	normalChoomah.fileLocation = "assets/Characters/Choomah-charger/choomahcharger.dae";
 	normalChoomah.name = "normal";
 
 	chargerChoomah.fileLocation = "assets/Characters/Choomah-charger/choomahcharger.dae";

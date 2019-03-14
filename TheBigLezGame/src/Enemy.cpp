@@ -9,7 +9,7 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	jumpingCounter = 0;
 
 	velocity = 0.05f;
-
+	angularVelocity = 0.5f;
 	rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
@@ -55,11 +55,23 @@ void Enemy::update()
 
 			//get angle between the current and the next node
 			distanceToBeCovered = next - current;
-			rotation = distanceToBeCovered;
-			movementStep = glm::normalize(distanceToBeCovered) * velocity;
 
+			rotation = distanceToBeCovered; // rotation we want to be at
+			glm::vec3 current = getRotation(); // current rotation
+
+			if (current != rotation)
+			{
+				//calculate angle between the two vectors
+				float angle = glm::dot(current, rotation);
+				cout << "my name jeff: " << std::round(getPosition().x) << " , " << std::round(getPosition().y) << " , " << std::round(getPosition().z) << endl;
+				//increment towards the correct angle
+				//Rotate(angle * angularVelocity, glm::vec3(0.0f, 0.0f, 1.0f));
+
+			}
+			cout << "my name jeff: " << std::round(getPosition().x)  << " , "<< std::round(getPosition().y) << " , " << std::round(getPosition().z) << endl;
+			movementStep = glm::normalize(distanceToBeCovered) * velocity;
 			Move(glm::vec3(movementStep));
-			//cout << std::round(getPosition().x) << std::round(getPosition().y) << std::round(getPosition().z) << endl;
+			cout << "my name jeff: " << std::round(getPosition().x) << " , " << std::round(getPosition().y) << " , " << std::round(getPosition().z) << endl;
 			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 			{
 				outerPath.pop_back();
@@ -71,7 +83,7 @@ void Enemy::update()
 
 			if (setJump == false) {
 				//set animation to jumping 
-				jumpingCounter = 2;
+				jumpingCounter = 3;
 				setJump = true;
 			}
 		}
@@ -95,19 +107,36 @@ void Enemy::update()
 			//enemy has reached a window
 			setPathEnd(target->getPosition(), false);
 			current = getPosition();
-			next = innerPath.back();
+			if (jumpingCounter > 0) {
+
+			}
+			else
+			{
+				next = innerPath.back();
+			}
 
 			//get angle between the current and the next node
 			distanceToBeCovered = next - current;
-			rotation = distanceToBeCovered;
-			movementStep = glm::normalize(distanceToBeCovered) * velocity;
 
+			rotation = distanceToBeCovered; // rotation we want to be at
+			glm::vec3 current = getRotation(); // current rotation
+
+			if (current != rotation)
+			{
+				//calculate angle between the two vectors
+				float angle = glm::dot(current, rotation);
+
+				//increment towards the correct angle
+				Rotate((angle * 180) / 3.1415 * angularVelocity, glm::vec3(0.0f, 1.0f, 0.0f));
+			}
+			
+			movementStep = glm::normalize(distanceToBeCovered) * velocity;
 			Move(glm::vec3(movementStep));
 
 			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 			{
 				innerPath.pop_back();
-				jumpingCounter = 0;
+				jumpingCounter --;
 			}
 			//get him to jump then calculate new path with new grid to nearest player
 

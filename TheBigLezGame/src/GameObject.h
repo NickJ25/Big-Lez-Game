@@ -56,6 +56,8 @@ public:
 	void setDraw(bool d);
 
 	glm::vec3 getPosition();
+	glm::vec3 getRotation();
+
 	void setPosition(glm::vec3 newPos);
 	void setMatrix(glm::mat4 newMat);
 
