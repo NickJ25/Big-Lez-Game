@@ -314,10 +314,11 @@ void Game::update()
 				e->update();
 			}
 
-			std::vector<GameObject*>::iterator it1;
-			for (it1 = gameObjects.begin(); it1 != gameObjects.end(); it1++)
+		}
+		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end() - 1; ++it)
+		{
+			for (vector<GameObject*>::iterator it1 = it + 1; it1 < gameObjects.end(); ++it1) // we make sure that we check a collision between the same objcts only once
 			{
-		
 				if ((*it)->getCollider() && (*it1)->getCollider()) {
 					if (checkCollision((*it), (*it1)) == true)
 					{
@@ -329,29 +330,42 @@ void Game::update()
 						//if they are both enemies
 						if (e1 && e2) {
 							//do contact resolution here 
-							
+
 							//get contact normal
-							contactNormal = getFaceNormal(e1->getPosition(), e2);
+							//contactNormal = getFaceNormal(e1->getPosition(), e2);
 
 							//calculate distance between points
 							float dist = glm::distance(e1->getPosition(), e2->getPosition());
 							float penetration = dist - (e1->getCollider()->getHW() + e2->getCollider()->getHW());
 
-							e2->Move(glm::vec3(penetrationDepthX, 0.0f, penetrationDepthZ));
-						}else
-						if (e1)
-						{
-							//attack animation
+							if (penetration <= 0) {
+								e1->Move(glm::vec3(-5.0f, 0.0f, 0.0f));
+								e2->Move(glm::vec3(5.0f, 0.0f, 0.0f));
+							}
 						}
 						else
-						if (e2)
 						{
-							//attack animation
+							
+							Player *p1 = dynamic_cast<Player*>((*it));
+							Player *p2 = dynamic_cast<Player*>((*it));
+							//if there is a player, enemy collision
+							if (e1 && p2 || e2 && p1)
+							{
+								//check which one is the enemy, then set to attack animation
+								if (e1)
+								{
+
+								}
+								if (e2)
+								{
+
+								}
+							}
 						}
-
-
+						
 					}
 				}
+
 			}
 		}
 
