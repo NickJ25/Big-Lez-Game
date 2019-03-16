@@ -7,7 +7,7 @@ WaveSpawner::WaveSpawner(Grid* g) : GameObject(glm::vec3(0.0f,0.0f,0.0f))
 
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1;
-	wave1.push_back(2), wave1.push_back(2), wave1.push_back(0), wave1.push_back(0);
+	wave1.push_back(0), wave1.push_back(0), wave1.push_back(0), wave1.push_back(1);
 	waves.push_back(wave1); 
 
 	//set some random spawn points, 3 on each side out of view of the main building
@@ -122,36 +122,52 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			if (j == 0)      choomah = new Enemy(normalChoomah);
 			else if (j == 1) choomah = new Enemy(chargerChoomah);
 			else if (j == 2) choomah = new Enemy(brawlerChoomah);
-			else if (j == 3) choomah = new Enemy(bossChoomah);
+			else if (j == 3) choomah = new Boss(bossChoomah);
 			else		     choomah = new Enemy(normalChoomah);
 
-			//select a spawn direction to spawn from
-			currentType = getType();
-			lastType = currentType;
+			//if not a boss choomah
+			if (j != 3) {
+				//select a spawn direction to spawn from
+				currentType = getType();
+				lastType = currentType;
 
-			//set their properties
-			choomah->setShader(shader);
-			choomah->Move(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
-			choomah->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
-			choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
+				//set their properties
+				choomah->setShader(shader);
+				choomah->Move(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
+				choomah->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
+				choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
 
-			cout << "choomah spawn position = " << choomah->getPosition().x << " , " << choomah->getPosition().y << " , " << choomah->getPosition().z << " ) " << endl;
+				cout << "choomah spawn position = " << choomah->getPosition().x << " , " << choomah->getPosition().y << " , " << choomah->getPosition().z << " ) " << endl;
 
-			//get their path from the spawn point to a door
-		    Enemy *e = dynamic_cast<Enemy*>(choomah);
-			if (e)
-				e->setPathEnd(getEndCoord(currentType));
-			for (std::vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
-			{
-				Player *tmp = dynamic_cast<Player*>((*it));
-				if (tmp)
+				//get their path from the spawn point to a door
+				Enemy *e = dynamic_cast<Enemy*>(choomah);
+				if (e)
+					e->setPathEnd(getEndCoord(currentType));
+				for (std::vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
 				{
-					e->setTarget(tmp);
-					break;
+					Player *tmp = dynamic_cast<Player*>((*it));
+					if (tmp)
+					{
+						e->setTarget(tmp);
+						break;
+					}
+				}
+				pathManager->addToQueue(choomah);
+			}
+			if (j == 3)
+			{
+				//create the boss specially
+				Boss* b = dynamic_cast<Boss*>(choomah);
+				if (b) {
+					b->setShader(shader);
+					b->Move(b->getSpawnPoint());
+					b->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
+					b->addCollision(glm::vec3(b->getPosition().x, -12.5f, -b->getPosition().y), 1.0, 1.0);
+				}
+				else {
+					cout << "dynamic cast failed my man" << endl;
 				}
 			}
-			pathManager->addToQueue(choomah);
-
 			// add them to the gameplay vector reference
 			gameObjects.push_back(choomah);
 

@@ -253,26 +253,23 @@ char Game::computePointMask(glm::vec3 p, Enemy* e)
 	char mask = 0;
 	if (pointIsAbovePlane(p, nright, -center.x - radii.x))
 	{
-		//cout << "X" << endl;
 		mask |= 1;// +x
 	}
 	if (pointIsAbovePlane(p, nleft, center.x - radii.x))
 	{
-		//cout << "-X" << endl;
 		mask |= 2;	// -x
 	}
 	if (pointIsAbovePlane(p, nup, -center.z - radii.y))
 	{
-		//cout << "Y" << endl;
 		mask |= 4;	// +y
 	}
 	if (pointIsAbovePlane(p, ndown, center.z - radii.y))
 	{
-		//cout << "-Y" << endl;
 		mask |= 8;	// -y
 	}
 	return mask;
 }
+
 glm::vec3 Game::getFaceNormal(glm::vec3 p, Enemy* e)
 {
 	char mask = computePointMask(p, e);
@@ -315,6 +312,8 @@ void Game::update()
 			}
 
 		}
+
+		//collision checking loop
 		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end() - 1; ++it)
 		{
 			for (vector<GameObject*>::iterator it1 = it + 1; it1 < gameObjects.end(); ++it1) // we make sure that we check a collision between the same objcts only once
@@ -331,14 +330,18 @@ void Game::update()
 						if (e1 && e2) {
 							//do contact resolution here 
 
-							//get contact normal
+							// dlc - get contact normal
 							//contactNormal = getFaceNormal(e1->getPosition(), e2);
 
 							//calculate distance between points
 							float dist = glm::distance(e1->getPosition(), e2->getPosition());
 							float penetration = dist - (e1->getCollider()->getHW() + e2->getCollider()->getHW());
 
+							//if there is a positive penetration
 							if (penetration <= 0) {
+
+								//shuffle both away from eachother - this will help for spawning but they will still pile up on the player, but you'll be dead 
+								//before you notice
 								e1->Move(glm::vec3(-5.0f, 0.0f, 0.0f));
 								e2->Move(glm::vec3(5.0f, 0.0f, 0.0f));
 							}

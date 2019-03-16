@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "PathManager.h"
 #include "Grid.h"
+#include "Boss.h"
 
 class WaveSpawner : public GameObject
 {
@@ -63,7 +64,7 @@ private:
 	Enemy::Character normalChoomah;
 	Enemy::Character chargerChoomah;
 	Enemy::Character brawlerChoomah;
-	Enemy::Character bossChoomah;
+	Boss::Character bossChoomah;
 
 	//the worlds grid
 	Grid* grid;

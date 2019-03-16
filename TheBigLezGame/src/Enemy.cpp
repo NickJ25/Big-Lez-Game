@@ -140,7 +140,7 @@ void Enemy::update()
 			}
 		}
 	}
-	cout << "choomah position = " << getPosition().x << " , " << getPosition().y << " , " << getPosition().z << " ) " << endl;
+	//cout << "choomah position = " << getPosition().x << " , " << getPosition().y << " , " << getPosition().z << " ) " << endl;
 
 }
 
