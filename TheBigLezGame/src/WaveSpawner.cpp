@@ -7,97 +7,100 @@ WaveSpawner::WaveSpawner(Grid* g) : GameObject(glm::vec3(0.0f,0.0f,0.0f))
 
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1;
-	wave1.push_back(1), wave1.push_back(0), wave1.push_back(0), wave1.push_back(0);
+	wave1.push_back(2), wave1.push_back(2), wave1.push_back(0), wave1.push_back(0);
 	waves.push_back(wave1); 
 
-	//set some random spawn points, 4 on each side out of view of the main building
+	//set some random spawn points, 3 on each side out of view of the main building
+	//first spawns
 	spawnPointsBottom.push_back(glm::vec2(120.0f, 215.0f));
-	spawnPointsTop.push_back(glm::vec2(120.0f, 215.0f));
-	spawnPointsRight.push_back(glm::vec2(210.0f, 105.0f));
-	spawnPointsLeft.push_back(glm::vec2(-130.0f, 95.0f));
-	//spawnPointsBottom.push_back(glm::vec2(120.0f, 215.0f));
-	//spawnPointsTop.push_back(glm::vec2(120.0f, 215.0f));
-	//spawnPointsLeft.push_back(glm::vec2(120.0f, 215.0f));
-	//spawnPointsRight.push_back(glm::vec2(120.0f, 215.0f));
-	//spawnPoints.push_back(glm::vec2(-130.0f, -155.0f));
-	//spawnPoints.push_back(glm::vec2(-70.0f, -160.0f));
-	//spawnPoints.push_back(glm::vec2(70.0f, -155.0f));
-	//spawnPoints.push_back(glm::vec2(130.0f, -160.0f));
-	//spawnPoints.push_back(glm::vec2(-130.0f, 185.0f));
-	//spawnPoints.push_back(glm::vec2(-70.0f, 190.0f));
-	//spawnPoints.push_back(glm::vec2(70.0f, 185.0f));
-	//spawnPoints.push_back(glm::vec2(130.0f, 190.0f));
+	spawnPointsTop.push_back(glm::vec2(-60.0f, -215.0f));
+	spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
+	//second spawns
+	//spawnPointsBottom.push_back(glm::vec2(200.0f, 215.0f));
+	//spawnPointsTop.push_back(glm::vec2(110.0f, -215.0f));
+	//spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
+	//third spawns
+	//spawnPointsBottom.push_back(glm::vec2(-60.0f, 215.0f));
+	//spawnPointsTop.push_back(glm::vec2(200.0f, -215.0f));
+	//spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
 
 	initNPCs();
 }
 
-glm::vec2 WaveSpawner::getSpawnCoord(string type)
+glm::vec2 WaveSpawner::getSpawnCoord(int type)
 {
 	srand(time(0));
 	float randomNumber = 0;
 
-	if (type == "Bottom" && spawnPointsBottom.size() > 0) {
+	if (type == 0 && spawnPointsBottom.size() > 0) {
 		randomNumber = (rand() % spawnPointsBottom.size());
 		return spawnPointsBottom.at(randomNumber);
 	}
-	if (type == "Top" && spawnPointsTop.size() > 0) {
+	if (type == 1 && spawnPointsTop.size() > 0) {
 		randomNumber = (rand() % spawnPointsTop.size());
 		return spawnPointsTop.at(randomNumber);
 	}
-	if (type == "Left" && spawnPointsLeft.size() > 0) {
+	/*if (type == "Left" && spawnPointsLeft.size() > 0) {
 		randomNumber = (rand() % spawnPointsLeft.size());
 		return spawnPointsLeft.at(randomNumber);
-	}
-	if (type == "Right" && spawnPointsRight.size() > 0) {
+	}*/
+	if (type == 2 && spawnPointsRight.size() > 0) {
 		randomNumber = (rand() % spawnPointsRight.size());
-		return spawnPointsLeft.at(randomNumber);
+		return spawnPointsRight.at(randomNumber);
 	}
 	cout << "incorrect string entered" << endl;
 	return glm::vec2(0, 0);
 }
 
-void WaveSpawner::setEndCoords(std::vector<glm::vec3> e, string type)
+void WaveSpawner::setEndCoords(std::vector<std::pair<glm::vec3, glm::vec3>> e, int type)
 {
-	if (type == "Bottom")
+	if (type == 0)
 		endPointsBottom = e;
-	if (type == "Top")
+	if (type == 1)
 		endPointsTop = e;
-	if (type == "Left")
-		endPointsLeft = e;
-	if (type == "Right")
+	if (type == 2)
 		endPointsRight = e;
+	//if (type == "Left")
+	//	endPointsLeft = e;
 }
 
-glm::vec3 WaveSpawner::getEndCoord(string type)
+std::pair<glm::vec3 , glm::vec3> WaveSpawner::getEndCoord(int type)
 {
 	srand(time(0));
 	float randomNumber;
 
-	if (type == "Bottom" && endPointsBottom.size() > 0) {
+	if (type == 0 && endPointsBottom.size() > 0) {
 		float randomNumber = (rand() % endPointsBottom.size());
 		return endPointsBottom.at(randomNumber);
 	}
-	if (type == "Top" && endPointsTop.size() > 0) {
-		float randomNumber = (rand() % endPointsTop.size());
+	if (type == 1 && endPointsTop.size() > 0) {
+	    float randomNumber = (rand() % endPointsTop.size());
 		return endPointsTop.at(randomNumber);
 	}
-	if (type == "Left" && endPointsLeft.size() > 0) {
-		float randomNumber = (rand() % endPointsLeft.size());
-		return endPointsLeft.at(randomNumber);
-	}
-	if (type == "Right" && endPointsRight.size() > 0) {
+	if (type == 2 && endPointsRight.size() > 0) {
 		float randomNumber = (rand() % endPointsRight.size());
 		return endPointsRight.at(randomNumber);
 	}
+	//if (type == "Left" && endPointsLeft.size() > 0) {
+	//	float randomNumber = (rand() % endPointsLeft.size());
+	//	return endPointsLeft.at(randomNumber);
+	//}
 
 }
 
-string WaveSpawner::getType()
+int WaveSpawner::getType()
 {
-	//srand(time(0));
-	//int randomNumber = (rand() % types->size());
-	//return types[randomNumber];
-	return "Bottom";
+	srand(time(0));
+	int randomNumber = (rand() % 2);
+	if (types[randomNumber] != lastType)
+		return types[randomNumber];
+	else
+		if (randomNumber == 0)
+			return 1;
+		if (randomNumber == 1)
+			return 2;
+
+			return 0;
 }
 void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager)
 {
@@ -124,6 +127,8 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 
 			//select a spawn direction to spawn from
 			currentType = getType();
+			lastType = currentType;
+
 			//set their properties
 			choomah->setShader(shader);
 			choomah->Move(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
@@ -135,7 +140,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			//get their path from the spawn point to a door
 		    Enemy *e = dynamic_cast<Enemy*>(choomah);
 			if (e)
-				e->setPathEnd(getEndCoord(currentType), true);
+				e->setPathEnd(getEndCoord(currentType));
 			for (std::vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
 			{
 				Player *tmp = dynamic_cast<Player*>((*it));
@@ -158,7 +163,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 void WaveSpawner::initNPCs()
 {
 
-	normalChoomah.fileLocation = "assets/Characters/Choomah-charger/choomahcharger.dae";
+	normalChoomah.fileLocation = "assets/Characters/Choomah-normal/choomahbasic1.dae";
 	normalChoomah.name = "normal";
 
 	chargerChoomah.fileLocation = "assets/Characters/Choomah-charger/choomahcharger.dae";

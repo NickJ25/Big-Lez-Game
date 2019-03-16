@@ -1,4 +1,4 @@
-#pragma once
+#define GLM_ENABLE_EXPERIMENTAL
 #pragma once
 #include "GameObject.h"
 #include "Shader.h"
@@ -8,6 +8,7 @@
 #include <string>
 #include <cmath>
 
+#include "glm/gtx/vector_angle.hpp"
 
 class Enemy : public GameObject
 {
@@ -23,7 +24,14 @@ public:
 
 	//function to give its pathfinding movement
 	void setPath(std::vector<glm::vec3> p ,bool outer);
-	void setPathEnd(glm::vec3 p, bool outer);
+	void setPathEnd(std::pair<glm::vec3, glm::vec3> p)
+	{
+		outerPathEnd = p;
+	}
+	void setInnerPathEnd(glm::vec3 p)
+	{
+		innerPathEnd = p;
+	}
 
 	void setPaused(bool p);
 	bool getPaused();
@@ -43,12 +51,14 @@ public:
 		return target;
 	}
 
-	glm::vec3 getPathEnd(bool outer)
+	std::pair<glm::vec3, glm::vec3> getOuterPathEnd()
 	{
-		if (outer == true)
 			return outerPathEnd;
-		else
-			return innerPathEnd;
+	}
+
+	glm::vec3 getInnerPathEnd()
+	{
+		return innerPathEnd;
 	}
 
 	bool getLocation()
@@ -70,17 +80,22 @@ public:
 	{
 		currentTargetPosition = p;
 	}
+
+	bool getJump()
+	{
+		return Jump;
+	}
 private:
 	
 	std::vector<glm::vec3> outerPath;
 	std::vector<glm::vec3> innerPath;
-	glm::vec3 outerPathEnd;
+	std::pair<glm::vec3, glm::vec3> outerPathEnd;
 	glm::vec3 innerPathEnd;
 
 	bool inside;
 	bool outsideMovement;
 	int jumpingCounter;
-	bool setJump;
+	bool Jump;
 	
 	bool paused;
 

@@ -33,7 +33,5 @@ void Player::update()
 
 	tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
 
-	tempMat = glm::scale(tempMat, glm::vec3(0.6f, 0.6f, 0.6f));
-
 	this->setMatrix(tempMat);
 }

@@ -41,11 +41,13 @@ private:
 	Image* pauseBackground;
 	Text* testtxt2;
 	bool showBoundingBoxes;
-
+	int penetrationDepthX;
+	int penetrationDepthZ;
 public:
 	Game() {};
 	~Game() {};
 	void init();
 	void update();
 	void draw();
+	bool checkCollision(GameObject* a, GameObject* b);
 };

@@ -89,19 +89,20 @@ void Game::init()
 	//gameObjects.push_back(bigLez);
 
 
-	sassy = new Player(Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
+	sassy = new Player(Sassy, glm::vec3(65.0f, -12.5f, 20.0f)); // Change to prop is issue?
 	sassy->setShader(toonShader);
-	//sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
+	sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
 	sassy->setAnimation(5.0f, 1.0f);
 	gameObjects.push_back(sassy);
 
 	mainPlayer = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
 	mainPlayer->setShader(toonShader);
+	mainPlayer->Move(glm::vec3(45.0f, -12.5f, 20.0f));
 	//mainPlayer->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
+	//mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	//mainPlayer->setAnim(0);
 	mainPlayer->setAnimation(5.0f, 1.0f);
-	gameObjects.push_back(mainPlayer);
+	//gameObjects.push_back(mainPlayer);
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	lezTest->setShader(toonShader);
@@ -185,18 +186,21 @@ void Game::init()
 	}
 
 	//first initialise a vector containing door information
-	std::vector<glm::vec3> bottomDoors, topDoors, leftDoors, rightDoors;
-	leftDoors.push_back(glm::vec3(45.0f, -12.5f, -26.0f));
-	topDoors.push_back(glm::vec3(37.5f, -12.5f, 37.5f));
-	bottomDoors.push_back(glm::vec3(80.0f, -12.5f,  50.0f));
-	rightDoors.push_back(glm::vec3(75.0f, -12.5f, -25.0f));
-	//doors.push_back(glm::vec3(95.0f, 0.0, -6.25f));
-	//doors.push_back(glm::vec3(95.0f, 0.0, 36.25f));
+	std::vector<std::pair<glm::vec3, glm::vec3>> bottomDoors, topDoors, leftDoors, rightDoors;
+
+	topDoors.push_back(std::pair<glm::vec3, glm::vec3> (glm::vec3(83.0f, -12.5f, -30.0f), glm::vec3(83.0f,-12.5f,-10.0f)));
+	topDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, -30.0f), glm::vec3(43.0f, -12.5f, -10.0f)));
+
+	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(83.0f, -12.5f,  50.0f), glm::vec3(83.0f, -12.5f, 30.0f)));
+	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, 50.0f), glm::vec3(43.0f, -12.5f, 30.0f)));
+
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, -10.0f), glm::vec3(80.0f, -12.5f, -10.0f)));
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 30.0f), glm::vec3(80.0f, -12.5f, 30.0f)));
+
 
 	//grid has to be the last game object added
 	pathFindingGrid = new Grid(glm::vec2(500, 500), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f), "boundingbox");
 	pathFindingGrid->buildGrid(gameObjects, toonShader);
-	//pathFindingGrid->addEndPoints(bottomDoors);
 
 	//initialise the path manager
 	pathManager = new PathManager();
@@ -204,10 +208,13 @@ void Game::init()
 
 	//set up the wavespawner
 	waveSpawner = new WaveSpawner(pathFindingGrid);
-	waveSpawner->setEndCoords(bottomDoors, "Bottom");
-	waveSpawner->setEndCoords(topDoors, "Top");
-	waveSpawner->setEndCoords(leftDoors, "Left");
-	waveSpawner->setEndCoords(rightDoors, "Right");
+	waveSpawner->setEndCoords(bottomDoors, 0);
+	waveSpawner->setEndCoords(topDoors, 1);
+	waveSpawner->setEndCoords(rightDoors, 2);
+
+	//dlc
+	//waveSpawner->setEndCoords(leftDoors, "Left");
+
 	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager);
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
@@ -222,23 +229,75 @@ void Game::init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+bool Game::checkCollision(GameObject* a, GameObject* b)
+{
+	if (abs(a->getCollider()->getPos().x - b->getCollider()->getPos().x) > (a->getCollider()->getHW() + b->getCollider()->getHW())) return false;
+	if (abs(a->getCollider()->getPos().z - b->getCollider()->getPos().z) > (a->getCollider()->getHH() + b->getCollider()->getHW())) return false;
+
+	penetrationDepthX = abs(a->getCollider()->getPos().x - b->getCollider()->getPos().x) - (a->getCollider()->getHW() + b->getCollider()->getHW());
+	penetrationDepthZ = abs(a->getCollider()->getPos().z - b->getCollider()->getPos().z) - (a->getCollider()->getHH() + b->getCollider()->getHW());
+
+	return true;
+}
 
 void Game::update()
 {
 	if(isGameRunning == true)
 	{
-		for (int i = 0; i < gameObjects.size(); i++) {
-			if (gameObjects[i] != nullptr) {
-				gameObjects[i]->componentUpdate();
-				gameObjects[i]->update();
 
-				Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
-				if (e)
-				{
-					e->update();
-				}
+		std::vector<GameObject*>::iterator it;
+		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+		{
+			(*it)->componentUpdate();
+			(*it)->update();
+
+			//update enemy AI 
+			Enemy *e = dynamic_cast<Enemy*>((*it));
+			if (e)
+			{
+				e->update();
+			}
+
+			std::vector<GameObject*>::iterator it1;
+			for (it1 = gameObjects.begin(); it1 != gameObjects.end(); it1++)
+			{
+				//if ((*it)->getCollider() && (*it1)->getCollider()) {
+				//	if (checkCollision((*it), (*it1)) == true)
+				//	{
+				//		//an enemy is colliding with something
+				//		//if it is a player
+				//		Player *e1 = dynamic_cast<Player*>((*it));
+				//		Player *e2 = dynamic_cast<Player*>((*it1));
+				//		if (e1)
+				//		{
+				//			//attack animation
+				//		}
+				//		if (e2)
+				//		{
+				//			//attack animation
+				//		}
+				//		//if it is anything else
+				//		(*it)->Move(glm::vec3(penetrationDepthX, 0.0f, penetrationDepthZ));
+
+				//	}
+				//}
 			}
 		}
+		//for (int i = 0; i < gameObjects.size(); i++) {
+		//	if (gameObjects[i] != nullptr) {
+		//		gameObjects[i]->componentUpdate();
+		//		gameObjects[i]->update();
+
+		//		Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
+		//		if (e)
+		//		{
+		//			e->update();
+
+		//			//also check enemy - enemy collisions
+
+		//		}
+		//	}
+		//}
 		lezCamera.update();
 		const Uint8 *keys = SDL_GetKeyboardState(NULL);
 		if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP

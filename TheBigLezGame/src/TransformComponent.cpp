@@ -26,9 +26,12 @@ void TransformComponent::setPosition(glm::vec3 newPos)
 	//cout << m_matrix[0][2] << " " << m_matrix[1][2] << " " << m_matrix[2][3] << " " << m_matrix[3][2] << endl;
 	//cout << m_matrix[0][3] << " " << m_matrix[1][3] << " " << m_matrix[2][3] << " " << m_matrix[3][3] << endl;
 	//cout << "------------------------------------------" << endl;
-	m_matrix = glm::translate(m_matrix, -this->getPosition());
-	cout << this->getPosition().x << " " << this->getPosition().y << " " << this->getPosition().z << endl;
+	cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
+	m_matrix = glm::translate(m_matrix, -getPosition());
+	cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
 	m_matrix = glm::translate(m_matrix, newPos);
+	cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
+	cout << endl;
 }
 
 
@@ -41,9 +44,11 @@ void TransformComponent::move(glm::vec3 position)
 void TransformComponent::rotate(GLfloat radians, glm::vec3 rotation)
 {
 	glm::vec3 tempVec = this->getPosition();
-	m_matrix = glm::translate(m_matrix, -(this->getPosition()));
+	m_matrix = glm::translate(m_matrix, (this->getPosition()));
 	m_matrix = glm::rotate(m_matrix, glm::radians(radians), rotation);
 	m_matrix = glm::translate(m_matrix, tempVec);
+	cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
+	cout << endl;
 }
 
 glm::vec3 TransformComponent::getRotation()
