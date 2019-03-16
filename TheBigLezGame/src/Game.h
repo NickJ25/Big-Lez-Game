@@ -50,4 +50,16 @@ public:
 	void update();
 	void draw();
 	bool checkCollision(GameObject* a, GameObject* b);
+
+	//for calculating contact normal
+	const glm::vec3 nup = glm::vec3(0, 1, 0);
+	const glm::vec3 ndown = glm::vec3(0, -1, 0);
+	const glm::vec3 nright = glm::vec3(1, 0, 0);
+	const glm::vec3 nleft = glm::vec3(-1, 0, 0);
+
+	char computePointMask(glm::vec3 p, Enemy* e);
+	glm::vec3 getFaceNormal(glm::vec3 p, Enemy* e);
+	bool pointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d);
+
+	glm::vec3 contactNormal;
 };

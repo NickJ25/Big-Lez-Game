@@ -234,10 +234,66 @@ bool Game::checkCollision(GameObject* a, GameObject* b)
 	if (abs(a->getCollider()->getPos().x - b->getCollider()->getPos().x) > (a->getCollider()->getHW() + b->getCollider()->getHW())) return false;
 	if (abs(a->getCollider()->getPos().z - b->getCollider()->getPos().z) > (a->getCollider()->getHH() + b->getCollider()->getHW())) return false;
 
-	penetrationDepthX = abs(a->getCollider()->getPos().x - b->getCollider()->getPos().x) - (a->getCollider()->getHW() + b->getCollider()->getHW());
-	penetrationDepthZ = abs(a->getCollider()->getPos().z - b->getCollider()->getPos().z) - (a->getCollider()->getHH() + b->getCollider()->getHW());
+	//penetrationDepthX = a->getCollider()->getHW() + b->getCollider()->getHW() - a->getCollider()->getPos().x - b->getCollider()->getPos().x;
+	//penetrationDepthZ = a->getCollider()->getHH() + b->getCollider()->getHW() - a->getCollider()->getPos().z - b->getCollider()->getPos().z;
 
 	return true;
+}
+
+bool Game::pointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d)
+{
+	return glm::dot(n, P) + d > FLT_EPSILON;
+}
+
+char Game::computePointMask(glm::vec3 p, Enemy* e)
+{
+	glm::vec3 center = p;
+	glm::vec2 radii = glm::vec2(e->getCollider()->getHW(), e->getCollider()->getHH());
+
+	char mask = 0;
+	if (pointIsAbovePlane(p, nright, -center.x - radii.x))
+	{
+		//cout << "X" << endl;
+		mask |= 1;// +x
+	}
+	if (pointIsAbovePlane(p, nleft, center.x - radii.x))
+	{
+		//cout << "-X" << endl;
+		mask |= 2;	// -x
+	}
+	if (pointIsAbovePlane(p, nup, -center.z - radii.y))
+	{
+		//cout << "Y" << endl;
+		mask |= 4;	// +y
+	}
+	if (pointIsAbovePlane(p, ndown, center.z - radii.y))
+	{
+		//cout << "-Y" << endl;
+		mask |= 8;	// -y
+	}
+	return mask;
+}
+glm::vec3 Game::getFaceNormal(glm::vec3 p, Enemy* e)
+{
+	char mask = computePointMask(p, e);
+	glm::vec3 normal = glm::vec3(0, 0, 0);
+	if ((mask & 1) == 1)	// +x
+	{
+		normal += nright;
+	}
+	if ((mask & 2) == 2)	// -x
+	{
+		normal += nleft;
+	}
+	if ((mask & 4) == 4)	// +y
+	{
+		normal += nup;
+	}
+	if ((mask & 8) == 8)	// -y
+	{
+		normal += ndown;
+	}
+	return normalize(normal);
 }
 
 void Game::update()
@@ -261,43 +317,44 @@ void Game::update()
 			std::vector<GameObject*>::iterator it1;
 			for (it1 = gameObjects.begin(); it1 != gameObjects.end(); it1++)
 			{
-				//if ((*it)->getCollider() && (*it1)->getCollider()) {
-				//	if (checkCollision((*it), (*it1)) == true)
-				//	{
-				//		//an enemy is colliding with something
-				//		//if it is a player
-				//		Player *e1 = dynamic_cast<Player*>((*it));
-				//		Player *e2 = dynamic_cast<Player*>((*it1));
-				//		if (e1)
-				//		{
-				//			//attack animation
-				//		}
-				//		if (e2)
-				//		{
-				//			//attack animation
-				//		}
-				//		//if it is anything else
-				//		(*it)->Move(glm::vec3(penetrationDepthX, 0.0f, penetrationDepthZ));
+		
+				if ((*it)->getCollider() && (*it1)->getCollider()) {
+					if (checkCollision((*it), (*it1)) == true)
+					{
+						//an enemy is colliding with something
+						//if it is another enemy
+						Enemy *e1 = dynamic_cast<Enemy*>((*it));
+						Enemy *e2 = dynamic_cast<Enemy*>((*it1));
 
-				//	}
-				//}
+						//if they are both enemies
+						if (e1 && e2) {
+							//do contact resolution here 
+							
+							//get contact normal
+							contactNormal = getFaceNormal(e1->getPosition(), e2);
+
+							//calculate distance between points
+							float dist = glm::distance(e1->getPosition(), e2->getPosition());
+							float penetration = dist - (e1->getCollider()->getHW() + e2->getCollider()->getHW());
+
+							e2->Move(glm::vec3(penetrationDepthX, 0.0f, penetrationDepthZ));
+						}else
+						if (e1)
+						{
+							//attack animation
+						}
+						else
+						if (e2)
+						{
+							//attack animation
+						}
+
+
+					}
+				}
 			}
 		}
-		//for (int i = 0; i < gameObjects.size(); i++) {
-		//	if (gameObjects[i] != nullptr) {
-		//		gameObjects[i]->componentUpdate();
-		//		gameObjects[i]->update();
 
-		//		Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
-		//		if (e)
-		//		{
-		//			e->update();
-
-		//			//also check enemy - enemy collisions
-
-		//		}
-		//	}
-		//}
 		lezCamera.update();
 		const Uint8 *keys = SDL_GetKeyboardState(NULL);
 		if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
@@ -422,7 +479,7 @@ void Game::update()
 	if (pathManager->working == true)
 		pathManager->working = false;
 
-	cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
+	//cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
 	lezCamera.update();/// ----------------------------------------------------------------------CHECK
 	const Uint8 *keys = SDL_GetKeyboardState(NULL); /// ----------------------------------------------------------------------REMOVE
 	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP

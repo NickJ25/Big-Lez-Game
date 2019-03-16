@@ -37,7 +37,7 @@ void PathManager::update(std::vector<GameObject*>& gameObjects, Shader* shader)
 			pathQueue.pop();
 			pathQueue.push(obj);
 
-			cout << pathQueue.size() << endl;
+			//cout << pathQueue.size() << endl;
 			working = true;
 		}
 

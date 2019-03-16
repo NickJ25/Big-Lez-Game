@@ -140,6 +140,8 @@ void Enemy::update()
 			}
 		}
 	}
+	cout << "choomah position = " << getPosition().x << " , " << getPosition().y << " , " << getPosition().z << " ) " << endl;
+
 }
 
 std::vector<glm::vec3> Enemy::getPath()
