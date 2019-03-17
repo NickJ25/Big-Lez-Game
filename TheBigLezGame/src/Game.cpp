@@ -207,11 +207,18 @@ void Game::init()
 	pathManager->addGrid(pathFindingGrid);
 
 	//set up the wavespawner
-	waveSpawner = new WaveSpawner(pathFindingGrid);
+	waveSpawner = new WaveSpawner();
+
+	// numbers correspond to number of each choomah type per round
+	vector<int> wave1;
+	wave1.push_back(0), wave1.push_back(0), wave1.push_back(0), wave1.push_back(1);
+
+	//add this wave to the wave spawner
+	waveSpawner->setWave(wave1);
+
 	waveSpawner->setEndCoords(bottomDoors, 0);
 	waveSpawner->setEndCoords(topDoors, 1);
 	waveSpawner->setEndCoords(rightDoors, 2);
-
 	//dlc
 	//waveSpawner->setEndCoords(leftDoors, "Left");
 
@@ -309,6 +316,14 @@ void Game::update()
 			if (e)
 			{
 				e->update();
+			}
+
+			Boss *b = dynamic_cast<Boss*>((*it));
+			if (b)
+			{
+				b->update();
+				b->checkFieldEmpty(gameObjects);
+				b->spawnMinions(gameObjects, toonShader, pathManager);
 			}
 
 		}
@@ -496,7 +511,7 @@ void Game::update()
 	if (pathManager->working == true)
 		pathManager->working = false;
 
-	//cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
+	cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
 	lezCamera.update();/// ----------------------------------------------------------------------CHECK
 	const Uint8 *keys = SDL_GetKeyboardState(NULL); /// ----------------------------------------------------------------------REMOVE
 	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP

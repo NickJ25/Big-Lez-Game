@@ -1,9 +1,18 @@
 #include "Boss.h"
+#include "WaveSpawner.h"
 
 Boss::Boss(Character character) : GameObject(character.fileLocation.c_str())
 {
+	privateSpawner = new WaveSpawner();
+	initialiseWaveSpawner();
+
+	//low level choomah wave
+	std::vector<int> tmpVec;
+	tmpVec.push_back(3), tmpVec.push_back(0), tmpVec.push_back(0), tmpVec.push_back(0);
+	bossWaves.push_back(tmpVec);
+
 	paused = false;
-	velocity = 0.04;
+	velocity = 0.1;
 	angularVelocity = 0.005f;
 	rotation = glm::vec3(0.0f, 1.0f, 0.0f);
 	
@@ -19,7 +28,7 @@ Boss::Boss(Character character) : GameObject(character.fileLocation.c_str())
 	//add end position to same relative position as its path
 	outerPathEnd.push_back(glm::vec3(45.0f, -12.5f, -80.0f));
 	//and the same with the start position
-	spawnPoints.push_back(glm::vec3(-215.0f, -12.5f, -240.0f));
+	spawnPoints.push_back(glm::vec3(215.0f, -12.5f, -240.0f));
 
 	//reseed then pick a random path for the boss to take
 	srand(time(0));
@@ -32,6 +41,26 @@ Boss::Boss(Character character) : GameObject(character.fileLocation.c_str())
 
 Boss::~Boss()
 {
+}
+
+void Boss::initialiseWaveSpawner() {
+
+	//first initialise a vector containing door information
+	std::vector<std::pair<glm::vec3, glm::vec3>> bottomDoors, topDoors, leftDoors, rightDoors;
+
+	topDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(83.0f, -12.5f, -30.0f), glm::vec3(83.0f, -12.5f, -10.0f)));
+	topDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, -30.0f), glm::vec3(43.0f, -12.5f, -10.0f)));
+
+	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(83.0f, -12.5f, 50.0f), glm::vec3(83.0f, -12.5f, 30.0f)));
+	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, 50.0f), glm::vec3(43.0f, -12.5f, 30.0f)));
+
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, -10.0f), glm::vec3(80.0f, -12.5f, -10.0f)));
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 30.0f), glm::vec3(80.0f, -12.5f, 30.0f)));
+
+
+	privateSpawner->setEndCoords(bottomDoors, 0);
+	privateSpawner->setEndCoords(topDoors, 1);
+	privateSpawner->setEndCoords(rightDoors, 2);
 }
 
 void Boss::setPaused(bool p)
@@ -85,8 +114,60 @@ void Boss::update()
 				selectedPath.pop_back();
 			}
 		}
+		else
+		{
+			stopped = true;
+		}
 	}
-	//cout << "choomah position = " << getPosition().x << " , " << getPosition().y << " , " << getPosition().z << " ) " << endl;
+	cout << "boss position = " << getPosition().x << " , " << getPosition().y << " , " << getPosition().z << " ) " << endl;
 
 }
 
+void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager* pathmanager)
+{
+	if (canSpawn == true && stopped == true)
+	{
+		srand(time(0));
+		int type = (rand() % bossWaves.size());
+
+		privateSpawner->setWave(bossWaves.at(type));
+		privateSpawner->spawnWave(g, spawnCounter, shader, pathmanager);
+		spawnCounter++;
+		canSpawn = false;
+	}
+}
+
+void Boss::checkFieldEmpty(std::vector<GameObject*> g)
+{
+	int counter = 0;
+	std::vector<GameObject*>::iterator it;
+	for (it = g.begin(); it != g.end(); it++)
+	{
+		Enemy *e = dynamic_cast<Enemy*>((*it));
+		if (e)
+			counter++;
+	}
+	if (counter <= 0)
+	{
+		canSpawn = true;
+	}
+	else
+	{
+		canSpawn = false;
+	}
+}
+
+void Boss::setPathEnd(glm::vec3 p)
+{
+	outerPathEnd.push_back(p);
+}
+
+glm::vec3 Boss::getOuterPathEnd(int position)
+{
+	return outerPathEnd.at(position);
+}
+
+glm::vec3 Boss::getSpawnPoint()
+{
+	return selectedSpawnPoint;
+}

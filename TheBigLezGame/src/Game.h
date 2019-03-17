@@ -22,7 +22,7 @@
 #include "Button.h"
 #include "Image.h"
 #include "WaveSpawner.h"
-
+#include "Boss.h"
 #include "Text.h"
 #include "WaveSpawner.h"
 #include "Grid.h"

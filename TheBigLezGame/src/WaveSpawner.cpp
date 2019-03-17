@@ -1,14 +1,8 @@
 #include "WaveSpawner.h"
+#include "Boss.h"
 
-WaveSpawner::WaveSpawner(Grid* g) : GameObject(glm::vec3(0.0f,0.0f,0.0f))
+WaveSpawner::WaveSpawner() : GameObject(glm::vec3(0.0f,0.0f,0.0f))
 {
-	//set the grid
-	grid = g;
-
-	// numbers correspond to number of each choomah type per round
-	vector<int> wave1;
-	wave1.push_back(0), wave1.push_back(0), wave1.push_back(0), wave1.push_back(1);
-	waves.push_back(wave1); 
 
 	//set some random spawn points, 3 on each side out of view of the main building
 	//first spawns
@@ -104,7 +98,8 @@ int WaveSpawner::getType()
 }
 void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager)
 {
-	//set empty pointer to array of floats
+	
+	//set empty pointer to vector of floats
 	vector<int> currentwave;
 
 	// depending on what wave it currently is, assign current wave accordingly
@@ -122,7 +117,13 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			if (j == 0)      choomah = new Enemy(normalChoomah);
 			else if (j == 1) choomah = new Enemy(chargerChoomah);
 			else if (j == 2) choomah = new Enemy(brawlerChoomah);
-			else if (j == 3) choomah = new Boss(bossChoomah);
+			else if (j == 3) {
+				// has to be setup here to prevent include loops that would come by declaring its character in the header file
+				Boss::Character bossChar;
+				bossChar.fileLocation = "assets/Characters/Bumble-Brutus/bumblebrutus.dae";
+				bossChar.name = "boss";
+				choomah = new Boss(bossChar);
+			}
 			else		     choomah = new Enemy(normalChoomah);
 
 			//if not a boss choomah
@@ -187,8 +188,5 @@ void WaveSpawner::initNPCs()
 
 	brawlerChoomah.fileLocation = "assets/Characters/Choomah-brawler/choomahbrawler.dae";
 	brawlerChoomah.name = "brawler";
-
-	bossChoomah.fileLocation = "assets/Characters/Bumble-Brutus/bumblebrutus.dae";
-	bossChoomah.name = "boss";
 
 }

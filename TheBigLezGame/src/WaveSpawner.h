@@ -11,12 +11,12 @@
 #include "Player.h"
 #include "PathManager.h"
 #include "Grid.h"
-#include "Boss.h"
-
+//#include "Boss.h"
+class Boss;
 class WaveSpawner : public GameObject
 {
 public:
-	WaveSpawner(Grid* g);
+	WaveSpawner();
 
 	//function to get random co-ordinates from the preset coordinates
 	glm::vec2 getSpawnCoord(int type);
@@ -34,6 +34,16 @@ public:
 	void update() override {}
 
 	int getType();
+
+	void setWave(std::vector<int> w)
+	{
+		waves.push_back(w);
+	}
+
+	std::vector<vector<int>> getWaves()
+	{
+		return waves;
+	}
 
 private:
 
@@ -64,8 +74,4 @@ private:
 	Enemy::Character normalChoomah;
 	Enemy::Character chargerChoomah;
 	Enemy::Character brawlerChoomah;
-	Boss::Character bossChoomah;
-
-	//the worlds grid
-	Grid* grid;
 };

@@ -3,12 +3,14 @@
 #include "GameObject.h"
 #include "Shader.h"
 #include "Player.h"
+#include "Enemy.h"
 #include <iostream>
 #include <string>
 #include <cmath>
 #include <ctime>
 #include "glm/gtx/vector_angle.hpp"
-
+#include "PathManager.h"
+class WaveSpawner;
 class Boss: public GameObject
 {
 public:
@@ -26,19 +28,13 @@ public:
 
 	//function to give its pathfinding movement
 	void setPath(std::vector<glm::vec3> p, bool outer);
-	void setPathEnd(glm::vec3 p)
-	{
-		outerPathEnd.push_back(p);
-	}
+	void setPathEnd(glm::vec3 p);
 
 	void setPaused(bool p);
 	bool getPaused();
 
 
-	glm::vec3 getOuterPathEnd(int position)
-	{
-		return outerPathEnd.at(position);
-	}
+	glm::vec3 getOuterPathEnd(int position);
 
 
 	std::vector<glm::vec3> getPath();
@@ -47,14 +43,17 @@ public:
 
 	glm::vec3 rotation;
 
-	glm::vec3 getSpawnPoint()
-	{
-		return selectedSpawnPoint;
-	}
+	glm::vec3 getSpawnPoint();
 
-	
+	void checkFieldEmpty(std::vector<GameObject*> g);
+
+	void initialiseWaveSpawner();
+
+	void spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager* pathmanager);
+
 private:
 
+	WaveSpawner *privateSpawner;
 	std::vector<std::vector<glm::vec3>> outerPath;
 	std::vector<glm::vec3> outerPathEnd;
 	std::vector<glm::vec3> spawnPoints;
@@ -64,11 +63,15 @@ private:
 	glm::vec3 selectedSpawnPoint;
 
 	bool outsideMovement;
-
+	bool canSpawn = true;
 	bool paused;
+	bool stopped = false;
 
 	float velocity;
 	float angularVelocity;
+
+	std::vector<std::vector<int>> bossWaves;
+	int spawnCounter = 0;
 
 };
 
