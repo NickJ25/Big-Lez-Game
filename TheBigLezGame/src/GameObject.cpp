@@ -90,6 +90,7 @@ void GameObject::componentDraw(glm::mat4 view)
 			renderComponent->setDrawMatrix(transformComponent->getMatrix());
 			renderComponent->setView(view);
 			renderComponent->Draw();
+			//transformComponent->resetMatrix();
 		}
 	}
 	else

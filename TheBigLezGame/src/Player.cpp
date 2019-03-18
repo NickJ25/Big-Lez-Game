@@ -34,7 +34,7 @@ void Player::update()
 {
 	m_playerCamera->update();
 
-	// Create a matrix and apply the rotations and translations o nit.
+	// Create a matrix and apply the rotations and translations on it.
 	glm::mat4 tempMat(1.0f);
 	tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -8.0f, 0.0f)));
 	tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
@@ -45,6 +45,10 @@ void Player::update()
 	gunMat *= glm::mat4(1.0) * tempMat;
 
 	GameObject::setMatrix(tempMat);
+
+	//this->Move(m_playerCamera->getCameraPos() + glm::vec3(0.0f, -8.0f, 0.0f));
+	//this->Rotate(-m_playerCamera->getYaw() + 90, glm::vec3(0.0, 1.0, 0.0));
+	//this->Scale(glm::vec3(0.6, 0.6, 0.6));
 
 	// Apply the same matrix to the gun model
 	if (currentWeapon != NULL) {
