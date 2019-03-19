@@ -51,6 +51,8 @@ public:
 
 	void spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager* pathmanager);
 
+	int getCurrentWave();
+
 private:
 
 	WaveSpawner *privateSpawner;
@@ -71,7 +73,19 @@ private:
 	float angularVelocity;
 
 	std::vector<std::vector<int>> bossWaves;
+	std::vector<int> normalWave;
+	std::vector<int> chargerWave;
+	std::vector<int> brawlerWave;
+
+	std::vector<GameObject*> normalObj;
+	//std::vector<
+	std::vector<int> current;
+
 	int spawnCounter = 0;
+	int currentWave = 0;
+	int numToBeSpawned = 0;
+	bool waveSet = false;
+	bool waveSpawned = false;
 
 };
 

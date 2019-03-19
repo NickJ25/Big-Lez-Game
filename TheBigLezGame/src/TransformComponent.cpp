@@ -16,6 +16,7 @@ glm::mat4 TransformComponent::getMatrix()
 void TransformComponent::setMatrix(glm::mat4 newMat)
 {
 	m_matrix = newMat;
+	m_position = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 void TransformComponent::setPosition(glm::vec3 newPos)

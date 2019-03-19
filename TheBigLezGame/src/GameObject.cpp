@@ -67,6 +67,11 @@ void GameObject::setPosition(glm::vec3 newPos)
 	transformComponent->setPosition(newPos);
 }
 
+glm::mat4 GameObject::getMatrix()
+{
+	return transformComponent->getMatrix();
+}
+
 void GameObject::setMatrix(glm::mat4 newMat)
 {
 	transformComponent->setMatrix(newMat);

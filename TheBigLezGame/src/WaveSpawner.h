@@ -45,6 +45,15 @@ public:
 		return waves;
 	}
 
+	void spawnEnemy(std::vector<GameObject*> &gameObjects)
+	{
+		if (!toBeSpawned.empty()) {
+			GameObject* tmp = toBeSpawned.at(0);
+			toBeSpawned.erase(toBeSpawned.begin());
+			gameObjects.push_back(tmp);
+			//delete tmp;
+		}
+	}
 private:
 
 	//position values
@@ -74,4 +83,7 @@ private:
 	Enemy::Character normalChoomah;
 	Enemy::Character chargerChoomah;
 	Enemy::Character brawlerChoomah;
+
+	//optimisation controller
+	std::vector<GameObject*> toBeSpawned;
 };

@@ -3,13 +3,18 @@
 
 Boss::Boss(Character character) : GameObject(character.fileLocation.c_str())
 {
+
+	//intialise spawnable waves
+	normalWave.push_back(3), normalWave.push_back(0), normalWave.push_back(0), normalWave.push_back(0);
+	chargerWave.push_back(0), chargerWave.push_back(3), chargerWave.push_back(0), chargerWave.push_back(0);
+	brawlerWave.push_back(0), brawlerWave.push_back(0), brawlerWave.push_back(3), brawlerWave.push_back(0);
+
+	bossWaves.push_back(normalWave), bossWaves.push_back(chargerWave), bossWaves.push_back(brawlerWave);
+	current = bossWaves.at(0);
+
+	//initialise a wave spawner 
 	privateSpawner = new WaveSpawner();
 	initialiseWaveSpawner();
-
-	//low level choomah wave
-	std::vector<int> tmpVec;
-	tmpVec.push_back(3), tmpVec.push_back(0), tmpVec.push_back(0), tmpVec.push_back(0);
-	bossWaves.push_back(tmpVec);
 
 	paused = false;
 	velocity = 0.1;
@@ -61,6 +66,8 @@ void Boss::initialiseWaveSpawner() {
 	privateSpawner->setEndCoords(bottomDoors, 0);
 	privateSpawner->setEndCoords(topDoors, 1);
 	privateSpawner->setEndCoords(rightDoors, 2);
+
+	privateSpawner->setWave(current);
 }
 
 void Boss::setPaused(bool p)
@@ -119,21 +126,43 @@ void Boss::update()
 			stopped = true;
 		}
 	}
-	cout << "boss position = " << getPosition().x << " , " << getPosition().y << " , " << getPosition().z << " ) " << endl;
+}
 
+int Boss::getCurrentWave()
+{
+	srand(time(0));
+	int type = (rand() % bossWaves.size());
+	return type;
 }
 
 void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager* pathmanager)
 {
+
 	if (canSpawn == true && stopped == true)
 	{
-		srand(time(0));
-		int type = (rand() % bossWaves.size());
-
-		privateSpawner->setWave(bossWaves.at(type));
-		privateSpawner->spawnWave(g, spawnCounter, shader, pathmanager);
-		spawnCounter++;
-		canSpawn = false;
+		if (waveSet == false)
+		{
+			currentWave = getCurrentWave();
+			current = bossWaves.at(currentWave);
+			std::vector<int> tmp = bossWaves.at(currentWave);
+			int numOfChoomahs = 0;
+			for (vector<int>::iterator it = tmp.begin(); it < tmp.end(); ++it)
+			{
+				numOfChoomahs += (*it);
+			}
+			numToBeSpawned = numOfChoomahs;
+			//delete tmp;
+			waveSet = true;
+		}
+		privateSpawner->spawnWave(g, currentWave, shader, pathmanager);
+		privateSpawner->spawnEnemy(g);
+		g.size();
+		numToBeSpawned--;
+		if (numToBeSpawned == 0)
+		{
+			waveSpawned = true;
+			canSpawn = false;
+		}
 	}
 }
 
@@ -153,6 +182,7 @@ void Boss::checkFieldEmpty(std::vector<GameObject*> g)
 	}
 	else
 	{
+		if(waveSpawned == true)
 		canSpawn = false;
 	}
 }

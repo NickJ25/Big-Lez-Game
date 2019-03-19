@@ -12,7 +12,7 @@ PathManager* pathManager;
 GameObject* sassy;
 
 // Initalize Two Camera
-Camera lezCamera(glm::vec3(80.0f, 12.5f, 205.0f), FREECAM);
+Camera lezCamera(glm::vec3(195.0f, 12.5f, -115.0f), FREECAM);
 
 rt3d::materialStruct material0 = {
 	{0.0f, 0.8f, 0.2f, 1.0f}, // ambient
@@ -211,7 +211,7 @@ void Game::init()
 
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1;
-	wave1.push_back(0), wave1.push_back(0), wave1.push_back(0), wave1.push_back(1);
+	wave1.push_back(1), wave1.push_back(0), wave1.push_back(0), wave1.push_back(0);
 
 	//add this wave to the wave spawner
 	waveSpawner->setWave(wave1);
@@ -222,7 +222,9 @@ void Game::init()
 	//dlc
 	//waveSpawner->setEndCoords(leftDoors, "Left");
 
+	//prepare wave 1 to be spawned
 	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager);
+
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
 	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
@@ -304,6 +306,8 @@ void Game::update()
 {
 	if(isGameRunning == true)
 	{
+		//check if an enemy is due to be spawned, and if so create it
+		waveSpawner->spawnEnemy(gameObjects);
 
 		std::vector<GameObject*>::iterator it;
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
@@ -324,6 +328,7 @@ void Game::update()
 				b->update();
 				b->checkFieldEmpty(gameObjects);
 				b->spawnMinions(gameObjects, toonShader, pathManager);
+				gameObjects.size();
 			}
 
 		}
@@ -511,7 +516,7 @@ void Game::update()
 	if (pathManager->working == true)
 		pathManager->working = false;
 
-	cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
+	//cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
 	lezCamera.update();/// ----------------------------------------------------------------------CHECK
 	const Uint8 *keys = SDL_GetKeyboardState(NULL); /// ----------------------------------------------------------------------REMOVE
 	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP

@@ -60,6 +60,7 @@ public:
 
 	void setPosition(glm::vec3 newPos);
 	void setMatrix(glm::mat4 newMat);
+	glm::mat4 getMatrix();
 
 	void addCollision(glm::vec3 pos, float hw, float hh);
 	CollisionComponent* getCollider();

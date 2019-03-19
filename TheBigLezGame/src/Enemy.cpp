@@ -19,7 +19,7 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	if (character.name == "brawler") {
 		velocity = 0.02f;
 	}
-	angularVelocity = 0.005f;
+	angularVelocity = 0.5f;
 	rotation = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
@@ -69,21 +69,26 @@ void Enemy::update()
 			glm::vec3 currentRot = getRotation(); // current rotation
 
 
-			if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
-			{
+				//calculate angle between the two vectors
+				float angle = -glm::acos(glm::dot(currentRot, rotation));
+				movementStep = glm::normalize(distanceToBeCovered) * velocity;
 
-				////calculate angle between the two vectors
-				//float angle = glm::acos(glm::dot(currentRot, rotation));
-				//glm::mat4 tempMat(1.0f);
-				//tempMat = glm::translate(tempMat, getPosition());
-				//tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0, 1.0, 0.0));
-				//setMatrix(tempMat);
 				
-			}
+				//reset the rotation
+				glm::mat4 tempMat(1.0f);
 
-			movementStep = glm::normalize(distanceToBeCovered) * velocity;
-			Move(glm::vec3(movementStep));
+				//calculate the translation 
+				tempMat = glm::translate(tempMat, getPosition());
+				tempMat = glm::translate(tempMat, movementStep);
 
+				if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
+				{
+					//reapply the rotation
+					tempMat = glm::rotate(tempMat, angle * angularVelocity, glm::vec3(0.0f, 1.0f, 0.0f));
+				}
+
+				//set the matrix
+				setMatrix(tempMat);
 			
 			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 			{
@@ -107,10 +112,8 @@ void Enemy::update()
 
 				if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 				{
-					cout << endl;
 					Jump = true;
 				}
-				cout << endl;
 			}
 
 		}
@@ -132,7 +135,30 @@ void Enemy::update()
 			//get angle between the current and the next node
 			distanceToBeCovered = next - current;
 			movementStep = glm::normalize(distanceToBeCovered) * velocity;
-			Move(glm::vec3(movementStep));
+
+			rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
+			glm::vec3 currentRot = getRotation(); // current rotation
+
+			//calculate angle between the two vectors
+			float angle = -glm::acos(glm::dot(currentRot, rotation));
+
+			//reset the rotation
+			glm::mat4 tempMat(1.0f);
+
+			//calculate the translation 
+			tempMat = glm::translate(tempMat, getPosition());
+			tempMat = glm::translate(tempMat, movementStep);
+
+			if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
+			{
+				//reapply the rotation
+				tempMat = glm::rotate(tempMat, angle * angularVelocity, glm::vec3(0.0f, 1.0f, 0.0f));
+			}
+
+			//set the matrix
+			setMatrix(tempMat);
+
+			//Move(glm::vec3(movementStep));
 
 			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 			{
