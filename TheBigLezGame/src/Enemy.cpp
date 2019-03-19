@@ -6,6 +6,7 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	outsideMovement = false;
 	paused = false;
 	Jump = false;
+	moving = true;
 	jumpingCounter = 0;
 
 	if (character.name == "charger") {
@@ -48,10 +49,12 @@ bool Enemy::getPaused()
 
 void Enemy::update()
 {
+	cout << getPosition().x << " , " << getPosition().z << endl;
 	glm::vec3 current;
 	glm::vec3 next;
 	glm::vec3 distanceToBeCovered;
 	glm::vec3 movementStep;
+	bool rotated = false;
 	if (paused == false) {
 		//get it to follow
 		if (!outerPath.empty())
@@ -67,6 +70,7 @@ void Enemy::update()
 			distanceToBeCovered = next - current;
 			rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
 			glm::vec3 currentRot = getRotation(); // current rotation
+			glm::mat4 test = getMatrix();
 
 
 				//calculate angle between the two vectors
@@ -81,18 +85,20 @@ void Enemy::update()
 				tempMat = glm::translate(tempMat, getPosition());
 				tempMat = glm::translate(tempMat, movementStep);
 
-				if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
+				if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.z) != std::round(rotation.z) && rotated == false)
 				{
 					//reapply the rotation
-					tempMat = glm::rotate(tempMat, angle * angularVelocity, glm::vec3(0.0f, 1.0f, 0.0f));
+					tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+					rotated = true;
 				}
 
 				//set the matrix
 				setMatrix(tempMat);
-			
+				glm::vec3 check = getRotation();
 			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 			{
 				outerPath.pop_back();
+				rotated = false;
 			}
 		}
 		else {
@@ -100,15 +106,41 @@ void Enemy::update()
 
 				inside = true;
 				//jumping animation
-				setAnimation(4.58f, 1.0f);
-				velocity = 0.05;
+				setAnimValues(4.58, 1.0f);
+
+				velocity = 0.1;
 
 				//get to the second of the pair 
 				current = getPosition();
 				next = getOuterPathEnd().second;
 				distanceToBeCovered = next - current;
+
+				glm::vec3 jumpDirection = glm::normalize(getOuterPathEnd().second - getPosition());
+				rotation = glm::normalize(jumpDirection); // rotation we want to be at
+				glm::vec3 currentRot = getRotation(); // current rotation
+
+
+					//calculate angle between the two vectors
+				float angle = -glm::acos(glm::dot(currentRot, rotation));
 				movementStep = glm::normalize(distanceToBeCovered) * velocity;
-				Move(glm::vec3(movementStep));
+
+
+				//reset the rotation
+				glm::mat4 tempMat(1.0f);
+
+				//calculate the translation 
+				tempMat = glm::translate(tempMat, getPosition());
+				tempMat = glm::translate(tempMat, movementStep);
+
+				if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
+				{
+					//reapply the rotation
+					tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+				}
+
+				//set the matrix
+				setMatrix(tempMat);
+
 
 				if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 				{
@@ -122,7 +154,8 @@ void Enemy::update()
 		{
 
 			//running animation
-			setAnimation(0.0f, 8.3f);
+			setAnimValues(0.0f, 8.3f);
+
 			velocity = 0.05;
 				
 			//enemy has reached a window
@@ -147,12 +180,15 @@ void Enemy::update()
 
 			//calculate the translation 
 			tempMat = glm::translate(tempMat, getPosition());
+
+			//if not touching a player
+			if(moving == true)
 			tempMat = glm::translate(tempMat, movementStep);
 
 			if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
 			{
 				//reapply the rotation
-				tempMat = glm::rotate(tempMat, angle * angularVelocity, glm::vec3(0.0f, 1.0f, 0.0f));
+				tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
 			}
 
 			//set the matrix

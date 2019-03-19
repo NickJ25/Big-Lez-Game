@@ -12,7 +12,7 @@ PathManager* pathManager;
 GameObject* sassy;
 
 // Initalize Two Camera
-Camera lezCamera(glm::vec3(195.0f, 12.5f, -115.0f), FREECAM);
+Camera lezCamera(glm::vec3(110.0f, 12.5f, 190.0f), FREECAM);
 
 rt3d::materialStruct material0 = {
 	{0.0f, 0.8f, 0.2f, 1.0f}, // ambient
@@ -93,6 +93,7 @@ void Game::init()
 	sassy->setShader(toonShader);
 	sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
 	sassy->setAnimation(5.0f, 1.0f);
+	sassy->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 	gameObjects.push_back(sassy);
 
 	mainPlayer = new Player(BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -110,8 +111,8 @@ void Game::init()
 	gameObjects.push_back(lezTest);
 
 	// add environmental collision boxes for pathfinding an' such
-	glm::vec3 fenceScaleVertical = glm::vec3(4.0f, 4.0f, 30.0f);
-	glm::vec3 fenceScaleHorizontal = glm::vec3(30.0f, 4.0f, 4.0f);
+	glm::vec3 fenceScaleVertical = glm::vec3(4.0f, 4.0f, 35.0f);
+	glm::vec3 fenceScaleHorizontal = glm::vec3(35.0f, 4.0f, 4.0f);
 	glm::vec3 test = glm::vec3(2.5, 2.5, 2.5);
 	GameObject* Fence;
 
@@ -188,18 +189,18 @@ void Game::init()
 	//first initialise a vector containing door information
 	std::vector<std::pair<glm::vec3, glm::vec3>> bottomDoors, topDoors, leftDoors, rightDoors;
 
-	topDoors.push_back(std::pair<glm::vec3, glm::vec3> (glm::vec3(83.0f, -12.5f, -30.0f), glm::vec3(83.0f,-12.5f,-10.0f)));
+	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(83.0f, -12.5f, 46.0f), glm::vec3(83.0f, -12.5f, 38.0f)));
+	//bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, 50.0f), glm::vec3(43.0f, -12.5f, 30.0f)));
+
+	//topDoors.push_back(std::pair<glm::vec3, glm::vec3> (glm::vec3(83.0f, -12.5f, -30.0f), glm::vec3(83.0f,-12.5f,-10.0f)));
 	topDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, -30.0f), glm::vec3(43.0f, -12.5f, -10.0f)));
 
-	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(83.0f, -12.5f,  50.0f), glm::vec3(83.0f, -12.5f, 30.0f)));
-	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, 50.0f), glm::vec3(43.0f, -12.5f, 30.0f)));
-
-	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, -10.0f), glm::vec3(80.0f, -12.5f, -10.0f)));
-	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 30.0f), glm::vec3(80.0f, -12.5f, 30.0f)));
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, -6.0f), glm::vec3(80.0f, -12.5f, -6.0f)));
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 32.0f), glm::vec3(80.0f, -12.5f, 32.0f)));
 
 
 	//grid has to be the last game object added
-	pathFindingGrid = new Grid(glm::vec2(500, 500), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f), "boundingbox");
+	pathFindingGrid = new Grid(glm::vec2(1250, 1250), 2.0f, glm::vec3(0.0f, 0.0f, 0.0f), "boundingbox");
 	pathFindingGrid->buildGrid(gameObjects, toonShader);
 
 	//initialise the path manager
@@ -377,11 +378,11 @@ void Game::update()
 								//check which one is the enemy, then set to attack animation
 								if (e1)
 								{
-
+									e1->setAnimValues(3.6f, 1.36);
 								}
 								if (e2)
 								{
-
+									e2->setAnimValues(3.6f, 1.36);
 								}
 							}
 						}

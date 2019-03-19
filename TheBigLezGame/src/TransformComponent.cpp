@@ -48,8 +48,8 @@ void TransformComponent::rotate(GLfloat radians, glm::vec3 rotation)
 	m_matrix = glm::translate(m_matrix, (this->getPosition()));
 	m_matrix = glm::rotate(m_matrix, glm::radians(radians), rotation);
 	m_matrix = glm::translate(m_matrix, tempVec);
-	cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
-	cout << endl;
+	//cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
+	//cout << endl;
 }
 
 glm::vec3 TransformComponent::getRotation()

@@ -85,6 +85,14 @@ public:
 	{
 		return Jump;
 	}
+
+	void setAnimValues(float s, float e)
+	{
+		animStart = s;
+		animEnd = e;
+		setAnimation(s, e);
+	}
+
 private:
 	
 	std::vector<glm::vec3> outerPath;
@@ -96,6 +104,7 @@ private:
 	bool outsideMovement;
 	int jumpingCounter;
 	bool Jump;
+	bool moving;
 	
 	bool paused;
 
@@ -104,5 +113,8 @@ private:
 
 	Player* target;
 	glm::vec3 currentTargetPosition;
+
+	float animStart = 0.0f;
+	float animEnd = 0.0f;
 };
 

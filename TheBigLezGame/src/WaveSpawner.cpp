@@ -84,18 +84,17 @@ std::pair<glm::vec3 , glm::vec3> WaveSpawner::getEndCoord(int type)
 
 int WaveSpawner::getType()
 {
-	//srand(time(0));
-	//int randomNumber = (rand() % 2);
-	//if (types[randomNumber] != lastType)
-	//	return types[randomNumber];
-	//else
-	//	if (randomNumber == 0)
-	//		return 1;
-	//	if (randomNumber == 1)
-	//		return 2;
+	srand(time(0));
+	int randomNumber = (rand() % 2);
+	if (types[randomNumber] != lastType)
+		return types[randomNumber];
+	else
+		if (randomNumber == 0)
+			return 1;
+		if (randomNumber == 1)
+			return 2;
 
-	//		return 0;
-	return 2;
+			return 0;
 }
 void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager)
 {
@@ -131,19 +130,21 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 				//if not a boss choomah
 				if (j != 3) {
 					//select a spawn direction to spawn from
-					currentType = getType();
+					currentType = 0;// getType();
 					lastType = currentType;
 
 					//set their properties
 					choomah->setShader(shader);
 					choomah->Move(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
-					choomah->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
+					//choomah->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
 					choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
 
 					//get their path from the spawn point to a door
 					Enemy *e = dynamic_cast<Enemy*>(choomah);
-					if (e)
+					if (e) {
 						e->setPathEnd(getEndCoord(currentType));
+						e->setAnimValues(0.0f, 8.3f);
+					}
 					for (std::vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
 					{
 						Player *tmp = dynamic_cast<Player*>((*it));
