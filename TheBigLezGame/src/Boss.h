@@ -47,11 +47,29 @@ public:
 
 	void checkFieldEmpty(std::vector<GameObject*> g);
 
-	void initialiseWaveSpawner();
+	void initialiseWaveSpawner(Shader* shader, PathManager* pathmanager);
 
 	void spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager* pathmanager);
 
 	int getCurrentWave();
+
+	void setWave()
+	{
+		srand(time(0));
+		int randomNumber = rand() % 3;
+		if (randomNumber == 0) {
+			currentObj = normalObj;
+			current = normalWave;
+		}
+		if (randomNumber == 1) {
+			currentObj = chargerObj;
+			current = chargerWave;
+		}
+		if (randomNumber == 2) {
+			currentObj = brawlerObj;
+			current = brawlerWave;
+		}
+	}
 
 private:
 
@@ -78,10 +96,13 @@ private:
 	std::vector<int> brawlerWave;
 
 	std::vector<GameObject*> normalObj;
-	//std::vector<
-	std::vector<int> current;
+	std::vector<GameObject*> chargerObj;
+	std::vector<GameObject*> brawlerObj;
 
-	int spawnCounter = 0;
+	std::vector<int> current;
+	std::vector<GameObject*> currentObj;
+
+	int spawnCounter = 3;
 	int currentWave = 0;
 	int numToBeSpawned = 0;
 	bool waveSet = false;

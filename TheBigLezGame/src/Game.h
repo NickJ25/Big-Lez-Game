@@ -27,6 +27,7 @@
 #include "WaveSpawner.h"
 #include "Grid.h"
 #include "PathManager.h"
+#include "Obstacle.h"
 
 using namespace std;
 

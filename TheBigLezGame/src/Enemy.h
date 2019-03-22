@@ -65,6 +65,11 @@ public:
 	{
 		return inside;
 	}
+
+	void setMoving(bool newMove)
+	{
+		moving = newMove;
+	}
 	std::vector<glm::vec3> getPath();
 
 	void update() override;

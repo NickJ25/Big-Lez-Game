@@ -130,7 +130,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 				//if not a boss choomah
 				if (j != 3) {
 					//select a spawn direction to spawn from
-					currentType = 0;// getType();
+					currentType = getType();
 					lastType = currentType;
 
 					//set their properties
@@ -163,6 +163,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 					if (b) {
 						b->setShader(shader);
 						b->Move(b->getSpawnPoint());
+						b->initialiseWaveSpawner(shader, pathManager);
 						b->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
 						b->addCollision(glm::vec3(b->getPosition().x, -12.5f, -b->getPosition().y), 1.0, 1.0);
 					}

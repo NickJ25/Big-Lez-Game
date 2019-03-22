@@ -23,6 +23,7 @@ protected:
 public:
 	GameObject(glm::vec3 pos) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
 		transformComponent = new TransformComponent(glm::vec4(pos,1.0f));
+		renderComponent = nullptr;
 		paused = false;
 	}
 

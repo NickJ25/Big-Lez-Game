@@ -13,12 +13,18 @@ float CollisionComponent::getHW()
 {
 	return halfWidth;
 }
+
 float CollisionComponent::getHH()
 {
 	return halfHeight;
 }
 
-void CollisionComponent::move(glm::vec3 moveAmount)
+void CollisionComponent::setCollider(glm::vec3 newPos)
+{
+	centre = newPos;
+}
+
+void CollisionComponent::moveCollider(glm::vec3 moveAmount)
 {
 	centre += moveAmount;
 }

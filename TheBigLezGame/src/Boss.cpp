@@ -14,7 +14,6 @@ Boss::Boss(Character character) : GameObject(character.fileLocation.c_str())
 
 	//initialise a wave spawner 
 	privateSpawner = new WaveSpawner();
-	initialiseWaveSpawner();
 
 	paused = false;
 	velocity = 0.1;
@@ -48,7 +47,7 @@ Boss::~Boss()
 {
 }
 
-void Boss::initialiseWaveSpawner() {
+void Boss::initialiseWaveSpawner(Shader* shader, PathManager* pathmanager) {
 
 	//first initialise a vector containing door information
 	std::vector<std::pair<glm::vec3, glm::vec3>> bottomDoors, topDoors, leftDoors, rightDoors;
@@ -67,7 +66,17 @@ void Boss::initialiseWaveSpawner() {
 	privateSpawner->setEndCoords(topDoors, 1);
 	privateSpawner->setEndCoords(rightDoors, 2);
 
+	//assign a current wave
+	setWave();
+
+	//set a random wave to current
 	privateSpawner->setWave(current);
+
+	//get all the waves ready to be spawned at any time
+	privateSpawner->spawnWave(normalObj, 0, shader, pathmanager);
+	privateSpawner->spawnWave(chargerObj, 0, shader, pathmanager);
+	privateSpawner->spawnWave(brawlerObj, 0, shader, pathmanager);
+
 }
 
 void Boss::setPaused(bool p)
@@ -151,17 +160,19 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 				numOfChoomahs += (*it);
 			}
 			numToBeSpawned = numOfChoomahs;
-			//delete tmp;
 			waveSet = true;
 		}
-		privateSpawner->spawnWave(g, currentWave, shader, pathmanager);
-		privateSpawner->spawnEnemy(g);
-		g.size();
+
+		privateSpawner->spawnEnemy(currentObj, g);
+
 		numToBeSpawned--;
 		if (numToBeSpawned == 0)
 		{
 			waveSpawned = true;
 			canSpawn = false;
+			currentWave = NULL;
+			//set a new wave;
+			setWave();
 		}
 	}
 }
@@ -179,6 +190,10 @@ void Boss::checkFieldEmpty(std::vector<GameObject*> g)
 	if (counter <= 0)
 	{
 		canSpawn = true;
+		if (waveSpawned == true)
+		{
+			waveSpawned == false;
+		}
 	}
 	else
 	{

@@ -49,7 +49,7 @@ bool Enemy::getPaused()
 
 void Enemy::update()
 {
-	cout << getPosition().x << " , " << getPosition().z << endl;
+	//cout << getPosition().x << " , " << getPosition().z << endl;
 	glm::vec3 current;
 	glm::vec3 next;
 	glm::vec3 distanceToBeCovered;
@@ -94,6 +94,11 @@ void Enemy::update()
 
 				//set the matrix
 				setMatrix(tempMat);
+
+				//move the bounding box with the model without applying rotation
+				if (getCollider())
+					getCollider()->setCollider(tempMat[3]);
+
 				glm::vec3 check = getRotation();
 			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 			{
@@ -141,6 +146,9 @@ void Enemy::update()
 				//set the matrix
 				setMatrix(tempMat);
 
+				//move the bounding box with the model without applying rotation
+				if (getCollider())
+					getCollider()->setCollider(tempMat[3]);
 
 				if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 				{
@@ -194,7 +202,9 @@ void Enemy::update()
 			//set the matrix
 			setMatrix(tempMat);
 
-			//Move(glm::vec3(movementStep));
+			//move the bounding box with the model without applying rotation
+			if (getCollider())
+				getCollider()->setCollider(tempMat[3]);
 
 			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 			{
