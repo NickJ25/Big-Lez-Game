@@ -47,7 +47,7 @@ Boss::~Boss()
 {
 }
 
-void Boss::initialiseWaveSpawner(Shader* shader, PathManager* pathmanager) {
+void Boss::initialiseWaveSpawner(vector<GameObject*> gameObjects, Shader* shader, PathManager* pathmanager) {
 
 	//first initialise a vector containing door information
 	std::vector<std::pair<glm::vec3, glm::vec3>> bottomDoors, topDoors, leftDoors, rightDoors;
@@ -73,9 +73,9 @@ void Boss::initialiseWaveSpawner(Shader* shader, PathManager* pathmanager) {
 	privateSpawner->setWave(current);
 
 	//get all the waves ready to be spawned at any time
-	privateSpawner->spawnWave(normalObj, 0, shader, pathmanager);
-	privateSpawner->spawnWave(chargerObj, 0, shader, pathmanager);
-	privateSpawner->spawnWave(brawlerObj, 0, shader, pathmanager);
+	privateSpawner->spawnWave(gameObjects, 0, shader, pathmanager, normalObj);
+	privateSpawner->spawnWave(gameObjects, 0, shader, pathmanager, chargerObj);
+	privateSpawner->spawnWave(gameObjects, 0, shader, pathmanager, brawlerObj);
 
 }
 

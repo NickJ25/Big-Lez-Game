@@ -117,6 +117,8 @@ void Enemy::update()
 
 				//get to the second of the pair 
 				current = getPosition();
+				if (getTarget())
+					cout << "nama jeff" << endl;
 				next = getOuterPathEnd().second;
 				distanceToBeCovered = next - current;
 
@@ -154,6 +156,7 @@ void Enemy::update()
 				{
 					Jump = true;
 				}
+				cout << endl;
 			}
 
 		}

@@ -47,7 +47,7 @@ public:
 
 	void checkFieldEmpty(std::vector<GameObject*> g);
 
-	void initialiseWaveSpawner(Shader* shader, PathManager* pathmanager);
+	void initialiseWaveSpawner(vector<GameObject*> gameObjects, Shader* shader, PathManager* pathmanager);
 
 	void spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager* pathmanager);
 

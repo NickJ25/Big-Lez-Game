@@ -371,7 +371,7 @@ void Game::update()
 
 								//shuffle both away from eachother - this will help for spawning but they will still pile up on the player, but you'll be dead 
 								//before you notice
-								e1->Move(glm::vec3(-5.0f, 0.0f, 0.0f));
+								//e1->Move(glm::vec3(-5.0f, 0.0f, 0.0f));
 								e2->Move(glm::vec3(5.0f, 0.0f, 0.0f));
 							}
 						}

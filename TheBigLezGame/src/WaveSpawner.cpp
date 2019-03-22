@@ -96,7 +96,7 @@ int WaveSpawner::getType()
 
 			return 0;
 }
-void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager)
+void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager, vector<GameObject*> &destinationVector)
 {
 	
 	//set empty pointer to vector of floats
@@ -163,13 +163,17 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 					if (b) {
 						b->setShader(shader);
 						b->Move(b->getSpawnPoint());
-						b->initialiseWaveSpawner(shader, pathManager);
+						b->initialiseWaveSpawner(gameObjects, shader, pathManager);
 						b->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
 						b->addCollision(glm::vec3(b->getPosition().x, -12.5f, -b->getPosition().y), 1.0, 1.0);
 					}
 				}
-				// add them to the gameplay vector reference
-				toBeSpawned.push_back(choomah);
+				//if this wavespawner is sending these enemies to a different vector
+				if (destinationVector.size() > 0)
+					destinationVector.push_back(choomah);
+				else
+					// add them to the gameplay vector reference
+					toBeSpawned.push_back(choomah);
 				break;
 			}
 		}

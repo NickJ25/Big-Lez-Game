@@ -26,7 +26,7 @@ public:
 	std::pair<glm::vec3, glm::vec3> getEndCoord(int type);
 	
 	//array of predefined numbers to correspond to enemies in each wave
-	void spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager);
+	void spawnWave(vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager, vector<GameObject*>& destination = vector<GameObject*>());
 	
 	//set up the enemy gameobjects for spawning
 	void initNPCs();
