@@ -3,6 +3,8 @@
 
 Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 {
+	name = character.name;
+
 	firstPosition = true;
 	inside = false;
 	outsideMovement = false;
@@ -22,7 +24,7 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	}
 
 	if (character.name == "brawler") {
-		velocity = 0.02f;
+		velocity = 0.07f;
 		originalVelocity = 0.02f;
 	}
 	angularVelocity = 0.5f;
@@ -60,7 +62,7 @@ void Enemy::reset(PathManager* pathmanager)
 
 void Enemy::update()
 {
-	cout << getPosition().x << " , " << getPosition().z << endl
+	cout << getPosition().x << " , " << getPosition().z << endl;
 
 	glm::vec3 current;
 	glm::vec3 next;
@@ -124,7 +126,10 @@ void Enemy::update()
 
 				inside = true;
 				//jumping animation
-				setAnimValues(4.58, 1.0f);
+				if (name == "brawler")
+					setAnimValues(0.0f, 1.0f);
+				else
+					setAnimValues(4.58, 1.0f);
 
 				velocity = 0.1;
 

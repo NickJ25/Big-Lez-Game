@@ -39,6 +39,7 @@ public:
 		paused = false;
 	}
 
+
 	void setAnimation(float s, float e);
 
 	void setPaused(bool p);

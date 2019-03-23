@@ -136,5 +136,7 @@ private:
 	std::vector<glm::vec3> originalOuterPath;
 	glm::vec3 originalPosition;
 	bool firstPosition;
+
+	string name;
 };
 
