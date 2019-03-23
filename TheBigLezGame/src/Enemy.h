@@ -4,12 +4,14 @@
 #include "Shader.h"
 #include "Player.h"
 
+
 #include <iostream>
 #include <string>
 #include <cmath>
 
 #include "glm/gtx/vector_angle.hpp"
 
+class PathManager;
 class Enemy : public GameObject
 {
 public:
@@ -98,8 +100,16 @@ public:
 		setAnimation(s, e);
 	}
 
+	void reset(PathManager* pathmanager);
+
+	void setSpawnPoint(glm::vec3 p)
+	{
+		spawnPoint = p;
+	}
+
 private:
 	
+	glm::vec3 spawnPoint;
 	std::vector<glm::vec3> outerPath;
 	std::vector<glm::vec3> innerPath;
 	std::pair<glm::vec3, glm::vec3> outerPathEnd;
@@ -121,5 +131,10 @@ private:
 
 	float animStart = 0.0f;
 	float animEnd = 0.0f;
+
+	float originalVelocity;
+	std::vector<glm::vec3> originalOuterPath;
+	glm::vec3 originalPosition;
+	bool firstPosition;
 };
 

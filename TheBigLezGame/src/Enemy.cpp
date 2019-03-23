@@ -1,7 +1,9 @@
 #include "Enemy.h"
+#include "PathManager.h"
 
 Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 {
+	firstPosition = true;
 	inside = false;
 	outsideMovement = false;
 	paused = false;
@@ -11,14 +13,17 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 
 	if (character.name == "charger") {
 		velocity = 0.095f;
+		originalVelocity = 0.095;
 	}
 
 	if (character.name == "normal") {
 		velocity = 0.05f;
+		originalVelocity = 0.05;
 	}
 
 	if (character.name == "brawler") {
 		velocity = 0.02f;
+		originalVelocity = 0.02f;
 	}
 	angularVelocity = 0.5f;
 	rotation = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -28,15 +33,6 @@ Enemy::~Enemy()
 {
 }
 
-float dot(glm::vec3 a, glm::vec3 b)  //calculates dot product of a and b
-{
-	return a.x * b.x + a.y * b.y + a.z * b.z;
-}
-
-float mag(glm::vec3 a)  //calculates magnitude of a
-{
-	return std::sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
-}
 void Enemy::setPaused(bool p)
 {
 	paused = p;
@@ -47,9 +43,25 @@ bool Enemy::getPaused()
 	return paused;
 }
 
+void Enemy::reset(PathManager* pathmanager)
+{
+	setPosition(spawnPoint);
+	velocity = originalVelocity;
+	pathmanager->addToQueue(this);
+	//setPath(originalOuterPath, true);
+	inside = false;
+	outsideMovement = false;
+	paused = false;
+	Jump = false;
+	moving = true;
+	jumpingCounter = 0;
+	rotation = glm::vec3(0.0f, 1.0f, 0.0f);
+}
+
 void Enemy::update()
 {
-	//cout << getPosition().x << " , " << getPosition().z << endl;
+	cout << getPosition().x << " , " << getPosition().z << endl
+
 	glm::vec3 current;
 	glm::vec3 next;
 	glm::vec3 distanceToBeCovered;
@@ -59,6 +71,7 @@ void Enemy::update()
 		//get it to follow
 		if (!outerPath.empty())
 		{
+
 			inside = false;
 			if (outsideMovement == false)
 				outsideMovement = true;
@@ -226,8 +239,10 @@ std::vector<glm::vec3> Enemy::getPath()
 
 void Enemy::setPath(std::vector<glm::vec3> p, bool outer)
 {
-	if (outer == true)
+	if (outer == true) {
 		outerPath = p;
+		originalOuterPath = p;
+	}
 	else
 		innerPath = p;
 }

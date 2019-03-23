@@ -207,7 +207,7 @@ void Game::init()
 	//waveSpawner->setEndCoords(leftDoors, "Left");
 
 	//prepare wave 1 to be spawned
-	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager);
+	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, false);
 
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
@@ -288,17 +288,18 @@ glm::vec3 Game::getFaceNormal(glm::vec3 p, Enemy* e)
 
 void removeEnemies(std::vector<GameObject*> & gameObjects)
 {
-	int counter = 0;
-	std::vector<GameObject*>::iterator it;
-	for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+	std::vector<GameObject*>::iterator it = gameObjects.begin();
+	while(it != gameObjects.end())
 	{
 
 		Enemy* e = dynamic_cast<Enemy*>((*it));
 		if (e)
 		{
-			gameObjects.erase(gameObjects.begin() + counter);
+			it = gameObjects.erase(it);
 		}
-		counter++;
+		else {
+			++it;
+		}
 	}
 }
 
@@ -372,7 +373,7 @@ void Game::update()
 								//shuffle both away from eachother - this will help for spawning but they will still pile up on the player, but you'll be dead 
 								//before you notice
 								//e1->Move(glm::vec3(-5.0f, 0.0f, 0.0f));
-								e2->Move(glm::vec3(5.0f, 0.0f, 0.0f));
+								e2->Move(glm::vec3(0.0f, 0.0f, 1.0f));
 							}
 						}
 						else
@@ -427,10 +428,20 @@ void Game::update()
 		
 		
 	}
-
+	bool clicked = false;
 	if (Input::keyboard1.keys[GLFW_KEY_B])
 	{
-		removeEnemies(gameObjects);
+		if (clicked == false) {
+			removeEnemies(gameObjects);
+			clicked = true;
+		}
+	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_N])
+	{
+		if (clicked == true) {
+			clicked = false;
+		}
 	}
 
 	if (isGameRunning == false) 

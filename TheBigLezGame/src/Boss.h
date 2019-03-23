@@ -60,14 +60,17 @@ public:
 		if (randomNumber == 0) {
 			currentObj = normalObj;
 			current = normalWave;
+			currentWave = 0;
 		}
 		if (randomNumber == 1) {
 			currentObj = chargerObj;
 			current = chargerWave;
+			currentWave = 1;
 		}
 		if (randomNumber == 2) {
 			currentObj = brawlerObj;
 			current = brawlerWave;
+			currentWave = 2;
 		}
 	}
 

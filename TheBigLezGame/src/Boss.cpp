@@ -66,17 +66,21 @@ void Boss::initialiseWaveSpawner(vector<GameObject*> gameObjects, Shader* shader
 	privateSpawner->setEndCoords(topDoors, 1);
 	privateSpawner->setEndCoords(rightDoors, 2);
 
-	//assign a current wave
-	setWave();
-
 	//set a random wave to current
-	privateSpawner->setWave(current);
+	privateSpawner->setWave(normalWave);
+	privateSpawner->setWave(chargerWave);
+	privateSpawner->setWave(brawlerWave);
+
 
 	//get all the waves ready to be spawned at any time
-	privateSpawner->spawnWave(gameObjects, 0, shader, pathmanager, normalObj);
-	privateSpawner->spawnWave(gameObjects, 0, shader, pathmanager, chargerObj);
-	privateSpawner->spawnWave(gameObjects, 0, shader, pathmanager, brawlerObj);
+	while (brawlerObj.size() < 3) {
+		privateSpawner->spawnWave(gameObjects, 0, shader, pathmanager, true, normalObj);
+		privateSpawner->spawnWave(gameObjects, 1, shader, pathmanager, true, chargerObj);
+		privateSpawner->spawnWave(gameObjects, 2, shader, pathmanager, true, brawlerObj);
+	}
 
+	//assign a current wave
+	setWave();
 }
 
 void Boss::setPaused(bool p)
@@ -151,7 +155,7 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 	{
 		if (waveSet == false)
 		{
-			currentWave = getCurrentWave();
+			//currentWave = getCurrentWave();
 			current = bossWaves.at(currentWave);
 			std::vector<int> tmp = bossWaves.at(currentWave);
 			int numOfChoomahs = 0;
@@ -163,17 +167,43 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 			waveSet = true;
 		}
 
-		privateSpawner->spawnEnemy(currentObj, g);
+		while (numToBeSpawned > 0) {
+			privateSpawner->spawnEnemy(currentObj, g);
+			numToBeSpawned--;
+		}
 
-		numToBeSpawned--;
-		if (numToBeSpawned == 0)
-		{
+			//reset whichever wave has just been dispensed
+		if (currentWave == 0) {
+			for (vector<GameObject*>::iterator it = normalObj.begin(); it < normalObj.end(); ++it)
+			{
+				Enemy *e = dynamic_cast<Enemy*>((*it));
+				if (e)
+					e->reset(pathmanager);
+			}
+		}
+		if (currentWave == 1) {
+			for (vector<GameObject*>::iterator it = chargerObj.begin(); it < chargerObj.end(); ++it)
+			{
+				Enemy *e = dynamic_cast<Enemy*>((*it));
+				if (e)
+					e->reset(pathmanager);
+			}
+		}
+		if (currentWave == 2) {
+			for (vector<GameObject*>::iterator it = brawlerObj.begin(); it < brawlerObj.end(); ++it)
+			{
+				Enemy *e = dynamic_cast<Enemy*>((*it));
+				if (e)
+					e->reset(pathmanager);
+			}
+		}
+
 			waveSpawned = true;
 			canSpawn = false;
 			currentWave = NULL;
-			//set a new wave;
+
+			//set a new wave
 			setWave();
-		}
 	}
 }
 
@@ -193,12 +223,14 @@ void Boss::checkFieldEmpty(std::vector<GameObject*> g)
 		if (waveSpawned == true)
 		{
 			waveSpawned == false;
+			waveSet = false;
 		}
 	}
 	else
 	{
-		if(waveSpawned == true)
-		canSpawn = false;
+		if (waveSpawned == true) {
+			canSpawn = false;
+		}
 	}
 }
 

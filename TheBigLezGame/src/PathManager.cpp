@@ -1,4 +1,5 @@
 #include "PathManager.h"
+#include "Enemy.h"
 
 PathManager::PathManager()
 {

@@ -96,7 +96,7 @@ int WaveSpawner::getType()
 
 			return 0;
 }
-void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager, vector<GameObject*> &destinationVector)
+void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager, bool destinationVector, vector<GameObject*> &destination)
 {
 	
 	//set empty pointer to vector of floats
@@ -142,6 +142,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 					//get their path from the spawn point to a door
 					Enemy *e = dynamic_cast<Enemy*>(choomah);
 					if (e) {
+						e->setSpawnPoint(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
 						e->setPathEnd(getEndCoord(currentType));
 						e->setAnimValues(0.0f, 8.3f);
 					}
@@ -169,8 +170,8 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 					}
 				}
 				//if this wavespawner is sending these enemies to a different vector
-				if (destinationVector.size() > 0)
-					destinationVector.push_back(choomah);
+				if (destinationVector)
+					destination.push_back(choomah);
 				else
 					// add them to the gameplay vector reference
 					toBeSpawned.push_back(choomah);

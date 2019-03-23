@@ -10,6 +10,7 @@
 
 #include "Player.h"
 #include "PathManager.h"
+#include "Enemy.h"
 #include "Grid.h"
 //#include "Boss.h"
 class Boss;
@@ -26,7 +27,7 @@ public:
 	std::pair<glm::vec3, glm::vec3> getEndCoord(int type);
 	
 	//array of predefined numbers to correspond to enemies in each wave
-	void spawnWave(vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager, vector<GameObject*>& destination = vector<GameObject*>());
+	void spawnWave(vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager, bool destinationVector, vector<GameObject*>& destination = vector<GameObject*>());
 	
 	//set up the enemy gameobjects for spawning
 	void initNPCs();
@@ -45,7 +46,7 @@ public:
 		return waves;
 	}
 
-	void spawnEnemy(std::vector<GameObject*>& currentObj, std::vector<GameObject*> &gameObjects)
+	void spawnEnemy(std::vector<GameObject*> currentObj, std::vector<GameObject*> &gameObjects)
 	{
 		if(toBeSpawned.size() == 0)
 			toBeSpawned = currentObj;
