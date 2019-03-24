@@ -9,6 +9,7 @@ Shader *toonShader;
 WaveSpawner* waveSpawner;
 Grid* pathFindingGrid;
 PathManager* pathManager;
+Prop* collisionTest;
 
 GameObject* sassy;
 
@@ -42,6 +43,8 @@ void Game::init()
 	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
 	dirLight->setShader(toonShader);
 	gameObjects.push_back(dirLight);
+
+	
 
 	GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 100.0f, 0.0f));
 
@@ -111,9 +114,13 @@ void Game::init()
 	gameObjects.push_back(lezShotgun);
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+	lezTest->Move(glm::vec3(-10.0f, 0.0f, -10.0f));
+	cout << "lez test pos:" << lezTest->getPosition().x << " " << lezTest->getPosition().y << " " << lezTest->getPosition().z << "----------------------" << endl;
 	lezTest->setShader(toonShader);
 	lezTest->Rotate(-90.0f, glm::vec3(1.0, 0.0, 0.0));
+	lezTest->addCollision(glm::vec3(-10.0f, 0.0f, -10.0f), 50, 50);
 	gameObjects.push_back(lezTest);
+
 
 	// add environmental collision boxes for pathfinding an' such
 	glm::vec3 fenceScaleVertical = glm::vec3(4.0f, 4.0f, 30.0f);
@@ -284,52 +291,6 @@ void Game::update()
 			exit(0);
 		}
 
-	}
-
-	if (Input::controller1.buttons[0]) {
-		cout << "A" << endl;
-	}
-	if (Input::controller1.buttons[1]) {
-		cout << "B" << endl;
-	}
-	if (Input::controller1.buttons[2]) {
-		cout << "X" << endl;
-	}
-	if (Input::controller1.buttons[3]) {
-		cout << "Y" << endl;
-	}
-	if (Input::controller1.buttons[4]) {
-		cout << "Left Bumper" << endl;
-	}
-	if (Input::controller1.buttons[5]) {
-		cout << "Right Bumper" << endl;
-	}
-	if (Input::controller1.buttons[6]) {
-		cout << "Back" << endl;
-	}
-	if (Input::controller1.buttons[7]) {
-		cout << "Start" << endl;
-	}
-	if (Input::controller1.buttons[8]) {
-		cout << "Left Thumb" << endl;
-	}
-	if (Input::controller1.buttons[9]) {
-		cout << "Right Thumb" << endl;
-	}
-	if (Input::controller1.buttons[10]) {
-		cout << "DPad UP" << endl;
-	}
-	if (Input::controller1.buttons[11]) {
-		cout << "DPad RIGHT" << endl;
-	}
-	if (Input::controller1.buttons[12]) {
-		cout << "DPad DOWN" << endl;
-	}
-	if (Input::controller1.buttons[13]) {
-		cout << "DPad LEFT" << endl;
-	}
-	if (Input::controller1.buttons[14]) {
-		cout << "Guide" << endl;
 	}
 
 	if (Input::keyboard1.keys[GLFW_KEY_C]) {

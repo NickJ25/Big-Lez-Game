@@ -26,6 +26,7 @@ public:
 	void reload(bool clicked);
 	void setMatrix(glm::mat4 newMat);
 	void update() override;
+	void checkHit();
 
 	void primaryMove(bool active) override;
 	void secondaryMove(bool active) override;

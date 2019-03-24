@@ -52,6 +52,11 @@ void Gun::update()
 	t_gunName->draw(m_gunName, glm::vec3(1.0, 1.0, 1.0));
 }
 
+void Gun::checkHit()
+{
+
+}
+
 void Gun::primaryMove(bool active)
 {
 	shoot(active);

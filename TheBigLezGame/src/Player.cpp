@@ -42,19 +42,20 @@ void Player::update()
 	tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
 	tempMat = glm::scale(tempMat, glm::vec3(0.6f, 0.6f, 0.6f));
 
-	glm::mat4 gunMat(1.0f);
-	gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	gunMat *= glm::mat4(1.0) * tempMat;
+
 
 	GameObject::setMatrix(tempMat);
 
-	//this->Move(m_playerCamera->getCameraPos() + glm::vec3(0.0f, -8.0f, 0.0f));
-	//this->Rotate(-m_playerCamera->getYaw() + 90, glm::vec3(0.0, 1.0, 0.0));
-	//this->Scale(glm::vec3(0.6, 0.6, 0.6));
-
 	// Apply the same matrix to the gun model
 	if (currentWeapon != NULL) {
-		currentWeapon->setMatrix(tempMat);
+		glm::mat4 gunMat(1.0f);
+		//gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -14.0f, 0.0f)));
+		gunMat = glm::rotate(gunMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
+		gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+		//gunMat = glm::translate(gunMat, (glm::vec3(1.0f, 5.0f, 0.0f)));
+
+		currentWeapon->setMatrix(gunMat);
 		currentWeapon->update();
 	}
 
@@ -67,22 +68,6 @@ void Player::update()
 		currentWeapon->action(this->getController()->getReloadAction());
 
 	}
-	//cout << Input::mouse1.buttons[GLFW_MOUSE_BUTTON_LEFT] << endl;
-	//if (Input::mouse1.buttons[GLFW_MOUSE_BUTTON_LEFT]) {
-	//	if (currentWeapon != NULL) {
-	//		currentWeapon->primaryMove();
-	//	}
-	//}
-	//if (Input::mouse1.buttons[GLFW_MOUSE_BUTTON_RIGHT]) {
-	//	if (currentWeapon != NULL) {
-	//		currentWeapon->secondaryMove();
-	//	}
-	//}
-	//if (Input::keyboard1.keys[GLFW_KEY_R]) {
-	//	if (currentWeapon != NULL) {
-	//		currentWeapon->action();
-	//	}
-	//}
 }
 
 void Player::addWeapon(Weapon * weapon)
