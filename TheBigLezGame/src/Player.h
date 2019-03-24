@@ -17,7 +17,7 @@ public:
 		GLint walkSpeed;
 	};
 
-	Player(int player, Character character, glm::vec3 startPos);
+	Player(ControllerComponent::ControllerType controller, Character character, glm::vec3 startPos);
 	~Player();
 
 	void playAnimation();

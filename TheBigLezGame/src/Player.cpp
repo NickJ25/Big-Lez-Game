@@ -1,13 +1,14 @@
  #include "Player.h"
 
-Player::Player(int player, Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
+Player::Player(ControllerComponent::ControllerType controller, Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
 {
-	if (player == 1) {
+	if (controller == ControllerComponent::KEYBOARD) {
 		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f), DYNAMIC);
 	}
 	else {
 		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f), STATIC);
 	}
+	this->addController(controller);
 	m_character = character;
 	prevYaw = -90;
 	currentYaw = 0;
@@ -60,21 +61,28 @@ void Player::update()
 	setAnimation(0, 120);
 
 	// Gun controls
-	if (Input::mouse1.buttons[GLFW_MOUSE_BUTTON_LEFT]) {
-		if (currentWeapon != NULL) {
-			currentWeapon->primaryMove();
-		}
+	if (currentWeapon != NULL) {
+		currentWeapon->primaryMove(this->getController()->getPrimaryAction());
+		currentWeapon->secondaryMove(this->getController()->getSecondaryAction());
+		currentWeapon->action(this->getController()->getReloadAction());
+
 	}
-	if (Input::mouse1.buttons[GLFW_MOUSE_BUTTON_RIGHT]) {
-		if (currentWeapon != NULL) {
-			currentWeapon->secondaryMove();
-		}
-	}
-	if (Input::keyboard1.keys[GLFW_KEY_R]) {
-		if (currentWeapon != NULL) {
-			currentWeapon->action();
-		}
-	}
+	//cout << Input::mouse1.buttons[GLFW_MOUSE_BUTTON_LEFT] << endl;
+	//if (Input::mouse1.buttons[GLFW_MOUSE_BUTTON_LEFT]) {
+	//	if (currentWeapon != NULL) {
+	//		currentWeapon->primaryMove();
+	//	}
+	//}
+	//if (Input::mouse1.buttons[GLFW_MOUSE_BUTTON_RIGHT]) {
+	//	if (currentWeapon != NULL) {
+	//		currentWeapon->secondaryMove();
+	//	}
+	//}
+	//if (Input::keyboard1.keys[GLFW_KEY_R]) {
+	//	if (currentWeapon != NULL) {
+	//		currentWeapon->action();
+	//	}
+	//}
 }
 
 void Player::addWeapon(Weapon * weapon)

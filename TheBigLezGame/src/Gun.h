@@ -13,19 +13,21 @@ private:
 	GLuint m_clipSize;
 	GLuint m_currentClip = m_clipSize;
 
+	bool sprayAllowed;
+	bool gunFired;
 	Text* t_ammoCount;
 	Text* t_gunName;
 
 public:
-	Gun(const char* filename, std::string gunName, GLuint maxAmmo, GLuint clipSize);
+	Gun(const char* filename, std::string gunName, GLuint maxAmmo, GLuint clipSize, bool allowSpray);
 	~Gun();
 
-	void shoot(bool holdDown);
-	void reload();
+	void shoot(bool clicked);
+	void reload(bool clicked);
 	void setMatrix(glm::mat4 newMat);
 	void update() override;
 
-	void primaryMove() override;
-	void secondaryMove() override;
-	void action() override;
+	void primaryMove(bool active) override;
+	void secondaryMove(bool active) override;
+	void action(bool active) override;
 };

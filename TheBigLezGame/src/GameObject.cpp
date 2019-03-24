@@ -77,6 +77,17 @@ CollisionComponent* GameObject::getCollider()
 	return collisionComponent;
 }
 
+void GameObject::addController(ControllerComponent::ControllerType controller)
+{
+	controllerComponent = new ControllerComponent(controller);
+}
+
+ControllerComponent * GameObject::getController()
+{
+	if (controllerComponent != nullptr) return controllerComponent;
+	else return nullptr;
+}
+
 void GameObject::componentUpdate()
 {
 

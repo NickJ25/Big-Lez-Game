@@ -90,13 +90,13 @@ void Game::init()
 	//gameObjects.push_back(bigLez);
 
 
-	sassy = new Player(2, Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
+	sassy = new Player(ControllerComponent::CONTROLLER1, Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
 	sassy->setShader(toonShader);
 	//sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
 	sassy->setAnimation(5.0f, 1.0f);
 	gameObjects.push_back(sassy);
 
-	mainPlayer = new Player(1, BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
+	mainPlayer = new Player(ControllerComponent::KEYBOARD, BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
 	mainPlayer->setShader(toonShader);
 	//mainPlayer->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
@@ -104,7 +104,7 @@ void Game::init()
 	mainPlayer->setAnimation(5.0f, 1.0f);
 	gameObjects.push_back(mainPlayer);
 
-	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8);
+	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, false);
 	lezShotgun->setShader(toonShader);
 	lezShotgun->setAnimation(0.0f, 1.0f);
 	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
@@ -124,7 +124,7 @@ void Game::init()
 
 	for (int i = 0; i < 20; i++)
 	{
-		Fence = new Player(2, cube, glm::vec3(0.0,0.0,0.0));
+		Fence = new Player(ControllerComponent::CONTROLLER1, cube, glm::vec3(0.0,0.0,0.0));
 		Fence->setShader(toonShader);
 		Fence->setAnimation(0.0f,1.0f);
 

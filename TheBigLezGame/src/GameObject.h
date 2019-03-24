@@ -3,6 +3,7 @@
 #include "TransformComponent.h"
 #include "CollisionComponent.h"
 #include "PhysicsComponent.h"
+#include "ControllerComponent.h"
 #include "Shader.h"
 
 
@@ -13,6 +14,7 @@ class GameObject {
 protected:
 	TransformComponent* transformComponent;
 	RenderComponent* renderComponent;
+	ControllerComponent* controllerComponent;
 	class CollisionComponent* collisionComponent;
 	glm::vec4 objPosition;
 	Shader* objShader;
@@ -61,6 +63,9 @@ public:
 
 	void addCollision(glm::vec3 pos, float hw, float hh);
 	CollisionComponent* getCollider();
+
+	void addController(ControllerComponent::ControllerType controller);
+	ControllerComponent* getController();
 
 	void componentUpdate();
 	void componentDraw(glm::mat4 view);

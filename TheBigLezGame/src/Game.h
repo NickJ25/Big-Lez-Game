@@ -22,11 +22,10 @@
 #include "Button.h"
 #include "Image.h"
 #include "WaveSpawner.h"
-
 #include "Text.h"
-#include "WaveSpawner.h"
 #include "Grid.h"
 #include "PathManager.h"
+#include "ControllerComponent.h"
 
 using namespace std;
 

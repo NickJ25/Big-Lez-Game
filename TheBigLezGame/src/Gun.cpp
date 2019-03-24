@@ -1,7 +1,7 @@
 #include "Gun.h"
 
-Gun::Gun(const char * filename, std::string gunName, GLuint maxAmmo, GLuint clipSize) : Weapon(filename, glm::vec3(0.0f, 0.0f, 0.0f)),
-		m_gunName(gunName), m_maxAmmo(maxAmmo), m_clipSize(clipSize)
+Gun::Gun(const char * filename, std::string gunName, GLuint maxAmmo, GLuint clipSize, bool allowSpray) : Weapon(filename, glm::vec3(0.0f, 0.0f, 0.0f)),
+		m_gunName(gunName), m_maxAmmo(maxAmmo), m_clipSize(clipSize), sprayAllowed(allowSpray)
 {
 	t_ammoCount = new Text(glm::vec2(50.0, 80.0), "assets/Fonts/Another_.ttf");
 	t_gunName = new Text(glm::vec2(50.0, 40.0), "assets/Fonts/Another_.ttf");
@@ -12,20 +12,32 @@ Gun::~Gun()
 
 }
 
-void Gun::shoot(bool holdDown)
+void Gun::shoot(bool clicked)
 {
-	if (m_currentClip >= 0) {
-		m_currentClip--;
+	if (sprayAllowed) {
+		if (m_currentClip > 0) {
+			m_currentClip--;
+		}
 	}
-	if (m_currentClip < 0) {
-		m_currentClip = 0;
+	else {
+		if (clicked == true && !gunFired) {
+			if (m_currentClip > 0) {
+				m_currentClip--;
+				gunFired = true;
+			}
+		}
+		else if (clicked == false) {
+			gunFired = false;
+		}
 	}
 }
 
-void Gun::reload()
+void Gun::reload(bool clicked)
 {
-	if (m_currentClip != m_clipSize) {
-		m_currentClip = m_clipSize;
+	if (clicked) {
+		if (m_currentClip != m_clipSize) {
+			m_currentClip = m_clipSize;
+		}
 	}
 }
 
@@ -40,17 +52,17 @@ void Gun::update()
 	t_gunName->draw(m_gunName, glm::vec3(1.0, 1.0, 1.0));
 }
 
-void Gun::primaryMove()
+void Gun::primaryMove(bool active)
 {
-	shoot(true);
+	shoot(active);
 }
 
-void Gun::secondaryMove()
+void Gun::secondaryMove(bool active)
 {
 
 }
 
-void Gun::action()
+void Gun::action(bool active)
 {
-	reload();
+	reload(active);
 }

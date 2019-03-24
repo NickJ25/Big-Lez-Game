@@ -153,6 +153,7 @@
     <ClCompile Include="src\AnimMesh.cpp" />
     <ClCompile Include="src\AnimModel.cpp" />
     <ClCompile Include="src\Button.cpp" />
+    <ClCompile Include="src\ControllerComponent.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Grid.cpp" />
     <ClCompile Include="src\Gun.cpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="src\windowGLFW.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ControllerComponent.h" />
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\Node.h" />
