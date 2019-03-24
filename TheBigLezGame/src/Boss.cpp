@@ -3,7 +3,8 @@
 
 Boss::Boss(Character character) : GameObject(character.fileLocation.c_str())
 {
-
+	//set to default walk animation
+	setAnimation(0.0f, 4.4f);
 	//intialise spawnable waves
 	normalWave.push_back(3), normalWave.push_back(0), normalWave.push_back(0), normalWave.push_back(0);
 	chargerWave.push_back(0), chargerWave.push_back(3), chargerWave.push_back(0), chargerWave.push_back(0);
@@ -24,6 +25,7 @@ Boss::Boss(Character character) : GameObject(character.fileLocation.c_str())
 	//create temporary vector
 	std::vector<glm::vec3> tmpPath;
 	//fill it
+	tmpPath.push_back(glm::vec3(50.0f, -12.5f, -100.0f));
 	tmpPath.push_back(glm::vec3(50.0f , -12.5f, -110.0f));
 	tmpPath.push_back(glm::vec3(155.0f, -12.5f, -145.0f));
 	tmpPath.push_back(glm::vec3(155.0f, -12.5f, -220.0f));
@@ -99,6 +101,9 @@ void Boss::update()
 	glm::vec3 next;
 	glm::vec3 distanceToBeCovered;
 	glm::vec3 movementStep;
+
+	bool rotated = false; 
+
 	if (paused == false) {
 		//get it to follow
 		if (!selectedPath.empty())
@@ -112,26 +117,32 @@ void Boss::update()
 			rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
 			glm::vec3 currentRot = getRotation(); // current rotation
 
+						//calculate angle between the two vectors
+			float angle = -glm::acos(glm::dot(currentRot, rotation));
+			movementStep = glm::normalize(distanceToBeCovered) * velocity;
 
-			if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
+
+			//reset the rotation
+			glm::mat4 tempMat(1.0f);
+
+			//calculate the translation 
+			tempMat = glm::translate(tempMat, getPosition());
+			tempMat = glm::translate(tempMat, movementStep);
+
+			if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.z) != std::round(rotation.z) && rotated == false)
 			{
-
-				////calculate angle between the two vectors
-				//float angle = glm::acos(glm::dot(currentRot, rotation));
-				//glm::mat4 tempMat(1.0f);
-				//tempMat = glm::translate(tempMat, getPosition());
-				//tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0, 1.0, 0.0));
-				//setMatrix(tempMat);
-
+				//reapply the rotation
+				tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+				rotated = true;
 			}
 
-			movementStep = glm::normalize(distanceToBeCovered) * velocity;
-			Move(glm::vec3(movementStep));
-
+			//set the matrix
+			setMatrix(tempMat);
 
 			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 			{
 				selectedPath.pop_back();
+				rotated = false;
 			}
 		}
 		else
@@ -204,6 +215,27 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 
 			//set a new wave
 			setWave();
+	}
+}
+
+void Boss::setWave()
+{
+	srand(time(0));
+	int randomNumber = rand() % 3;
+	if (randomNumber == 0) {
+		currentObj = normalObj;
+		current = normalWave;
+		currentWave = 0;
+	}
+	if (randomNumber == 1) {
+		currentObj = chargerObj;
+		current = chargerWave;
+		currentWave = 1;
+	}
+	if (randomNumber == 2) {
+		currentObj = brawlerObj;
+		current = brawlerWave;
+		currentWave = 2;
 	}
 }
 

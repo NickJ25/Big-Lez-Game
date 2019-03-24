@@ -428,7 +428,6 @@ void Game::update()
 		
 		
 	}
-	bool clicked = false;
 	if (Input::keyboard1.keys[GLFW_KEY_B])
 	{
 		if (clicked == false) {

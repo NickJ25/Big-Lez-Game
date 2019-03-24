@@ -44,6 +44,7 @@ private:
 	bool showBoundingBoxes;
 	int penetrationDepthX;
 	int penetrationDepthZ;
+	bool clicked = false;
 public:
 	Game() {};
 	~Game() {};

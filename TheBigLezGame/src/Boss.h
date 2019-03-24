@@ -23,9 +23,6 @@ public:
 	Boss(Character character);
 	~Boss();
 
-
-	//just give him 4 predefined paths to choose from, he then stops and does ambient animations
-
 	//function to give its pathfinding movement
 	void setPath(std::vector<glm::vec3> p, bool outer);
 	void setPathEnd(glm::vec3 p);
@@ -35,7 +32,6 @@ public:
 
 
 	glm::vec3 getOuterPathEnd(int position);
-
 
 	std::vector<glm::vec3> getPath();
 
@@ -53,26 +49,7 @@ public:
 
 	int getCurrentWave();
 
-	void setWave()
-	{
-		srand(time(0));
-		int randomNumber = rand() % 3;
-		if (randomNumber == 0) {
-			currentObj = normalObj;
-			current = normalWave;
-			currentWave = 0;
-		}
-		if (randomNumber == 1) {
-			currentObj = chargerObj;
-			current = chargerWave;
-			currentWave = 1;
-		}
-		if (randomNumber == 2) {
-			currentObj = brawlerObj;
-			current = brawlerWave;
-			currentWave = 2;
-		}
-	}
+	void setWave();
 
 private:
 
