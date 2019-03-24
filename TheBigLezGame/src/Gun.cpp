@@ -12,7 +12,7 @@ Gun::~Gun()
 
 }
 
-void Gun::shoot()
+void Gun::shoot(bool holdDown)
 {
 	if (m_currentClip >= 0) {
 		m_currentClip--;
@@ -42,7 +42,7 @@ void Gun::update()
 
 void Gun::primaryMove()
 {
-	shoot();
+	shoot(true);
 }
 
 void Gun::secondaryMove()

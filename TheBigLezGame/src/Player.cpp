@@ -1,4 +1,4 @@
-#include "Player.h"
+ #include "Player.h"
 
 Player::Player(int player, Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
 {
@@ -36,8 +36,9 @@ void Player::update()
 
 	// Create a matrix and apply the rotations and translations on it.
 	glm::mat4 tempMat(1.0f);
-	tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -8.0f, 0.0f)));
+	tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -7.5f, 0.0f)));
 	tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
+	tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
 	tempMat = glm::scale(tempMat, glm::vec3(0.6f, 0.6f, 0.6f));
 
 	glm::mat4 gunMat(1.0f);

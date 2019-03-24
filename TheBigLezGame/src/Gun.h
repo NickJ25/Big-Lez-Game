@@ -20,7 +20,7 @@ public:
 	Gun(const char* filename, std::string gunName, GLuint maxAmmo, GLuint clipSize);
 	~Gun();
 
-	void shoot();
+	void shoot(bool holdDown);
 	void reload();
 	void setMatrix(glm::mat4 newMat);
 	void update() override;
