@@ -15,26 +15,60 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	moving = true;
 	jumpingCounter = 0;
 
+	//reseed randomiser
+	srand(time(0));
+	float random = 0.0f;
 
 	//set physics depending on the character
 	if (character.name == "charger") {
-		velocity = 0.095f;
-		originalVelocity = 0.095;
+	
+		health = 20.0f;
+		originalHealth = 20.0f;
+
+		random = rand() % 95 + 75;
 	}
 
 	if (character.name == "normal") {
-		velocity = 0.05f;
-		originalVelocity = 0.05;
+		health = 40.0f;
+		originalHealth = 40.0f;
+
+		random = rand() % 70 + 60;
 	}
 
 	if (character.name == "brawler") {
-		velocity = 0.07f;
-		originalVelocity = 0.02f;
+		health = 100.0f;
+		originalHealth = 100.0f;
+
+		random = rand() % 45 + 25;
 	}
+
+	//set velocity
+	velocity = random / 1000;
+	originalVelocity = random / 1000;
 
 	//constant angular velocity and orientation
 	angularVelocity = 0.5f;
 	rotation = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	//setup injury and death animations
+
+	//normal choomah injuries
+	injuryAnimations.at(0).push_back(pair<float, float>(1.96f, 2.24f));
+	injuryAnimations.at(0).push_back(pair<float, float>(2.88f, 1.69f));
+
+	//just one for now 
+	deathAnimations.at(0).push_back(pair<float, float>(8.33f, 1.45f));
+
+	//charger choomah injuries
+	injuryAnimations.at(1).push_back(pair<float, float>(5.42f, 2.13f));
+	injuryAnimations.at(1).push_back(pair<float, float>(6.25f, 1.88f));
+
+	deathAnimations.at(1).push_back(pair<float, float>(1.46f, 3.33f));
+
+	//brawler choomah injuries
+	//injuryAnimations.at(2).push_back(pair<float, float>(5.42f, 2.13f));
+	//injuryAnimations.at(2).push_back(pair<float, float>(6.25f, 1.88f));
+
 }
 
 Enemy::~Enemy()
@@ -54,25 +88,62 @@ bool Enemy::getPaused()
 void Enemy::reset(PathManager* pathmanager)
 {
 	//resets all the variables to how they weree at spawn, re-adds the object to the path manager to prevent bugs with random spawning
-	//setPosition(spawnPoint);
 	glm::mat4 tmp(1.0f);
 	tmp = glm::translate(tmp, spawnPoint);
 	setMatrix(tmp);
+
 	velocity = originalVelocity;
 	pathmanager->addToQueue(this);
+
+	//default values from the constructor
 	inside = false;
 	outsideMovement = false;
 	paused = false;
 	Jump = false;
 	moving = true;
 	jumpingCounter = 0;
+
 	rotation = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	//death, health and injuries
+	dead = false;
+	health = originalHealth;
+	injured = false;
+	deathAnimationTimer = 20;
+	still = false;
+
+
 }
 
 void Enemy::update()
 {
 	//uncomment for debugging
 	//cout << getPosition().x << " , " << getPosition().z << endl;
+	if (dead == true)
+	{
+		deathAnimationTimer--;
+		
+		if (deathAnimationTimer <= 0) {
+			//then pause the model
+			setStill(true);
+			still == true;
+		}
+	}
+
+	//if injured
+	if (injured == true)
+	{
+		injuryAnimationTimer--;
+		if (injuryAnimationTimer <= 0) {
+			injured = false;
+
+			//set back to default run animation
+			setAnimation(0.0f, 8.3f);
+
+			//reset injury time
+			injuryAnimationTimer = 20;
+		}
+	}
 
 	//initialise movement vectors
 	glm::vec3 current;
@@ -294,6 +365,11 @@ void Enemy::setSpawnPoint(glm::vec3 p)
 	spawnPoint = p;
 }
 
+string Enemy::getName()
+{
+	return name;
+}
+
 bool Enemy::getLocation()
 {
 	return inside;
@@ -329,3 +405,49 @@ void Enemy::setPath(std::vector<glm::vec3> p, bool outer)
 		innerPath = p;
 }
 
+//injury
+void Enemy::takeDamage(float damage)
+{
+	health -= damage;
+
+	if (health <= 0) {
+		health = 0;
+		death();
+	}
+	else
+	{
+		injured = true;
+
+		srand(time(0));
+		int randomNumber = rand() % 2;
+
+		//set to a random injury animation
+		if(name == "normal")
+			setAnimation(injuryAnimations.at(0).at(randomNumber).first, injuryAnimations.at(0).at(randomNumber).second);
+		if (name == "charger")
+			setAnimation(injuryAnimations.at(1).at(randomNumber).first, injuryAnimations.at(1).at(randomNumber).second);
+		if (name == "brawler")
+			setAnimation(injuryAnimations.at(2).at(randomNumber).first, injuryAnimations.at(2).at(randomNumber).second);
+
+	}
+
+
+}
+
+//death
+void Enemy::death()
+{
+	//set death animation and timer the length of it -1 frame
+	dead = true;
+
+	if (name == "normal")
+		setAnimation(injuryAnimations.at(0).at(0).first, injuryAnimations.at(0).at(0).second);
+	if (name == "charger")
+		setAnimation(injuryAnimations.at(1).at(0).first, injuryAnimations.at(1).at(0).second);
+
+}
+
+float Enemy::getHealth()
+{
+	return health;
+}

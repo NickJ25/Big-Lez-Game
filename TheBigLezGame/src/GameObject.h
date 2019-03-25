@@ -18,7 +18,8 @@ protected:
 	Shader* objShader;
 
 	bool isDrawing = true;
-	bool paused;
+	bool paused = false;
+	bool still = false;
 
 public:
 	GameObject(glm::vec3 pos) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
@@ -44,6 +45,8 @@ public:
 
 	void setPaused(bool p);
 	bool getPaused();
+
+	void setStill(bool s);
 
 	virtual ~GameObject() {
 		delete transformComponent;

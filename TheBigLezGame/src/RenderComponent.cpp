@@ -54,6 +54,12 @@ void RenderComponent::setPaused(bool p)
 {
 	m_objModel->setPaused(p);
 }
+
+void RenderComponent::setStill(bool s)
+{
+	m_objModel->setStill(s);
+}
+
 bool RenderComponent::getPaused()
 {
 	return m_objModel->getPaused();

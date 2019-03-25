@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <ctime>
 
 #include "glm/gtx/vector_angle.hpp"
 
@@ -81,14 +82,37 @@ public:
 	//record the enemies spawn point
 	void setSpawnPoint(glm::vec3 p);
 
+	string getName();
+
+	//injury
+	void takeDamage(float damage);
+
+	//death
+	void death();
+
+	float getHealth();
+
 private:
 	
+	float health;
+	float originalHealth;
+
+	int injuryAnimationTimer = 20;
+	bool injured = false;
+
+	int deathAnimationTimer = 20;
+	bool dead = false;
+
 	//spawning and pathing variables
 	glm::vec3 spawnPoint;
 	std::vector<glm::vec3> outerPath;
 	std::vector<glm::vec3> innerPath;
 	std::pair<glm::vec3, glm::vec3> outerPathEnd;
 	glm::vec3 innerPathEnd;
+
+	//store each enemies animation
+	std::vector<std::vector<pair<float, float>>> injuryAnimations;
+	std::vector<std::vector<pair<float, float>>> deathAnimations;
 
 	//movement regulating variables
 	bool inside;

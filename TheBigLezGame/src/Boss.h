@@ -88,5 +88,10 @@ private:
 	bool waveSet = false;
 	bool waveSpawned = false;
 
+	//equivalent of 6 seconds
+	int animationTimer = 144;
+	bool animating = false;
+	string animType = " ";
+
 };
 

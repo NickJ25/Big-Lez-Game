@@ -59,21 +59,25 @@ void AnimModel::update()
 
 }
 
+void AnimModel::setStill(bool s)
+{
+	still = s;
+}
+
 void AnimModel::draw(GLuint shaders_program, bool isAnimated)
 {
 	vector<aiMatrix4x4> transforms;
-	// if not explicitly set, just find the time
-	if (paused == false) {
+
+	if (paused == false && still == false) {
 		pauseFrame = false;
 		boneTransform((double)glfwGetTime(), transforms);
 	}
 	else {
-		if (pauseFrameSet == false)
-			pauseFrame = (double)glfwGetTime();
+	if (pauseFrameSet == false)
+		pauseFrame = (double)glfwGetTime();
 		boneTransform(pauseFrame, transforms);
 		pauseFrameSet = true;
 	}
-
 
 	for (uint i = 0; i < transforms.size(); i++) // move all matrices for actual model position to shader
 	{

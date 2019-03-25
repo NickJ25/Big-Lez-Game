@@ -46,7 +46,7 @@ private:
 	void loadObject(const char* mesh_filename);
 	void loadAnimObject(const char * mesh_filename);
 
-
+	bool still = false;
 	
 public:
 	RenderComponent(const char* mesh_filename) {
@@ -62,6 +62,7 @@ public:
 	void setAnim(float s, float e);
 	void setPaused(bool p);
 	bool getPaused();
+	void setStill(bool s);
 	void Draw();
 
 };

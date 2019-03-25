@@ -162,11 +162,48 @@ int Boss::getCurrentWave()
 void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager* pathmanager)
 {
 
+	if (animationTimer > 0)
+	{
+
+		if (animating == true) {
+
+			if (still == true) {
+				still = false;
+				setStill(false);
+			}
+
+			//if normal choomahs do the stomp animation
+			if (animType == "normal")
+				setAnimation(12.5f, 1.11f);
+			//if the chargers, do the waving hand animation
+			if (animType == "charger")
+				setAnimation(13.75f, 1.0f);
+			//if the brawlers, do the beating chest animation
+			if (animType == "brawler")
+				setAnimation(10.83f, 1.225f);
+
+			animationTimer--;
+		}
+	}
+	else {
+		//standing still
+		if (stopped == true) {
+			animating = false;
+			animationTimer = 144;
+			//setAnimation(0.0f, 1.0f);
+			setStill(true);
+			still = true;
+		}
+	}
+
 	if (canSpawn == true && stopped == true)
 	{
+		Enemy* temp = dynamic_cast<Enemy*>(currentObj.at(0));
+		if (temp)
+			animType = temp->getName();
+
 		if (waveSet == false)
 		{
-			//currentWave = getCurrentWave();
 			current = bossWaves.at(currentWave);
 			std::vector<int> tmp = bossWaves.at(currentWave);
 			int numOfChoomahs = 0;
@@ -175,7 +212,9 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 				numOfChoomahs += (*it);
 			}
 			numToBeSpawned = numOfChoomahs;
+			animating = true;
 			waveSet = true;
+
 		}
 
 		while (numToBeSpawned > 0) {
