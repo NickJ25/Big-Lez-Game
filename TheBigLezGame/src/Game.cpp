@@ -107,7 +107,7 @@ void Game::init()
 	//mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	//mainPlayer->setAnim(0);
 	mainPlayer->setAnimation(5.0f, 1.0f);
-	//gameObjects.push_back(mainPlayer);
+	gameObjects.push_back(mainPlayer);
 
 	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, false);
 	lezShotgun->setShader(toonShader);
@@ -130,6 +130,7 @@ void Game::init()
 	glm::vec3 test = glm::vec3(2.5, 2.5, 2.5);
 	GameObject* Fence;
 
+#pragma region Fences
 
 	for (int i = 0; i < 20; i++)
 	{
@@ -182,7 +183,9 @@ void Game::init()
 
 	}
 
-	//first initialise a vector containing door information
+#pragma endregion
+
+	//first initialise a Fector containing door information
 	std::vector<std::pair<glm::vec3, glm::vec3>> bottomDoors, topDoors, leftDoors, rightDoors;
 
 	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(83.0f, -12.5f, 46.0f), glm::vec3(83.0f, -12.5f, 38.0f)));

@@ -196,11 +196,8 @@
     <ClCompile Include="src\windowGLFW.cpp" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <ClInclude Include="src\ControllerComponent.h" />
-=======
     <ClInclude Include="src\Boss.h" />
->>>>>>> Chris-Enemies
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\Node.h" />
