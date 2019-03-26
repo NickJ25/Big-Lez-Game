@@ -53,17 +53,27 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	//setup injury and death animations
 
 	//normal choomah injuries
-	injuryAnimations.at(0).push_back(pair<float, float>(1.96f, 2.24f));
-	injuryAnimations.at(0).push_back(pair<float, float>(2.88f, 1.69f));
+	std::vector<pair<float, float>> normalInjuries;
+	normalInjuries.push_back(pair<float, float>(1.96f, 2.24f));
+	normalInjuries.push_back(pair<float, float>(2.88f, 1.69f));
+	injuryAnimations.push_back(normalInjuries);
 
 	//just one for now 
-	deathAnimations.at(0).push_back(pair<float, float>(8.33f, 1.45f));
+	std::vector<pair<float, float>> normalDeath;
+	normalDeath.push_back(pair<float, float>(0.75f, 4.54f));
+	deathAnimations.push_back(normalDeath);
 
 	//charger choomah injuries
-	injuryAnimations.at(1).push_back(pair<float, float>(5.42f, 2.13f));
-	injuryAnimations.at(1).push_back(pair<float, float>(6.25f, 1.88f));
+	std::vector<pair<float, float>> chargerInjuries;
+	chargerInjuries.push_back(pair<float, float>(5.42f, 2.13f));
+	chargerInjuries.push_back(pair<float, float>(6.25f, 1.88f));
 
-	deathAnimations.at(1).push_back(pair<float, float>(1.46f, 3.33f));
+	injuryAnimations.push_back(chargerInjuries);
+
+	//and one charger death animation
+	std::vector<pair<float, float>> chargerDeath;
+	chargerDeath.push_back(pair<float, float>(1.46f, 3.33f));
+	deathAnimations.push_back(chargerDeath);
 
 	//brawler choomah injuries
 	//injuryAnimations.at(2).push_back(pair<float, float>(5.42f, 2.13f));
@@ -109,7 +119,7 @@ void Enemy::reset(PathManager* pathmanager)
 	dead = false;
 	health = originalHealth;
 	injured = false;
-	deathAnimationTimer = 20;
+	deathAnimationTimer = 150;
 	still = false;
 
 
@@ -129,190 +139,193 @@ void Enemy::update()
 			still == true;
 		}
 	}
+	else {
 
-	//if injured
-	if (injured == true)
-	{
-		injuryAnimationTimer--;
-		if (injuryAnimationTimer <= 0) {
-			injured = false;
-
-			//set back to default run animation
-			setAnimation(0.0f, 8.3f);
-
-			//reset injury time
-			injuryAnimationTimer = 20;
-		}
-	}
-
-	//initialise movement vectors
-	glm::vec3 current;
-	glm::vec3 next;
-	glm::vec3 distanceToBeCovered;
-	glm::vec3 movementStep;
-
-	bool rotated = false;
-
-	//if the game isnt paused
-	if (paused == false) {
-
-		//if the enemy is currently outside
-		if (!outerPath.empty())
+		//if injured
+		if (injured == true)
 		{
+			injuryAnimationTimer--;
+			if (injuryAnimationTimer <= 0) {
+				injured = false;
 
-			inside = false;
-			if (outsideMovement == false)
-				outsideMovement = true;
+				//set back to default run animation
+				setAnimation(0.0f, 8.3f);
 
-			current = getPosition();
-			next = outerPath.back();
-
-			//get angle between the current and the next node
-			distanceToBeCovered = next - current;
-			rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
-			glm::vec3 currentRot = getRotation(); // current rotation
-
-			//calculate angle between the two vectors
-			float angle = -glm::acos(glm::dot(currentRot, rotation));
-			movementStep = glm::normalize(distanceToBeCovered) * velocity;
-
-				
-			//reset the rotation
-			glm::mat4 tempMat(1.0f);
-
-			//calculate the translation 
-			tempMat = glm::translate(tempMat, getPosition());
-			tempMat = glm::translate(tempMat, movementStep);
-
-			if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.z) != std::round(rotation.z) && rotated == false)
-			{
-				//reapply the rotation
-				tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
-				rotated = true;
-			}
-
-			//set the matrix
-			setMatrix(tempMat);
-
-			//move the bounding box with the model without applying rotation
-			if (getCollider())
-				getCollider()->setCollider(tempMat[3]);
-
-				glm::vec3 check = getRotation();
-			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
-			{
-				//remove this from the vector and set it back to unrotated
-				outerPath.pop_back();
-				rotated = false;
+				//reset injury time
+				injuryAnimationTimer = 40;
 			}
 		}
 		else {
-			if (outsideMovement == true && Jump == false) {
 
-				inside = true;
-				//jumping animation
-				if (name == "brawler")
-					setAnimValues(0.0f, 1.0f);
-				else
-					setAnimValues(4.58, 1.0f);
+			//initialise movement vectors
+			glm::vec3 current;
+			glm::vec3 next;
+			glm::vec3 distanceToBeCovered;
+			glm::vec3 movementStep;
 
-				velocity = 0.1;
+			bool rotated = false;
 
-				//get to the second of the pair 
-				current = getPosition();
+			//if the game isnt paused
+			if (paused == false) {
 
-				next = getOuterPathEnd().second;
-				distanceToBeCovered = next - current;
-
-				glm::vec3 jumpDirection = glm::normalize(getOuterPathEnd().second - getPosition());
-				rotation = glm::normalize(jumpDirection); // rotation we want to be at
-				glm::vec3 currentRot = getRotation(); // current rotation
-
-				//calculate angle between the two vectors
-				float angle = -glm::acos(glm::dot(currentRot, rotation));
-				movementStep = glm::normalize(distanceToBeCovered) * velocity;
-
-
-				//reset the rotation
-				glm::mat4 tempMat(1.0f);
-
-				//calculate the translation 
-				tempMat = glm::translate(tempMat, getPosition());
-				tempMat = glm::translate(tempMat, movementStep);
-
-				if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
+				//if the enemy is currently outside
+				if (!outerPath.empty())
 				{
-					//reapply the rotation
-					tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+
+					inside = false;
+					if (outsideMovement == false)
+						outsideMovement = true;
+
+					current = getPosition();
+					next = outerPath.back();
+
+					//get angle between the current and the next node
+					distanceToBeCovered = next - current;
+					rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
+					glm::vec3 currentRot = getRotation(); // current rotation
+
+					//calculate angle between the two vectors
+					float angle = -glm::acos(glm::dot(currentRot, rotation));
+					movementStep = glm::normalize(distanceToBeCovered) * velocity;
+
+
+					//reset the rotation
+					glm::mat4 tempMat(1.0f);
+
+					//calculate the translation 
+					tempMat = glm::translate(tempMat, getPosition());
+					tempMat = glm::translate(tempMat, movementStep);
+
+					if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.z) != std::round(rotation.z) && rotated == false)
+					{
+						//reapply the rotation
+						tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+						rotated = true;
+					}
+
+					//set the matrix
+					setMatrix(tempMat);
+
+					//move the bounding box with the model without applying rotation
+					if (getCollider())
+						getCollider()->setCollider(tempMat[3]);
+
+					glm::vec3 check = getRotation();
+					if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
+					{
+						//remove this from the vector and set it back to unrotated
+						outerPath.pop_back();
+						rotated = false;
+					}
+				}
+				else {
+					if (outsideMovement == true && Jump == false) {
+
+						inside = true;
+						//jumping animation
+						if (name == "brawler")
+							setAnimValues(0.0f, 1.0f);
+						else
+							setAnimValues(4.58, 1.0f);
+
+						velocity = 0.1;
+
+						//get to the second of the pair 
+						current = getPosition();
+
+						next = getOuterPathEnd().second;
+						distanceToBeCovered = next - current;
+
+						glm::vec3 jumpDirection = glm::normalize(getOuterPathEnd().second - getPosition());
+						rotation = glm::normalize(jumpDirection); // rotation we want to be at
+						glm::vec3 currentRot = getRotation(); // current rotation
+
+						//calculate angle between the two vectors
+						float angle = -glm::acos(glm::dot(currentRot, rotation));
+						movementStep = glm::normalize(distanceToBeCovered) * velocity;
+
+
+						//reset the rotation
+						glm::mat4 tempMat(1.0f);
+
+						//calculate the translation 
+						tempMat = glm::translate(tempMat, getPosition());
+						tempMat = glm::translate(tempMat, movementStep);
+
+						if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
+						{
+							//reapply the rotation
+							tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+						}
+
+						//set the matrix
+						setMatrix(tempMat);
+
+						//move the bounding box with the model without applying rotation
+						if (getCollider())
+							getCollider()->setCollider(tempMat[3]);
+
+						if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
+						{
+							Jump = true;
+						}
+					}
+
 				}
 
-				//set the matrix
-				setMatrix(tempMat);
-
-				//move the bounding box with the model without applying rotation
-				if (getCollider())
-					getCollider()->setCollider(tempMat[3]);
-
-				if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
+				if (outsideMovement == true && outerPath.empty() == true && innerPath.empty() == false && Jump == true)
 				{
-					Jump = true;
+
+					//running animation
+					setAnimValues(0.0f, 8.3f);
+
+					velocity = 0.05;
+
+					//enemy has reached a window
+					setInnerPathEnd(target->getPosition());
+
+					current = getPosition();
+					next = innerPath.back();
+
+
+					//get angle between the current and the next node
+					distanceToBeCovered = next - current;
+					movementStep = glm::normalize(distanceToBeCovered) * velocity;
+
+					rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
+					glm::vec3 currentRot = getRotation(); // current rotation
+
+					//calculate angle between the two vectors
+					float angle = -glm::acos(glm::dot(currentRot, rotation));
+
+					//reset the rotation
+					glm::mat4 tempMat(1.0f);
+
+					//calculate the translation 
+					tempMat = glm::translate(tempMat, getPosition());
+
+					//if not touching a player
+					if (moving == true)
+						tempMat = glm::translate(tempMat, movementStep);
+
+					if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
+					{
+						//reapply the rotation
+						tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+					}
+
+					//set the matrix
+					setMatrix(tempMat);
+
+					//move the bounding box with the model without applying rotation
+					if (getCollider())
+						getCollider()->setCollider(tempMat[3]);
+
+					if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
+					{
+						innerPath.pop_back();
+					}
 				}
-				cout << endl;
-			}
-
-		}
-
-		if (outsideMovement == true && outerPath.empty() == true && innerPath.empty() == false && Jump == true)
-		{
-
-			//running animation
-			setAnimValues(0.0f, 8.3f);
-
-			velocity = 0.05;
-				
-			//enemy has reached a window
-			setInnerPathEnd(target->getPosition());
-
-			current = getPosition();
-			next = innerPath.back();
-
-
-			//get angle between the current and the next node
-			distanceToBeCovered = next - current;
-			movementStep = glm::normalize(distanceToBeCovered) * velocity;
-
-			rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
-			glm::vec3 currentRot = getRotation(); // current rotation
-
-			//calculate angle between the two vectors
-			float angle = -glm::acos(glm::dot(currentRot, rotation));
-
-			//reset the rotation
-			glm::mat4 tempMat(1.0f);
-
-			//calculate the translation 
-			tempMat = glm::translate(tempMat, getPosition());
-
-			//if not touching a player
-			if(moving == true)
-			tempMat = glm::translate(tempMat, movementStep);
-
-			if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
-			{
-				//reapply the rotation
-				tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
-			}
-
-			//set the matrix
-			setMatrix(tempMat);
-
-			//move the bounding box with the model without applying rotation
-			if (getCollider())
-				getCollider()->setCollider(tempMat[3]);
-
-			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
-			{
-				innerPath.pop_back();
 			}
 		}
 	}
@@ -441,13 +454,19 @@ void Enemy::death()
 	dead = true;
 
 	if (name == "normal")
-		setAnimation(injuryAnimations.at(0).at(0).first, injuryAnimations.at(0).at(0).second);
+		setAnimation(deathAnimations.at(0).at(0).first, deathAnimations.at(0).at(0).second);
 	if (name == "charger")
-		setAnimation(injuryAnimations.at(1).at(0).first, injuryAnimations.at(1).at(0).second);
+		setAnimation(deathAnimations.at(1).at(0).first, deathAnimations.at(1).at(0).second);
 
 }
 
 float Enemy::getHealth()
 {
 	return health;
+}
+
+
+bool Enemy::getInjured()
+{
+	return injured;
 }

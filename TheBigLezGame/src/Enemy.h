@@ -92,15 +92,17 @@ public:
 
 	float getHealth();
 
+	bool getInjured();
+
 private:
 	
 	float health;
 	float originalHealth;
 
-	int injuryAnimationTimer = 20;
+	int injuryAnimationTimer = 40;
 	bool injured = false;
 
-	int deathAnimationTimer = 20;
+	int deathAnimationTimer = 150;
 	bool dead = false;
 
 	//spawning and pathing variables

@@ -45,6 +45,9 @@ private:
 	int penetrationDepthX;
 	int penetrationDepthZ;
 	bool clicked = false;
+
+	//utility functions for testing
+	bool takeDamage = false;
 public:
 	Game() {};
 	~Game() {};

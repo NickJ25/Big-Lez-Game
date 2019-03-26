@@ -347,7 +347,7 @@ void Game::update()
 					Player *p2 = dynamic_cast<Player*>((*it1));
 					if (t1 || t2 && p1 || p2)
 					{
-						cout << endl;
+						//cout << endl;
 					}
 					if (checkCollision((*it), (*it1)) == true)
 					{
@@ -385,12 +385,12 @@ void Game::update()
 
 							if (e1 || e2)
 							{
-								cout << endl;
+								//cout << endl;
 							}
 
 							if (p1 || p2)
 							{
-								cout << endl;
+								//cout << endl;
 							}
 							if (e1 && p2 || e2 && p1)
 							{
@@ -398,11 +398,13 @@ void Game::update()
 								if (e1)
 								{
 									e1->setMoving(false);
+									if(!e1->getInjured())
 									e1->setAnimValues(3.6f, 1.36);
 								}
 								if (e2)
 								{
 									e2->setMoving(false);
+									if (!e2->getInjured())
 									e2->setAnimValues(3.6f, 1.36);
 								}
 							}
@@ -545,6 +547,29 @@ void Game::update()
 		}
 	}
 
+	if (Input::keyboard1.keys[GLFW_KEY_M]) {
+
+		if (takeDamage == false) {
+			vector<GameObject*>::iterator it;
+			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+			{
+				Enemy *tmp = dynamic_cast<Enemy*>(*it);
+				if (tmp)
+				{
+					tmp->takeDamage(0.05f);
+				}
+			}
+			takeDamage = true;
+		}
+	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_O]) {
+
+		if (takeDamage == true) {
+			takeDamage = false;
+		}
+	}
+
 	//update one path per frame so the computer doesnt melt
 	if (pathManager->working == false) {
 		pathManager->update(gameObjects, toonShader);
@@ -573,7 +598,7 @@ void Game::draw()
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), lezCamera.getCameraPos().x, lezCamera.getCameraPos().y, lezCamera.getCameraPos().z);
 	//glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
 
-	cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
+	//cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "viewpos; " << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//cout << "Diffuse; " << glGetUniformLocation(toonShader->getID(), "material.diffuse") << endl;
 	//cout << "specular; " << glGetUniformLocation(toonShader->getID(), "material.specular") << endl;
