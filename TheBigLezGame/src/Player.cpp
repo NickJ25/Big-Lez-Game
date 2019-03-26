@@ -23,7 +23,7 @@ Player::~Player()
 
 void Player::playAnimation()
 {
-
+	setAnimation(0, 8);
 }
 
 Camera* Player::getCamera()
@@ -59,7 +59,7 @@ void Player::update()
 		currentWeapon->update();
 	}
 
-	setAnimation(0, 120);
+	
 
 	// Gun controls
 	if (currentWeapon != NULL) {
@@ -84,6 +84,13 @@ void Player::addWeapon(Weapon * weapon)
 	}
 }
 
+bool Player::hasPlayerAttacked()
+{
+	if (currentWeapon != NULL) {
+		return currentWeapon->hasAttacked();
+	}
+	return false;
+}
 Player::Character Player::getCharacter()
 {
 	return m_character;

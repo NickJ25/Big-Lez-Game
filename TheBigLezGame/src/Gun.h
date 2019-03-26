@@ -15,6 +15,7 @@ private:
 
 	bool sprayAllowed;
 	bool gunFired;
+	bool alreadyFired = false;;
 	Text* t_ammoCount;
 	Text* t_gunName;
 
@@ -31,4 +32,5 @@ public:
 	void primaryMove(bool active) override;
 	void secondaryMove(bool active) override;
 	void action(bool active) override;
+	bool hasAttacked() override;
 };

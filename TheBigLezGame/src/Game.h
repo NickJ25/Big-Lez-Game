@@ -31,6 +31,8 @@ using namespace std;
 
 class Game {
 private:
+	Player* ALL_PLAYERS[2]; // Hold all players in this array?
+
 	Player* mainPlayer;
 	Text* testtxt;
 	bool isGameRunning = true; 

@@ -71,3 +71,23 @@ void Gun::action(bool active)
 {
 	reload(active);
 }
+
+bool Gun::hasAttacked()
+{
+	if (sprayAllowed) {
+		return gunFired;
+	}
+	else {
+		if (gunFired && !alreadyFired) {
+			alreadyFired = true;
+			return gunFired;
+		}
+		else if(!gunFired) {
+			alreadyFired = false;
+			return false;
+		}
+		else {
+			return false;
+		}
+	}
+}

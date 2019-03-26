@@ -24,6 +24,7 @@ public:
 	Camera* getCamera();
 	void update() override;
 	void addWeapon(Weapon* weapon);
+	bool hasPlayerAttacked();
 	
 	Player::Character getCharacter();
 
@@ -39,6 +40,8 @@ private:
 	GLuint m_health;
 
 	glm::vec3 colourTemp = glm::vec3(0.2, 0.4, 0.5);
+
+	bool playerShootGun = false;
 
 };
 

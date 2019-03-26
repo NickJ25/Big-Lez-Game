@@ -242,6 +242,7 @@ void Game::update()
 {
 	if(isGameRunning == true)
 	{
+		// Game Object Update Loop
 		for (int i = 0; i < gameObjects.size(); i++) {
 			if (gameObjects[i] != nullptr) {
 				gameObjects[i]->componentUpdate();
@@ -254,10 +255,10 @@ void Game::update()
 				}
 			}
 		}
-		//lezCamera.update();
-		const Uint8 *keys = SDL_GetKeyboardState(NULL);
-		if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
-		else SDL_SetRelativeMouseMode(SDL_TRUE);
+
+		// Everything else
+		if(mainPlayer->hasPlayerAttacked()) cout << "FIRE ZE MISSILES!" << endl;
+		
 	}
 	
 	if (Input::keyboard1.keys[GLFW_KEY_P])
@@ -370,6 +371,10 @@ void Game::update()
 			}
 			showBoundingBoxes = false;
 		}
+	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_X]) {
+		mainPlayer->playAnimation();
 	}
 
 	//update one path per frame so the computer doesnt melt
