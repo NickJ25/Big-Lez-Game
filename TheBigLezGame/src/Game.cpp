@@ -292,6 +292,9 @@ void Game::update()
 		}
 
 	}
+	glm::vec3 ray_Test(0.0f, 0.0f, 0.0f);
+	ray_Test = mainPlayer->getPosition() + mainPlayer->getCamera()->getCameraFront() * 1.0f;
+	cout << "Ray: " << ray_Test.x << " " << ray_Test.y << " " << ray_Test.z << endl;
 
 	if (Input::keyboard1.keys[GLFW_KEY_C]) {
 		sassy->Move(glm::vec3(1.0f, 0.0f, 0.0f));

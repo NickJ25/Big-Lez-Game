@@ -126,7 +126,7 @@ void Camera::update()
 	front.z = sin(glm::radians(m_yaw)) *cos(glm::radians(m_pitch));
 	m_front = glm::normalize(front);
 	m_right = glm::normalize(glm::cross(m_front, m_up));
-	cout << m_front.x << " " << m_front.y << " " << m_front.z << endl;
+	//cout << m_front.x << " " << m_front.y << " " << m_front.z << endl;
 }
 
 GLfloat Camera::getYaw()
