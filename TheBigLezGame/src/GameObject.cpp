@@ -6,13 +6,18 @@ void GameObject::Move(glm::vec3 moveAmount)
 
 	if (collisionComponent)
 	{
-		collisionComponent->move(moveAmount);
+		collisionComponent->moveCollider(moveAmount);
 	}
 }
 
 void GameObject::Rotate(GLfloat degrees, glm::vec3 rotateAmount)
 {
 	transformComponent->rotate(degrees, rotateAmount);
+}
+
+glm::vec3 GameObject::getRotation()
+{
+	return transformComponent->getRotation();
 }
 
 void GameObject::Scale(glm::vec3 scaleAmount)
@@ -35,6 +40,13 @@ void GameObject::setAnimation(float s, float e)
 	}
 }
 
+void GameObject::setStill(bool s)
+{
+	if (renderComponent != nullptr) {
+		renderComponent->setStill(s);
+	}
+	still = s;
+}
 void GameObject::setPaused(bool p)
 {
 	if (renderComponent != nullptr) {
@@ -60,6 +72,11 @@ glm::vec3 GameObject::getPosition()
 void GameObject::setPosition(glm::vec3 newPos)
 {
 	transformComponent->setPosition(newPos);
+}
+
+glm::mat4 GameObject::getMatrix()
+{
+	return transformComponent->getMatrix();
 }
 
 void GameObject::setMatrix(glm::mat4 newMat)

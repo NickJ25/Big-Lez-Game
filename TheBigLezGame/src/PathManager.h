@@ -1,10 +1,8 @@
 #pragma once
 #include "Grid.h"
-#include "Enemy.h"
 #include <queue>
 
-#include "Enemy.h"
-
+class Enemy;
 class PathManager {
 
 public:

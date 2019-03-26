@@ -45,6 +45,8 @@ public:
 	void setPaused(bool p);
 	bool getPaused();
 
+	void setStill(bool s);
+
 private:
 	Assimp::Importer import;
 	const aiScene* scene;
@@ -85,6 +87,8 @@ private:
 	bool paused = false;
 	double pauseFrame;
 	bool pauseFrameSet = false;
+
+	bool still = false;
 };
 
 #endif

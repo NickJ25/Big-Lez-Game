@@ -1,4 +1,4 @@
-#pragma once
+#define GLM_ENABLE_EXPERIMENTAL
 #pragma once
 #include "GameObject.h"
 #include "Shader.h"
@@ -7,8 +7,11 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <ctime>
 
+#include "glm/gtx/vector_angle.hpp"
 
+class PathManager;
 class Enemy : public GameObject
 {
 public:
@@ -23,70 +26,125 @@ public:
 
 	//function to give its pathfinding movement
 	void setPath(std::vector<glm::vec3> p ,bool outer);
-	void setPathEnd(glm::vec3 p, bool outer);
 
+	//set the end point to the outer path, and also the start point of the inner path
+	void setPathEnd(std::pair<glm::vec3, glm::vec3> p);
+
+	//retrive these values
+	std::pair<glm::vec3, glm::vec3> getOuterPathEnd();
+
+	//find the targets current position
+	void setInnerPathEnd(glm::vec3 p);
+
+	//pause functionality to stop animations and movement when paused
 	void setPaused(bool p);
 	bool getPaused();
 
-	void getPlayerPosition(glm::vec3 p)
-	{
-		innerPathEnd = p;
-	}
+	//set the assigned player as target
+	void setTarget(Player* p);
 
-	void setTarget(Player* p)
-	{
-		target = p;
-	}
+	//retrieve this target
+	Player* getTarget();
 
-	Player* getTarget()
-	{
-		return target;
-	}
+	//check current recorded player location
+	glm::vec3 getInnerPathEnd();
 
-	glm::vec3 getPathEnd(bool outer)
-	{
-		if (outer == true)
-			return outerPathEnd;
-		else
-			return innerPathEnd;
-	}
+	//check if this enemy is inside the house
+	bool getLocation();
 
-	bool getLocation()
-	{
-		return inside;
-	}
+	//set the boolean value dictating whether the enemy is moving or not
+	void setMoving(bool newMove);
+
+	//retrieve the enemies path to the house
 	std::vector<glm::vec3> getPath();
 
+	//overloaded from superclass
 	void update() override;
 
+	//public rotation
 	glm::vec3 rotation;
 
-	glm::vec3 getCurrentTargetPosition()
-	{
-		return currentTargetPosition;
-	}
+	//retrieve targets position
+	glm::vec3 getCurrentTargetPosition();
 
-	void setCurrentTargetPosition(glm::vec3 p)
-	{
-		currentTargetPosition = p;
-	}
+	//set targets position 
+	void setCurrentTargetPosition(glm::vec3 p);
+
+	//check if the enemy is currently jumping
+	bool getJump();
+
+	//set animation start and end values
+	void setAnimValues(float s, float e);
+
+	//reset all the enemies animation speed and position variables
+	void reset(PathManager* pathmanager);
+
+	//record the enemies spawn point
+	void setSpawnPoint(glm::vec3 p);
+
+	string getName();
+
+	//injury
+	void takeDamage(float damage);
+
+	//death
+	void death();
+
+	float getHealth();
+
+	bool getInjured();
+
 private:
 	
+	float health;
+	float originalHealth;
+
+	int injuryAnimationTimer = 40;
+	bool injured = false;
+
+	int deathAnimationTimer = 150;
+	bool dead = false;
+
+	//spawning and pathing variables
+	glm::vec3 spawnPoint;
 	std::vector<glm::vec3> outerPath;
 	std::vector<glm::vec3> innerPath;
-	glm::vec3 outerPathEnd;
+	std::pair<glm::vec3, glm::vec3> outerPathEnd;
 	glm::vec3 innerPathEnd;
 
+	//store each enemies animation
+	std::vector<std::vector<pair<float, float>>> injuryAnimations;
+	std::vector<std::vector<pair<float, float>>> deathAnimations;
+
+	//movement regulating variables
 	bool inside;
 	bool outsideMovement;
 	int jumpingCounter;
-	bool setJump;
+	bool Jump;
+	bool moving;
 	
+	//pausing variable
 	bool paused;
 
+	//physics variables
 	float velocity;
+	float angularVelocity;
 
+	//target variables
 	Player* target;
 	glm::vec3 currentTargetPosition;
+
+	//animation variables
+	float animStart = 0.0f;
+	float animEnd = 0.0f;
+
+	//reset variables
+	float originalVelocity;
+	std::vector<glm::vec3> originalOuterPath;
+	glm::vec3 originalPosition;
+	bool firstPosition;
+
+	//characters name
+	string name;
 };
 

@@ -22,10 +22,12 @@
 #include "Button.h"
 #include "Image.h"
 #include "WaveSpawner.h"
+#include "Boss.h"
 #include "Text.h"
 #include "Grid.h"
 #include "PathManager.h"
 #include "ControllerComponent.h"
+#include "Obstacle.h"
 
 using namespace std;
 
@@ -42,11 +44,29 @@ private:
 	Image* pauseBackground;
 	Text* testtxt2;
 	bool showBoundingBoxes;
+	int penetrationDepthX;
+	int penetrationDepthZ;
+	bool clicked = false;
 
+	//utility functions for testing
+	bool takeDamage = false;
 public:
 	Game() {};
 	~Game() {};
 	void init();
 	void update();
 	void draw();
+	bool checkCollision(GameObject* a, GameObject* b);
+
+	//for calculating contact normal
+	const glm::vec3 nup = glm::vec3(0, 1, 0);
+	const glm::vec3 ndown = glm::vec3(0, -1, 0);
+	const glm::vec3 nright = glm::vec3(1, 0, 0);
+	const glm::vec3 nleft = glm::vec3(-1, 0, 0);
+
+	char computePointMask(glm::vec3 p, Enemy* e);
+	glm::vec3 getFaceNormal(glm::vec3 p, Enemy* e);
+	bool pointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d);
+
+	glm::vec3 contactNormal;
 };

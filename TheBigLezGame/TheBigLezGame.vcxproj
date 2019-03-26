@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{23957313-D5FA-4760-BBCF-DCE931E7B80A}</ProjectGuid>
     <RootNamespace>TheBigLezGame</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="src\AnimMesh.cpp" />
     <ClCompile Include="src\AnimModel.cpp" />
+    <ClCompile Include="src\Boss.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\ControllerComponent.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="src\MainMenu.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Node.cpp" />
+    <ClCompile Include="src\Obstacle.cpp" />
     <ClCompile Include="src\OptionsMenu.cpp" />
     <ClCompile Include="src\PathManager.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -194,10 +196,15 @@
     <ClCompile Include="src\windowGLFW.cpp" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClInclude Include="src\ControllerComponent.h" />
+=======
+    <ClInclude Include="src\Boss.h" />
+>>>>>>> Chris-Enemies
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\Node.h" />
+    <ClInclude Include="src\Obstacle.h" />
     <ClInclude Include="src\PathManager.h" />
     <ClInclude Include="src\WaveSpawner.h" />
     <ClInclude Include="src\Gun.h" />

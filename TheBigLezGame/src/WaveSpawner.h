@@ -10,30 +10,53 @@
 
 #include "Player.h"
 #include "PathManager.h"
+#include "Enemy.h"
 #include "Grid.h"
-
+//#include "Boss.h"
+class Boss;
 class WaveSpawner : public GameObject
 {
 public:
-	WaveSpawner(Grid* g);
+	WaveSpawner();
 
 	//function to get random co-ordinates from the preset coordinates
-	glm::vec2 getSpawnCoord(string type);
+	glm::vec2 getSpawnCoord(int type);
 
-	void setEndCoords(std::vector<glm::vec3> e, string type);
+	void setEndCoords(std::vector<std::pair<glm::vec3,glm::vec3>> e, int type);
 
-	glm::vec3 getEndCoord(string type);
+	std::pair<glm::vec3, glm::vec3> getEndCoord(int type);
 	
 	//array of predefined numbers to correspond to enemies in each wave
-	void spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager);
+	void spawnWave(vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager, bool destinationVector, vector<GameObject*>& destination = vector<GameObject*>());
 	
 	//set up the enemy gameobjects for spawning
 	void initNPCs();
 
 	void update() override {}
 
-	string getType();
+	int getType();
 
+	void setWave(std::vector<int> w)
+	{
+		waves.push_back(w);
+	}
+
+	std::vector<vector<int>> getWaves()
+	{
+		return waves;
+	}
+
+	void spawnEnemy(std::vector<GameObject*> currentObj, std::vector<GameObject*> &gameObjects)
+	{
+		if(toBeSpawned.size() == 0)
+			toBeSpawned = currentObj;
+		if (!toBeSpawned.empty()) {
+			GameObject* tmp = toBeSpawned.at(0);
+			toBeSpawned.erase(toBeSpawned.begin());
+			gameObjects.push_back(tmp);
+			//delete tmp;
+		}
+	}
 private:
 
 	//position values
@@ -49,21 +72,21 @@ private:
 	std::vector<glm::vec2> spawnPointsLeft;
 	std::vector<glm::vec2> spawnPointsRight;
 
-	std::vector<glm::vec3> endPointsBottom;
-	std::vector<glm::vec3> endPointsTop;
-	std::vector<glm::vec3> endPointsLeft;
-	std::vector<glm::vec3> endPointsRight;
+	std::vector<std::pair<glm::vec3, glm::vec3>> endPointsBottom;
+	std::vector<std::pair<glm::vec3, glm::vec3>> endPointsTop;
+	std::vector<std::pair<glm::vec3, glm::vec3>> endPointsLeft;
+	std::vector<std::pair<glm::vec3, glm::vec3>> endPointsRight;
 
 	//types
-	string types[4] = {"Bottom", "Top", "Left", "Right"};
-	string currentType;
+	int types[3] = {0, 1, 2};
+	int currentType = 0;
+	int lastType = 1;
 
 	//enemies
 	Enemy::Character normalChoomah;
 	Enemy::Character chargerChoomah;
 	Enemy::Character brawlerChoomah;
-	Enemy::Character bossChoomah;
 
-	//the worlds grid
-	Grid* grid;
+	//optimisation controller
+	std::vector<GameObject*> toBeSpawned;
 };

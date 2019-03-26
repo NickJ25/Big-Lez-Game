@@ -21,6 +21,7 @@ void TransformComponent::resetMatrix()
 void TransformComponent::setMatrix(glm::mat4 newMat)
 {
 	m_matrix = newMat;
+	m_position = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 void TransformComponent::setPosition(glm::vec3 newPos)
@@ -33,7 +34,12 @@ void TransformComponent::setPosition(glm::vec3 newPos)
 	//cout << "------------------------------------------" << endl;
 	m_matrix = glm::translate(m_matrix, (this->getPosition() *= -1.0f));
 	cout << this->getPosition().x << " " << this->getPosition().y << " " << this->getPosition().z << endl;
+	//cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
+	//m_matrix = glm::translate(m_matrix, -getPosition());
+	//cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
 	m_matrix = glm::translate(m_matrix, newPos);
+	cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
+	cout << endl;
 }
 
 
@@ -46,13 +52,18 @@ void TransformComponent::move(glm::vec3 position)
 void TransformComponent::rotate(GLfloat radians, glm::vec3 rotation)
 {
 	glm::vec3 tempVec = this->getPosition();
-	cout << "first pos: " << this->getPosition().x << " " << this->getPosition().y << " " << this->getPosition().z <<  endl;
+	//cout << "first pos: " << this->getPosition().x << " " << this->getPosition().y << " " << this->getPosition().z <<  endl;
 	m_matrix = glm::translate(m_matrix, (this->getPosition() * -1.0f));
-	cout << "second pos: " << this->getPosition().x << " " << this->getPosition().y << " " << this->getPosition().z << endl;
+	//cout << "second pos: " << this->getPosition().x << " " << this->getPosition().y << " " << this->getPosition().z << endl;
 	m_matrix = glm::rotate(m_matrix, glm::radians(radians), rotation);
-	cout << "tempVec: " << tempVec.x << " " << tempVec.y << " " << tempVec.z << endl;
+	//cout << "tempVec: " << tempVec.x << " " << tempVec.y << " " << tempVec.z << endl;
 	m_matrix = glm::translate(m_matrix, tempVec);
-	cout << "third pos: " << this->getPosition().x << " " << this->getPosition().y << " " << this->getPosition().z << "\n"<< endl;
+	//cout << "third pos: " << this->getPosition().x << " " << this->getPosition().y << " " << this->getPosition().z << "\n"<< endl;
+}
+
+glm::vec3 TransformComponent::getRotation()
+{
+	return glm::normalize(glm::column(m_matrix, 0));
 }
 
 void TransformComponent::scale(glm::vec3 scale)

@@ -183,7 +183,14 @@
     <ClCompile Include="src\Gun.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="src\ControllerComponent.cpp">
+=======
+    <ClCompile Include="src\Boss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Obstacle.cpp">
+>>>>>>> Chris-Enemies
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -332,7 +339,14 @@
     <ClInclude Include="src\Gun.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="src\ControllerComponent.h">
+=======
+    <ClInclude Include="src\Boss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Obstacle.h">
+>>>>>>> Chris-Enemies
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

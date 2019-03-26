@@ -1,4 +1,5 @@
 #include "PathManager.h"
+#include "Enemy.h"
 
 PathManager::PathManager()
 {
@@ -25,22 +26,16 @@ void PathManager::update(std::vector<GameObject*>& gameObjects, Shader* shader)
 		if (obj) {
 			if (e->getLocation() == false && e->getPath().empty()) 
 			{
-				e->setPath(findPath(pathQueue.front(), e->getPathEnd(true), gameObjects, shader, 0 , false), true);
-				pathQueue.pop();
-				pathQueue.push(obj);
+				e->setPath(findPath(pathQueue.front(), e->getOuterPathEnd().first, gameObjects, shader, 0 , false), true);
 			}
-			else
+
+			if (e->getLocation() == true && e->getCurrentTargetPosition() != e->getTarget()->getPosition() && e->getJump() == true)
 			{
-				if (e->getLocation() == true && e->getCurrentTargetPosition() != e->getTarget()->getPosition())
-				{
-					e->setCurrentTargetPosition(e->getTarget()->getPosition());
-					e->setPath(findPath(pathQueue.front(), e->getCurrentTargetPosition(), gameObjects, shader, 0, true), false);
-					pathQueue.pop();
-					pathQueue.push(obj);
-				}
-
+				e->setCurrentTargetPosition(e->getTarget()->getPosition());
+				e->setPath(findPath(pathQueue.front(), e->getCurrentTargetPosition(), gameObjects, shader, 0, true), false);
 			}
-
+			pathQueue.pop();
+			pathQueue.push(obj);
 			//cout << pathQueue.size() << endl;
 			working = true;
 		}

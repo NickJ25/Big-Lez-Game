@@ -14,7 +14,7 @@ Prop* collisionTest;
 GameObject* sassy;
 
 // Initalize Two Camera
-//Camera lezCamera(glm::vec3(0.0f, 12.5f, 0.0f), FREECAM);
+//Camera lezCamera(glm::vec3(110.0f, 12.5f, 190.0f), FREECAM);
 
 rt3d::materialStruct material0 = {
 	{0.0f, 0.8f, 0.2f, 1.0f}, // ambient
@@ -95,17 +95,19 @@ void Game::init()
 
 	sassy = new Player(ControllerComponent::CONTROLLER1, Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
 	sassy->setShader(toonShader);
-	//sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
+	sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
 	sassy->setAnimation(5.0f, 1.0f);
+	sassy->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 	gameObjects.push_back(sassy);
 
 	mainPlayer = new Player(ControllerComponent::KEYBOARD, BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
 	mainPlayer->setShader(toonShader);
+	mainPlayer->Move(glm::vec3(45.0f, -12.5f, 20.0f));
 	//mainPlayer->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
+	//mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	//mainPlayer->setAnim(0);
 	mainPlayer->setAnimation(5.0f, 1.0f);
-	gameObjects.push_back(mainPlayer);
+	//gameObjects.push_back(mainPlayer);
 
 	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, false);
 	lezShotgun->setShader(toonShader);
@@ -123,107 +125,103 @@ void Game::init()
 
 
 	// add environmental collision boxes for pathfinding an' such
-	glm::vec3 fenceScaleVertical = glm::vec3(4.0f, 4.0f, 30.0f);
-	glm::vec3 fenceScaleHorizontal = glm::vec3(30.0f, 4.0f, 4.0f);
+	glm::vec3 fenceScaleVertical = glm::vec3(4.0f, 4.0f, 35.0f);
+	glm::vec3 fenceScaleHorizontal = glm::vec3(35.0f, 4.0f, 4.0f);
 	glm::vec3 test = glm::vec3(2.5, 2.5, 2.5);
 	GameObject* Fence;
 
 
 	for (int i = 0; i < 20; i++)
 	{
-		Fence = new Player(ControllerComponent::CONTROLLER1, cube, glm::vec3(0.0,0.0,0.0));
-		Fence->setShader(toonShader);
-		Fence->setAnimation(0.0f,1.0f);
+		Fence = new Obstacle("collider", glm::vec3(0.0,0.0,0.0));
 
 
 		glm::vec3 scaleFactor = fenceScaleVertical;
-		if (i >= 4 && i < 14) 
-			scaleFactor = fenceScaleHorizontal;
-		if (i == 14) 
-			scaleFactor = glm::vec3(2.0f, 4.0, 25.0f);
-		if (i == 15 || i == 16)
-			scaleFactor = glm::vec3(18.0f, 4.0, 2.0);
-		if (i == 17 || i == 18)
-			scaleFactor = glm::vec3(8.0f, 4.0, 2.0);
-		if (i == 19)
-			scaleFactor = glm::vec3(2.0f, 4.0, 4.0);
+		if (i >= 4 && i < 14) scaleFactor = fenceScaleHorizontal;
+		if (i == 14) scaleFactor = glm::vec3(2.0f, 4.0, 25.0f);
+		if (i == 15 || i == 16) scaleFactor = glm::vec3(18.0f, 4.0, 2.0);
+		if (i == 17 || i == 18) scaleFactor = glm::vec3(8.0f, 4.0, 2.0);
+		if (i == 19) scaleFactor = glm::vec3(2.0f, 4.0, 4.0);
+
+			//apply the selected scale first
 			Fence->Scale(scaleFactor);
 			
 			glm::vec3 pos;
 
 			//fences
-			if (i == 0) { Fence->Move(glm::vec3(-13.0f, 0.0f, 0.9f));  pos = glm::vec3(-13.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.9f*scaleFactor.z); 	Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 1) { Fence->Move(glm::vec3(-13.0f, 0.0f, -2.6f));  pos = glm::vec3(-13.0f*scaleFactor.x, 0.0f*scaleFactor.y, -2.6f*scaleFactor.z); 	Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 2) { Fence->Move(glm::vec3(37.0f, 0.0f, 0.9f));  pos = glm::vec3(37.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.9f*scaleFactor.z); 	Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 3) { Fence->Move(glm::vec3(37.0f, 0.0f, -2.6f));  pos = glm::vec3(37.0f*scaleFactor.x, 0.0f*scaleFactor.y, -2.6f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 4) { Fence->Move(glm::vec3(-4.2f, 0.0f, -41.0f));  pos = glm::vec3(-4.2f*scaleFactor.x, 0.0f*scaleFactor.y, -41.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 5) { Fence->Move(glm::vec3(-0.2f, 0.0f, -41.0f));  pos = glm::vec3(-0.2f*scaleFactor.x, 0.0f*scaleFactor.y, -41.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 6) { Fence->Move(glm::vec3(3.2f, 0.0f, -41.0f));  pos = glm::vec3(3.2f*scaleFactor.x, 0.0f*scaleFactor.y, -41.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 7) { Fence->Move(glm::vec3(6.7f, 0.0f, -41.0f));  pos = glm::vec3(6.7f*scaleFactor.x, 0.0f*scaleFactor.y, -41.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+			if (i == 0) { pos = glm::vec3(-13.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.9f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(-13.0f, 0.0f, 0.9f)); }
+			if (i == 1) { pos = glm::vec3(-13.0f*scaleFactor.x, 0.0f*scaleFactor.y, -2.6f*scaleFactor.z); 	Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(-13.0f, 0.0f, -2.6f));}
+			if (i == 2) { pos = glm::vec3(37.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.9f*scaleFactor.z); 	Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(37.0f, 0.0f, 0.9f));}
+			if (i == 3) { pos = glm::vec3(37.0f*scaleFactor.x, 0.0f*scaleFactor.y, -2.6f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(37.0f, 0.0f, -2.6f));  }
+			if (i == 4) { pos = glm::vec3(-4.2f*scaleFactor.x, 0.0f*scaleFactor.y, -41.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(-4.2f, 0.0f, -41.0f));   }
+			if (i == 5) { pos = glm::vec3(-0.2f*scaleFactor.x, 0.0f*scaleFactor.y, -41.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(-0.2f, 0.0f, -41.0f)); }
+			if (i == 6) { pos = glm::vec3(3.2f*scaleFactor.x, 0.0f*scaleFactor.y, -41.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(3.2f, 0.0f, -41.0f));}
+			if (i == 7) { pos = glm::vec3(6.7f*scaleFactor.x, 0.0f*scaleFactor.y, -41.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(6.7f, 0.0f, -41.0f));}
 
 			//house on the right
-			if (i == 8) { scaleFactor = fenceScaleVertical; Fence->Move(glm::vec3(50.0f, 0.0f, 0.8f));  pos = glm::vec3(50.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.8f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z+10.0); }
-			if (i == 9) { scaleFactor = fenceScaleVertical; Fence->Move(glm::vec3(55.0f, 0.0f, 0.8f));  pos = glm::vec3(55.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.8f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z+10.0); }
-			if (i == 10){ scaleFactor = fenceScaleVertical; Fence->Move(glm::vec3(60.0f, 0.0f, 0.8f));  pos = glm::vec3(60.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.8f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z+10.0); }
+			if (i == 8) { scaleFactor = fenceScaleVertical;  pos = glm::vec3(50.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.8f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z+10.0); Fence->Move(glm::vec3(50.0f, 0.0f, 0.8f));}
+			if (i == 9) { scaleFactor = fenceScaleVertical;  pos = glm::vec3(55.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.8f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z+10.0); Fence->Move(glm::vec3(55.0f, 0.0f, 0.8f));}
+			if (i == 10){ scaleFactor = fenceScaleVertical;  pos = glm::vec3(60.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.8f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z+10.0); Fence->Move(glm::vec3(60.0f, 0.0f, 0.8f));}
 
 			//house on the left
-			if (i == 11) { Fence->Move(glm::vec3(-5.0f, 0.0f, 0.0f));  pos = glm::vec3(-5.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 12) { Fence->Move(glm::vec3(-5.0f, 0.0f, 5.0f));  pos = glm::vec3(-5.0f*scaleFactor.x, 0.0f*scaleFactor.y, 5.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 13) { Fence->Move(glm::vec3(-5.0f, 0.0f, 10.0f));  pos = glm::vec3(-5.0f*scaleFactor.x, 0.0f*scaleFactor.y, 10.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+			if (i == 11) { pos = glm::vec3(-5.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(-5.0f, 0.0f, 0.0f));}
+			if (i == 12) { pos = glm::vec3(-5.0f*scaleFactor.x, 0.0f*scaleFactor.y, 5.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(-5.0f, 0.0f, 5.0f));}
+			if (i == 13) { pos = glm::vec3(-5.0f*scaleFactor.x, 0.0f*scaleFactor.y, 10.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(-5.0f, 0.0f, 10.0f));
+			}
 
 			//house in the middle 
-			if (i == 14) 
-			{ Fence->Move(glm::vec3(2.0f, 0.0f, 0.5f));  pos = glm::vec3(2.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 15)
-			{
-			Fence->Move(glm::vec3(1.0f, 0.0f, -7.5f));  pos = glm::vec3(1.0f*scaleFactor.x, 0.0f*scaleFactor.y, -7.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); 
-			}
-			if (i == 16)
-			{
-				Fence->Move(glm::vec3(1.0f, 0.0f, 17.0f));  pos = glm::vec3(1.0f*scaleFactor.x, 0.0f*scaleFactor.y, 17.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);
-			}
-			if (i == 17)
-			{
-				Fence->Move(glm::vec3(8.0f, 0.0f, -7.5f));  pos = glm::vec3(8.0f*scaleFactor.x, 0.0f*scaleFactor.y, -7.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);
-			}
-			if (i == 18)
-			{
-				Fence->Move(glm::vec3(8.0f, 0.0f, 17.0f));  pos = glm::vec3(8.0f*scaleFactor.x, 0.0f*scaleFactor.y, 17.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);
-			}
-			if (i == 19)
-			{
-				Fence->Move(glm::vec3(47.0f, 0.0f, 3.0f));  pos = glm::vec3(47.0f*scaleFactor.x, 0.0f*scaleFactor.y, 3.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);
-			}
+			if (i == 14){ pos = glm::vec3(2.0f*scaleFactor.x, 0.0f*scaleFactor.y, 0.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(2.0f, 0.0f, 0.5f));}
+			if (i == 15){ pos = glm::vec3(1.0f*scaleFactor.x, 0.0f*scaleFactor.y, -7.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(1.0f, 0.0f, -7.5f));}
+			if (i == 16){ pos = glm::vec3(1.0f*scaleFactor.x, 0.0f*scaleFactor.y, 17.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(1.0f, 0.0f, 17.0f));}
+			if (i == 17){ pos = glm::vec3(8.0f*scaleFactor.x, 0.0f*scaleFactor.y, -7.5f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(8.0f, 0.0f, -7.5f));}
+			if (i == 18){ pos = glm::vec3(8.0f*scaleFactor.x, 0.0f*scaleFactor.y, 17.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(8.0f, 0.0f, 17.0f));}
+			if (i == 19){ pos = glm::vec3(47.0f*scaleFactor.x, 0.0f*scaleFactor.y, 3.0f*scaleFactor.z); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); Fence->Move(glm::vec3(47.0f, 0.0f, 3.0f));}
 
+			//add collision objects to the game objects vector
 			gameObjects.push_back(Fence);
 
 	}
 
 	//first initialise a vector containing door information
-	std::vector<glm::vec3> bottomDoors, topDoors, leftDoors, rightDoors;
-	leftDoors.push_back(glm::vec3(45.0f, -12.5f, -26.0f));
-	topDoors.push_back(glm::vec3(37.5f, -12.5f, 37.5f));
-	bottomDoors.push_back(glm::vec3(80.0f, -12.5f,  50.0f));
-	rightDoors.push_back(glm::vec3(75.0f, -12.5f, -25.0f));
-	//doors.push_back(glm::vec3(95.0f, 0.0, -6.25f));
-	//doors.push_back(glm::vec3(95.0f, 0.0, 36.25f));
+	std::vector<std::pair<glm::vec3, glm::vec3>> bottomDoors, topDoors, leftDoors, rightDoors;
+
+	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(83.0f, -12.5f, 46.0f), glm::vec3(83.0f, -12.5f, 38.0f)));
+	//bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, 50.0f), glm::vec3(43.0f, -12.5f, 30.0f)));
+
+	//topDoors.push_back(std::pair<glm::vec3, glm::vec3> (glm::vec3(83.0f, -12.5f, -30.0f), glm::vec3(83.0f,-12.5f,-10.0f)));
+	topDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, -30.0f), glm::vec3(43.0f, -12.5f, -10.0f)));
+
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, -6.0f), glm::vec3(80.0f, -12.5f, -6.0f)));
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 32.0f), glm::vec3(80.0f, -12.5f, 32.0f)));
+
 
 	//grid has to be the last game object added
-	pathFindingGrid = new Grid(glm::vec2(500, 500), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f), "boundingbox");
+	pathFindingGrid = new Grid(glm::vec2(1250, 1250), 2.0f, glm::vec3(0.0f, 0.0f, 0.0f), "boundingbox");
 	pathFindingGrid->buildGrid(gameObjects, toonShader);
-	//pathFindingGrid->addEndPoints(bottomDoors);
 
 	//initialise the path manager
 	pathManager = new PathManager();
 	pathManager->addGrid(pathFindingGrid);
 
 	//set up the wavespawner
-	waveSpawner = new WaveSpawner(pathFindingGrid);
-	waveSpawner->setEndCoords(bottomDoors, "Bottom");
-	waveSpawner->setEndCoords(topDoors, "Top");
-	waveSpawner->setEndCoords(leftDoors, "Left");
-	waveSpawner->setEndCoords(rightDoors, "Right");
-	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager);
+	waveSpawner = new WaveSpawner();
+
+	// numbers correspond to number of each choomah type per round
+	vector<int> wave1;
+	wave1.push_back(0), wave1.push_back(0), wave1.push_back(0), wave1.push_back(1);
+
+	//add this wave to the wave spawner
+	waveSpawner->setWave(wave1);
+
+	waveSpawner->setEndCoords(bottomDoors, 0);
+	waveSpawner->setEndCoords(topDoors, 1);
+	waveSpawner->setEndCoords(rightDoors, 2);
+	//dlc
+	//waveSpawner->setEndCoords(leftDoors, "Left");
+
+	//prepare wave 1 to be spawned
+	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, false);
+
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
 	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
@@ -237,28 +235,200 @@ void Game::init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+bool Game::checkCollision(GameObject* a, GameObject* b)
+{
+	if (abs(a->getCollider()->getPos().x - b->getCollider()->getPos().x) > (a->getCollider()->getHW() + b->getCollider()->getHW())) return false;
+	if (abs(a->getCollider()->getPos().z - b->getCollider()->getPos().z) > (a->getCollider()->getHH() + b->getCollider()->getHW())) return false;
+
+	//penetrationDepthX = a->getCollider()->getHW() + b->getCollider()->getHW() - a->getCollider()->getPos().x - b->getCollider()->getPos().x;
+	//penetrationDepthZ = a->getCollider()->getHH() + b->getCollider()->getHW() - a->getCollider()->getPos().z - b->getCollider()->getPos().z;
+
+	return true;
+}
+
+bool Game::pointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d)
+{
+	return glm::dot(n, P) + d > FLT_EPSILON;
+}
+
+char Game::computePointMask(glm::vec3 p, Enemy* e)
+{
+	glm::vec3 center = p;
+	glm::vec2 radii = glm::vec2(e->getCollider()->getHW(), e->getCollider()->getHH());
+
+	char mask = 0;
+	if (pointIsAbovePlane(p, nright, -center.x - radii.x))
+	{
+		mask |= 1;// +x
+	}
+	if (pointIsAbovePlane(p, nleft, center.x - radii.x))
+	{
+		mask |= 2;	// -x
+	}
+	if (pointIsAbovePlane(p, nup, -center.z - radii.y))
+	{
+		mask |= 4;	// +y
+	}
+	if (pointIsAbovePlane(p, ndown, center.z - radii.y))
+	{
+		mask |= 8;	// -y
+	}
+	return mask;
+}
+
+glm::vec3 Game::getFaceNormal(glm::vec3 p, Enemy* e)
+{
+	char mask = computePointMask(p, e);
+	glm::vec3 normal = glm::vec3(0, 0, 0);
+	if ((mask & 1) == 1)	// +x
+	{
+		normal += nright;
+	}
+	if ((mask & 2) == 2)	// -x
+	{
+		normal += nleft;
+	}
+	if ((mask & 4) == 4)	// +y
+	{
+		normal += nup;
+	}
+	if ((mask & 8) == 8)	// -y
+	{
+		normal += ndown;
+	}
+	return normalize(normal);
+}
+
+void removeEnemies(std::vector<GameObject*> & gameObjects)
+{
+	std::vector<GameObject*>::iterator it = gameObjects.begin();
+	while(it != gameObjects.end())
+	{
+
+		Enemy* e = dynamic_cast<Enemy*>((*it));
+		if (e)
+		{
+			it = gameObjects.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+}
 
 void Game::update()
 {
 	if(isGameRunning == true)
 	{
-		// Game Object Update Loop
-		for (int i = 0; i < gameObjects.size(); i++) {
-			if (gameObjects[i] != nullptr) {
-				gameObjects[i]->componentUpdate();
-				gameObjects[i]->update();
+		//check if an enemy is due to be spawned, and if so create it
+		std::vector<GameObject*> empty;
+		waveSpawner->spawnEnemy(empty, gameObjects);
+		std::vector<GameObject*>::iterator it;
+		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+		{
+			(*it)->componentUpdate();
+			(*it)->update();
 
-				Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
-				if (e)
-				{
-					e->update();
-				}
+			//update enemy AI 
+			Enemy *e = dynamic_cast<Enemy*>((*it));
+			if (e)
+			{
+				e->update();
 			}
+
+			Boss *b = dynamic_cast<Boss*>((*it));
+			if (b)
+			{
+				b->update();
+				b->checkFieldEmpty(gameObjects);
+				b->spawnMinions(gameObjects, toonShader, pathManager);
+			}
+
 		}
 
+		//collision checking loop
+		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end() - 1; ++it)
+		{
+			for (vector<GameObject*>::iterator it1 = it + 1; it1 < gameObjects.end(); ++it1) // we make sure that we check a collision between the same objcts only once
+			{
+				if ((*it)->getCollider() && (*it1)->getCollider()) {
+
+					Enemy *t1 = dynamic_cast<Enemy*>((*it));
+					Enemy *t2 = dynamic_cast<Enemy*>((*it1));
+					Player *p1 = dynamic_cast<Player*>((*it));
+					Player *p2 = dynamic_cast<Player*>((*it1));
+					if (t1 || t2 && p1 || p2)
+					{
+						//cout << endl;
+					}
+					if (checkCollision((*it), (*it1)) == true)
+					{
+						//an enemy is colliding with something
+						//if it is another enemy
+						Enemy *e1 = dynamic_cast<Enemy*>((*it));
+						Enemy *e2 = dynamic_cast<Enemy*>((*it1));
+
+						//if they are both enemies
+						if (e1 && e2) {
+							//do contact resolution here 
+
+							// dlc - get contact normal
+							//contactNormal = getFaceNormal(e1->getPosition(), e2);
+
+							//calculate distance between points
+							float dist = glm::distance(e1->getPosition(), e2->getPosition());
+							float penetration = dist - (e1->getCollider()->getHW() + e2->getCollider()->getHW());
+
+							//if there is a positive penetration
+							if (penetration <= 0) {
+
+								//shuffle both away from eachother - this will help for spawning but they will still pile up on the player, but you'll be dead 
+								//before you notice
+								//e1->Move(glm::vec3(-5.0f, 0.0f, 0.0f));
+								//e2->Move(glm::vec3(0.0f, 0.0f, 1.0f));
+							}
+						}
+						else
+						{
+							
+							Player *p1 = dynamic_cast<Player*>((*it));
+							Player *p2 = dynamic_cast<Player*>((*it1));
+							//if there is a player, enemy collision
+
+							if (e1 || e2)
+							{
+								//cout << endl;
+							}
+
+							if (p1 || p2)
+							{
+								//cout << endl;
+							}
+							if (e1 && p2 || e2 && p1)
+							{
+								//check which one is the enemy, then set to attack animation
+								if (e1)
+								{
+									e1->setMoving(false);
+									if(!e1->getInjured())
+									e1->setAnimValues(3.6f, 1.36);
+								}
+								if (e2)
+								{
+									e2->setMoving(false);
+									if (!e2->getInjured())
+									e2->setAnimValues(3.6f, 1.36);
+								}
+							}
+						}
+						
+					}
+				}
+
+			}
+		}
 		// Everything else
 		if(mainPlayer->hasPlayerAttacked()) cout << "FIRE ZE MISSILES!" << endl;
-		
 	}
 	
 	if (Input::keyboard1.keys[GLFW_KEY_P])
@@ -266,6 +436,20 @@ void Game::update()
 		isGameRunning = false;	
 		g_window = glfwGetCurrentContext();
 		glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	if (Input::keyboard1.keys[GLFW_KEY_B])
+	{
+		if (clicked == false) {
+			removeEnemies(gameObjects);
+			clicked = true;
+		}
+	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_N])
+	{
+		if (clicked == true) {
+			clicked = false;
+		}
 	}
 
 	if (isGameRunning == false) 
@@ -377,6 +561,29 @@ void Game::update()
 		mainPlayer->playAnimation();
 	}
 
+	if (Input::keyboard1.keys[GLFW_KEY_M]) {
+
+		if (takeDamage == false) {
+			vector<GameObject*>::iterator it;
+			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+			{
+				Enemy *tmp = dynamic_cast<Enemy*>(*it);
+				if (tmp)
+				{
+					tmp->takeDamage(0.05f);
+				}
+			}
+			takeDamage = true;
+		}
+	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_O]) {
+
+		if (takeDamage == true) {
+			takeDamage = false;
+		}
+	}
+
 	//update one path per frame so the computer doesnt melt
 	if (pathManager->working == false) {
 		pathManager->update(gameObjects, toonShader);
@@ -385,7 +592,6 @@ void Game::update()
 		pathManager->working = false;
 
 	//cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
-	//lezCamera.update();/// ----------------------------------------------------------------------CHECK
 	const Uint8 *keys = SDL_GetKeyboardState(NULL); /// ----------------------------------------------------------------------REMOVE
 	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
 	else SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -402,7 +608,6 @@ void Game::draw()
 
 	//glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), lezCamera.getCameraPos().x, lezCamera.getCameraPos().y, lezCamera.getCameraPos().z);
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
-
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
 	skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));

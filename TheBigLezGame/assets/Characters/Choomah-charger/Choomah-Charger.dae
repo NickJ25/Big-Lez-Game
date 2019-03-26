@@ -5,29 +5,15 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.79.0 commit date:2018-03-22, commit time:14:10, hash:f4dc9f9d68b</authoring_tool>
     </contributor>
-    <created>2019-03-14T19:28:00</created>
-    <modified>2019-03-14T19:28:00</modified>
+    <created>2019-03-14T19:18:10</created>
+    <modified>2019-03-14T19:18:10</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images>
-    <image id="ChoomahChargerUV" name="ChoomahChargerUV">
-      <init_from>ChoomahChargerUV.png</init_from>
-    </image>
-  </library_images>
+  <library_images/>
   <library_effects>
-    <effect id="Material-effect">
+    <effect id="Material1-effect">
       <profile_COMMON>
-        <newparam sid="ChoomahChargerUV-surface">
-          <surface type="2D">
-            <init_from>ChoomahChargerUV</init_from>
-          </surface>
-        </newparam>
-        <newparam sid="ChoomahChargerUV-sampler">
-          <sampler2D>
-            <source>ChoomahChargerUV-surface</source>
-          </sampler2D>
-        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -37,13 +23,13 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <texture texture="ChoomahChargerUV-sampler"/>
+              <color sid="diffuse">0.8 0.8 0.8 1</color>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
             </specular>
             <shininess>
-              <float sid="shininess">50</float>
+              <float sid="shininess">49</float>
             </shininess>
             <index_of_refraction>
               <float sid="index_of_refraction">1</float>
@@ -54,8 +40,8 @@
     </effect>
   </library_effects>
   <library_materials>
-    <material id="Material-material" name="Material">
-      <instance_effect url="#Material-effect"/>
+    <material id="Material1-material" name="Material1">
+      <instance_effect url="#Material1-effect"/>
     </material>
   </library_materials>
   <library_geometries>
@@ -93,7 +79,7 @@
         <vertices id="lowman_shoes-mesh-vertices">
           <input semantic="POSITION" source="#lowman_shoes-mesh-positions"/>
         </vertices>
-        <triangles material="Material-material" count="2454">
+        <triangles material="Material1-material" count="2454">
           <input semantic="VERTEX" source="#lowman_shoes-mesh-vertices" offset="0"/>
           <input semantic="NORMAL" source="#lowman_shoes-mesh-normals" offset="1"/>
           <input semantic="TEXCOORD" source="#lowman_shoes-mesh-map-0" offset="2" set="0"/>
@@ -1062,7 +1048,7 @@
           <skeleton>#Armature_Torso</skeleton>
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material-material" target="#Material-material"/>
+              <instance_material symbol="Material1-material" target="#Material1-material"/>
             </technique_common>
           </bind_material>
         </instance_controller>

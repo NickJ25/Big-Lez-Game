@@ -94,4 +94,5 @@ bool Player::hasPlayerAttacked()
 Player::Character Player::getCharacter()
 {
 	return m_character;
+	//this->setMatrix(tempMat);
 }

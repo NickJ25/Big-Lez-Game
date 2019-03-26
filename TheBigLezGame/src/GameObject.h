@@ -20,11 +20,13 @@ protected:
 	Shader* objShader;
 
 	bool isDrawing = true;
-	bool paused;
+	bool paused = false;
+	bool still = false;
 
 public:
 	GameObject(glm::vec3 pos) : objPosition(glm::vec4(pos.x, pos.y, pos.z, 1.0f)) {
 		transformComponent = new TransformComponent(glm::vec4(pos,1.0f));
+		renderComponent = nullptr;
 		paused = false;
 	}
 
@@ -40,10 +42,13 @@ public:
 		paused = false;
 	}
 
+
 	void setAnimation(float s, float e);
 
 	void setPaused(bool p);
 	bool getPaused();
+
+	void setStill(bool s);
 
 	virtual ~GameObject() {
 		delete transformComponent;
@@ -58,8 +63,11 @@ public:
 	void setDraw(bool d);
 
 	glm::vec3 getPosition();
+	glm::vec3 getRotation();
+
 	void setPosition(glm::vec3 newPos);
 	void setMatrix(glm::mat4 newMat);
+	glm::mat4 getMatrix();
 
 	void addCollision(glm::vec3 pos, float hw, float hh);
 	CollisionComponent* getCollider();
