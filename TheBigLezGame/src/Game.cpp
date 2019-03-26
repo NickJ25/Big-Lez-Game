@@ -327,31 +327,27 @@ void Game::update()
 		std::vector<GameObject*> empty;
 		waveSpawner->spawnEnemy(empty, gameObjects);
 
-		int c = 0;
-		std::vector<GameObject*>::iterator it;
-		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
-		{
+		for (int i = 0; i < gameObjects.size(); i++) {
+			if (gameObjects[i] != nullptr) {
+				gameObjects[i]->componentUpdate();
+				gameObjects[i]->update();
 
-			(*it)->componentUpdate();
-			(*it)->update();
+				//update enemy AI 
+				Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
+				if (e)
+				{
+					e->update();
+				}
 
-			//update enemy AI 
-			Enemy *e = dynamic_cast<Enemy*>((*it));
-			if (e)
-			{
-				e->update();
+				Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
+				if (b)
+				{
+					b->update();
+					b->checkFieldEmpty(gameObjects);
+					b->spawnMinions(gameObjects, toonShader, pathManager);
+					cout << endl;
+				}
 			}
-
-			Boss *b = dynamic_cast<Boss*>((*it));
-			if (b)
-			{
-				b->update();
-				b->checkFieldEmpty(gameObjects);
-				b->spawnMinions(gameObjects, toonShader, pathManager);
-				cout << endl;
-			}
-			c++;
-			cout << c << endl;
 		}
 
 		//collision checking loop
