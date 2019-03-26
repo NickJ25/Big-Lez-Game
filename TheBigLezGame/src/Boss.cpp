@@ -254,7 +254,9 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 
 			//set a new wave
 			setWave();
+			cout << endl;
 	}
+	cout << endl;
 }
 
 void Boss::setWave()
@@ -276,6 +278,7 @@ void Boss::setWave()
 		current = brawlerWave;
 		currentWave = 2;
 	}
+	cout << endl;
 }
 
 void Boss::checkFieldEmpty(std::vector<GameObject*> g)

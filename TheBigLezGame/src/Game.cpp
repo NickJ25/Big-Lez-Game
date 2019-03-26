@@ -113,7 +113,7 @@ void Game::init()
 	lezShotgun->setShader(toonShader);
 	lezShotgun->setAnimation(0.0f, 1.0f);
 	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
-	gameObjects.push_back(lezShotgun);
+	//gameObjects.push_back(lezShotgun);
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	lezTest->Move(glm::vec3(-10.0f, 0.0f, -10.0f));
@@ -130,7 +130,7 @@ void Game::init()
 	glm::vec3 test = glm::vec3(2.5, 2.5, 2.5);
 	GameObject* Fence;
 
-#pragma region Fences
+//#pragma region Fences
 
 	for (int i = 0; i < 20; i++)
 	{
@@ -183,7 +183,7 @@ void Game::init()
 
 	}
 
-#pragma endregion
+//#pragma endregion
 
 	//first initialise a Fector containing door information
 	std::vector<std::pair<glm::vec3, glm::vec3>> bottomDoors, topDoors, leftDoors, rightDoors;
@@ -326,9 +326,12 @@ void Game::update()
 		//check if an enemy is due to be spawned, and if so create it
 		std::vector<GameObject*> empty;
 		waveSpawner->spawnEnemy(empty, gameObjects);
+
+		int c = 0;
 		std::vector<GameObject*>::iterator it;
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
+
 			(*it)->componentUpdate();
 			(*it)->update();
 
@@ -345,8 +348,10 @@ void Game::update()
 				b->update();
 				b->checkFieldEmpty(gameObjects);
 				b->spawnMinions(gameObjects, toonShader, pathManager);
+				cout << endl;
 			}
-
+			c++;
+			cout << c << endl;
 		}
 
 		//collision checking loop

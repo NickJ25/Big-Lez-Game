@@ -148,11 +148,26 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 					}
 					for (std::vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
 					{
+						bool playerPassed = false;
+
 						Player *tmp = dynamic_cast<Player*>((*it));
 						if (tmp)
 						{
-							e->setTarget(tmp);
-							break;
+							if (playerPassed = true)
+							{
+								e->setTarget(tmp);
+								break;
+							}
+							srand(time(0));
+							int randomNumber = rand() % 4;
+							if (randomNumber > 2) {
+								e->setTarget(tmp);
+								break;
+							}
+							else
+							{
+								playerPassed = true;
+							}
 						}
 					}
 					pathManager->addToQueue(choomah);
