@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <glm/glm.hpp>
 
 class Input
 {
@@ -18,7 +19,11 @@ private:
 		std::string name;
 		bool connected;
 		bool buttons[15];
+		glm::vec2 leftThumb;
+		glm::vec2 rightThumb;
+		glm::vec2 triggers;
 	};
+
 public:
 	static Keyboard Input::keyboard1;
 	static Mouse Input::mouse1;

@@ -113,7 +113,7 @@ void Game::init()
 	lezShotgun->setShader(toonShader);
 	lezShotgun->setAnimation(0.0f, 1.0f);
 	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
-	//gameObjects.push_back(lezShotgun);
+	gameObjects.push_back(lezShotgun);
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	lezTest->Move(glm::vec3(-10.0f, 0.0f, -10.0f));
