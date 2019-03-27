@@ -3,7 +3,7 @@
 Player::Player(ControllerComponent::ControllerType controller, Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
 {
 	if (controller == ControllerComponent::KEYBOARD) {
-		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f), DYNAMIC);
+		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 4.5f, 0.0f), DYNAMIC);
 	}
 	else {
 		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f), STATIC);
@@ -40,8 +40,6 @@ void Player::update()
 	tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -7.5f, 0.0f)));
 	tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
 	tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
-	tempMat = glm::scale(tempMat, glm::vec3(0.6f, 0.6f, 0.6f));
-
 
 
 	GameObject::setMatrix(tempMat);

@@ -100,13 +100,15 @@ void Game::init()
 	sassy->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 	gameObjects.push_back(sassy);
 
-	mainPlayer = new Player(ControllerComponent::KEYBOARD, BigLez, glm::vec3(0.0f, 0.0f, 0.0f));
+	mainPlayer = new Player(ControllerComponent::KEYBOARD, BigLez, glm::vec3(45.0f, -12.5f, 20.0f));
 	mainPlayer->setShader(toonShader);
 	mainPlayer->Move(glm::vec3(45.0f, -12.5f, 20.0f));
+	mainPlayer->setStill(true);
 	//mainPlayer->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	//mainPlayer->Scale(glm::vec3(0.6f, 0.6f, 0.6f));
 	//mainPlayer->setAnim(0);
-	mainPlayer->setAnimation(5.0f, 1.0f);
+	sassy->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
+	sassy->setAnimation(5.0f, 1.0f);
 	gameObjects.push_back(mainPlayer);
 
 	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, false);
