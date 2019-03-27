@@ -8,7 +8,7 @@ Player::Player(ControllerComponent::ControllerType controller, Character charact
 	else {
 		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f), STATIC);
 	}
-	this->addController(controller);
+	this->addController(ControllerComponent::KEYBOARD);
 	m_character = character;
 	prevYaw = -90;
 	currentYaw = 0;
@@ -33,6 +33,27 @@ Camera* Player::getCamera()
 
 void Player::update()
 {
+	if (this->getController()->getForwardMovement()) {
+		glm::vec3 tempPos = m_playerCamera->getCameraPos() - m_playerCamera->getCameraFront() * 1.0f;
+		tempPos.y = 0;
+		m_playerCamera->setCameraPos(tempPos);
+	}
+	if (this->getController()->getBackMovement()) {
+		glm::vec3 tempPos = m_playerCamera->getCameraPos() + m_playerCamera->getCameraFront() * 1.0f;
+		tempPos.y = 0;
+		m_playerCamera->setCameraPos(tempPos);
+	}
+	if (this->getController()->getLeftMovement()) {
+		glm::vec3 tempPos = m_playerCamera->getCameraPos() + glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
+		tempPos.y = 0;
+		m_playerCamera->setCameraPos(tempPos);
+	}
+	if (this->getController()->getRightMovement()) {
+		glm::vec3 tempPos = m_playerCamera->getCameraPos() - glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
+		tempPos.y = 0;
+		m_playerCamera->setCameraPos(tempPos);
+	}
+
 	m_playerCamera->update();
 
 	// Create a matrix and apply the rotations and translations on it.
@@ -58,8 +79,6 @@ void Player::update()
 		currentWeapon->setMatrix(gunMat);
 		currentWeapon->update();
 	}
-
-	
 
 	// Gun controls
 	if (currentWeapon != NULL) {

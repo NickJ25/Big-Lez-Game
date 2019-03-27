@@ -1,21 +1,75 @@
 #include "ControllerComponent.h"
+#include <iostream>
 
-ControllerComponent::ControllerComponent(ControllerType control)
+ControllerComponent::ControllerComponent(ControllerType control) : m_controllerType(control)
 {
-
 }
 
 bool ControllerComponent::getPrimaryAction()
 {
-	return Input::mouse1.buttons[GLFW_MOUSE_BUTTON_LEFT];
+	if (m_controllerType == KEYBOARD) return Input::mouse1.buttons[GLFW_MOUSE_BUTTON_LEFT];
+	else {
+		if (Input::controller1.triggers.y > 0) return true;
+		else return false;
+	}
 }
 
 bool ControllerComponent::getSecondaryAction()
 {
-	return Input::mouse1.buttons[GLFW_MOUSE_BUTTON_RIGHT];
+	if (m_controllerType == KEYBOARD) return Input::mouse1.buttons[GLFW_MOUSE_BUTTON_RIGHT];
+	else {
+		if (Input::controller1.triggers.x > 0) return true;
+		else return false;
+	}
 }
 
 bool ControllerComponent::getReloadAction()
 {
-	return Input::keyboard1.keys[GLFW_KEY_R];
+	if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_R];
+	else return Input::controller1.buttons[2];
+}
+
+bool ControllerComponent::getForwardMovement()
+{
+	//if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_W];
+	//else return Input::controller1.leftThumb.x;
+	if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_W];
+	else {
+		if (Input::controller1.leftThumb.y > 0) return true;
+		else return false;
+	}
+}
+
+bool ControllerComponent::getLeftMovement()
+{
+	//if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_A];
+	//else return Input::controller1.leftThumb.y;
+	if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_A];
+	else {
+		if (Input::controller1.leftThumb.x < 0) return true;
+		else return false;
+	}
+}
+
+bool ControllerComponent::getRightMovement()
+{
+	//if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_D];
+	//else return Input::controller1.leftThumb.y;
+
+	if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_D];
+	else {
+		if (Input::controller1.leftThumb.x > 0) return true;
+		else return false;
+	}
+}
+
+bool ControllerComponent::getBackMovement()
+{
+	//if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_S];
+	//else return Input::controller1.leftThumb.x;
+	if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_S];
+	else {
+		if (Input::controller1.leftThumb.y < 0) return true;
+		else return false;
+	}
 }

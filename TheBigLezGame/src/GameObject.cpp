@@ -86,12 +86,23 @@ void GameObject::setMatrix(glm::mat4 newMat)
 
 void GameObject::addCollision(glm::vec3 pos, float hw, float hh)
 {
-	collisionComponent = new CollisionComponent(pos, hw, hh);
+	collisionComponent = new CollisionComponent(pos, hw, hh, 0.0f);
+}
+
+void GameObject::addCollision(glm::vec3 pos, float hw, float th, float hh)
+{
+	collisionComponent = new CollisionComponent(pos, hw, hh, th);
 }
 
 CollisionComponent* GameObject::getCollider()
 {
 	return collisionComponent;
+}
+
+bool GameObject::isColliderNull()
+{
+	if (collisionComponent) return true;
+	else return false;
 }
 
 void GameObject::addController(ControllerComponent::ControllerType controller)

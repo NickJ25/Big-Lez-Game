@@ -44,8 +44,6 @@ void Game::init()
 	dirLight->setShader(toonShader);
 	gameObjects.push_back(dirLight);
 
-	
-
 	GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 100.0f, 0.0f));
 
 	//GameObject* spotLight = new SpotLight(mainCamera->getCameraPos(), mainCamera->getCameraFront(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.1f), 0.4, 3);
@@ -117,20 +115,21 @@ void Game::init()
 
 	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
 	lezTest->Move(glm::vec3(-10.0f, 0.0f, -10.0f));
-	cout << "lez test pos:" << lezTest->getPosition().x << " " << lezTest->getPosition().y << " " << lezTest->getPosition().z << "----------------------" << endl;
+	//cout << "lez test pos:" << lezTest->getPosition().x << " " << lezTest->getPosition().y << " " << lezTest->getPosition().z << "----------------------" << endl;
 	lezTest->setShader(toonShader);
 	lezTest->Rotate(-90.0f, glm::vec3(1.0, 0.0, 0.0));
 	lezTest->addCollision(glm::vec3(-10.0f, 0.0f, -10.0f), 50, 50);
 	gameObjects.push_back(lezTest);
 
 
+#pragma region Fences
 	// add environmental collision boxes for pathfinding an' such
 	glm::vec3 fenceScaleVertical = glm::vec3(4.0f, 4.0f, 35.0f);
 	glm::vec3 fenceScaleHorizontal = glm::vec3(35.0f, 4.0f, 4.0f);
 	glm::vec3 test = glm::vec3(2.5, 2.5, 2.5);
 	GameObject* Fence;
 
-//#pragma region Fences
+
 
 	for (int i = 0; i < 20; i++)
 	{
@@ -183,8 +182,6 @@ void Game::init()
 
 	}
 
-//#pragma endregion
-
 	//first initialise a Fector containing door information
 	std::vector<std::pair<glm::vec3, glm::vec3>> bottomDoors, topDoors, leftDoors, rightDoors;
 
@@ -225,6 +222,8 @@ void Game::init()
 	//prepare wave 1 to be spawned
 	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, false);
 
+#pragma endregion
+
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
 	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
@@ -247,6 +246,46 @@ bool Game::checkCollision(GameObject* a, GameObject* b)
 	//penetrationDepthZ = a->getCollider()->getHH() + b->getCollider()->getHW() - a->getCollider()->getPos().z - b->getCollider()->getPos().z;
 
 	return true;
+}
+
+bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * object)
+{	
+	// Prerequisites
+	vector<float>t_rayPos = { rayPos->x, rayPos->y, rayPos->z};
+	vector<float>t_rayDir = { rayDir->x, rayDir->y, rayDir->z };
+	vector<float>t_min = { object->getCollider()->getPos().x - object->getCollider()->getHW(),
+							object->getCollider()->getPos().y - object->getCollider()->getTH(),
+							object->getCollider()->getPos().z - object->getCollider()->getHH() };
+	vector<float>t_max = { object->getCollider()->getPos().x + object->getCollider()->getHW(),
+							object->getCollider()->getPos().y + object->getCollider()->getTH(),
+							object->getCollider()->getPos().z + object->getCollider()->getHH() };
+
+	// For all three slabs
+	for (int i = 0; i < 3; i++) {
+		float tmin = 0.0f;
+		float tmax = FLT_MAX;
+		if (abs(t_rayDir[i]) < std::numeric_limits<float>::epsilon()) {
+			if (t_rayPos[i] < t_min[i] || t_rayPos[i] > t_max[i]) return 0;
+		}
+		else {
+			// Compute intersection t value of ray with near and far plane of slab
+			float ood = 1.0f / t_rayDir[i];
+			float t1 = (t_min[i] - t_rayPos[i]) * ood;
+			float t2 = (t_max[i] - t_rayPos[i]) * ood;
+			// Make t1 be intersection with near plane, t2 with far plane
+			if (t1 > t2) {
+				float temp;
+				temp = t2;
+				t1 = t2;
+				t1 = temp;
+			}
+			// Compute the intersection of slab intersection intervals
+			if (t1 > tmin) tmin = t1;
+			if (t2 > tmax) tmax = t2;
+			//Exit with no collision as soon as slab intersection becomes empty
+		}
+	}
+	return 1;
 }
 
 bool Game::pointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d)
@@ -345,7 +384,6 @@ void Game::update()
 					b->update();
 					b->checkFieldEmpty(gameObjects);
 					b->spawnMinions(gameObjects, toonShader, pathManager);
-					cout << endl;
 				}
 			}
 		}
@@ -394,46 +432,54 @@ void Game::update()
 						}
 						else
 						{
-							
 							Player *p1 = dynamic_cast<Player*>((*it));
 							Player *p2 = dynamic_cast<Player*>((*it1));
 							//if there is a player, enemy collision
 
-							if (e1 || e2)
-							{
+							if (e1 || e2){
 								//cout << endl;
 							}
 
-							if (p1 || p2)
-							{
+							if (p1 || p2){
 								//cout << endl;
 							}
-							if (e1 && p2 || e2 && p1)
-							{
+							if (e1 && p2 || e2 && p1){
 								//check which one is the enemy, then set to attack animation
-								if (e1)
-								{
+								if (e1){
 									e1->setMoving(false);
 									if(!e1->getInjured())
 									e1->setAnimValues(3.6f, 1.36);
 								}
-								if (e2)
-								{
+								if (e2){
 									e2->setMoving(false);
 									if (!e2->getInjured())
 									e2->setAnimValues(3.6f, 1.36);
 								}
 							}
 						}
-						
 					}
 				}
-
+			}
+			// Ray Checking?
+			
+			if ((*it)->isColliderNull()) {
+				Enemy *t1 = dynamic_cast<Enemy*>((*it));
+				if (t1) {
+					cout << "Checking: " << endl;
+					cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (*it)) << endl;
+				}
+			}
+			else {
+				cout << "Skipped!" << endl;
 			}
 		}
 		// Everything else
 		if(mainPlayer->hasPlayerAttacked()) cout << "FIRE ZE MISSILES!" << endl;
 	}
+
+	//glm::vec3 ray_Test(0.0f, 0.0f, 0.0f);
+	//ray_Test = mainPlayer->getPosition() + mainPlayer->getCamera()->getCameraFront() * 1.0f;
+	////cout << "Ray: " << ray_Test.x << " " << ray_Test.y << " " << ray_Test.z << endl;
 	
 	if (Input::keyboard1.keys[GLFW_KEY_P])
 	{
@@ -481,9 +527,6 @@ void Game::update()
 		}
 
 	}
-	glm::vec3 ray_Test(0.0f, 0.0f, 0.0f);
-	ray_Test = mainPlayer->getPosition() + mainPlayer->getCamera()->getCameraFront() * 1.0f;
-	cout << "Ray: " << ray_Test.x << " " << ray_Test.y << " " << ray_Test.z << endl;
 
 	if (Input::keyboard1.keys[GLFW_KEY_C]) {
 		sassy->Move(glm::vec3(1.0f, 0.0f, 0.0f));

@@ -19,6 +19,11 @@ float CollisionComponent::getHH()
 	return halfHeight;
 }
 
+float CollisionComponent::getTH()
+{
+	return halfTrueHeight;
+}
+
 void CollisionComponent::setCollider(glm::vec3 newPos)
 {
 	centre = newPos;

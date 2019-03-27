@@ -107,7 +107,7 @@ void ControllerHandle() {
 		Input::controller1.rightThumb.x = axes[2];
 		Input::controller1.rightThumb.y = axes[3];
 		Input::controller1.triggers.x = axes[4];
-		Input::controller1.triggers.x = axes[5];
+		Input::controller1.triggers.y = axes[5];
 	}
 	else {
 		Input::controller1.connected = false;
