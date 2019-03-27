@@ -56,7 +56,6 @@ void Player::update()
 	}
 
 
-
 	m_playerCamera->update();
 
 	// Create a matrix and apply the rotations and translations on it.
@@ -64,8 +63,7 @@ void Player::update()
 	tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -7.5f, 0.0f)));
 	tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
 	tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
-	tempMat = glm::
-		(tempMat, glm::vec3(0.6f, 0.6f, 0.6f));
+	tempMat = glm::scale(tempMat, glm::vec3(0.6f, 0.6f, 0.6f));
 
 
 
