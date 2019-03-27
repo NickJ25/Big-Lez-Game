@@ -88,10 +88,9 @@ void Camera::update()
 		break;
 	}
 
-	int xpos, ypos;
-
-	xpos = Input::mouse1.current_Xpos;
-	ypos = Input::mouse1.current_Ypos;
+	float xpos, ypos;
+	xpos = Input::controller1.rightThumb.x; //Input::mouse1.current_Xpos;
+	ypos = Input::controller1.rightThumb.y; //Input::mouse1.current_Ypos;
 
 	if (firstCamLoad) { // Add start position for camera?
 		lastOffsetX = (float)xpos;
@@ -99,8 +98,8 @@ void Camera::update()
 		firstCamLoad = false;
 	}
 
-	mouseOffsetX = (float)xpos - lastOffsetX;
-	mouseOffsetY = lastOffsetY - (float)ypos;
+	mouseOffsetX = xpos * 9;//(float)xpos - lastOffsetX;
+	mouseOffsetY = -ypos* 8;//lastOffsetY - (float)ypos;
 	lastOffsetX = (float)xpos;
 	lastOffsetY = (float)ypos;
 

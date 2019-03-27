@@ -20,5 +20,7 @@ public:
 	bool getLeftMovement();
 	bool getRightMovement();
 	bool getBackMovement();
+	float getLookXAxis();
+	float getLookYAxis();
 
 };
