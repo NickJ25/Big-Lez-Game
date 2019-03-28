@@ -5,13 +5,19 @@
 
 struct Obstacle : public GameObject
 {
+	struct Character
+	{
+		string file;
+		string name;
+	};
 
-	Obstacle(std::string name, glm::vec3 startPos);
+	Obstacle(Character character, std::string name, glm::vec3 startPos);
 	~Obstacle();
 
 	void update() override;
 
 	std::string name;
+	Character m_char;
 };
 
 // Make camera unique

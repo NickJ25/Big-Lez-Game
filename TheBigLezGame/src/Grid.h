@@ -2,6 +2,7 @@
 #include "Node.h"
 #include "GameObject.h"
 #include "Player.h"
+#include "Obstacle.h"
 
 #include <algorithm>
 using namespace std;
@@ -49,12 +50,10 @@ private:
 	int gridX, gridY;
 	
 	glm::vec3 position;
-
-	Player::Character cube;
-
+	
 	std::vector<Node*> path;
 
-	//std::vector<glm::vec3> doors;
+	Obstacle::Character cube;
 
 	std::string boundingType;
 };

@@ -18,6 +18,7 @@ public:
 	};
 
 	Player(ControllerComponent::ControllerType controller, Character character, glm::vec3 startPos);
+	Player(Character character, glm::vec3 startPos);
 	~Player();
 
 	void playAnimation();
@@ -29,6 +30,7 @@ public:
 	Player::Character getCharacter();
 
 private:
+
 	Character m_character;
 	Camera* m_playerCamera;
 	Text* m_charLabel;

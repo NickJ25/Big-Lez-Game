@@ -15,6 +15,13 @@ Player::Player(ControllerComponent::ControllerType controller, Character charact
 	m_charLabel = new Text(glm::vec2(6.0f, 5.0f), "assets/Fonts/ariali.ttf");
 }
 
+Player::Player(Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
+{
+	m_character = character;
+	prevYaw = -90;
+	currentYaw = 0;
+	m_charLabel = new Text(glm::vec2(6.0f, 5.0f), "assets/Fonts/ariali.ttf");
+}
 
 Player::~Player()
 {
@@ -33,38 +40,40 @@ Camera* Player::getCamera()
 
 void Player::update()
 {
-	m_playerCamera->update();
+	if (m_playerCamera) {
+		m_playerCamera->update();
 
-	// Create a matrix and apply the rotations and translations on it.
-	glm::mat4 tempMat(1.0f);
-	tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -7.5f, 0.0f)));
-	tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
-	tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
+		// Create a matrix and apply the rotations and translations on it.
+		glm::mat4 tempMat(1.0f);
+		tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -7.5f, 0.0f)));
+		tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
+		tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
 
 
-	GameObject::setMatrix(tempMat);
+		GameObject::setMatrix(tempMat);
 
-	// Apply the same matrix to the gun model
-	if (currentWeapon != NULL) {
-		glm::mat4 gunMat(1.0f);
-		//gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -13.0f, 0.0f)));
-		gunMat = glm::rotate(gunMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
-		gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
-		//gunMat = glm::translate(gunMat, (glm::vec3(0.2f, -4.0f, 0.0f)));
+		// Apply the same matrix to the gun model
+		if (currentWeapon != NULL) {
+			glm::mat4 gunMat(1.0f);
+			//gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -13.0f, 0.0f)));
+			gunMat = glm::rotate(gunMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
+			gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+			//gunMat = glm::translate(gunMat, (glm::vec3(0.2f, -4.0f, 0.0f)));
 
-		currentWeapon->setMatrix(gunMat);
-		currentWeapon->update();
-	}
+			currentWeapon->setMatrix(gunMat);
+			currentWeapon->update();
+		}
 
-	
 
-	// Gun controls
-	if (currentWeapon != NULL) {
-		currentWeapon->primaryMove(this->getController()->getPrimaryAction());
-		currentWeapon->secondaryMove(this->getController()->getSecondaryAction());
-		currentWeapon->action(this->getController()->getReloadAction());
 
+		// Gun controls
+		if (currentWeapon != NULL) {
+			currentWeapon->primaryMove(this->getController()->getPrimaryAction());
+			currentWeapon->secondaryMove(this->getController()->getSecondaryAction());
+			currentWeapon->action(this->getController()->getReloadAction());
+
+		}
 	}
 }
 

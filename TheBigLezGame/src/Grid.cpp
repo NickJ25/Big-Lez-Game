@@ -15,8 +15,7 @@ Grid::Grid(glm::vec2 gridsize, float noderadius, glm::vec3 pos, std::string b): 
 	gridX = int(gridSize.x / nodeDiameter);
 	gridY = int(gridsize.y / nodeDiameter);
 
-	//initialise debug objects for nodes
-	cube.fileLocation = "assets/Props/Map/gridblock.dae";
+	cube.file = "assets/Props/Map/gridblock.dae";
 	cube.name = "boundingbox";
 }
 
@@ -42,40 +41,37 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 			tmpNode->gridX = i;
 			tmpNode->gridY = j;
 
-			// uncomment to create object to represent node
-			//GameObject* gridsquare;
-			//gridsquare = new Player(cube);
-			//gridsquare->setShader(shader);
-			//gridsquare->Move(glm::vec3(tmpNode->position.x, 0.5f, tmpNode->position.z));
-			//gridsquare->Scale(glm::vec3(3.0, 1.0, 3.0));
-			//gridsquare->setAnim(0);
-
 			std::vector<GameObject*>::iterator it;
 			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 			{
+
 				if ((*it)->getCollider())
 				{
 					//find out what type of obstruction it is
-					Player *p = dynamic_cast<Player*>((*it));
+					Obstacle *p = dynamic_cast<Obstacle*>((*it));
 
 					if (p)
 					{
-						if (p->getCharacter().name == boundingType) {
+						if (checkGridCollision(*it, *tmpNode) == true)
+						{
+							//tmpNode->setBlocked(true);
 
-							if (checkGridCollision(*it, *tmpNode) == true)
-							{
-								//uncomment for debugging purposes
-								//gridsquare->Move(glm::vec3(0.0f, 5.0f, 0.0f)); 
-								tmpNode->setBlocked(true);
-								break;
-							}
+							//GameObject* gridsquare;
+							//gridsquare = new Obstacle(cube, cube.name, glm::vec3(0.0f, 0.0f, 0.0f));
+							//gridsquare->setShader(shader);
+							//gridsquare->Move(glm::vec3(tmpNode->position.x, 0.5f, tmpNode->position.z));
+							//gridsquare->Scale(glm::vec3(3.0, 1.0, 3.0));
+							//gridsquare->setAnimation(0.0f, 1.0f);
+							//gridsquare->Move(glm::vec3(0.0f, 5.0f, 0.0f));
+							////uncomment for debugging purposes
+							////add game object to the render loop
+							//gameObjects.push_back(gridsquare);
+							break;
+							
 						}
 					}
 				}
 			}
-			//uncomment for debugging purposes
-			//add game object to the render loop
-			//gameObjects.push_back(gridsquare);
 
 			//add the node to the column
 			columnVector.push_back(tmpNode);

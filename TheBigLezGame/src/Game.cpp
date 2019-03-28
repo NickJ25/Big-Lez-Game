@@ -46,7 +46,7 @@ void Game::init()
 
 	
 
-	GameObject* environment = new Prop("assets/Props/Map/envMap.dae", glm::vec3(0.0f, 100.0f, 0.0f));
+	GameObject* environment = new Prop("assets/Props/Map/envMap1.dae", glm::vec3(0.0f, 20.0f, 100.0f));
 
 	//GameObject* spotLight = new SpotLight(mainCamera->getCameraPos(), mainCamera->getCameraFront(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.1f), 0.4, 3);
 	//spotLight->setShader(toonShader);
@@ -63,7 +63,7 @@ void Game::init()
 	//gameObjects.push_back(couch);
 
 	environment->setShader(toonShader);
-	environment->Move(glm::vec3(0.0f, 100.0f, 0.0f));
+	environment->Move(glm::vec3(0.0f, 60.0f, 0.0f));
 	gameObjects.push_back(environment);
 
 	// Characters
@@ -117,13 +117,13 @@ void Game::init()
 	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
 	//gameObjects.push_back(lezShotgun);
 
-	GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f));
-	lezTest->Move(glm::vec3(-10.0f, 0.0f, -10.0f));
-	cout << "lez test pos:" << lezTest->getPosition().x << " " << lezTest->getPosition().y << " " << lezTest->getPosition().z << "----------------------" << endl;
-	lezTest->setShader(toonShader);
-	lezTest->Rotate(-90.0f, glm::vec3(1.0, 0.0, 0.0));
-	lezTest->addCollision(glm::vec3(-10.0f, 0.0f, -10.0f), 50, 50);
-	gameObjects.push_back(lezTest);
+	//GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f), "NoBounding");
+	//lezTest->Move(glm::vec3(-10.0f, 0.0f, -10.0f));
+	//cout << "lez test pos:" << lezTest->getPosition().x << " " << lezTest->getPosition().y << " " << lezTest->getPosition().z << "----------------------" << endl;
+	//lezTest->setShader(toonShader);
+	//lezTest->Rotate(-90.0f, glm::vec3(1.0, 0.0, 0.0));
+	//lezTest->addCollision(glm::vec3(-10.0f, 0.0f, -10.0f), 50, 50);
+	//gameObjects.push_back(lezTest);
 
 
 	// add environmental collision boxes for pathfinding an' such
@@ -131,12 +131,14 @@ void Game::init()
 	glm::vec3 fenceScaleHorizontal = glm::vec3(35.0f, 4.0f, 4.0f);
 	glm::vec3 test = glm::vec3(2.5, 2.5, 2.5);
 	GameObject* Fence;
-
+	Obstacle::Character c;
+	c.file = "assets/Props/Map/gridblock.dae";
+	c.name = "boundingbox";
 //#pragma region Fences
 
 	for (int i = 0; i < 20; i++)
 	{
-		Fence = new Obstacle("collider", glm::vec3(0.0,0.0,0.0));
+		Fence = new Obstacle(c, "collider", glm::vec3(0.0,0.0,0.0));
 
 
 		glm::vec3 scaleFactor = fenceScaleVertical;
@@ -190,7 +192,7 @@ void Game::init()
 	//first initialise a Fector containing door information
 	std::vector<std::pair<glm::vec3, glm::vec3>> bottomDoors, topDoors, leftDoors, rightDoors;
 
-	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(83.0f, -12.5f, 46.0f), glm::vec3(83.0f, -12.5f, 38.0f)));
+	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(83.0f, -12.5f, 60.0f), glm::vec3(83.0f, -12.5f, 50.0f)));
 	//bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, 50.0f), glm::vec3(43.0f, -12.5f, 30.0f)));
 
 	//topDoors.push_back(std::pair<glm::vec3, glm::vec3> (glm::vec3(83.0f, -12.5f, -30.0f), glm::vec3(83.0f,-12.5f,-10.0f)));
@@ -201,7 +203,7 @@ void Game::init()
 
 
 	//grid has to be the last game object added
-	pathFindingGrid = new Grid(glm::vec2(1250, 1250), 2.0f, glm::vec3(0.0f, 0.0f, 0.0f), "boundingbox");
+	pathFindingGrid = new Grid(glm::vec2(500, 500), 5.0f, glm::vec3(0.0f, 0.0f, 0.0f), "boundingbox");
 	pathFindingGrid->buildGrid(gameObjects, toonShader);
 
 	//initialise the path manager
@@ -597,7 +599,6 @@ void Game::update()
 	if (pathManager->working == true)
 		pathManager->working = false;
 
-	//cout << "cpos: " << lezCamera.getCameraPos().x << " " << lezCamera.getCameraPos().z << endl;
 	const Uint8 *keys = SDL_GetKeyboardState(NULL); /// ----------------------------------------------------------------------REMOVE
 	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
 	else SDL_SetRelativeMouseMode(SDL_TRUE);
