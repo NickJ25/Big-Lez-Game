@@ -12,6 +12,7 @@ struct Obstacle : public GameObject
 	};
 
 	Obstacle(Character character, std::string name, glm::vec3 startPos);
+	Obstacle(std::string name, glm::vec3 startPos);
 	~Obstacle();
 
 	void update() override;

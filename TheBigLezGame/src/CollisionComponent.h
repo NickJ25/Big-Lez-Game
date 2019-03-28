@@ -14,6 +14,8 @@ public:
 
 	}
 
+	void setScale(glm::vec3 newScale);
+
 	void setCollider(glm::vec3 newPos);
 
 	void moveCollider(glm::vec3 moveAmount);

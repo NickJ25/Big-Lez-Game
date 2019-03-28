@@ -51,6 +51,9 @@ void Player::update()
 
 
 		GameObject::setMatrix(tempMat);
+	
+		//move the collider alongside the player
+		collisionComponent->setCollider(m_playerCamera->getCameraPos());
 
 		// Apply the same matrix to the gun model
 		if (currentWeapon != NULL) {

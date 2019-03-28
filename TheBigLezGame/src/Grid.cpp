@@ -54,18 +54,7 @@ void Grid::buildGrid(std::vector<GameObject*> &gameObjects, Shader *shader)
 					{
 						if (checkGridCollision(*it, *tmpNode) == true)
 						{
-							//tmpNode->setBlocked(true);
-
-							//GameObject* gridsquare;
-							//gridsquare = new Obstacle(cube, cube.name, glm::vec3(0.0f, 0.0f, 0.0f));
-							//gridsquare->setShader(shader);
-							//gridsquare->Move(glm::vec3(tmpNode->position.x, 0.5f, tmpNode->position.z));
-							//gridsquare->Scale(glm::vec3(3.0, 1.0, 3.0));
-							//gridsquare->setAnimation(0.0f, 1.0f);
-							//gridsquare->Move(glm::vec3(0.0f, 5.0f, 0.0f));
-							////uncomment for debugging purposes
-							////add game object to the render loop
-							//gameObjects.push_back(gridsquare);
+							tmpNode->setBlocked(true);
 							break;
 							
 						}

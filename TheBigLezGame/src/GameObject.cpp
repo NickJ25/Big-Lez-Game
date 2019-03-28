@@ -6,7 +6,7 @@ void GameObject::Move(glm::vec3 moveAmount)
 
 	if (collisionComponent)
 	{
-		collisionComponent->moveCollider(moveAmount);
+		collisionComponent->setCollider(transformComponent->getPosition());
 	}
 }
 

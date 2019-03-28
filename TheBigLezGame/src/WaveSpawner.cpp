@@ -6,13 +6,13 @@ WaveSpawner::WaveSpawner() : GameObject(glm::vec3(0.0f,0.0f,0.0f))
 
 	//set some random spawn points, 3 on each side out of view of the main building
 	//first spawns
-	spawnPointsBottom.push_back(glm::vec2(120.0f, 215.0f));
-	spawnPointsTop.push_back(glm::vec2(-60.0f, -215.0f));
-	spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
-	//second spawns
-	//spawnPointsBottom.push_back(glm::vec2(200.0f, 215.0f));
-	//spawnPointsTop.push_back(glm::vec2(110.0f, -215.0f));
+	//spawnPointsBottom.push_back(glm::vec2(120.0f, 215.0f));
+	//spawnPointsTop.push_back(glm::vec2(-60.0f, -215.0f));
 	//spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
+	//second spawns
+	spawnPointsBottom.push_back(glm::vec2(200.0f, 215.0f));
+	spawnPointsTop.push_back(glm::vec2(110.0f, -215.0f));
+	spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
 	//third spawns
 	//spawnPointsBottom.push_back(glm::vec2(-60.0f, 215.0f));
 	//spawnPointsTop.push_back(glm::vec2(200.0f, -215.0f));
@@ -153,12 +153,12 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 						Player *tmp = dynamic_cast<Player*>((*it));
 						if (tmp)
 						{
-							if (playerPassed = true)
-							{
+						//	if (playerPassed = true)
+						//	{
 								e->setTarget(tmp);
 								break;
-							}
-							srand(time(0));
+						//	}
+						/*	srand(time(0));
 							int randomNumber = rand() % 4;
 							if (randomNumber > 2) {
 								e->setTarget(tmp);
@@ -167,7 +167,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 							else
 							{
 								playerPassed = true;
-							}
+							}*/
 						}
 					}
 					pathManager->addToQueue(choomah);

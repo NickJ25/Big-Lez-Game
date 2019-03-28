@@ -7,6 +7,10 @@ Obstacle::Obstacle(Character character, std::string n, glm::vec3 startPos) : Gam
 
 }
 
+Obstacle::Obstacle( std::string n, glm::vec3 startPos) : GameObject(startPos)
+{
+	name = n;
+}
 
 Obstacle::~Obstacle()
 {
