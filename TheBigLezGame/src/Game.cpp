@@ -34,8 +34,8 @@ void Game::init()
 	toonShader = new Shader("src/toonShader.vert", "src/toonShader.frag");
 
 	skybox = new Skybox("assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
-						"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
-						"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp");
+		"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
+		"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp");
 
 	showBoundingBoxes = false;
 
@@ -44,7 +44,7 @@ void Game::init()
 	dirLight->setShader(toonShader);
 	gameObjects.push_back(dirLight);
 
-	
+
 
 	GameObject* environment = new Prop("assets/Props/Map/envMap1.dae", glm::vec3(0.0f, 20.0f, 100.0f));
 
@@ -54,7 +54,7 @@ void Game::init()
 	//GameObject* pointLight = new PointLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.09f, 0.05f, 0.09f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.09f, 0.32f));
 	//pointLight->setShader(toonShader);
 	//gameObjects.push_back(pointLight);
-	
+
 	//GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
 	//table->setShader(toonShader);
 	//gameObjects.push_back(table);
@@ -131,7 +131,7 @@ void Game::init()
 
 	for (int i = 0; i < 14; i++)
 	{
-		Fence = new Obstacle("collider", glm::vec3(0.0,0.0,0.0));
+		Fence = new Obstacle("collider", glm::vec3(0.0, 0.0, 0.0));
 
 
 		//for the left and right fences
@@ -143,42 +143,42 @@ void Game::init()
 		if (i == 13) scaleFactor = glm::vec3(2.0f, 0.0f, 27.5f);
 
 
-			//apply the selected scale first
-			Fence->Scale(scaleFactor);
-			
-			glm::vec3 pos;
+		//apply the selected scale first
+		Fence->Scale(scaleFactor);
 
-			//fences
-			//left fences
-			if (i == 0) { pos = glm::vec3(-50.0f, 0.0f, 35.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);}
-			if (i == 1) { pos = glm::vec3(-50.0f, 0.0f, -75.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);}
-			
-			//right fences
-			if (i == 2) { pos = glm::vec3(145.0f, 0.0f, 35.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);}
-			if (i == 3) { pos = glm::vec3(145.0f, 0.0f, -75.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);}
-			
-			//top fences left to right
-			if (i == 4) { pos = glm::vec3(-125.0f, 0.0f, -165.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);}
-			if (i == 5) { pos = glm::vec3(-10.0f, 0.0f, -165.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);}
-			if (i == 6) { pos = glm::vec3(98.0f, 0.0f, -165.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			if (i == 7) { pos = glm::vec3(204.0f, 0.0f, -165.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+		glm::vec3 pos;
 
-			////house in the middle 3.5 til 28
-			//front of house
-			if (i == 8) { pos = glm::vec3(17.5f, 0.0f, -15.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);}
-			if (i == 9){ pos = glm::vec3(62.5f, 0.0f, -10.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);}
+		//fences
+		//left fences
+		if (i == 0) { pos = glm::vec3(-50.0f, 0.0f, 35.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+		if (i == 1) { pos = glm::vec3(-50.0f, 0.0f, -75.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 
-			//right hand side of the house
-			if (i == 10){ pos = glm::vec3(90.0f, 0.0f, 15.75f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z);}
+		//right fences
+		if (i == 2) { pos = glm::vec3(145.0f, 0.0f, 35.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+		if (i == 3) { pos = glm::vec3(145.0f, 0.0f, -75.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 
-			//rear of the house
-			if (i == 11){ pos = glm::vec3(62.5f, 0.0f, 44.0f); Fence->addCollision(pos, scaleFactor.x, 2.0f);}
-			if (i == 12) { pos = glm::vec3(17.5f, 0.0f, 44.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+		//top fences left to right
+		if (i == 4) { pos = glm::vec3(-125.0f, 0.0f, -165.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+		if (i == 5) { pos = glm::vec3(-10.0f, 0.0f, -165.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+		if (i == 6) { pos = glm::vec3(98.0f, 0.0f, -165.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+		if (i == 7) { pos = glm::vec3(204.0f, 0.0f, -165.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 
-			//left of house 45 to -10 at 0 
-			if (i == 13) { pos = glm::vec3(0.0f, 0.0f, 17.5f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
-			//add collision objects to the game objects vector
-			gameObjects.push_back(Fence);
+		////house in the middle 3.5 til 28
+		//front of house
+		if (i == 8) { pos = glm::vec3(17.5f, 0.0f, -15.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+		if (i == 9) { pos = glm::vec3(62.5f, 0.0f, -10.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+
+		//right hand side of the house
+		if (i == 10) { pos = glm::vec3(90.0f, 0.0f, 15.75f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+
+		//rear of the house
+		if (i == 11) { pos = glm::vec3(62.5f, 0.0f, 44.0f); Fence->addCollision(pos, scaleFactor.x, 2.0f); }
+		if (i == 12) { pos = glm::vec3(17.5f, 0.0f, 44.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+
+		//left of house 45 to -10 at 0 
+		if (i == 13) { pos = glm::vec3(0.0f, 0.0f, 17.5f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+		//add collision objects to the game objects vector
+		gameObjects.push_back(Fence);
 
 	}
 
@@ -209,11 +209,25 @@ void Game::init()
 	waveSpawner = new WaveSpawner();
 
 	// numbers correspond to number of each choomah type per round
-	vector<int> wave1;
-	wave1.push_back(0), wave1.push_back(0), wave1.push_back(0), wave1.push_back(1);
+	vector<int> wave1, wave2, wave3, wave4, wave5, wave6, wave7;
+	wave1.push_back(15), wave1.push_back(0), wave1.push_back(0), wave1.push_back(0); // size 5
+	wave2.push_back(2), wave2.push_back(0), wave2.push_back(0), wave2.push_back(0); // size 7
+	wave3.push_back(1), wave3.push_back(0), wave3.push_back(0), wave3.push_back(0); // size 10
+	wave4.push_back(2), wave4.push_back(0), wave4.push_back(0), wave4.push_back(0); // 12
+	wave5.push_back(1), wave5.push_back(0), wave5.push_back(0), wave5.push_back(0); // 15
+	wave6.push_back(2), wave6.push_back(0), wave6.push_back(0), wave6.push_back(0);//18
+	//wave7.push_back(1), wave7.push_back(0), wave7.push_back(0), wave7.push_back(0);//19
 
 	//add this wave to the wave spawner
 	waveSpawner->setWave(wave1);
+	waveSpawner->setWave(wave2);
+	waveSpawner->setWave(wave3);
+	waveSpawner->setWave(wave4);
+	waveSpawner->setWave(wave5);
+	waveSpawner->setWave(wave6);
+	//waveSpawner->setWave(wave7);
+
+	firstWaveCounter = 15;
 
 	waveSpawner->setEndCoords(bottomDoors, 0);
 	waveSpawner->setEndCoords(topDoors, 1);
@@ -222,8 +236,32 @@ void Game::init()
 	//waveSpawner->setEndCoords(leftDoors, "Left");
 
 	//prepare wave 1 to be spawned
-	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, false);
-
+	//for (int i = 0; i < 5; i++) { 
+	//	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, false);
+	//}
+	while(firstWave.size() < 15) { 
+		waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, true, firstWave);
+	}
+	while (secondWave.size() < 2)
+	{
+		waveSpawner->spawnWave(gameObjects, 1, toonShader, pathManager, true, secondWave);
+	}
+	while (thirdWave.size() < 1)
+	{
+		waveSpawner->spawnWave(gameObjects, 2, toonShader, pathManager, true, thirdWave);
+	}
+	while (fourthWave.size() < 2)
+	{
+		waveSpawner->spawnWave(gameObjects, 3, toonShader, pathManager, true, fourthWave);
+	}
+	while (fifthWave.size() < 1)
+	{
+		waveSpawner->spawnWave(gameObjects, 4, toonShader, pathManager, true, fifthWave);
+	}
+	while (sixthWave.size() < 2) 
+	{
+		waveSpawner->spawnWave(gameObjects, 5, toonShader, pathManager, true, sixthWave);
+	}
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
 	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
@@ -324,8 +362,10 @@ void Game::update()
 	{
 		cout << mainPlayer->getCollider()->getPos().x << " , " << mainPlayer->getCollider()->getPos().z << endl;
 		//check if an enemy is due to be spawned, and if so create it
-		std::vector<GameObject*> empty;
-		waveSpawner->spawnEnemy(empty, gameObjects);
+		while (firstWaveCounter > 0) {
+			waveSpawner->spawnEnemy(firstWave, gameObjects);
+			firstWaveCounter--;
+		}
 
 		for (int i = 0; i < gameObjects.size(); i++) {
 			if (gameObjects[i] != nullptr) {

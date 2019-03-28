@@ -48,6 +48,16 @@ private:
 	int penetrationDepthZ;
 	bool clicked = false;
 
+	//storage for the spawned waves
+	vector<GameObject*> firstWave;
+	vector<GameObject*> secondWave;
+	vector<GameObject*> thirdWave;
+	vector<GameObject*> fourthWave;
+	vector<GameObject*> fifthWave;
+	vector<GameObject*> sixthWave;
+
+	int firstWaveCounter;
+
 	//utility functions for testing
 	bool takeDamage = false;
 public:
