@@ -60,6 +60,14 @@ private:
 
 	//utility functions for testing
 	bool takeDamage = false;
+
+	//float wavetimer
+	float waveTimer = 10.0f; // 10 seconds between the end of one wave and the start of the next
+
+	//for calcualting delta time
+	float currentTime = 0.0f;
+	float previousTime = 0.0f;
+
 public:
 	Game() {};
 	~Game() {};

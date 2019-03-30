@@ -360,6 +360,8 @@ void Game::update()
 {
 	if(isGameRunning == true)
 	{
+
+
 		cout << mainPlayer->getCollider()->getPos().x << " , " << mainPlayer->getCollider()->getPos().z << endl;
 		//check if an enemy is due to be spawned, and if so create it
 		while (firstWaveCounter > 0) {

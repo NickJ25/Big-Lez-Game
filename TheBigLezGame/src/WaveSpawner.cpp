@@ -12,11 +12,11 @@ WaveSpawner::WaveSpawner() : GameObject(glm::vec3(0.0f,0.0f,0.0f))
 	//second spawns
 	spawnPointsBottom.push_back(glm::vec2(200.0f, 215.0f));
 	spawnPointsTop.push_back(glm::vec2(110.0f, -215.0f));
-	spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
+	spawnPointsRight.push_back(glm::vec2(215.0f, -37.0f));
 	//third spawns
 	spawnPointsBottom.push_back(glm::vec2(-60.0f, 215.0f));
 	spawnPointsTop.push_back(glm::vec2(200.0f, -215.0f));
-	spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
+	spawnPointsRight.push_back(glm::vec2(215.0f, 95.0f));
 
 	initNPCs();
 
@@ -93,7 +93,7 @@ std::pair<glm::vec3 , glm::vec3> WaveSpawner::getEndCoord(int type)
 int WaveSpawner::getType()
 {
 	srand(time(0));
-	int randomNumber = (rand() % 2);
+	int randomNumber = rand() % 2;
 	if (types[randomNumber] != lastType)
 		return types[randomNumber];
 	else
@@ -101,7 +101,7 @@ int WaveSpawner::getType()
 			return 1;
 		if (randomNumber == 1)
 			return 2;
-
+		if (randomNumber == 2)
 			return 0;
 }
 void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager, bool destinationVector, vector<GameObject*> &destination)
@@ -115,7 +115,11 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 	//GameObject* charger = new Enemy(chargerChoomah);
 	//GameObject* brawler = new Enemy(brawlerChoomah);
 
-	currentChoomah = choomah;
+	//choomah = new Enemy(normalChoomah);
+	//charger = new Enemy(chargerChoomah);
+	//brawler = new Enemy(brawlerChoomah);
+
+	//currentChoomah = choomah;
 
 	// depending on what wave it currently is, assign current wave accordingly
 	for (int i = 0; i < 4; i++) currentwave.push_back(waves.at(wavenumber).at(i));
@@ -128,9 +132,12 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 			for (int i = 0; i < currentwave[j]; i++) {
 
 				//generate the choomahs from the vector
-				if (j == 0)      currentChoomah = choomah;
-				else if (j == 1) currentChoomah = charger;
-				else if (j == 2) currentChoomah = brawler;
+				if (j == 0) { choomah = new Enemy(normalChoomah); currentChoomah = choomah;
+				}     //currentChoomah = choomah;
+				else if (j == 1) { charger = new Enemy(chargerChoomah); currentChoomah = charger;
+				}//currentChoomah = charger;
+				else if (j == 2) { brawler = new Enemy(brawlerChoomah); currentChoomah = brawler;
+				}// currentChoomah = brawler;
 				else if (j == 3) {
 					// has to be setup here to prevent include loops that would come by declaring its character in the header file
 					Boss::Character bossChar;
@@ -150,19 +157,24 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 
 					//set their properties
 					if (currentChoomah) {
-						currentChoomah->setShader(shader);
-						currentChoomah->setMatrix(glm::mat4(1.0f));
-						currentChoomah->Move(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
-						currentChoomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
 
-						//get their path from the spawn point to a door
+						glm::vec2 currentSpawn = getSpawnCoord(currentType);
+						//setup enemy first
 						Enemy *e = dynamic_cast<Enemy*>(currentChoomah);
 						if (e) {
 							e->reset(pathManager);
-							e->setSpawnPoint(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
+							e->setSpawnPoint(glm::vec3(currentSpawn.x, -12.5f, currentSpawn.y));
 							e->setPathEnd(getEndCoord(currentType));
 							e->setAnimValues(0.0f, 8.3f);
 						}
+
+						//then setup its gameobject parent
+						currentChoomah->setShader(shader);
+						currentChoomah->setMatrix(glm::mat4(1.0f));
+						currentChoomah->Move(glm::vec3(currentSpawn.x, -12.5f, currentSpawn.y));
+						currentChoomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().z), 1.0, 1.0);
+
+
 						for (std::vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
 						{
 							bool playerPassed = false;
