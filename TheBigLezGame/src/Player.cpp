@@ -8,7 +8,7 @@ Player::Player(ControllerComponent::ControllerType controller, Character charact
 	else {
 		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f), STATIC);
 	}
-	this->addController(ControllerComponent::CONTROLLER1);
+	this->addController(ControllerComponent::KEYBOARD);
 	m_character = character;
 	prevYaw = -90;
 	currentYaw = 0;

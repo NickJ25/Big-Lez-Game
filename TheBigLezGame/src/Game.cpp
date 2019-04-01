@@ -44,7 +44,6 @@ void Game::init()
 	dirLight->setShader(toonShader);
 	gameObjects.push_back(dirLight);
 
-	GameObject* environment = new Prop("assets/Props/Map/envMap1.dae", glm::vec3(0.0f, 20.0f, 100.0f));
 	//GameObject* spotLight = new SpotLight(mainCamera->getCameraPos(), mainCamera->getCameraFront(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.1f), 0.4, 3);
 	//spotLight->setShader(toonShader);
 	//gameObjects.push_back(spotLight);
