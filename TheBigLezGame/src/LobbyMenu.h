@@ -4,13 +4,26 @@
 #include "Button.h"
 #include "Image.h"
 #include "Text.h"
+#include "Player.h"
 #include "windowGLFW.h"
+#include <vector>
 
 class LobbyMenu : public MenuState {
 private:
 	Image* background;
 	Button* backBtn, *startBtn;
 	GLFWwindow* m_window;
+	Button* p1BtnLeft, *p1BtnRight;
+	Button* p2BtnLeft, *p2BtnRight;
+	int p1Choice = 0, p2Choice = 0;
+
+	bool keyboardInUse = false;
+	bool controller1InUse = false;
+	bool controller2InUse = false;
+	vector<Player::Character*> playerList{ nullptr, nullptr };
+	vector<Player::Character> characterList;
+	void addController(Input::ControllerType controller);
+
 public:
 	LobbyMenu();
 	virtual ~LobbyMenu() {};

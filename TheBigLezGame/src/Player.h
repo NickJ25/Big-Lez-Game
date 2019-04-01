@@ -5,6 +5,7 @@
 #include "Text.h"
 #include <iostream>
 #include <string>
+#include "Input.h"
 
 class Player : public GameObject
 {
@@ -15,6 +16,7 @@ public:
 		bool isLocked;
 		GLint health;
 		GLint walkSpeed;
+		Input::ControllerType control;
 	};
 
 	Player(ControllerComponent::ControllerType controller, Character character, glm::vec3 startPos);

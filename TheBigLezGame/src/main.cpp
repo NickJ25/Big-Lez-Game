@@ -125,6 +125,11 @@ int main(int argc, char *argv[]) {
 	window->setMouseButtonCallback(MouseButtonCallback);
 	window->setJoystickCallback(JoystickCallback);
 
+	Input::keyboard1.type = Input::KEYBOARD;
+	Input::mouse1.type = Input::KEYBOARD;
+	Input::controller1.type = Input::CONTROLLER1;
+	Input::controller2.type = Input::CONTROLLER2;
+
 	// Required on Windows *only* init GLEW to access OpenGL beyond 1.1
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
