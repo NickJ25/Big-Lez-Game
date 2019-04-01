@@ -31,48 +31,39 @@ bool ControllerComponent::getReloadAction()
 
 bool ControllerComponent::getForwardMovement()
 {
-	//if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_W];
-	//else return Input::controller1.leftThumb.x;
 	if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_W];
 	else {
 		
-		if (Input::controller1.leftThumb.y > 0.3) { std::cout << "FORWARD" << std::endl; return true; }
+		if (Input::controller1.leftThumb.y > 0.3) return true;
 		else return false;
 	}
 }
 
 bool ControllerComponent::getLeftMovement()
 {
-	//if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_A];
-	//else return Input::controller1.leftThumb.y;
 	if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_A];
 	else {
 		
-		if (Input::controller1.leftThumb.x < -0.3) { std::cout << "LEFT" << std::endl; return true; }
+		if (Input::controller1.leftThumb.x < -0.3) return true; 
 		else return false;
 	}
 }
 
 bool ControllerComponent::getRightMovement()
 {
-	//if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_D];
-	//else return Input::controller1.leftThumb.y;
-	
 	if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_D];
 	else {
-		if (Input::controller1.leftThumb.x > 0.3) { std::cout << "RIGHT" << std::endl; return true; }
+		if (Input::controller1.leftThumb.x > 0.3) return true; 
 		else return false;
 	}
 }
 
 bool ControllerComponent::getBackMovement()
 {
-	//if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_S];
-	//else return Input::controller1.leftThumb.x;
 	if (m_controllerType == KEYBOARD) return Input::keyboard1.keys[GLFW_KEY_S];
 	else {
 		
-		if (Input::controller1.leftThumb.y < -0.3) { std::cout << "BACK" << std::endl; return true; }
+		if (Input::controller1.leftThumb.y < -0.3) return true; 
 		else return false;
 	}
 }
