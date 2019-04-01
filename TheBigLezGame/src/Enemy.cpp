@@ -199,7 +199,12 @@ void Enemy::update()
 					if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.z) != std::round(rotation.z) && rotated == false)
 					{
 						//reapply the rotation
-						tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+						if (getPosition().z < 0) {
+							tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+						}
+						else {
+							tempMat = glm::rotate(tempMat, -angle, glm::vec3(0.0f, 1.0f, 0.0f));
+						}
 						rotated = true;
 					}
 
