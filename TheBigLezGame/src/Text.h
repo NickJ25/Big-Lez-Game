@@ -37,5 +37,5 @@ public:
 	void scale(glm::vec2 scale);
 
 	glm::vec2 getSize();
-	void draw(std::string text, glm::vec3 colour);
+	void draw(std::string text, glm::vec4 colour, int imageMode);
 };

@@ -49,6 +49,8 @@ private:
 	bool clicked = false;
 
 	//storage for the spawned waves
+	vector<vector<GameObject*>> mapWaves;
+
 	vector<GameObject*> firstWave;
 	vector<GameObject*> secondWave;
 	vector<GameObject*> thirdWave;
@@ -56,20 +58,45 @@ private:
 	vector<GameObject*> fifthWave;
 	vector<GameObject*> sixthWave;
 
+	vector<int> waveCounters;
+
+	int currentWave;
+
 	int firstWaveCounter;
+
+	//record if there are enemies on the map
+	bool mapEmpty = false;
+	int enemyCounter = 0;
 
 	//utility functions for testing
 	bool takeDamage = false;
 
 	//float wavetimer
-	float waveTimer = 10.0f; // 10 seconds between the end of one wave and the start of the next
+	float waveTimer = 15.0f; // 6 seconds between the end of one wave and the start of the next, 15 to allow time for loading
+
+	//time between ticks
+	float deltaTime = 0.0f;
 
 	//for calcualting delta time
 	float currentTime = 0.0f;
 	float previousTime = 0.0f;
 
+	//check if the game has been completed
+	bool gameWon = false;
+
+	Text* waveText;
+	float textAlpha = 1.0f;
+	float transparency = 1.0f;
+
+	//sync up sounds waves and animations
+	bool initialised = false;
+
 public:
-	Game() {};
+	Game() 
+	{
+		init();
+		initialised = true;
+	};
 	~Game() {};
 	void init();
 	void update();
@@ -85,6 +112,8 @@ public:
 	char computePointMask(glm::vec3 p, Enemy* e);
 	glm::vec3 getFaceNormal(glm::vec3 p, Enemy* e);
 	bool pointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d);
+
+	void generateWave(int waveNumber);
 
 	glm::vec3 contactNormal;
 };

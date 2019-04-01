@@ -72,7 +72,7 @@ void Button::draw()
 {
 	m_currentImage->draw();
 	m_textBox->move(glm::vec2(m_position.x - (m_textBox->getSize().x / 2), m_position.y - (m_textBox->getSize().y / 2) - 12));
-	m_textBox->draw(m_text, glm::vec3(1.0, 1.0, 1.0));
+	m_textBox->draw(m_text, glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
 	m_currentImage = m_texNormal;
 	
 }

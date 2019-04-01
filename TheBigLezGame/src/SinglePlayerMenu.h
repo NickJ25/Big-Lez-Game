@@ -15,7 +15,7 @@ using namespace std;
 
 class SinglePlayerMenu : public MenuState {
 private:
-	Game singleplayerGame;
+	Game *singleplayerGame;
 public:
 	SinglePlayerMenu();
 	virtual ~SinglePlayerMenu() {};

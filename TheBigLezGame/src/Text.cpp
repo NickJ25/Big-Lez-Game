@@ -90,7 +90,7 @@ glm::vec2 Text::getSize()
 	return m_textBoxSize;
 }
 
-void Text::draw(std::string text, glm::vec3 colour)
+void Text::draw(std::string text, glm::vec4 colour, int imageMode)
 {
 	m_textShader->use();
 
@@ -99,7 +99,8 @@ void Text::draw(std::string text, glm::vec3 colour)
 	glUniformMatrix4fv(glGetUniformLocation(m_textShader->getID(), "imgView"), 1, GL_FALSE, glm::value_ptr(m_view));
 
 	//glUniformMatrix4fv(glGetUniformLocation(m_textShader->getID(), "PROJECTION_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
-	glUniform1i(glGetUniformLocation(m_textShader->getID(), "imgMode"), 1);
+	glUniform1i(glGetUniformLocation(m_textShader->getID(), "imgMode"), imageMode);
+	glUniform1f(glGetUniformLocation(m_textShader->getID(), "alpha"), colour.w);
 	glUniform3f(glGetUniformLocation(m_textShader->getID(), "imgColour"), colour.x, colour.y, colour.z);
 
 	glActiveTexture(GL_TEXTURE0);

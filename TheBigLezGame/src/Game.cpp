@@ -210,12 +210,12 @@ void Game::init()
 
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1, wave2, wave3, wave4, wave5, wave6, wave7;
-	wave1.push_back(15), wave1.push_back(0), wave1.push_back(0), wave1.push_back(0); // size 5
-	wave2.push_back(2), wave2.push_back(0), wave2.push_back(0), wave2.push_back(0); // size 7
+	wave1.push_back(1), wave1.push_back(0), wave1.push_back(0), wave1.push_back(0); // size 5
+	wave2.push_back(1), wave2.push_back(0), wave2.push_back(0), wave2.push_back(0); // size 7
 	wave3.push_back(1), wave3.push_back(0), wave3.push_back(0), wave3.push_back(0); // size 10
-	wave4.push_back(2), wave4.push_back(0), wave4.push_back(0), wave4.push_back(0); // 12
+	wave4.push_back(1), wave4.push_back(0), wave4.push_back(0), wave4.push_back(0); // 12
 	wave5.push_back(1), wave5.push_back(0), wave5.push_back(0), wave5.push_back(0); // 15
-	wave6.push_back(2), wave6.push_back(0), wave6.push_back(0), wave6.push_back(0);//18
+	wave6.push_back(1), wave6.push_back(0), wave6.push_back(0), wave6.push_back(0);//18
 	//wave7.push_back(1), wave7.push_back(0), wave7.push_back(0), wave7.push_back(0);//19
 
 	//add this wave to the wave spawner
@@ -239,29 +239,60 @@ void Game::init()
 	//for (int i = 0; i < 5; i++) { 
 	//	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, false);
 	//}
-	while(firstWave.size() < 15) { 
+	int waveCount = 0;
+
+	while(firstWave.size() < 1) { 
 		waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, true, firstWave);
+		waveCount++;
 	}
-	while (secondWave.size() < 2)
+	waveCounters.push_back(waveCount);
+	waveCount = 0;
+	while (secondWave.size() < 1)
 	{
 		waveSpawner->spawnWave(gameObjects, 1, toonShader, pathManager, true, secondWave);
+		waveCount++;
 	}
+	waveCounters.push_back(waveCount);
+	waveCount = 0;
 	while (thirdWave.size() < 1)
 	{
 		waveSpawner->spawnWave(gameObjects, 2, toonShader, pathManager, true, thirdWave);
+		waveCount++;
 	}
-	while (fourthWave.size() < 2)
+	waveCounters.push_back(waveCount);
+	waveCount = 0;
+	while (fourthWave.size() < 1)
 	{
 		waveSpawner->spawnWave(gameObjects, 3, toonShader, pathManager, true, fourthWave);
+		waveCount++;
 	}
+	waveCounters.push_back(waveCount);
+	waveCount = 0;
 	while (fifthWave.size() < 1)
 	{
 		waveSpawner->spawnWave(gameObjects, 4, toonShader, pathManager, true, fifthWave);
+		waveCount++;
 	}
-	while (sixthWave.size() < 2) 
+	waveCounters.push_back(waveCount);
+	waveCount = 0;
+	while (sixthWave.size() < 1) 
 	{
 		waveSpawner->spawnWave(gameObjects, 5, toonShader, pathManager, true, sixthWave);
+		waveCount++;
 	}
+	waveCounters.push_back(waveCount);
+	waveCount = 0;
+
+	//add the waves to the wave generating vector
+	mapWaves.push_back(firstWave);
+	mapWaves.push_back(secondWave);
+	mapWaves.push_back(thirdWave);
+	mapWaves.push_back(fourthWave);
+	mapWaves.push_back(fifthWave);
+	mapWaves.push_back(sixthWave);
+
+	//set the first wave to be spawned
+	currentWave = 0;
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
 	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
@@ -269,6 +300,9 @@ void Game::init()
 
 	testtxt = new Text(glm::vec2(590.0, 445.0), "assets/Fonts/Another_.ttf");
 	testtxt2 = new Text(glm::vec2(600.0, 325.0), "assets/Fonts/Another_.ttf");
+
+	waveText = new Text(glm::vec2(600.0, 300.0), "assets/Fonts/Another_.ttf");
+	waveText->scale(glm::vec2(2.5f, 2.5f));
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -356,18 +390,70 @@ void removeEnemies(std::vector<GameObject*> & gameObjects)
 	}
 }
 
+void Game::generateWave(int waveNumber)
+{
+	//check if an enemy is due to be spawned, and if so create it
+	while (waveCounters.at(waveNumber) > 0) {
+		waveSpawner->spawnEnemy(mapWaves.at(waveNumber), gameObjects);
+		waveCounters.at(waveNumber)--;
+	}
+
+}
+
 void Game::update()
 {
-	if(isGameRunning == true)
+	if(isGameRunning == true && initialised)
 	{
+		//set up timing 
+		currentTime = glfwGetTime();
+		deltaTime = currentTime - previousTime;
+		previousTime = currentTime;
+		
+		//check if there are no enemies left 
+		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end() - 1; ++it)
+		{
+			Boss* tmp = dynamic_cast<Boss*>((*it));
+			Enemy* tmp1 = dynamic_cast<Enemy*>((*it));
 
-
-		cout << mainPlayer->getCollider()->getPos().x << " , " << mainPlayer->getCollider()->getPos().z << endl;
-		//check if an enemy is due to be spawned, and if so create it
-		while (firstWaveCounter > 0) {
-			waveSpawner->spawnEnemy(firstWave, gameObjects);
-			firstWaveCounter--;
+			if (tmp || tmp1)
+				enemyCounter++;
 		}
+
+		//if an enemy was not detected
+		if (enemyCounter <= 0)
+		{
+			waveTimer -= deltaTime;
+			transparency += deltaTime;
+			waveText->draw("Wave " + std::to_string(currentWave + 1) + "...", glm::vec4(1.0f, 1.0f, 1.0f, textAlpha), 1);
+			if (currentWave > 0) {
+				if (textAlpha > 0.0f)
+					textAlpha = 6.0f - transparency;
+			}
+			else {
+				//account for the drastic slowdown at the start of compilation
+				if (textAlpha > 0.0f)
+					textAlpha -= 0.001f;
+			}
+		}
+		else
+		{
+			textAlpha = 1.0f;
+			transparency = 0.0f;
+		}
+
+		//re-zero the value for checking next frame
+		enemyCounter = 0;
+
+		//if the timer has hit zero, spawn the current wave
+		if (waveTimer <= 0) {
+			generateWave(currentWave);
+			waveTimer = 10.0f;
+			currentWave++;
+		}
+
+		//check if the player has won the game
+		if (currentWave > mapWaves.size())
+			gameWon = true;
 
 		for (int i = 0; i < gameObjects.size(); i++) {
 			if (gameObjects[i] != nullptr) {
@@ -638,8 +724,8 @@ void Game::draw()
 		// Draws pause menu
 		resumeBtn->draw();
 		mainMenuBtn->draw(); 
-		testtxt->draw("Resume", glm::vec3(1.0f, 1.0f, 1.0f));
-		testtxt2->draw("Quit", glm::vec3(1.0f, 1.0f, 1.0f));
+		testtxt->draw("Resume", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),1);
+		testtxt2->draw("Quit", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),1);
 		pauseBackground->draw();
 	}
 

@@ -8,18 +8,21 @@ SinglePlayerMenu::SinglePlayerMenu()
 
 void SinglePlayerMenu::handle(Menu * menu)
 {
-	singleplayerGame.init();
+	singleplayerGame = new Game;
+	//singleplayerGame->init();
 	selectedMenu = menu;
 }
 
 void SinglePlayerMenu::update()
 {
-	singleplayerGame.update();
+	if(singleplayerGame)
+	singleplayerGame->update();
 }
 
 void SinglePlayerMenu::draw()
 {
-	singleplayerGame.draw();
+	if (singleplayerGame)
+	singleplayerGame->draw();
 }
 
 
