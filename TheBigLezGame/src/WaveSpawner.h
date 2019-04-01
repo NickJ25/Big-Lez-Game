@@ -12,7 +12,7 @@
 #include "PathManager.h"
 #include "Enemy.h"
 #include "Grid.h"
-//#include "Boss.h"
+
 class Boss;
 class WaveSpawner : public GameObject
 {
@@ -54,10 +54,16 @@ public:
 			GameObject* tmp = toBeSpawned.at(0);
 			toBeSpawned.erase(toBeSpawned.begin());
 			gameObjects.push_back(tmp);
-			//delete tmp;
 		}
 	}
 private:
+
+	//enemy templates
+	GameObject* choomah;// = new Enemy(normalChoomah);
+	GameObject* charger;// = new Enemy(chargerChoomah);
+	GameObject* brawler;// = new Enemy(brawlerChoomah);
+
+	GameObject* currentChoomah;// = choomah;
 
 	//position values
 	float radius;

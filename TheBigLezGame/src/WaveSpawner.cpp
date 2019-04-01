@@ -6,19 +6,27 @@ WaveSpawner::WaveSpawner() : GameObject(glm::vec3(0.0f,0.0f,0.0f))
 
 	//set some random spawn points, 3 on each side out of view of the main building
 	//first spawns
-	//spawnPointsBottom.push_back(glm::vec2(120.0f, 215.0f));
-	//spawnPointsTop.push_back(glm::vec2(-60.0f, -215.0f));
-	//spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
+	spawnPointsBottom.push_back(glm::vec2(120.0f, 215.0f));
+	spawnPointsTop.push_back(glm::vec2(-60.0f, -215.0f));
+	spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
 	//second spawns
 	spawnPointsBottom.push_back(glm::vec2(200.0f, 215.0f));
 	spawnPointsTop.push_back(glm::vec2(110.0f, -215.0f));
-	spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
+	spawnPointsRight.push_back(glm::vec2(215.0f, -37.0f));
 	//third spawns
-	//spawnPointsBottom.push_back(glm::vec2(-60.0f, 215.0f));
-	//spawnPointsTop.push_back(glm::vec2(200.0f, -215.0f));
-	//spawnPointsRight.push_back(glm::vec2(195.0f, -115.0f));
+	spawnPointsBottom.push_back(glm::vec2(-60.0f, 215.0f));
+	spawnPointsTop.push_back(glm::vec2(200.0f, -215.0f));
+	spawnPointsRight.push_back(glm::vec2(215.0f, 95.0f));
 
 	initNPCs();
+
+	//initialise the templates 
+	choomah = new Enemy(normalChoomah);
+	charger = new Enemy(chargerChoomah);
+	brawler = new Enemy(brawlerChoomah);
+
+	currentChoomah = choomah;
+
 }
 
 glm::vec2 WaveSpawner::getSpawnCoord(int type)
@@ -85,7 +93,7 @@ std::pair<glm::vec3 , glm::vec3> WaveSpawner::getEndCoord(int type)
 int WaveSpawner::getType()
 {
 	srand(time(0));
-	int randomNumber = (rand() % 2);
+	int randomNumber = rand() % 2;
 	if (types[randomNumber] != lastType)
 		return types[randomNumber];
 	else
@@ -93,7 +101,7 @@ int WaveSpawner::getType()
 			return 1;
 		if (randomNumber == 1)
 			return 2;
-
+		if (randomNumber == 2)
 			return 0;
 }
 void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumber, Shader* shader, PathManager* pathManager, bool destinationVector, vector<GameObject*> &destination)
@@ -102,50 +110,78 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 	//set empty pointer to vector of floats
 	vector<int> currentwave;
 
+	//enemy templates
+	//GameObject* choomah = new Enemy(normalChoomah);
+	//GameObject* charger = new Enemy(chargerChoomah);
+	//GameObject* brawler = new Enemy(brawlerChoomah);
+
+	//choomah = new Enemy(normalChoomah);
+	//charger = new Enemy(chargerChoomah);
+	//brawler = new Enemy(brawlerChoomah);
+
+	//currentChoomah = choomah;
+
 	// depending on what wave it currently is, assign current wave accordingly
-	if (wavenumber == 0) for (int i = 0; i < 4; i++) currentwave.push_back(waves.at(0).at(i));
-	if (wavenumber == 1) for (int i = 0; i < 4; i++) currentwave.push_back(waves.at(1).at(i));
-	if (wavenumber == 2) for (int i = 0; i < 4; i++) currentwave.push_back(waves.at(2).at(i));
-	if (wavenumber == 3) for (int i = 0; i < 4; i++) currentwave.push_back(waves.at(3).at(i));
+	for (int i = 0; i < 4; i++) currentwave.push_back(waves.at(wavenumber).at(i));
+	for (int i = 0; i < 4; i++) currentwave.push_back(waves.at(wavenumber).at(i));
+	for (int i = 0; i < 4; i++) currentwave.push_back(waves.at(wavenumber).at(i));
+	for (int i = 0; i < 4; i++) currentwave.push_back(waves.at(wavenumber).at(i));
 
 		//generate normal choomahs
-		for (int j = 0; j < currentwave.size(); j++) {
-			for (int i = 0; i < currentwave[j]; i++) {
+	for (int j = 0; j < currentwave.size(); j++) {
+		for (int i = 0; i < currentwave[j]; i++) {
 
-				GameObject* choomah;
+			//generate the choomahs from the vector
+			if (j == 0) {
+				choomah = new Enemy(normalChoomah); currentChoomah = choomah;
+			}     //currentChoomah = choomah;
+			else if (j == 1) {
+				charger = new Enemy(chargerChoomah); currentChoomah = charger;
+			}//currentChoomah = charger;
+			else if (j == 2) {
+				brawler = new Enemy(brawlerChoomah); currentChoomah = brawler;
+			}// currentChoomah = brawler;
+			else if (j == 3) {
+				// has to be setup here to prevent include loops that would come by declaring its character in the header file
+				Boss::Character bossChar;
+				bossChar.fileLocation = "assets/Characters/Bumble-Brutus/bumblebrutus.dae";
+				bossChar.name = "boss";
+				choomah = new Boss(bossChar);
+			}
+			else {
+				currentChoomah = new Enemy(normalChoomah);
+			}
 
-				//generate the choomahs from the vector
-				if (j == 0)      choomah = new Enemy(normalChoomah);
-				else if (j == 1) choomah = new Enemy(chargerChoomah);
-				else if (j == 2) choomah = new Enemy(brawlerChoomah);
-				else if (j == 3) {
-					// has to be setup here to prevent include loops that would come by declaring its character in the header file
-					Boss::Character bossChar;
-					bossChar.fileLocation = "assets/Characters/Bumble-Brutus/bumblebrutus.dae";
-					bossChar.name = "boss";
-					choomah = new Boss(bossChar);
-				}
-				else		     choomah = new Enemy(normalChoomah);
+			//if not a boss choomah
+			if (j != 3) {
+				//select a spawn direction to spawn from
+				currentType = getType();
+				lastType = currentType;
 
-				//if not a boss choomah
-				if (j != 3) {
-					//select a spawn direction to spawn from
-					currentType = getType();
-					lastType = currentType;
+				//set their properties
+				choomah->setShader(shader);
+				choomah->Move(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
+				//choomah->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
+				choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 50, 1.0);
 
-					//set their properties
-					choomah->setShader(shader);
-					choomah->Move(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
-					//choomah->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
-					choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 50, 1.0);
+				if (currentChoomah) {
 
-					//get their path from the spawn point to a door
-					Enemy *e = dynamic_cast<Enemy*>(choomah);
+					glm::vec2 currentSpawn = getSpawnCoord(currentType);
+					//setup enemy first
+					Enemy *e = dynamic_cast<Enemy*>(currentChoomah);
 					if (e) {
-						e->setSpawnPoint(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
+						e->reset(pathManager);
+						e->setSpawnPoint(glm::vec3(currentSpawn.x, -12.5f, currentSpawn.y));
 						e->setPathEnd(getEndCoord(currentType));
 						e->setAnimValues(0.0f, 8.3f);
 					}
+
+					//then setup its gameobject parent
+					currentChoomah->setShader(shader);
+					currentChoomah->setMatrix(glm::mat4(1.0f));
+					currentChoomah->Move(glm::vec3(currentSpawn.x, -12.5f, currentSpawn.y));
+					currentChoomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().z), 1.0, 1.0);
+
 					for (std::vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
 					{
 						bool playerPassed = false;
@@ -153,24 +189,24 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 						Player *tmp = dynamic_cast<Player*>((*it));
 						if (tmp)
 						{
-						//	if (playerPassed = true)
-						//	{
-								e->setTarget(tmp);
-								break;
-						//	}
-						/*	srand(time(0));
-							int randomNumber = rand() % 4;
-							if (randomNumber > 2) {
-								e->setTarget(tmp);
-								break;
-							}
-							else
-							{
-								playerPassed = true;
-							}*/
+							//	if (playerPassed = true)
+							//	{
+							e->setTarget(tmp);
+							break;
+							//	}
+							/*	srand(time(0));
+								int randomNumber = rand() % 4;
+								if (randomNumber > 2) {
+									e->setTarget(tmp);
+									break;
+								}
+								else
+								{
+									playerPassed = true;
+								}*/
 						}
 					}
-					pathManager->addToQueue(choomah);
+					pathManager->addToQueue(currentChoomah);
 				}
 				if (j == 3)
 				{
@@ -181,18 +217,22 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 						b->Move(b->getSpawnPoint());
 						b->initialiseWaveSpawner(gameObjects, shader, pathManager);
 						b->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
-						b->addCollision(glm::vec3(b->getPosition().x, -12.5f, -b->getPosition().y), 1.0, 50, 1.0);
+						b->addCollision(glm::vec3(b->getPosition().x, -12.5f, -b->getPosition().y), 1.0, 1.0);
 					}
 				}
 				//if this wavespawner is sending these enemies to a different vector
-				if (destinationVector)
-					destination.push_back(choomah);
-				else
+				if (destinationVector) {
+					destination.push_back(currentChoomah);
+					return;
+				}
+				else {
 					// add them to the gameplay vector reference
-					toBeSpawned.push_back(choomah);
-				break;
+					toBeSpawned.push_back(currentChoomah);
+					return;
+				}
 			}
 		}
+	}
 }
 
 void WaveSpawner::initNPCs()

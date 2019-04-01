@@ -43,8 +43,8 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	}
 
 	//set velocity
-	velocity = random / 1000;
-	originalVelocity = random / 1000;
+	velocity = random / 5000;
+	originalVelocity = random / 5000;
 
 	//constant angular velocity and orientation
 	angularVelocity = 0.5f;
@@ -163,7 +163,7 @@ void Enemy::update()
 			glm::vec3 distanceToBeCovered;
 			glm::vec3 movementStep;
 
-			bool rotated = false;
+			//bool rotated = false;
 
 			//if the game isnt paused
 			if (paused == false) {
@@ -181,11 +181,26 @@ void Enemy::update()
 
 					//get angle between the current and the next node
 					distanceToBeCovered = next - current;
-					rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
+					if (nodeSet == true) {
+						glm::vec3 result = next - currentNode;
+						rotation = glm::normalize(result);
+						cout << endl;
+					}
+					else
+						rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
+
 					glm::vec3 currentRot = getRotation(); // current rotation
 
 					//calculate angle between the two vectors
+					float jeff = glm::dot(currentRot, rotation);
+
 					float angle = -glm::acos(glm::dot(currentRot, rotation));
+
+					if (jeff == 0)
+					{
+						angle = 3.1415;
+					}
+
 					movementStep = glm::normalize(distanceToBeCovered) * velocity;
 
 
@@ -199,7 +214,7 @@ void Enemy::update()
 					if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.z) != std::round(rotation.z) && rotated == false)
 					{
 						//reapply the rotation
-						tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+						tempMat = glm::rotate(tempMat, jeff, glm::vec3(0.0f, 1.0f, 0.0f));
 						rotated = true;
 					}
 
@@ -214,8 +229,10 @@ void Enemy::update()
 					if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 					{
 						//remove this from the vector and set it back to unrotated
+						currentNode = outerPath.back();
 						outerPath.pop_back();
 						rotated = false;
+						nodeSet = true;
 					}
 				}
 				else {

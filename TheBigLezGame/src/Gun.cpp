@@ -48,8 +48,8 @@ void Gun::setMatrix(glm::mat4 newMat)
 
 void Gun::update()
 {
-	t_ammoCount->draw(std::to_string(m_currentClip) + " / " + std::to_string(m_clipSize), glm::vec3(1.0, 1.0, 1.0));
-	t_gunName->draw(m_gunName, glm::vec3(1.0, 1.0, 1.0));
+	t_ammoCount->draw(std::to_string(m_currentClip) + " / " + std::to_string(m_clipSize), glm::vec4(1.0, 1.0, 1.0, 1.0),1);
+	t_gunName->draw(m_gunName, glm::vec4(1.0, 1.0, 1.0, 1.0),1);
 }
 
 void Gun::checkHit()
