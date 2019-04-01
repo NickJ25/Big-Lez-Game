@@ -57,6 +57,7 @@ public:
 	void update();
 	void draw();
 	bool checkCollision(GameObject* a, GameObject* b);
+	bool checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * object);
 
 	//for calculating contact normal
 	const glm::vec3 nup = glm::vec3(0, 1, 0);

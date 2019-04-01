@@ -137,7 +137,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 					choomah->setShader(shader);
 					choomah->Move(glm::vec3(getSpawnCoord(currentType).x, -12.5f, getSpawnCoord(currentType).y));
 					//choomah->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
-					choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 1.0);
+					choomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().y), 1.0, 50, 1.0);
 
 					//get their path from the spawn point to a door
 					Enemy *e = dynamic_cast<Enemy*>(choomah);
@@ -181,7 +181,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 						b->Move(b->getSpawnPoint());
 						b->initialiseWaveSpawner(gameObjects, shader, pathManager);
 						b->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
-						b->addCollision(glm::vec3(b->getPosition().x, -12.5f, -b->getPosition().y), 1.0, 1.0);
+						b->addCollision(glm::vec3(b->getPosition().x, -12.5f, -b->getPosition().y), 1.0, 50, 1.0);
 					}
 				}
 				//if this wavespawner is sending these enemies to a different vector

@@ -15,7 +15,7 @@ protected:
 	TransformComponent* transformComponent;
 	RenderComponent* renderComponent;
 	ControllerComponent* controllerComponent;
-	class CollisionComponent* collisionComponent;
+	class CollisionComponent* collisionComponent = nullptr;
 	glm::vec4 objPosition;
 	Shader* objShader;
 
@@ -70,7 +70,9 @@ public:
 	glm::mat4 getMatrix();
 
 	void addCollision(glm::vec3 pos, float hw, float hh);
+	void addCollision(glm::vec3 pos, float hw, float th, float hh);
 	CollisionComponent* getCollider();
+	bool isColliderNull();
 
 	void addController(ControllerComponent::ControllerType controller);
 	ControllerComponent* getController();

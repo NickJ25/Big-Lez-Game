@@ -8,7 +8,7 @@ Player::Player(ControllerComponent::ControllerType controller, Character charact
 	else {
 		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f), STATIC);
 	}
-	this->addController(controller);
+	this->addController(ControllerComponent::CONTROLLER1);
 	m_character = character;
 	prevYaw = -90;
 	currentYaw = 0;
@@ -40,45 +40,65 @@ Camera* Player::getCamera()
 
 void Player::update()
 {
-	if (m_playerCamera) {
-		m_playerCamera->update();
-
-		// Create a matrix and apply the rotations and translations on it.
-		glm::mat4 tempMat(1.0f);
-		tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -7.5f, 0.0f)));
-		tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
-		tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
-
-
-		GameObject::setMatrix(tempMat);
-	
-		//move the collider alongside the player
-		collisionComponent->setCollider(m_playerCamera->getCameraPos());
-
-		// Apply the same matrix to the gun model
-		if (currentWeapon != NULL) {
-			glm::mat4 gunMat(1.0f);
-			//gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -13.0f, 0.0f)));
-			gunMat = glm::rotate(gunMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
-			gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
-			//gunMat = glm::translate(gunMat, (glm::vec3(0.2f, -4.0f, 0.0f)));
-
-			currentWeapon->setMatrix(gunMat);
-			currentWeapon->update();
-		}
+	//Movement controls
+	if (this->getController()->getForwardMovement()) {
+		glm::vec3 tempPos = m_playerCamera->getCameraPos() - m_playerCamera->getCameraFront() * 1.0f;
+		tempPos.y = 0;
+		m_playerCamera->setCameraPos(tempPos);
+	}
+	if (this->getController()->getBackMovement()) {
+		glm::vec3 tempPos = m_playerCamera->getCameraPos() + m_playerCamera->getCameraFront() * 1.0f;
+		tempPos.y = 0;
+		m_playerCamera->setCameraPos(tempPos);
+	}
+	if (this->getController()->getLeftMovement()) {
+		glm::vec3 tempPos = m_playerCamera->getCameraPos() + glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
+		tempPos.y = 0;
+		m_playerCamera->setCameraPos(tempPos);
+	}
+	if (this->getController()->getRightMovement()) {
+		glm::vec3 tempPos = m_playerCamera->getCameraPos() - glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
+		tempPos.y = 0;
+		m_playerCamera->setCameraPos(tempPos);
+	}
 
 
+	m_playerCamera->update();
 
-		// Gun controls
-		if (currentWeapon != NULL) {
-			currentWeapon->primaryMove(this->getController()->getPrimaryAction());
-			currentWeapon->secondaryMove(this->getController()->getSecondaryAction());
-			currentWeapon->action(this->getController()->getReloadAction());
+	// Create a matrix and apply the rotations and translations on it.
+	glm::mat4 tempMat(1.0f);
+	tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -7.5f, 0.0f)));
+	tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
+	tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
 
-		}
+
+	GameObject::setMatrix(tempMat);
+
+	//move the collider alongside the player
+	collisionComponent->setCollider(m_playerCamera->getCameraPos());
+
+	// Apply the same matrix to the gun model
+	if (currentWeapon != NULL) {
+		glm::mat4 gunMat(1.0f);
+		//gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -13.0f, 0.0f)));
+		gunMat = glm::rotate(gunMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
+		gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+		//gunMat = glm::translate(gunMat, (glm::vec3(0.2f, -4.0f, 0.0f)));
+
+		currentWeapon->setMatrix(gunMat);
+		currentWeapon->update();
+	}
+
+	// Gun controls
+	if (currentWeapon != NULL) {
+		currentWeapon->primaryMove(this->getController()->getPrimaryAction());
+		currentWeapon->secondaryMove(this->getController()->getSecondaryAction());
+		currentWeapon->action(this->getController()->getReloadAction());
+
 	}
 }
+
 
 void Player::addWeapon(Weapon * weapon)
 {
@@ -104,5 +124,4 @@ bool Player::hasPlayerAttacked()
 Player::Character Player::getCharacter()
 {
 	return m_character;
-	//this->setMatrix(tempMat);
 }
