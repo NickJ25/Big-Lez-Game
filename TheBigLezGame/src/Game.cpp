@@ -447,7 +447,7 @@ void Game::update()
 		previousTime = currentTime;
 		
 		//check if there are no enemies left 
-		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end() - 1; ++it)
+		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
 		{
 			Boss* tmp = dynamic_cast<Boss*>((*it));
 			Enemy* tmp1 = dynamic_cast<Enemy*>((*it));

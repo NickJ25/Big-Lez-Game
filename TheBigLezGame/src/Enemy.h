@@ -105,11 +105,6 @@ private:
 	int deathAnimationTimer = 150;
 	bool dead = false;
 
-	//rotation variables
-	bool rotated = false;
-	bool nodeSet = false;
-	glm::vec3 currentNode;
-
 	//spawning and pathing variables
 	glm::vec3 spawnPoint;
 	std::vector<glm::vec3> outerPath;
