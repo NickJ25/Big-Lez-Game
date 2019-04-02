@@ -184,7 +184,7 @@ void Enemy::update()
 					if (nodeSet == true) {
 						glm::vec3 result = next - currentNode;
 						rotation = glm::normalize(result);
-						cout << endl;
+						//cout << endl;
 					}
 					else
 						rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at

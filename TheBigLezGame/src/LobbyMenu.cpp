@@ -28,7 +28,7 @@ void LobbyMenu::handle(Menu * menu)
 	controller2InUse = false;
 	playerList = { nullptr, nullptr };
 
-	background = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
+	background = new Image("assets/Art/background.png", glm::vec2(640.0, 360.0));
 	m_window = glfwGetCurrentContext();
 	backBtn = new Button(Button::NORMAL, glm::vec2(640.0, 100.0), "Back");
 	startBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Start");

@@ -1,7 +1,7 @@
 #include "Gun.h"
 
-Gun::Gun(const char * filename, std::string gunName, GLuint maxAmmo, GLuint clipSize, bool allowSpray) : Weapon(filename, glm::vec3(0.0f, 0.0f, 0.0f)),
-		m_gunName(gunName), m_maxAmmo(maxAmmo), m_clipSize(clipSize), sprayAllowed(allowSpray)
+Gun::Gun(const char * filename, std::string gunName, GLuint maxAmmo, GLuint clipSize, float shootDelay, bool allowSpray) : Weapon(filename, glm::vec3(0.0f, 0.0f, 0.0f)),
+		m_gunName(gunName), m_maxAmmo(maxAmmo), m_clipSize(clipSize), sprayAllowed(allowSpray), m_shootDelay(shootDelay)
 {
 	t_ammoCount = new Text(glm::vec2(50.0, 80.0), "assets/Fonts/Another_.ttf");
 	t_gunName = new Text(glm::vec2(50.0, 40.0), "assets/Fonts/Another_.ttf");
@@ -15,15 +15,23 @@ Gun::~Gun()
 void Gun::shoot(bool clicked)
 {
 	if (sprayAllowed) {
-		if (m_currentClip > 0) {
-			m_currentClip--;
+		if (lastFired + m_shootDelay < glfwGetTime()) {
+			if (m_currentClip > 0) {
+				m_currentClip--;
+				lastFired = glfwGetTime();
+			}
 		}
 	}
 	else {
+
 		if (clicked == true && !gunFired) {
-			if (m_currentClip > 0) {
-				m_currentClip--;
-				gunFired = true;
+			if (lastFired + m_shootDelay < glfwGetTime()) {
+				cout << "Last Fired: " << lastFired << " Delay: " << m_shootDelay << " = " << lastFired + m_shootDelay << "| " << "Shot Time: " << glfwGetTime() << "\n";
+				if (m_currentClip > 0) {
+					m_currentClip--;
+					gunFired = true;
+					lastFired = glfwGetTime();
+				}
 			}
 		}
 		else if (clicked == false) {

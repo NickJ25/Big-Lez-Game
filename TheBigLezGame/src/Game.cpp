@@ -104,7 +104,7 @@ void Game::init()
 	mainPlayer->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 	gameObjects.push_back(mainPlayer);
 
-	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, false);
+	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 2.5, false);
 	lezShotgun->setShader(toonShader);
 	lezShotgun->setAnimation(0.0f, 1.0f);
 	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
@@ -571,12 +571,12 @@ void Game::update()
 			if ((*it)->isColliderNull()) {
 				Enemy *t1 = dynamic_cast<Enemy*>((*it));
 				if (t1) {
-					cout << "Checking: " << endl;
-					cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (*it)) << endl;
+					//cout << "Checking: " << endl;
+					//cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (*it)) << endl;
 				}
 			}
 			else {
-				cout << "Skipped!" << endl;
+				//cout << "Skipped!" << endl;
 			}
 		}
 		// Everything else
