@@ -8,6 +8,9 @@
 #include <vector>
 #include <iostream>
 
+// Include Audio engine
+#include <irrKlang.h>
+
 //test include
 #include "Shader.h"
 #include "Model.h"
@@ -90,6 +93,14 @@ private:
 
 	//sync up sounds waves and animations
 	bool initialised = false;
+
+	//background music engine
+	irrklang::ISoundEngine *AmbientEngine = irrklang::createIrrKlangDevice();
+	bool ambientInitialised = false;
+
+	//wave spawner noise engine
+	irrklang::ISoundEngine *WaveEngine = irrklang::createIrrKlangDevice();
+	bool waveInitialised = false;
 
 public:
 	Game() 

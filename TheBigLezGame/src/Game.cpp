@@ -288,6 +288,59 @@ void Game::init()
 	mapWaves.push_back(fifthWave);
 	mapWaves.push_back(sixthWave);
 
+	vector<string> playerNames;
+	//set up audio depending on what characters are present
+	for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+	{
+		Player *p = dynamic_cast<Player*>(*it);
+
+		//add player names to temporary vector
+		if (p)
+			playerNames.push_back(p->getCharacter().name);
+	}
+
+	int LezCounter = 0;
+	int SassyCounter = 0;
+	int DonnyCounter = 0;
+	int ClarenceCounter = 0;
+
+	//find missing character of the possible 4 ( 2 missing if playing single player ) 
+	for (int i = 0; i < playerNames.size(); i++)
+	{
+		if (playerNames[i] == "Clarence")
+		{
+			ClarenceCounter++;
+		}
+		if (playerNames[i] == "Donny")
+		{
+			DonnyCounter++;
+		}
+		if (playerNames[i] == "Sassy")
+		{
+			SassyCounter++;
+		}
+		if (playerNames[i] == "Lez")
+		{
+			LezCounter++;
+		}
+	}
+
+	if (ClarenceCounter == 0)
+	{
+		//push back donny, lez and sassy conversations
+	}
+	if (DonnyCounter == 0)
+	{
+		//push back clarence, lez and sassy conversations
+	}
+	if (SassyCounter == 0)
+	{
+		//push back donny, lez and clarence conversations
+	}
+	if (LezCounter == 0)
+	{
+		//push back donny, clarene and sassy conversations
+	}
 	//set the first wave to be spawned
 	currentWave = 0;
 
@@ -441,6 +494,14 @@ void Game::update()
 {
 	if(isGameRunning == true && initialised)
 	{
+		if (ambientInitialised == false) {
+			//set up sound
+			AmbientEngine->setSoundVolume(0.1f);
+			AmbientEngine->play2D("assets/Sounds/AmbientMusic.wav", GL_TRUE);
+			ambientInitialised = true;
+
+		}
+
 		//set up timing 
 		currentTime = glfwGetTime();
 		deltaTime = currentTime - previousTime;
@@ -461,6 +522,11 @@ void Game::update()
 		{
 			waveTimer -= deltaTime;
 			transparency += deltaTime;
+			if (waveInitialised == false) {
+				WaveEngine->setSoundVolume(0.075f);
+				WaveEngine->play2D("assets/Sounds/WaveChange.wav", GL_FALSE);
+				waveInitialised = true;
+			}
 			waveText->draw("Wave " + std::to_string(currentWave + 1) + "...", glm::vec4(1.0f, 1.0f, 1.0f, textAlpha), 1);
 			if (currentWave > 0) {
 				if (textAlpha > 0.0f)
@@ -474,6 +540,7 @@ void Game::update()
 		}
 		else
 		{
+			waveInitialised = false;
 			textAlpha = 1.0f;
 			transparency = 0.0f;
 		}
