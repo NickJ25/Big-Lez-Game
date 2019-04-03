@@ -130,6 +130,10 @@ int main(int argc, char *argv[]) {
 	Input::controller1.type = Input::CONTROLLER1;
 	Input::controller2.type = Input::CONTROLLER2;
 
+	// Initial Screen Size Setup
+	Input::SCREEN_HEIGHT = 720;
+	Input::SCREEN_WIDTH = 1280;
+
 	// Required on Windows *only* init GLEW to access OpenGL beyond 1.1
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();

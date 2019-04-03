@@ -80,6 +80,11 @@ void Text::move(glm::vec2 position)
 	m_model = glm::translate(glm::mat4(1.0), glm::vec3(position.x, position.y, 0.0f));
 }
 
+glm::vec2 Text::getPosition()
+{
+	return glm::vec2(m_model[3][0], m_model[3][1]);
+}
+
 void Text::scale(glm::vec2 scale)
 {
 	m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
@@ -132,6 +137,7 @@ void Text::draw(std::string text, glm::vec4 colour, int imageMode)
 			{ x_pos + w,	y_pos,		0.0f,	1.0, 1.0 },
 			{ x_pos + w,	y_pos + h,  0.0f,	1.0, 0.0 },
 		};
+
 		// render texture over this quad
 		glBindTexture(GL_TEXTURE_2D, ch.textureID);
 		// update VBO memory

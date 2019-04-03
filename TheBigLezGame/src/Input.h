@@ -36,6 +36,8 @@ public:
 	static Mouse Input::mouse1;
 	static Controller Input::controller1;
 	static Controller Input::controller2;
+	static int SCREEN_HEIGHT;
+	static int SCREEN_WIDTH;
 	//static bool Input::keys[1024];
 	//static int Input::mouse_xpos;
 	//static int Input::mouse_ypos;

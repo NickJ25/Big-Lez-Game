@@ -15,7 +15,11 @@ private:
 	GLFWwindow* m_window;
 	Button* p1BtnLeft, *p1BtnRight;
 	Button* p2BtnLeft, *p2BtnRight;
+	Text* p1CharacterSelected, *p2CharacterSelected;
+	Text* p1InfoText, *p2InfoText;
+	Text* p1Status, *p2Status;
 	int p1Choice = 0, p2Choice = 0;
+	bool p1Ready = false , p2Ready = false;
 
 	bool keyboardInUse = false;
 	bool controller1InUse = false;
@@ -23,6 +27,7 @@ private:
 	vector<Player::Character*> playerList{ nullptr, nullptr };
 	vector<Player::Character> characterList;
 	void addController(Input::ControllerType controller);
+	void addCharacters();
 
 public:
 	LobbyMenu();

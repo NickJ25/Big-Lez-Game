@@ -90,6 +90,8 @@ void GraphicsMenu::update()
 
 	//std::cout << mode << " " << newWidth << "x" << newHeight << std::endl;
 	if (applyBtn->buttonClick()) {
+		Input::SCREEN_WIDTH = newWidth;
+		Input::SCREEN_HEIGHT = newHeight;
 		glfwSetWindowSize(m_window, newWidth, newHeight);
 	}
 	//glfwSetWindowSize

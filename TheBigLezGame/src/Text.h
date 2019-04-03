@@ -25,6 +25,7 @@ private:
 	Shader* m_textShader;
 	GLuint m_VAO, m_VBO;
 	glm::vec2 m_textBoxSize;
+	bool m_centreText;				// Should text draw in centre
 
 	glm::mat4 m_model = glm::mat4(1.0);
 	glm::mat4 m_proj = glm::mat4(1.0);
@@ -34,6 +35,7 @@ public:
 	~Text();
 
 	void move(glm::vec2 position);
+	glm::vec2 getPosition();
 	void scale(glm::vec2 scale);
 
 	glm::vec2 getSize();

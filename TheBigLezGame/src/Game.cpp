@@ -104,7 +104,7 @@ void Game::init()
 	mainPlayer->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 	gameObjects.push_back(mainPlayer);
 
-	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 2.5, false);
+	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
 	lezShotgun->setShader(toonShader);
 	lezShotgun->setAnimation(0.0f, 1.0f);
 	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
@@ -119,7 +119,7 @@ void Game::init()
 	//gameObjects.push_back(lezTest);
 
 
-#pragma region Fences
+#pragma region Fences & Wave Junk
 	// add environmental collision boxes for pathfinding an' such
 	glm::vec3 fenceScaleVertical = glm::vec3(1.0f, 4.0f, 35.0f);
 	glm::vec3 fenceScaleHorizontal = glm::vec3(35.0f, 4.0f, 1.0f);
@@ -278,7 +278,7 @@ void Game::init()
 	waveCounters.push_back(waveCount);
 	waveCount = 0;
 
-#pragma endregion
+
 
 	//add the waves to the wave generating vector
 	mapWaves.push_back(firstWave);
@@ -290,6 +290,8 @@ void Game::init()
 
 	//set the first wave to be spawned
 	currentWave = 0;
+
+#pragma endregion
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
 	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
@@ -760,14 +762,12 @@ void Game::draw()
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
-
-	//glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), lezCamera.getCameraPos().x, lezCamera.getCameraPos().y, lezCamera.getCameraPos().z);
+\
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
 	skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));
 
-	//skybox->draw(projection * glm::mat4(glm::mat3(lezCamera.lookAtMat())));
 
 	if (isGameRunning == false)
 	{
@@ -782,7 +782,6 @@ void Game::draw()
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
 			gameObjects[i]->componentDraw(mainPlayer->getCamera()->lookAtMat());
-			//gameObjects[i]->componentDraw(lezCamera.lookAtMat());
 		}
 	}
 	

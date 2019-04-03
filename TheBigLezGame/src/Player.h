@@ -13,7 +13,7 @@ public:
 	struct Character {
 		std::string name;
 		std::string fileLocation;
-		bool isLocked;
+		bool isLocked = false;		// Not locked by default
 		GLint health;
 		GLint walkSpeed;
 		Input::ControllerType control;
