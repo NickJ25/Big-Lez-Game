@@ -328,6 +328,36 @@ void Game::init()
 	if (ClarenceCounter == 0)
 	{
 		//push back donny, lez and sassy conversations
+
+		//3 of each 
+		//lez sassy conversation
+		irrklang::ISoundSource* LSconvo1 = conversationEngine->addSoundSourceFromFile("assets/Sounds/Lez/LezSassy1.wav");
+		irrklang::ISoundSource* LSconvo2 = conversationEngine->addSoundSourceFromFile("assets/Sounds/Sassy/LezSassy1.wav");
+		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+		{
+			Player *p = dynamic_cast<Player*>(*it);
+
+			//check the cast result and add the sounds appropriately
+			if (p) {
+				if (p->getCharacter().name == "Leslie")
+					p->setSound(LSconvo1);
+				if (p->getCharacter().name == "Sassy")
+					p->setSound(LSconvo2);
+
+				vector<float> times; // in seconds
+				times.push_back(0.0f);
+				times.push_back(1.5f);
+
+				vector<string> orders;
+				orders.push_back("Leslie");
+				orders.push_back("Sassy");
+
+				convos.push_back(times);
+				convoOrders.push_back(orders);
+
+				noOfSounds++;
+			}
+		}
 	}
 	if (DonnyCounter == 0)
 	{
@@ -494,9 +524,10 @@ void Game::update()
 {
 	if(isGameRunning == true && initialised)
 	{
+
 		if (ambientInitialised == false) {
 			//set up sound
-			AmbientEngine->setSoundVolume(0.1f);
+			AmbientEngine->setSoundVolume(0.03f);
 			AmbientEngine->play2D("assets/Sounds/AmbientMusic.wav", GL_TRUE);
 			ambientInitialised = true;
 
@@ -506,6 +537,44 @@ void Game::update()
 		currentTime = glfwGetTime();
 		deltaTime = currentTime - previousTime;
 		previousTime = currentTime;
+
+		if (conversationTimer > 0)
+		{
+			conversationTimer -= currentTime;
+		}
+		else {
+			//get random sound and play it
+			srand(time(0));
+			int randomSound = rand() % noOfSounds;
+
+			if (convoAssigned == false) {
+				int orderPlace = 0;
+				int count = 0;
+				for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+				{
+					count++;
+
+					Player *p = dynamic_cast<Player*>(*it);
+					if (p && p->getCharacter().name == convoOrders.at(randomSound).at(orderPlace)) {
+						p->playSound(randomSound, convos.at(randomSound).at(orderPlace));
+						orderPlace++;
+					}
+					int check = convoOrders.at(randomSound).size();
+
+					if (count == gameObjects.size() && orderPlace < check)
+					{
+						it = gameObjects.begin();
+						count = 0;
+					}
+
+
+				}
+
+				conversationTimer = (24 * deltaTime) * 60.0f;
+				convoAssigned = true;
+			}
+
+		}
 		
 		//check if there are no enemies left 
 		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
@@ -524,7 +593,7 @@ void Game::update()
 			transparency += deltaTime;
 			if (waveInitialised == false) {
 				WaveEngine->setSoundVolume(0.075f);
-				WaveEngine->play2D("assets/Sounds/WaveChange.wav", GL_FALSE);
+			//	WaveEngine->play2D("assets/Sounds/WaveChange.wav", GL_FALSE);
 				waveInitialised = true;
 			}
 			waveText->draw("Wave " + std::to_string(currentWave + 1) + "...", glm::vec4(1.0f, 1.0f, 1.0f, textAlpha), 1);

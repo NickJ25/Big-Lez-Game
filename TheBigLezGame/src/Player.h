@@ -5,6 +5,7 @@
 #include "Text.h"
 #include <iostream>
 #include <string>
+#include <irrKlang.h>
 
 class Player : public GameObject
 {
@@ -29,7 +30,26 @@ public:
 	
 	Player::Character getCharacter();
 
+	//sound stuff
+	void setSound(irrklang::ISoundSource*);
+	irrklang::ISoundSource* getSound(int sound);
+
+	void playSound(int sound, float delay = 100.0f);
+
+
 private:
+
+	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
+	float soundDelay;
+	bool playingSound = false;
+	bool soundCalled = false;
+
+	float soundAnimationTime = 0.0f;
+	bool soundAnimSet = false;
+
+	bool isMoving = false;
+
+	vector<irrklang::ISoundSource*> sounds;
 
 	Character m_character;
 	Camera* m_playerCamera;

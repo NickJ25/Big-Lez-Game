@@ -38,28 +38,82 @@ Camera* Player::getCamera()
 	return m_playerCamera;
 }
 
+void Player::playSound(int sound, float delay)
+{
+	if (playingSound == false && delay != 100.0f)
+	{
+		soundDelay = delay;
+		playingSound = true;
+	}
+	else 
+	if(playingSound == true){
+		float time = glfwGetTime();
+		soundDelay -= time;
+		if (soundDelay <= 0)
+		{
+			if (soundCalled == false) {
+				privateEngine->play3D(getSound(sound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+				soundCalled = true;
+			}
+			if (soundAnimSet == false) {
+				soundAnimationTime = getSound(sound)->getPlayLength() / 1000;
+				soundAnimSet = true;
+			}
+			if (soundAnimationTime > 0 && soundAnimSet == true)
+			{
+
+				soundAnimationTime -= time;
+
+				if(isMoving == true)
+					//universal walking - talking animation
+					setAnimation(0.0f, 1.0f);
+				else
+					//universal talking only animation
+					setAnimation(0.0f, 1.0f);
+			}
+			if (soundAnimationTime <= 0) {
+				soundAnimSet = false;
+				playingSound = false;
+				soundCalled = false;
+			}
+		}
+	}
+	
+}
+
 void Player::update()
 {
+	//updates the timer without setting a new sound
+	playSound(0, 100.0f);
+
 	//Movement controls
 	if (this->getController()->getForwardMovement()) {
 		glm::vec3 tempPos = m_playerCamera->getCameraPos() - m_playerCamera->getCameraFront() * 1.0f;
 		tempPos.y = 0;
 		m_playerCamera->setCameraPos(tempPos);
-	}
+		isMoving = true;
+	}else
 	if (this->getController()->getBackMovement()) {
 		glm::vec3 tempPos = m_playerCamera->getCameraPos() + m_playerCamera->getCameraFront() * 1.0f;
 		tempPos.y = 0;
 		m_playerCamera->setCameraPos(tempPos);
-	}
+		isMoving = true;
+	}else
 	if (this->getController()->getLeftMovement()) {
 		glm::vec3 tempPos = m_playerCamera->getCameraPos() + glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
 		tempPos.y = 0;
 		m_playerCamera->setCameraPos(tempPos);
-	}
+		isMoving = true;
+	}else
 	if (this->getController()->getRightMovement()) {
 		glm::vec3 tempPos = m_playerCamera->getCameraPos() - glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
 		tempPos.y = 0;
 		m_playerCamera->setCameraPos(tempPos);
+		isMoving = true;
+	}
+	else
+	{
+		isMoving = false;
 	}
 
 
@@ -124,4 +178,14 @@ bool Player::hasPlayerAttacked()
 Player::Character Player::getCharacter()
 {
 	return m_character;
+}
+
+void Player::setSound(irrklang::ISoundSource* newSound)
+{
+	sounds.push_back(newSound);
+}
+
+irrklang::ISoundSource* Player::getSound(int sound)
+{
+	return sounds.at(sound);
 }

@@ -102,6 +102,20 @@ private:
 	irrklang::ISoundEngine *WaveEngine = irrklang::createIrrKlangDevice();
 	bool waveInitialised = false;
 
+	//conversation noise engine
+	irrklang::ISoundEngine *conversationEngine = irrklang::createIrrKlangDevice();
+
+	//sound numbers
+	int noOfSounds = 0;
+
+	//sound timers
+	float conversationTimer = 2400.0f;
+
+	//conversations
+	vector<vector<float>> convos;
+	vector<vector<string>> convoOrders;
+	bool convoAssigned = false;
+
 public:
 	Game() 
 	{
