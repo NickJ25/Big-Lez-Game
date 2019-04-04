@@ -190,4 +190,5 @@ void LobbyMenu::draw()
 	}
 
 	backBtn->draw();
+	startBtn->draw();
 }

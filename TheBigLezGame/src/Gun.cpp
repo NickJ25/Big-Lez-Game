@@ -26,7 +26,6 @@ void Gun::shoot(bool clicked)
 
 		if (clicked == true && !gunFired) {
 			if (lastFired + m_shootDelay < glfwGetTime()) {
-				cout << "Last Fired: " << lastFired << " Delay: " << m_shootDelay << " = " << lastFired + m_shootDelay << "| " << "Shot Time: " << glfwGetTime() << "\n";
 				if (m_currentClip > 0) {
 					m_currentClip--;
 					gunFired = true;
