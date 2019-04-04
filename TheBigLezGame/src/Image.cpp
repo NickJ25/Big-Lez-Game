@@ -77,6 +77,11 @@ Image::~Image()
 
 }
 
+void Image::translate(glm::vec2 position)
+{
+	m_model = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0));
+}
+
 void Image::rotate(GLfloat radians) {
 	m_model = glm::rotate(m_model, (float)glm::radians(radians), glm::vec3(0.0f, 1.0f, 0.0f));
 }

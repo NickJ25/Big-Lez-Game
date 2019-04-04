@@ -11,6 +11,7 @@
 class LobbyMenu : public MenuState {
 private:
 	Image* background;
+	Image* p1CurrentCharPic, *p2CurrentCharPic;
 	Button* backBtn, *startBtn;
 	GLFWwindow* m_window;
 	Button* p1BtnLeft, *p1BtnRight;
@@ -26,6 +27,7 @@ private:
 	bool controller2InUse = false;
 	vector<Player::Character*> playerList{ nullptr, nullptr };
 	vector<Player::Character> characterList;
+	vector<Image*>charPicList;
 	void addController(Input::ControllerType controller);
 	void addCharacters();
 

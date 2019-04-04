@@ -24,6 +24,9 @@ void LobbyMenu::addCharacters()
 	BigLez.health = 100;
 	BigLez.walkSpeed = 10;
 	characterList.push_back(BigLez);
+	Image* bigLezPic = new Image("assets/Characters/BigLez/biglezPicture.png", glm::vec2(0, 0));
+	//bigLezPic->scale(glm::vec2(0.2, 0.4));
+	charPicList.push_back(bigLezPic);
 
 	// Create Sassy
 	Player::Character Sassy;
@@ -32,6 +35,9 @@ void LobbyMenu::addCharacters()
 	Sassy.health = 100;
 	Sassy.walkSpeed = 10;
 	characterList.push_back(Sassy);
+	Image* sassyPic = new Image("assets/Characters/Sassy/sassyPicture.png", glm::vec2(0, 0));
+	//sassyPic->scale(glm::vec2(0.2, 0.4));
+	charPicList.push_back(sassyPic);
 
 	// Create Donny
 	Player::Character Donny;
@@ -40,6 +46,9 @@ void LobbyMenu::addCharacters()
 	Donny.health = 100;
 	Donny.walkSpeed = 10;
 	characterList.push_back(Donny);
+	Image* donnyPic = new Image("assets/Characters/Donny/donnyPicture.png", glm::vec2(0, 0));
+	//donnyPic->scale(glm::vec2(0.2, 0.4));
+	charPicList.push_back(donnyPic);
 
 	// Create Clarence
 	Player::Character Clarence;
@@ -49,6 +58,9 @@ void LobbyMenu::addCharacters()
 	Clarence.walkSpeed = 12;
 	Clarence.isLocked = true;
 	characterList.push_back(Clarence);
+	Image* clarencePic = new Image("assets/Characters/Clarence/clarencePicture.png", glm::vec2(0, 0));
+	//clarencePic->scale(glm::vec2(0.2, 0.4));
+	charPicList.push_back(clarencePic);
 
 }
 
@@ -118,6 +130,10 @@ void LobbyMenu::update()
 			if (p1Choice > characterList.size() - 1) p1Choice = 0;
 		}
 		if (p1Choice < 0) p1Choice = characterList.size() - 1;
+
+		p1CurrentCharPic = charPicList[p1Choice];
+		//p1CurrentCharPic->translate(glm::vec2(0, 0));
+		//p1CurrentCharPic->scale(glm::vec2(0.2, 0.4));
 	}
 
 	if (playerList[1] == nullptr) {
@@ -132,6 +148,8 @@ void LobbyMenu::update()
 			p2Choice++;
 			if (p2Choice > characterList.size() - 1) p2Choice = 0;
 		}
+
+		p2CurrentCharPic = charPicList[p2Choice];
 	}
 
 	if (backBtn->buttonClick()) {
@@ -155,6 +173,7 @@ void LobbyMenu::draw()
 	if (playerList[0] != nullptr) {
 		p1BtnLeft->draw();
 		p1BtnRight->draw();
+		p1CurrentCharPic->draw();
 
 		p1CharacterSelected->move(glm::vec2((Input::SCREEN_WIDTH * 0.25)- (p1CharacterSelected->getSize().x / 2), Input::SCREEN_HEIGHT * 0.25));
 		p1CharacterSelected->draw(characterList[p1Choice].name, glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
@@ -174,6 +193,7 @@ void LobbyMenu::draw()
 	if (playerList[1] != nullptr) {
 		p2BtnLeft->draw();
 		p2BtnRight->draw();
+		p2CurrentCharPic->draw();
 		p2CharacterSelected->move(glm::vec2((Input::SCREEN_WIDTH * 0.75) - (p2CharacterSelected->getSize().x / 2), Input::SCREEN_HEIGHT * 0.25));
 		p2CharacterSelected->draw(characterList[p2Choice].name, glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
 
