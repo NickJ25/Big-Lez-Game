@@ -3,8 +3,24 @@
 
 Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 {
+
 	//record the characters name
 	name = character.name;
+
+	//all choomahs have the same sounds
+	irrklang::ISoundSource* s1 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream1.wav");
+	irrklang::ISoundSource* s2 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream2.wav");
+	irrklang::ISoundSource* s3 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream3.wav");
+	irrklang::ISoundSource* s4 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream4.wav");
+	irrklang::ISoundSource* s5 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream5.wav");
+	irrklang::ISoundSource* s6 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream6.wav");
+	sounds.push_back(s1), sounds.push_back(s2), sounds.push_back(s3),sounds.push_back(s4), sounds.push_back(s5), sounds.push_back(s6);
+
+	irrklang::ISoundSource* d1 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Deaths/ChoomahDeath1.wav");
+	irrklang::ISoundSource* d2 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Deaths/ChoomahDeath2.wav");
+	irrklang::ISoundSource* d3 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Deaths/ChoomahDeath3.wav");
+	deathSounds.push_back(d1), deathSounds.push_back(d2), deathSounds.push_back(d3);
+
 
 	//initialise all the movement variables
 	firstPosition = true;
@@ -122,15 +138,62 @@ void Enemy::reset(PathManager* pathmanager)
 	deathAnimationTimer = 150;
 	still = false;
 
+	//reset sound variables
+	deathSoundSet = false;
+	soundPlaying = false;
+	walkSoundSet = false;
 
 }
 
 void Enemy::update()
 {
+	float deltaTime = glfwGetTime();
+	//sound update
+
+	if (moving == true && walkSoundSet == false)
+	{
+		privateEngineWalking->play3D("assets/Sounds/footsteps.wav", irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
+		walkSoundSet = true;
+	}
+	else
+	{
+		privateEngineWalking->setAllSoundsPaused(true);
+		walkSoundSet = false;	
+	}
+	if (soundDelay <= 0 && dead == false)
+	{
+		if (soundPlaying == false) {
+			srand(time(0));
+			int randomSound = rand() % sounds.size();
+			privateEngine->play3D(sounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			playTime = sounds.at(randomSound)->getPlayLength() / 1000;
+			int randFactor = rand() % 100 + 50;
+			soundDelay = (24 * deltaTime) * 55.0f + playTime + randFactor;
+			soundPlaying = true;
+		}
+		if (soundPlaying == true && soundDelay <= 0.0f)
+		{
+			soundPlaying = false;
+		}
+	}
+	else
+	{
+		soundDelay -= deltaTime;
+	}
 	//uncomment for debugging
 	//cout << getPosition().x << " , " << getPosition().z << endl;
 	if (dead == true)
 	{
+		if (deathSoundSet == false) {
+			soundPlaying = false;
+			deathSoundSet = true;
+		}
+		if (soundPlaying == false) {
+			srand(time(0));
+			int randomSound = rand() % deathSounds.size();
+			privateEngine->play3D(deathSounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			soundPlaying = true;
+		}
 		deathAnimationTimer--;
 		
 		if (deathAnimationTimer <= 0) {

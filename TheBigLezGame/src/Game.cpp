@@ -553,13 +553,15 @@ void Game::update()
 				for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
 				{
 					count++;
+					int check = convoOrders.at(randomSound).size();
 
 					Player *p = dynamic_cast<Player*>(*it);
 					if (p && p->getCharacter().name == convoOrders.at(randomSound).at(orderPlace)) {
 						p->playSound(randomSound, convos.at(randomSound).at(orderPlace));
 						orderPlace++;
+						if (orderPlace == check)
+							break;
 					}
-					int check = convoOrders.at(randomSound).size();
 
 					if (count == gameObjects.size() && orderPlace < check)
 					{
