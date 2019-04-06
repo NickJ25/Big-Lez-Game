@@ -8,6 +8,8 @@
 #include <string>
 #include <cmath>
 #include <ctime>
+#include <irrKlang.h>
+
 #include "glm/gtx/vector_angle.hpp"
 #include "PathManager.h"
 class WaveSpawner;
@@ -52,6 +54,14 @@ public:
 	void setWave();
 
 private:
+
+	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
+	bool soundSet = false;
+
+	irrklang::ISoundEngine *speechEngine = irrklang::createIrrKlangDevice();
+	vector<irrklang::ISoundSource*> sounds;
+	float speechTimer = 5.0f;
+
 
 	WaveSpawner *privateSpawner;
 	std::vector<std::vector<glm::vec3>> outerPath;

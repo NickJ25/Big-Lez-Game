@@ -66,7 +66,7 @@ void Game::init()
 	// Characters
 	Player::Character BigLez;
 	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
-	BigLez.name = "Leslie";
+	BigLez.name = "Lez";
 	BigLez.health = 100;
 	BigLez.walkSpeed = 10;
 
@@ -327,9 +327,59 @@ void Game::init()
 
 	if (ClarenceCounter == 0)
 	{
+	
+		//firstly add all their relevant one liners
+		vector<float> times; // in seconds
+		vector<string> orders;
+
+		//add lez lines
+		addCharacterSounds("Lez");
+
+		times.push_back(0.0f);
+		orders.push_back("Lez");
+
+		//add the same orders and times 3 times, once for each line
+		for (int i = 0; i < 3; i++) {
+			convos.push_back(times);
+			convoOrders.push_back(orders);
+		}
+
+		times.clear();
+		orders.clear();
+
+		//add sassy lines
+		addCharacterSounds("Sassy");
+
+		times.push_back(0.0f);
+		orders.push_back("Sassy");
+
+		//add the same orders and times 3 times, once for each line
+		for (int i = 0; i < 3; i++) {
+			convos.push_back(times);
+			convoOrders.push_back(orders);
+		}
+
+		times.clear();
+		orders.clear();
+
+		//add donny lines
+		addCharacterSounds("Donny");
+
+		times.push_back(0.0f);
+		orders.push_back("Donny");
+
+		//add the same orders and times 3 times, once for each line
+		for (int i = 0; i < 3; i++) {
+			convos.push_back(times);
+			convoOrders.push_back(orders);
+		}
+
+		times.clear();
+		orders.clear();
 		//push back donny, lez and sassy conversations
 
 		//3 of each 
+
 		//lez sassy conversation
 		irrklang::ISoundSource* LSconvo1 = conversationEngine->addSoundSourceFromFile("assets/Sounds/Lez/LezSassy1.wav");
 		irrklang::ISoundSource* LSconvo2 = conversationEngine->addSoundSourceFromFile("assets/Sounds/Sassy/LezSassy1.wav");
@@ -339,17 +389,16 @@ void Game::init()
 
 			//check the cast result and add the sounds appropriately
 			if (p) {
-				if (p->getCharacter().name == "Leslie")
+				if (p->getCharacter().name == "Lez")
 					p->setSound(LSconvo1);
 				if (p->getCharacter().name == "Sassy")
 					p->setSound(LSconvo2);
 
-				vector<float> times; // in seconds
+
 				times.push_back(0.0f);
 				times.push_back(1.5f);
 
-				vector<string> orders;
-				orders.push_back("Leslie");
+				orders.push_back("Lez");
 				orders.push_back("Sassy");
 
 				convos.push_back(times);
@@ -387,6 +436,38 @@ void Game::init()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+vector<irrklang::ISoundSource*> Game::loadSounds(string character)
+{
+	vector<irrklang::ISoundSource*> temp;
+	for (int i = 0; i < 3; i++) {
+		string tempstr = "assets/Sounds/" + character + "/lines/line" + to_string(i) + ".wav";
+		const char* tmpChar = tempstr.c_str();
+		irrklang::ISoundSource* tempSource = conversationEngine->addSoundSourceFromFile(tmpChar);
+		temp.push_back(tempSource);
+	}
+	return temp;
+}
+
+void Game::addCharacterSounds(string charName)
+{
+	vector<irrklang::ISoundSource*> charSounds = loadSounds(charName);
+	for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+	{
+		Player *p = dynamic_cast<Player*>(*it);
+
+		//check the cast result and add the sounds appropriately
+		if (p && p->getCharacter().name == charName) 
+		{
+			//cycle through all the preloaded sounds
+			for (int i = 0; i < charSounds.size(); i++)
+			{
+				//and add them to the player
+				p->setSound(charSounds[i]);
+			}
+		}
+	}
 }
 
 bool Game::checkCollision(GameObject* a, GameObject* b)
@@ -553,7 +634,16 @@ void Game::update()
 				for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
 				{
 					count++;
-					int check = convoOrders.at(randomSound).size();
+					int check = 0;
+					if (randomSound < 3)
+					{
+						check = 1;
+					}
+					else
+					{
+						check = convoOrders.at(randomSound).size();
+					}
+					
 
 					Player *p = dynamic_cast<Player*>(*it);
 					if (p && p->getCharacter().name == convoOrders.at(randomSound).at(orderPlace)) {
