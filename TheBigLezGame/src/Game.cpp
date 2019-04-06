@@ -361,7 +361,11 @@ bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * obj
 
 //bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * object)
 //{
-	//glm::vec3 invDir = glm::inverse()
+//	glm::vec3 invDir = glm::inverse();
+//	float tmin, tmax, tymin, tymax, tzmin, tzmax;
+//
+//	tmin = (bounds[rayPos->x] - )
+//
 //}
 
 bool Game::pointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d)

@@ -77,9 +77,17 @@ Image::~Image()
 
 }
 
+void Image::changeImage(std::string newImage)
+{
+	m_image = SOIL_load_image(newImage.c_str(), &m_imgWidth, &m_imgHeight, 0, SOIL_LOAD_RGBA);
+	init(m_image);
+}
+
 void Image::translate(glm::vec2 position)
 {
-	m_model = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0));
+	std::cout << "S: " << m_model[3][0] << " " << m_model[3][1] << " " << m_model[3][2] << "\n";
+	m_model = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
+	std::cout << "E: " << m_model[3][0] << " " << m_model[3][1] << " " << m_model[3][2] << "\n";
 }
 
 void Image::rotate(GLfloat radians) {

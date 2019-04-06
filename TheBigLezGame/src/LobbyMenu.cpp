@@ -24,9 +24,9 @@ void LobbyMenu::addCharacters()
 	BigLez.health = 100;
 	BigLez.walkSpeed = 10;
 	characterList.push_back(BigLez);
-	Image* bigLezPic = new Image("assets/Characters/BigLez/biglezPicture.png", glm::vec2(0, 0));
-	//bigLezPic->scale(glm::vec2(0.2, 0.4));
-	charPicList.push_back(bigLezPic);
+	//Image* bigLezPic = new Image("assets/Characters/BigLez/biglezPicture.png", glm::vec2(0, 0));
+	//bigLezPic->scale(glm::vec2(500, 500));
+	charPicList.push_back("assets/Characters/BigLez/biglezPicture.png");
 
 	// Create Sassy
 	Player::Character Sassy;
@@ -35,9 +35,9 @@ void LobbyMenu::addCharacters()
 	Sassy.health = 100;
 	Sassy.walkSpeed = 10;
 	characterList.push_back(Sassy);
-	Image* sassyPic = new Image("assets/Characters/Sassy/sassyPicture.png", glm::vec2(0, 0));
+	//Image* sassyPic = new Image("assets/Characters/Sassy/sassyPicture.png", glm::vec2(0, 0));
 	//sassyPic->scale(glm::vec2(0.2, 0.4));
-	charPicList.push_back(sassyPic);
+	charPicList.push_back("assets/Characters/Sassy/sassyPicture.png");
 
 	// Create Donny
 	Player::Character Donny;
@@ -46,9 +46,9 @@ void LobbyMenu::addCharacters()
 	Donny.health = 100;
 	Donny.walkSpeed = 10;
 	characterList.push_back(Donny);
-	Image* donnyPic = new Image("assets/Characters/Donny/donnyPicture.png", glm::vec2(0, 0));
+	//Image* donnyPic = new Image("assets/Characters/Donny/donnyPicture.png", glm::vec2(0, 0));
 	//donnyPic->scale(glm::vec2(0.2, 0.4));
-	charPicList.push_back(donnyPic);
+	charPicList.push_back("assets/Characters/Donny/donnyPicture.png");
 
 	// Create Clarence
 	Player::Character Clarence;
@@ -58,9 +58,9 @@ void LobbyMenu::addCharacters()
 	Clarence.walkSpeed = 12;
 	Clarence.isLocked = true;
 	characterList.push_back(Clarence);
-	Image* clarencePic = new Image("assets/Characters/Clarence/clarencePicture.png", glm::vec2(0, 0));
+	//Image* clarencePic = new Image("assets/Characters/Clarence/clarencePicture.png", glm::vec2(0, 0));
 	//clarencePic->scale(glm::vec2(0.2, 0.4));
-	charPicList.push_back(clarencePic);
+	charPicList.push_back("assets/Characters/Clarence/clarencePicture.png");
 
 }
 
@@ -97,6 +97,7 @@ void LobbyMenu::handle(Menu * menu)
 	p1InfoText = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.20, 5.0), "assets/Fonts/ariali.ttf");
 	p2InfoText = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.80, 5.0), "assets/Fonts/ariali.ttf");
 	selectedMenu = menu;
+	p1CurrentCharPic = new Image(charPicList[p1Choice].c_str(), glm::vec2(0.0f, 0.0f));
 }
 
 void LobbyMenu::update() 
@@ -118,7 +119,7 @@ void LobbyMenu::update()
 	}
 
 	if (playerList[0] == nullptr) {
-		cout << "Press Space or A for Player 1 \n";
+
 	}
 	else {
 		if (p1BtnLeft->buttonClick()) {
@@ -131,13 +132,13 @@ void LobbyMenu::update()
 		}
 		if (p1Choice < 0) p1Choice = characterList.size() - 1;
 
-		p1CurrentCharPic = charPicList[p1Choice];
-		//p1CurrentCharPic->translate(glm::vec2(0, 0));
-		//p1CurrentCharPic->scale(glm::vec2(0.2, 0.4));
+		p1CurrentCharPic->changeImage(charPicList[p1Choice]);
+		p1CurrentCharPic->translate(glm::vec2(Input::SCREEN_WIDTH * 0.25, Input::SCREEN_HEIGHT * 0.52));
+		p1CurrentCharPic->scale(glm::vec2(239 / 2, 307 / 2));
 	}
 
 	if (playerList[1] == nullptr) {
-		cout << "Press Space or A for Player 2 \n";
+
 	}
 	else {
 		if (p2BtnLeft->buttonClick()) {
@@ -148,8 +149,9 @@ void LobbyMenu::update()
 			p2Choice++;
 			if (p2Choice > characterList.size() - 1) p2Choice = 0;
 		}
-
-		p2CurrentCharPic = charPicList[p2Choice];
+		//p2CurrentCharPic = charPicList[p2Choice];
+		//p2CurrentCharPic->translate(glm::vec2(Input::SCREEN_WIDTH * 0.75, Input::SCREEN_HEIGHT * 0.52));
+		//p2CurrentCharPic->scale(glm::vec2(239 / 2, 307 / 2));
 	}
 
 	if (backBtn->buttonClick()) {

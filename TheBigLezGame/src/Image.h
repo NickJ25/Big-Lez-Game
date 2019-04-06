@@ -47,6 +47,7 @@ public:
 	Image(const char* filename, glm::vec2 screenPos);
 	Image(const char* filename, glm::vec2 screenPos, int width, int height);
 	~Image();
+	void changeImage(std::string newImage);
 	void translate(glm::vec2 position);
 	void rotate(GLfloat radians);
 	void scale(glm::vec2 scale);
