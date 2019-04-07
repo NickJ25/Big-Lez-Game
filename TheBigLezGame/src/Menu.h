@@ -1,6 +1,8 @@
 #pragma once
 #include "MenuState.h"
 
+#include <irrKlang.h>
+
 class Menu {
 private:
 	MenuState* current;
@@ -12,6 +14,9 @@ private:
 	MenuState* audio;
 	MenuState* scoreboard;
 	MenuState* lobby;
+
+	//background music engine
+	irrklang::ISoundEngine *AmbientEngine = irrklang::createIrrKlangDevice();
 public:
 	Menu();
 	virtual ~Menu()

@@ -21,6 +21,8 @@ Menu::Menu()
 	lobby = new LobbyMenu();
 	current = mainMenu;
 	current->handle(this);
+
+	AmbientEngine->play2D("Assets/Sounds/Ambient/MenuMusic.wav", true);
 }
 
 void Menu::setCurrent(MenuState * menu)
@@ -35,6 +37,8 @@ MenuState * Menu::getCurrentState()
 
 void Menu::updateMenus()
 {
+	if (current == singlePlayer)
+		AmbientEngine->stopAllSounds();
 	current->update();
 }
 

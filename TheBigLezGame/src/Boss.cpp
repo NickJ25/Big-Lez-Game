@@ -353,3 +353,8 @@ glm::vec3 Boss::getSpawnPoint()
 {
 	return selectedSpawnPoint;
 }
+
+float Boss::getHealth()
+{
+	return (health / 2400);
+}

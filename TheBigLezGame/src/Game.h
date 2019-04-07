@@ -109,12 +109,14 @@ private:
 	int noOfSounds = 0;
 
 	//sound timers
-	float conversationTimer = 2400.0f;
+	float conversationTimer = 15.0f;
 
 	//conversations
 	vector<vector<float>> convos;
 	vector<vector<string>> convoOrders;
 	bool convoAssigned = false;
+
+	Image* bossHealth;
 
 public:
 	Game() 

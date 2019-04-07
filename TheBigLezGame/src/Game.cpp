@@ -423,6 +423,10 @@ void Game::init()
 	//set the first wave to be spawned
 	currentWave = 0;
 
+
+	//initialise the HUD
+	bossHealth = new Image("Assets/Art/BossHealth.png", glm::vec3(0.0f, 0.0f, 0.0f));
+
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
 	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
 	pauseBackground = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
@@ -605,11 +609,10 @@ void Game::update()
 {
 	if(isGameRunning == true && initialised)
 	{
-
 		if (ambientInitialised == false) {
 			//set up sound
 			AmbientEngine->setSoundVolume(0.03f);
-			AmbientEngine->play2D("assets/Sounds/AmbientMusic.wav", GL_TRUE);
+			AmbientEngine->play2D("assets/Sounds/Ambient/AmbientMusic.wav", GL_TRUE);
 			ambientInitialised = true;
 
 		}
@@ -621,14 +624,13 @@ void Game::update()
 
 		if (conversationTimer > 0)
 		{
-			conversationTimer -= currentTime;
+			conversationTimer -= deltaTime;
 		}
 		else {
 			//get random sound and play it
 			srand(time(0));
 			int randomSound = rand() % noOfSounds;
 
-			if (convoAssigned == false) {
 				int orderPlace = 0;
 				int count = 0;
 				for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
@@ -662,10 +664,7 @@ void Game::update()
 
 				}
 
-				conversationTimer = (24 * deltaTime) * 60.0f;
-				convoAssigned = true;
-			}
-
+				conversationTimer = 15.0f;
 		}
 		
 		//check if there are no enemies left 
@@ -685,7 +684,7 @@ void Game::update()
 			transparency += deltaTime;
 			if (waveInitialised == false) {
 				WaveEngine->setSoundVolume(0.075f);
-			//	WaveEngine->play2D("assets/Sounds/WaveChange.wav", GL_FALSE);
+				WaveEngine->play2D("assets/Sounds/Ambient/WaveChange.wav", GL_FALSE);
 				waveInitialised = true;
 			}
 			waveText->draw("Wave " + std::to_string(currentWave + 1) + "...", glm::vec4(1.0f, 1.0f, 1.0f, textAlpha), 1);
@@ -735,6 +734,8 @@ void Game::update()
 				Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
 				if (b)
 				{
+					bossHealth->scale(glm::vec2(1.0f, b->getHealth()));
+					bossHealth->draw();
 					b->update();
 					b->checkFieldEmpty(gameObjects);
 					b->spawnMinions(gameObjects, toonShader, pathManager);

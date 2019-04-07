@@ -53,7 +53,12 @@ public:
 
 	void setWave();
 
+	//returns health clipped between 0 and 1 for scaling purposes
+	float getHealth();
+
 private:
+
+	float health = 2400.0f;
 
 	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
 	bool soundSet = false;
