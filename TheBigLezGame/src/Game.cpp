@@ -378,13 +378,16 @@ bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * obj
 	float tymin = (boxMin.y - rayPos->y) / rayDir->y;
 	float tymax = (boxMax.y - rayPos->y) / rayDir->y;
 
-	if (tymin < tymax) swap(tymin, tymax);
+	if (tymin > tymax) swap(tymin, tymax);
 
 	if ((tmin > tymax) || (tymin > tmax))
 		return false;
 
 	if (tymin > tmin)
 		tmin = tymin;
+
+	if (tymax < tmax)
+		tmax = tymax;
 
 	float tzmin = (boxMin.z - rayPos->z) / rayDir->z;
 	float tzmax = (boxMax.z - rayPos->z) / rayDir->z;
@@ -612,20 +615,20 @@ void Game::update()
 					}
 				}
 			}
-			// Ray Checking?
-			if ((*it)->isColliderNull()) {
-				Enemy *t1 = dynamic_cast<Enemy*>((*it));
-				if (t1) {
-					cout << "Checking: " << endl;
-					cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (*it)) << endl;
-				}
-			}
-			else {
-				//cout << "Skipped!" << endl;
-			}
 		}
-		// Everything else
+		// Player Attacking
 		if(mainPlayer->hasPlayerAttacked()) cout << "FIRE ZE MISSILES!" << endl;
+
+		for (int i = 0; i < gameObjects.size(); i++) {
+			Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
+			if (e) {
+				cout << "C_Area: " << e->getCollider()->getPos().x << " " << e->getCollider()->getPos().y << " " << e->getCollider()->getPos().z << endl;
+				cout << "P_Player: " << mainPlayer->getPosition().x << " " << mainPlayer->getPosition().y << " " << mainPlayer->getPosition().z << endl;
+				cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (e)) << endl;
+			}
+
+		}
+
 	}
 	
 	if (Input::keyboard1.keys[GLFW_KEY_P])

@@ -180,7 +180,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 					currentChoomah->setShader(shader);
 					currentChoomah->setMatrix(glm::mat4(1.0f));
 					currentChoomah->Move(glm::vec3(currentSpawn.x, -12.5f, currentSpawn.y));
-					currentChoomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().z), 1.0, 1.0);
+					currentChoomah->addCollision(glm::vec3(choomah->getPosition().x, -12.5f, -choomah->getPosition().z), 2.0, 10.0, 2.0);
 
 					for (std::vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
 					{
