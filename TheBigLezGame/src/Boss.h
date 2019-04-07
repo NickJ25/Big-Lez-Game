@@ -55,7 +55,10 @@ public:
 
 	//returns health clipped between 0 and 1 for scaling purposes
 	float getHealth();
-
+	void setHealth(float num)
+	{
+		health += num;
+	}
 private:
 
 	float health = 2400.0f;

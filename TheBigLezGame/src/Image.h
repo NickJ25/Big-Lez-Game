@@ -42,9 +42,17 @@ private:
 	glm::mat4 m_view = glm::mat4(1.0);
 
 	void init(unsigned char *image);
+
+	//for selective scaling
+	bool isMenu = true;
+
+	float posX;
+	float posY;
+	float currentRot = 0.0f;
+
 public:
-	Image(const char* filename, glm::vec2 screenPos);
-	Image(const char* filename, glm::vec2 screenPos, int width, int height);
+	Image(const char* filename, glm::vec2 screenPos, bool isMenu = true);
+	Image(const char* filename, glm::vec2 screenPos, int width, int height, bool isMenu = true);
 	~Image();
 	void translate(glm::vec2 position);
 	void rotate(GLfloat radians);

@@ -147,6 +147,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 				bossChar.fileLocation = "assets/Characters/Bumble-Brutus/bumblebrutus.dae";
 				bossChar.name = "boss";
 				choomah = new Boss(bossChar);
+				currentChoomah = choomah;
 			}
 			else {
 				currentChoomah = new Enemy(normalChoomah);
@@ -208,10 +209,11 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 					}
 					pathManager->addToQueue(currentChoomah);
 				}
+			}
 				if (j == 3)
 				{
 					//create the boss specially
-					Boss* b = dynamic_cast<Boss*>(choomah);
+					Boss* b = dynamic_cast<Boss*>(currentChoomah);
 					if (b) {
 						b->setShader(shader);
 						b->Move(b->getSpawnPoint());
@@ -230,7 +232,6 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 					toBeSpawned.push_back(currentChoomah);
 					return;
 				}
-			}
 		}
 	}
 }

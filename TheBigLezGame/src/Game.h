@@ -117,6 +117,7 @@ private:
 	bool convoAssigned = false;
 
 	Image* bossHealth;
+	bool ableTo = true;
 
 public:
 	Game() 

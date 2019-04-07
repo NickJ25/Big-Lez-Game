@@ -205,13 +205,13 @@ void Game::init()
 
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1, wave2, wave3, wave4, wave5, wave6, wave7;
-	wave1.push_back(1), wave1.push_back(0), wave1.push_back(0), wave1.push_back(0); // size 5
-	wave2.push_back(1), wave2.push_back(0), wave2.push_back(0), wave2.push_back(0); // size 7
-	wave3.push_back(1), wave3.push_back(0), wave3.push_back(0), wave3.push_back(0); // size 10
-	wave4.push_back(1), wave4.push_back(0), wave4.push_back(0), wave4.push_back(0); // 12
-	wave5.push_back(1), wave5.push_back(0), wave5.push_back(0), wave5.push_back(0); // 15
-	wave6.push_back(1), wave6.push_back(0), wave6.push_back(0), wave6.push_back(0);//18
-	//wave7.push_back(1), wave7.push_back(0), wave7.push_back(0), wave7.push_back(0);//19
+	wave1.push_back(0), wave1.push_back(0), wave1.push_back(0), wave1.push_back(1); 
+	wave2.push_back(1), wave2.push_back(0), wave2.push_back(0), wave2.push_back(0); 
+	wave3.push_back(1), wave3.push_back(0), wave3.push_back(0), wave3.push_back(0); 
+	wave4.push_back(1), wave4.push_back(0), wave4.push_back(0), wave4.push_back(0); 
+	wave5.push_back(1), wave5.push_back(0), wave5.push_back(0), wave5.push_back(0); 
+	wave6.push_back(1), wave6.push_back(0), wave6.push_back(0), wave6.push_back(0);
+	//wave7.push_back(1), wave7.push_back(0), wave7.push_back(0), wave7.push_back(0);
 
 	//add this wave to the wave spawner
 	waveSpawner->setWave(wave1);
@@ -425,7 +425,7 @@ void Game::init()
 
 
 	//initialise the HUD
-	bossHealth = new Image("Assets/Art/BossHealth.png", glm::vec3(0.0f, 0.0f, 0.0f));
+	bossHealth = new Image("Assets/Art/BossHealth.png", glm::vec2(0.0f, 700.0f), false);
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
 	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
@@ -734,7 +734,7 @@ void Game::update()
 				Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
 				if (b)
 				{
-					bossHealth->scale(glm::vec2(1.0f, b->getHealth()));
+					bossHealth->scale(glm::vec2(b->getHealth(), 20.0f));
 					bossHealth->draw();
 					b->update();
 					b->checkFieldEmpty(gameObjects);
@@ -822,20 +822,62 @@ void Game::update()
 		g_window = glfwGetCurrentContext();
 		glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
-	if (Input::keyboard1.keys[GLFW_KEY_B])
-	{
-		if (clicked == false) {
-			removeEnemies(gameObjects);
-			clicked = true;
+#pragma region debug tools
+
+	//for testing bounding box locations on the path finding grid and viewing them visually.
+	if (Input::keyboard1.keys[GLFW_KEY_1]) {
+
+		if (showBoundingBoxes == false) {
+			vector<GameObject*>::iterator it;
+			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+			{
+				Player *tmp = dynamic_cast<Player*>(*it);
+				if (tmp != nullptr)
+				{
+					if (tmp->getCharacter().name == "boundingbox")
+					{
+						if (showBoundingBoxes == false)
+							(*it)->setDraw(true);
+					}
+				}
+			}
+			showBoundingBoxes = true;
 		}
 	}
 
-	if (Input::keyboard1.keys[GLFW_KEY_N])
-	{
-		if (clicked == true) {
-			clicked = false;
+	//for testing health bar for the boss
+		if (Input::keyboard1.keys[GLFW_KEY_U])
+		{
+			if (ableTo) {
+				for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+				{
+					Boss *b = dynamic_cast<Boss*>(*it);
+					if (b)
+					{
+						b->setHealth(-20.0f);
+					}
+				}
+				ableTo = false;
+			}
 		}
-	}
+		//interchangeable - for boss health or uncomment for checking boss waves
+		if (Input::keyboard1.keys[GLFW_KEY_B])
+		{
+			ableTo == true;
+			/*if (clicked == false) {
+				removeEnemies(gameObjects);
+				clicked = true;
+			}*/
+		}
+
+		//reset function for remove enemies
+		if (Input::keyboard1.keys[GLFW_KEY_N])
+		{
+			if (clicked == true) {
+				clicked = false;
+			}
+		}
+#pragma endregion
 
 	if (isGameRunning == false) 
 	{
@@ -861,36 +903,6 @@ void Game::update()
 			exit(0);
 		}
 
-	}
-	//glm::vec3 ray_Test(0.0f, 0.0f, 0.0f);
-	//ray_Test = mainPlayer->getPosition() + mainPlayer->getCamera()->getCameraFront() * 1.0f;
-	//cout << "Ray: " << ray_Test.x << " " << ray_Test.y << " " << ray_Test.z << endl;
-
-	if (Input::keyboard1.keys[GLFW_KEY_C]) {
-		sassy->Move(glm::vec3(1.0f, 0.0f, 0.0f));
-	}
-	if (Input::keyboard1.keys[GLFW_KEY_V]) {
-		sassy->Move(glm::vec3(-1.0f, 0.0f, 0.0f));
-	}
-
-	if (Input::keyboard1.keys[GLFW_KEY_1]) {
-
-		if (showBoundingBoxes == false) {
-			vector<GameObject*>::iterator it;
-			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
-			{
-				Player *tmp = dynamic_cast<Player*>(*it);
-				if (tmp != nullptr)
-				{
-					if (tmp->getCharacter().name == "boundingbox")
-					{
-						if (showBoundingBoxes == false)
-							(*it)->setDraw(true);
-					}
-				}
-			}
-			showBoundingBoxes = true;
-		}
 	}
 
 	if (Input::keyboard1.keys[GLFW_KEY_Q]) {
