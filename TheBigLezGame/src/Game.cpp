@@ -319,54 +319,89 @@ bool Game::checkCollision(GameObject* a, GameObject* b)
 	return true;
 }
 
-bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * object)
-{	
-	// Prerequisites
-	vector<float>t_rayPos = { rayPos->x, rayPos->y, rayPos->z};
-	vector<float>t_rayDir = { rayDir->x, rayDir->y, rayDir->z };
-	vector<float>t_min = { object->getCollider()->getPos().x - object->getCollider()->getHW(),
-							object->getCollider()->getPos().y - object->getCollider()->getTH(),
-							object->getCollider()->getPos().z - object->getCollider()->getHH() };
-	vector<float>t_max = { object->getCollider()->getPos().x + object->getCollider()->getHW(),
-							object->getCollider()->getPos().y + object->getCollider()->getTH(),
-							object->getCollider()->getPos().z + object->getCollider()->getHH() };
-
-	// For all three slabs
-	for (int i = 0; i < 3; i++) {
-		float tmin = 0.0f;
-		float tmax = FLT_MAX;
-		if (abs(t_rayDir[i]) < std::numeric_limits<float>::epsilon()) {
-			if (t_rayPos[i] < t_min[i] || t_rayPos[i] > t_max[i]) return 0;
-		}
-		else {
-			// Compute intersection t value of ray with near and far plane of slab
-			float ood = 1.0f / t_rayDir[i];
-			float t1 = (t_min[i] - t_rayPos[i]) * ood;
-			float t2 = (t_max[i] - t_rayPos[i]) * ood;
-			// Make t1 be intersection with near plane, t2 with far plane
-			if (t1 > t2) {
-				float temp;
-				temp = t2;
-				t1 = t2;
-				t1 = temp;
-			}
-			// Compute the intersection of slab intersection intervals
-			if (t1 > tmin) tmin = t1;
-			if (t2 > tmax) tmax = t2;
-			//Exit with no collision as soon as slab intersection becomes empty
-		}
-	}
-	return 1;
-}
-
 //bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * object)
-//{
-//	glm::vec3 invDir = glm::inverse();
-//	float tmin, tmax, tymin, tymax, tzmin, tzmax;
+//{	
+//	// Prerequisites
+//	vector<float>t_rayPos = { rayPos->x, rayPos->y, rayPos->z};
+//	vector<float>t_rayDir = { rayDir->x, rayDir->y, rayDir->z };
+//	vector<float>t_min = { object->getCollider()->getPos().x - object->getCollider()->getHW(),
+//							object->getCollider()->getPos().y - object->getCollider()->getTH(),
+//							object->getCollider()->getPos().z - object->getCollider()->getHH() };
+//	vector<float>t_max = { object->getCollider()->getPos().x + object->getCollider()->getHW(),
+//							object->getCollider()->getPos().y + object->getCollider()->getTH(),
+//							object->getCollider()->getPos().z + object->getCollider()->getHH() };
 //
-//	tmin = (bounds[rayPos->x] - )
-//
+//	// For all three slabs
+//	for (int i = 0; i < 3; i++) {
+//		float tmin = 0.0f;
+//		float tmax = FLT_MAX;
+//		if (abs(t_rayDir[i]) < std::numeric_limits<float>::epsilon()) {
+//			if (t_rayPos[i] < t_min[i] || t_rayPos[i] > t_max[i]) return 0;
+//		}
+//		else {
+//			// Compute intersection t value of ray with near and far plane of slab
+//			float ood = 1.0f / t_rayDir[i];
+//			float t1 = (t_min[i] - t_rayPos[i]) * ood;
+//			float t2 = (t_max[i] - t_rayPos[i]) * ood;
+//			// Make t1 be intersection with near plane, t2 with far plane
+//			if (t1 > t2) {
+//				float temp;
+//				temp = t2;
+//				t1 = t2;
+//				t1 = temp;
+//			}
+//			// Compute the intersection of slab intersection intervals
+//			if (t1 > tmin) tmin = t1;
+//			if (t2 > tmax) tmax = t2;
+//			//Exit with no collision as soon as slab intersection becomes empty
+//		}
+//	}
+//	return 1;
 //}
+
+bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * object)
+{
+	// Collision Box Minimum point
+	glm::vec3 boxMin = glm::vec3(object->getCollider()->getPos().x - object->getCollider()->getHW(),
+								 object->getCollider()->getPos().y - object->getCollider()->getTH(),
+								 object->getCollider()->getPos().z - object->getCollider()->getHH() );
+	// Collision Box Maximum point
+	glm::vec3 boxMax = glm::vec3(object->getCollider()->getPos().x + object->getCollider()->getHW(),
+								 object->getCollider()->getPos().y + object->getCollider()->getTH(),
+								 object->getCollider()->getPos().z + object->getCollider()->getHH() );
+
+	float tmin = (boxMin.x - rayPos->x) / rayDir->x;
+	float tmax = (boxMax.x - rayPos->x) / rayDir->x;
+
+	if (tmin > tmax) swap(tmin, tmax);
+
+	float tymin = (boxMin.y - rayPos->y) / rayDir->y;
+	float tymax = (boxMax.y - rayPos->y) / rayDir->y;
+
+	if (tymin < tymax) swap(tymin, tymax);
+
+	if ((tmin > tymax) || (tymin > tmax))
+		return false;
+
+	if (tymin > tmin)
+		tmin = tymin;
+
+	float tzmin = (boxMin.z - rayPos->z) / rayDir->z;
+	float tzmax = (boxMax.z - rayPos->z) / rayDir->z;
+
+	if (tzmin > tzmax) swap(tzmin, tzmax);
+
+	if ((tmin > tzmax) || (tzmin > tmax))
+		return false;
+
+	if (tzmin > tmin)
+		tmin = tzmin;
+
+	if (tzmax < tmax)
+		tmax = tzmax;
+
+	return true;
+}
 
 bool Game::pointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d)
 {
