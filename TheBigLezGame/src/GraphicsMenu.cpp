@@ -90,6 +90,8 @@ void GraphicsMenu::update()
 
 	//std::cout << mode << " " << newWidth << "x" << newHeight << std::endl;
 	if (applyBtn->buttonClick()) {
+		Input::SCREEN_WIDTH = newWidth;
+		Input::SCREEN_HEIGHT = newHeight;
 		glfwSetWindowSize(m_window, newWidth, newHeight);
 	}
 	//glfwSetWindowSize
@@ -109,5 +111,5 @@ void GraphicsMenu::draw()
 	leftAABtn->draw();
 	rightAABtn->draw();
 	std::string t_Test = (std::to_string(newWidth) + "x" + std::to_string(newHeight));
-	resolutionTxt->draw(t_Test, glm::vec3(1.0, 1.0, 1.0));
+	resolutionTxt->draw(t_Test, glm::vec4(1.0, 1.0, 1.0, 1.0),1);
 }

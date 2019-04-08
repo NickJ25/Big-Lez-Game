@@ -80,6 +80,11 @@ void Text::move(glm::vec2 position)
 	m_model = glm::translate(glm::mat4(1.0), glm::vec3(position.x, position.y, 0.0f));
 }
 
+glm::vec2 Text::getPosition()
+{
+	return glm::vec2(m_model[3][0], m_model[3][1]);
+}
+
 void Text::scale(glm::vec2 scale)
 {
 	m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
@@ -90,7 +95,7 @@ glm::vec2 Text::getSize()
 	return m_textBoxSize;
 }
 
-void Text::draw(std::string text, glm::vec3 colour)
+void Text::draw(std::string text, glm::vec4 colour, int imageMode)
 {
 	m_textShader->use();
 
@@ -99,7 +104,8 @@ void Text::draw(std::string text, glm::vec3 colour)
 	glUniformMatrix4fv(glGetUniformLocation(m_textShader->getID(), "imgView"), 1, GL_FALSE, glm::value_ptr(m_view));
 
 	//glUniformMatrix4fv(glGetUniformLocation(m_textShader->getID(), "PROJECTION_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
-	glUniform1i(glGetUniformLocation(m_textShader->getID(), "imgMode"), 1);
+	glUniform1i(glGetUniformLocation(m_textShader->getID(), "imgMode"), imageMode);
+	glUniform1f(glGetUniformLocation(m_textShader->getID(), "alpha"), colour.w);
 	glUniform3f(glGetUniformLocation(m_textShader->getID(), "imgColour"), colour.x, colour.y, colour.z);
 
 	glActiveTexture(GL_TEXTURE0);
@@ -131,6 +137,7 @@ void Text::draw(std::string text, glm::vec3 colour)
 			{ x_pos + w,	y_pos,		0.0f,	1.0, 1.0 },
 			{ x_pos + w,	y_pos + h,  0.0f,	1.0, 0.0 },
 		};
+
 		// render texture over this quad
 		glBindTexture(GL_TEXTURE_2D, ch.textureID);
 		// update VBO memory

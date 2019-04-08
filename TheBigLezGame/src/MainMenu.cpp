@@ -7,7 +7,7 @@ MainMenu::MainMenu()
 
 void MainMenu::handle(Menu * menu)
 {
-	background = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
+	background = new Image("assets/Art/background.png", glm::vec2(640.0, 360.0));
 	logo = new Image("assets/Art/bigLezLogo.png", glm::vec2(640.0, 560.0));
 	logo->scale(glm::vec2(0.5, 0.4));
 	singlePlayerBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Singleplayer");
@@ -47,5 +47,5 @@ void MainMenu::draw()
 	singlePlayerBtn->draw();
 	optionsBtn->draw();
 	quitBtn->draw();
-	testText->draw("Developed by Group 3", glm::vec3(1.0,1.0,1.0));
+	testText->draw("Developed by Group 3", glm::vec4(1.0,1.0,1.0,1.0),1);
 }

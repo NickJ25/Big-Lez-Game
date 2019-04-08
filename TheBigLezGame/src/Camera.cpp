@@ -67,31 +67,30 @@ void Camera::update()
 		}
 		break;
 	case DYNAMIC: // Standard player
-		if (Input::keyboard1.keys[GLFW_KEY_W]) {
-			m_position = m_position - getFront() * 1.0f;
-			m_position.y = 0;
-		}
-		if (Input::keyboard1.keys[GLFW_KEY_S]) {
-			m_position = m_position + m_front * 1.0f;
-			m_position.y = 0;
-		}
-		if (Input::keyboard1.keys[GLFW_KEY_A]) {
-			m_position = m_position + glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
-			m_position.y = 0;
-		}
-		if (Input::keyboard1.keys[GLFW_KEY_D]) {
-			m_position = m_position - glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
-			m_position.y = 0;
-		}
+		//if (Input::keyboard1.keys[GLFW_KEY_W]) {
+		//	m_position = m_position - getFront() * 1.0f;
+		//	m_position.y = 0;
+		//}
+		//if (Input::keyboard1.keys[GLFW_KEY_S]) {
+		//	m_position = m_position + m_front * 1.0f;
+		//	m_position.y = 0;
+		//}
+		//if (Input::keyboard1.keys[GLFW_KEY_A]) {
+		//	m_position = m_position + glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
+		//	m_position.y = 0;
+		//}
+		//if (Input::keyboard1.keys[GLFW_KEY_D]) {
+		//	m_position = m_position - glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
+		//	m_position.y = 0;
+		//}
 		break;
 	case STATIC: // No movement
 		break;
 	}
 
-	int xpos, ypos;
-
-	xpos = Input::mouse1.current_Xpos;
-	ypos = Input::mouse1.current_Ypos;
+	float xpos, ypos;
+	xpos = Input::mouse1.current_Xpos; //Input::controller1.rightThumb.x;
+	ypos =  Input::mouse1.current_Ypos; // Input::controller1.rightThumb.y;
 
 	if (firstCamLoad) { // Add start position for camera?
 		lastOffsetX = (float)xpos;
@@ -99,8 +98,8 @@ void Camera::update()
 		firstCamLoad = false;
 	}
 
-	mouseOffsetX = (float)xpos - lastOffsetX;
-	mouseOffsetY = lastOffsetY - (float)ypos;
+	mouseOffsetX = (float)xpos - lastOffsetX; // Controller xpos * 9
+	mouseOffsetY = lastOffsetY - (float)ypos; // Controller -ypos* 8
 	lastOffsetX = (float)xpos;
 	lastOffsetY = (float)ypos;
 

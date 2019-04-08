@@ -29,7 +29,7 @@ void Image::init(unsigned char* image)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(backgroundCoords), backgroundCoords, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3, (GLvoid*)0);
-	m_model = glm::scale(m_model, glm::vec3(640.0f, 360.0f, 1.0f));
+	if(isMenu) m_model = glm::scale(m_model, glm::vec3((float)Input::SCREEN_WIDTH / 2, (float)Input::SCREEN_HEIGHT / 2, 1.0f));
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO2);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoords), textureCoords, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(1);
@@ -42,14 +42,18 @@ void Image::init(unsigned char* image)
 	glBindVertexArray(0);
 	SOIL_free_image_data(image);
 
-	m_proj = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, 0.0f, 100.0f);
+	m_proj = glm::ortho(0.0f, (float)Input::SCREEN_WIDTH, 0.0f, (float)Input::SCREEN_HEIGHT, 0.0f, 100.0f);
 	m_view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
-Image::Image(const char * filename, glm::vec2 screenPos)
+Image::Image(const char * filename, glm::vec2 screenPos, bool ismenu)
 {
 	m_image = SOIL_load_image(filename, &m_imgWidth, &m_imgHeight, 0, SOIL_LOAD_RGBA);
 	m_model = glm::translate(m_model, glm::vec3(screenPos.x, screenPos.y, 0.0f));
+
+	posX = screenPos.x;
+	posY = screenPos.y;
+	isMenu = ismenu;
 	if (m_image) {
 		init(m_image);
 	}
@@ -58,12 +62,18 @@ Image::Image(const char * filename, glm::vec2 screenPos)
 	}
 }
 
-Image::Image(const char * filename, glm::vec2 screenPos, int width, int height)
+Image::Image(const char * filename, glm::vec2 screenPos, int width, int height, bool ismenu)
 {
 	m_Width = width;
 	m_Height = height;
 	m_image = SOIL_load_image(filename, &m_imgWidth, &m_imgHeight, 0, SOIL_LOAD_RGBA);
 	m_model = glm::translate(m_model, glm::vec3(screenPos, 0.0f));
+
+
+	posX = screenPos.x;
+	posY = screenPos.y;
+	isMenu = ismenu;
+
 	if (m_image) {
 		init(m_image);
 	}
@@ -77,13 +87,36 @@ Image::~Image()
 
 }
 
+void Image::changeImage(std::string newImage)
+{
+	m_image = SOIL_load_image(newImage.c_str(), &m_imgWidth, &m_imgHeight, 0, SOIL_LOAD_RGBA);
+	init(m_image);
+}
+
+void Image::translate(glm::vec2 position)
+{
+	std::cout << "S: " << m_model[3][0] << " " << m_model[3][1] << " " << m_model[3][2] << "\n";
+	m_model = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
+	std::cout << "E: " << m_model[3][0] << " " << m_model[3][1] << " " << m_model[3][2] << "\n";
+}
+
 void Image::rotate(GLfloat radians) {
 	m_model = glm::rotate(m_model, (float)glm::radians(radians), glm::vec3(0.0f, 1.0f, 0.0f));
+	currentRot += radians;
 }
 
 void Image::scale(glm::vec2 scale)
 {
+	glm::mat4 temp(1.0f);
+	temp = glm::translate(temp, glm::vec3(posX, posY, 0.0f));
+	if(isMenu)
+	temp = glm::scale(temp, glm::vec3(640.0f, 360.0f, 1.0f));
+
+	temp = glm::rotate(temp, currentRot, glm::vec3(0.0f, 1.0f, 0.0f));
+	temp = glm::scale(temp, glm::vec3(scale.x, scale.y, 0.0f));
 	m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
+	std::cout << std::endl;
+	m_model = temp;// glm::scale(m_model, glm::vec3(scale, 0.0f));
 }
 
 void Image::draw()

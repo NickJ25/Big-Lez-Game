@@ -90,13 +90,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\dev\glew-2.1.0\include;..\..\..\dev\SDL2-2.0.8\include;..\..\..\dev\glm;..\..\..\dev\Assimp\include;..\..\..\dev\SOIL2\include;..\..\..\dev\glfw-3.2.1.bin.WIN32\include;..\..\..\dev\freetype-windows-binaries-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dev\irrKlang-1.6.0\include;..\..\..\dev\glew-2.1.0\include;..\..\..\dev\SDL2-2.0.8\include;..\..\..\dev\glm;..\..\..\dev\Assimp\include;..\..\..\dev\SOIL2\include;..\..\..\dev\glfw-3.2.1.bin.WIN32\include;..\..\..\dev\freetype-windows-binaries-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\dev\SDL2-2.0.8\VisualC\Win32\Debug;..\..\..\dev\glew-2.1.0\lib\Debug\Win32;..\..\..\dev\Assimp\lib;..\..\..\dev\SOIL2\lib;..\..\..\dev\glfw-3.2.1.bin.WIN32\lib-vc2015;..\..\..\dev\freetype-windows-binaries-master\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\dev\irrKlang-1.6.0\lib\Win32-visualStudio;..\..\..\dev\SDL2-2.0.8\VisualC\Win32\Debug;..\..\..\dev\glew-2.1.0\lib\Debug\Win32;..\..\..\dev\Assimp\lib;..\..\..\dev\SOIL2\lib;..\..\..\dev\glfw-3.2.1.bin.WIN32\lib-vc2015;..\..\..\dev\freetype-windows-binaries-master\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>
       </SubSystem>
-      <AdditionalDependencies>glew32d.lib;opengl32.lib;SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;soil2-debug.lib;glfw3.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32d.lib;opengl32.lib;SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;soil2-debug.lib;glfw3.lib;freetype.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -5,6 +5,8 @@
 #include "Text.h"
 #include <iostream>
 #include <string>
+#include "Input.h"
+#include <irrKlang.h>
 
 class Player : public GameObject
 {
@@ -12,9 +14,10 @@ public:
 	struct Character {
 		std::string name;
 		std::string fileLocation;
-		bool isLocked;
+		bool isLocked = false;		// Not locked by default
 		GLint health;
 		GLint walkSpeed;
+		Input::ControllerType control;
 	};
 
 	Player(ControllerComponent::ControllerType controller, Character character, glm::vec3 startPos);
@@ -29,7 +32,26 @@ public:
 	
 	Player::Character getCharacter();
 
+	//sound stuff
+	void setSound(irrklang::ISoundSource*);
+	irrklang::ISoundSource* getSound(int sound);
+
+	void playSound(int sound, float delay = 100.0f);
+
+
 private:
+
+	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
+	float soundDelay;
+	bool playingSound = false;
+	bool soundCalled = false;
+
+	float soundAnimationTime = 0.0f;
+	bool soundAnimSet = false;
+
+	bool isMoving = false;
+
+	vector<irrklang::ISoundSource*> sounds;
 
 	Character m_character;
 	Camera* m_playerCamera;

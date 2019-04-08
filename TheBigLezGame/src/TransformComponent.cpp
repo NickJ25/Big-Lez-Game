@@ -38,8 +38,8 @@ void TransformComponent::setPosition(glm::vec3 newPos)
 	//m_matrix = glm::translate(m_matrix, -getPosition());
 	//cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
 	m_matrix = glm::translate(m_matrix, newPos);
-	cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
-	cout << endl;
+	//cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
+	//cout << endl;
 }
 
 

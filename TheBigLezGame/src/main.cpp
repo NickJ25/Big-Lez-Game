@@ -96,11 +96,18 @@ void ControllerHandle() {
 		Input::controller1.name = glfwGetJoystickName(GLFW_JOYSTICK_1);
 		// Buttons
 		int count;
-		const unsigned char* axes = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
+		const unsigned char* btns = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
 		for (int i = 0; i < count; i++) {
-			if (axes[i] == GLFW_PRESS)Input::controller1.buttons[i] = true;
-			if (axes[i] == GLFW_RELEASE) Input::controller1.buttons[i] = false;
+			if (btns[i] == GLFW_PRESS)Input::controller1.buttons[i] = true;
+			if (btns[i] == GLFW_RELEASE) Input::controller1.buttons[i] = false;
 		}
+		const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
+		Input::controller1.leftThumb.x = axes[0];
+		Input::controller1.leftThumb.y = axes[1];
+		Input::controller1.rightThumb.x = axes[2];
+		Input::controller1.rightThumb.y = axes[3];
+		Input::controller1.triggers.x = axes[4];
+		Input::controller1.triggers.y = axes[5];
 	}
 	else {
 		Input::controller1.connected = false;
@@ -117,6 +124,15 @@ int main(int argc, char *argv[]) {
 	window->setCursorPosCallback(MouseCallback);
 	window->setMouseButtonCallback(MouseButtonCallback);
 	window->setJoystickCallback(JoystickCallback);
+
+	Input::keyboard1.type = Input::KEYBOARD;
+	Input::mouse1.type = Input::KEYBOARD;
+	Input::controller1.type = Input::CONTROLLER1;
+	Input::controller2.type = Input::CONTROLLER2;
+
+	// Initial Screen Size Setup
+	Input::SCREEN_HEIGHT = 720;
+	Input::SCREEN_WIDTH = 1280;
 
 	// Required on Windows *only* init GLEW to access OpenGL beyond 1.1
 	glewExperimental = GL_TRUE;

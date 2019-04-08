@@ -3,6 +3,13 @@
 
 Boss::Boss(Character character) : GameObject(character.fileLocation.c_str())
 {
+
+	// load in the boss' speech
+	irrklang::ISoundSource* s1 = speechEngine->addSoundSourceFromFile("assets/Sounds/BumbleBrutus/BumbleBrutusLine1.wav");
+	irrklang::ISoundSource* s2 = speechEngine->addSoundSourceFromFile("assets/Sounds/BumbleBrutus/BumbleBrutusLine2.wav");
+	irrklang::ISoundSource* s3 = speechEngine->addSoundSourceFromFile("assets/Sounds/BumbleBrutus/BumbleBrutusLine3.wav");
+	sounds.push_back(s1), sounds.push_back(s2), sounds.push_back(s3);
+
 	//set to default walk animation
 	setAnimation(0.0f, 4.4f);
 	//intialise spawnable waves
@@ -104,6 +111,30 @@ void Boss::update()
 
 	bool rotated = false; 
 
+	if (stopped == false)
+	{
+		privateEngine->play3D("assets/Sounds/BumbleBrutus/stomp.wav", irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
+		soundSet = true;
+	}
+
+	if (soundSet == true && stopped == true)
+	{
+		privateEngine->setAllSoundsPaused(true);
+		float deltaTime = glfwGetTime();
+		
+		if (speechTimer > 0)
+		{
+			speechTimer -= deltaTime;
+		}
+		else
+		{
+			srand(time(0));
+			float randomNumber = rand() % sounds.size();
+			speechEngine->play3D(sounds.at(randomNumber), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			float clipSize = sounds.at(randomNumber)->getPlayLength() / 1000;
+			speechTimer = 25.0f + clipSize;
+		}
+	}
 	if (paused == false) {
 		//get it to follow
 		if (!selectedPath.empty())
@@ -254,9 +285,9 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 
 			//set a new wave
 			setWave();
-			cout << endl;
+			//cout << endl;
 	}
-	cout << endl;
+	//cout << endl;
 }
 
 void Boss::setWave()
@@ -278,7 +309,7 @@ void Boss::setWave()
 		current = brawlerWave;
 		currentWave = 2;
 	}
-	cout << endl;
+	//cout << endl;
 }
 
 void Boss::checkFieldEmpty(std::vector<GameObject*> g)
@@ -321,4 +352,9 @@ glm::vec3 Boss::getOuterPathEnd(int position)
 glm::vec3 Boss::getSpawnPoint()
 {
 	return selectedSpawnPoint;
+}
+
+float Boss::getHealth()
+{
+	return (health / 2400.0f) * 1280.0f;
 }

@@ -12,15 +12,18 @@ private:
 	GLuint m_maxAmmo;
 	GLuint m_clipSize;
 	GLuint m_currentClip = m_clipSize;
+	float m_shootDelay;
 
 	bool sprayAllowed;
 	bool gunFired;
+	float lastFired = glfwGetTime();
 	bool alreadyFired = false;;
 	Text* t_ammoCount;
 	Text* t_gunName;
 
 public:
-	Gun(const char* filename, std::string gunName, GLuint maxAmmo, GLuint clipSize, bool allowSpray);
+	Gun(const char* filename, std::string gunName, GLuint maxAmmo, GLuint clipSize, 
+		float shootDelay, bool allowSpray);
 	~Gun();
 
 	void shoot(bool clicked);
