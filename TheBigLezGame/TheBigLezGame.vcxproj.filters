@@ -1,373 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Menu">
-      <UniqueIdentifier>{4eb4be4f-6863-4cb8-bb7c-b26b1f974615}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Menu">
-      <UniqueIdentifier>{d754ff68-b0f3-4101-bdf7-d66ef98c20bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{9cc05616-7987-4fe3-9115-b5d47be77850}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameObject">
-      <UniqueIdentifier>{4ea22011-7c2e-4368-97c8-85c0306e57a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameObject\Components">
-      <UniqueIdentifier>{4eee4534-037b-4b85-99ef-1a309a1adc84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObject">
-      <UniqueIdentifier>{3df29af6-8abf-40e1-8e74-b2c25599af6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObject\Components">
-      <UniqueIdentifier>{c937a85f-9600-492c-aadc-df7042bcb288}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameObject\GameObjects">
-      <UniqueIdentifier>{d2f3a0b2-d9e5-45e2-8826-cf484f8f880f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameObject\Components\SubComponents">
-      <UniqueIdentifier>{d26b563e-ce30-4cdf-835d-47233f2e82cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Other">
-      <UniqueIdentifier>{f4960844-9ab4-43e6-8129-3d988e152651}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Other">
-      <UniqueIdentifier>{b2b95fdc-5309-415f-b5f6-225db8698914}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameObject\GameObjects\Lights Types">
-      <UniqueIdentifier>{afdfe8c3-851b-4174-a230-5a057711fd41}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObject\Components\SubComponents">
-      <UniqueIdentifier>{7d03f6ea-a6d3-4531-a5ae-48b012c52c62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObject\GameObjects">
-      <UniqueIdentifier>{7a3fcaed-014b-4dc3-9f14-b0d87cdbc339}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObject\GameObjects\Light Types">
-      <UniqueIdentifier>{db36dc14-8b8d-45e8-b273-2299905e5a59}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="src\AnimMesh.cpp" />
+    <ClCompile Include="src\AnimModel.cpp" />
+    <ClCompile Include="src\Boss.cpp" />
+    <ClCompile Include="src\Button.cpp" />
+    <ClCompile Include="src\ControllerComponent.cpp" />
+    <ClCompile Include="src\Enemy.cpp" />
+    <ClCompile Include="src\Grid.cpp" />
+    <ClCompile Include="src\Gun.cpp" />
+    <ClCompile Include="src\Image.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\CollisionComponent.cpp" />
+    <ClCompile Include="src\DirectionalLight.cpp" />
+    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\LobbyMenu.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\AudioMenu.cpp" />
+    <ClCompile Include="src\ControlsMenu.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\GraphicsMenu.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MainMenu.cpp" />
+    <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\Node.cpp" />
+    <ClCompile Include="src\Obstacle.cpp" />
+    <ClCompile Include="src\OptionsMenu.cpp" />
+    <ClCompile Include="src\PathManager.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\PointLight.cpp" />
+    <ClCompile Include="src\Prop.cpp" />
+    <ClCompile Include="src\RenderComponent.cpp" />
+    <ClCompile Include="src\rt3d.cpp" />
+    <ClCompile Include="src\rt3dObjLoader.cpp" />
+    <ClCompile Include="src\ScoreboardMenu.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\SinglePlayerMenu.cpp" />
+    <ClCompile Include="src\Skybox.cpp" />
+    <ClCompile Include="src\SpotLight.cpp" />
+    <ClCompile Include="src\Text.cpp" />
+    <ClCompile Include="src\TransformComponent.cpp" />
+    <ClCompile Include="src\TextureLoader.cpp" />
+    <ClCompile Include="src\WaveSpawner.cpp" />
+    <ClCompile Include="src\windowGLFW.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AudioMenu.cpp">
-      <Filter>Source Files\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ControlsMenu.cpp">
-      <Filter>Source Files\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GraphicsMenu.cpp">
-      <Filter>Source Files\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SinglePlayerMenu.cpp">
-      <Filter>Source Files\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OptionsMenu.cpp">
-      <Filter>Source Files\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ScoreboardMenu.cpp">
-      <Filter>Source Files\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MainMenu.cpp">
-      <Filter>Source Files\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rt3d.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rt3dObjLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TransformComponent.cpp">
-      <Filter>Source Files\GameObject\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RenderComponent.cpp">
-      <Filter>Source Files\GameObject\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Mesh.cpp">
-      <Filter>Source Files\GameObject\Components\SubComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Menu.cpp">
-      <Filter>Source Files\GameObject\Components\SubComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Model.cpp">
-      <Filter>Source Files\GameObject\Components\SubComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Prop.cpp">
-      <Filter>Source Files\GameObject\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DirectionalLight.cpp">
-      <Filter>Source Files\GameObject\GameObjects\Light Types</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SpotLight.cpp">
-      <Filter>Source Files\GameObject\GameObjects\Light Types</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PointLight.cpp">
-      <Filter>Source Files\GameObject\GameObjects\Light Types</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Skybox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TextureLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CollisionComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Image.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Button.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AnimMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AnimModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Text.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\windowGLFW.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LobbyMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\WaveSpawner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Node.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Grid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PathManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Gun.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="src\ControllerComponent.cpp">
-=======
-    <ClCompile Include="src\Boss.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Obstacle.cpp">
->>>>>>> Chris-Enemies
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="src\ControllerComponent.h" />
+    <ClInclude Include="src\Boss.h" />
+    <ClInclude Include="src\Enemy.h" />
+    <ClInclude Include="src\Grid.h" />
+    <ClInclude Include="src\Node.h" />
+    <ClInclude Include="src\Obstacle.h" />
+    <ClInclude Include="src\PathManager.h" />
+    <ClInclude Include="src\WaveSpawner.h" />
+    <ClInclude Include="src\Gun.h" />
+    <ClInclude Include="src\LobbyMenu.h" />
+    <ClInclude Include="src\AnimMesh.h" />
+    <ClInclude Include="src\AnimModel.h" />
+    <ClInclude Include="src\Image.h" />
+    <ClInclude Include="src\Button.h" />
+    <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\MapReader.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\PointLight.h" />
+    <ClInclude Include="src\SpotLight.h" />
+    <ClInclude Include="src\DirectionalLight.h" />
+    <ClInclude Include="src\Light.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Prop.h" />
+    <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\Model.h" />
+    <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\CollisionComponent.h" />
+    <ClInclude Include="src\Skybox.h" />
+    <ClInclude Include="src\AIComponent.h" />
+    <ClInclude Include="src\Component.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\GameObject.h" />
+    <ClInclude Include="src\PhysicsComponent.h" />
+    <ClInclude Include="src\RenderComponent.h" />
+    <ClInclude Include="src\AudioMenu.h" />
+    <ClInclude Include="src\ControlsMenu.h" />
+    <ClInclude Include="src\GraphicsMenu.h" />
+    <ClInclude Include="src\MainMenu.h" />
+    <ClInclude Include="src\MenuState.h" />
+    <ClInclude Include="src\Menu.h" />
+    <ClInclude Include="src\OptionsMenu.h" />
+    <ClInclude Include="src\rt3d.h" />
+    <ClInclude Include="src\rt3dObjLoader.h" />
+    <ClInclude Include="src\ScoreboardMenu.h" />
+    <ClInclude Include="src\SinglePlayerMenu.h" />
+    <ClInclude Include="src\Text.h" />
+    <ClInclude Include="src\TransformComponent.h" />
+    <ClInclude Include="src\TextureLoader.h" />
+    <ClInclude Include="src\Weapon.h" />
+    <ClInclude Include="src\windowGLFW.h" />
+    <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\MenuState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MainMenu.h">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="src\OptionsMenu.h">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SinglePlayerMenu.h">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ControlsMenu.h">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GraphicsMenu.h">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AudioMenu.h">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ScoreboardMenu.h">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rt3d.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rt3dObjLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TransformComponent.h">
-      <Filter>Header Files\GameObject\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AIComponent.h">
-      <Filter>Header Files\GameObject\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Component.h">
-      <Filter>Header Files\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameObject.h">
-      <Filter>Header Files\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PhysicsComponent.h">
-      <Filter>Header Files\GameObject\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\RenderComponent.h">
-      <Filter>Header Files\GameObject\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Skybox.h">
-      <Filter>Header Files\GameObject\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CollisionComponent.h">
-      <Filter>Header Files\GameObject\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Header Files\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Model.h">
-      <Filter>Header Files\GameObject\Components\SubComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mesh.h">
-      <Filter>Header Files\GameObject\Components\SubComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Prop.h">
-      <Filter>Header Files\GameObject\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Light.h">
-      <Filter>Header Files\GameObject\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DirectionalLight.h">
-      <Filter>Header Files\GameObject\GameObjects\Lights Types</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SpotLight.h">
-      <Filter>Header Files\GameObject\GameObjects\Lights Types</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PointLight.h">
-      <Filter>Header Files\GameObject\GameObjects\Lights Types</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MapReader.h">
-      <Filter>Header Files\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TextureLoader.h">
-      <Filter>Header Files\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Button.h">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AnimModel.h">
-      <Filter>Header Files\GameObject\Components\SubComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AnimMesh.h">
-      <Filter>Header Files\GameObject\Components\SubComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Text.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\windowGLFW.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LobbyMenu.h">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="src\WaveSpawner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Grid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PathManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Weapon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Gun.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="src\ControllerComponent.h">
-=======
-    <ClInclude Include="src\Boss.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Obstacle.h">
->>>>>>> Chris-Enemies
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\toonShader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\toonShader.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\skyboxShader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\skyboxShader.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\Image.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\Image.vert">
-      <Filter>Shaders</Filter>
-    </None>
+    <None Include="src\Image.frag" />
+    <None Include="src\Image.vert" />
+    <None Include="src\skyboxShader.frag" />
+    <None Include="src\skyboxShader.vert" />
+    <None Include="src\toonShader.frag" />
+    <None Include="src\toonShader.vert" />
   </ItemGroup>
 </Project>

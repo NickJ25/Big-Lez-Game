@@ -3,8 +3,24 @@
 
 Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 {
+
 	//record the characters name
 	name = character.name;
+
+	//all choomahs have the same sounds
+	irrklang::ISoundSource* s1 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream1.wav");
+	irrklang::ISoundSource* s2 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream2.wav");
+	irrklang::ISoundSource* s3 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream3.wav");
+	irrklang::ISoundSource* s4 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream4.wav");
+	irrklang::ISoundSource* s5 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream5.wav");
+	irrklang::ISoundSource* s6 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Ambient/ChoomahScream6.wav");
+	sounds.push_back(s1), sounds.push_back(s2), sounds.push_back(s3),sounds.push_back(s4), sounds.push_back(s5), sounds.push_back(s6);
+
+	irrklang::ISoundSource* d1 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Deaths/ChoomahDeath1.wav");
+	irrklang::ISoundSource* d2 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Deaths/ChoomahDeath2.wav");
+	irrklang::ISoundSource* d3 = privateEngine->addSoundSourceFromFile("assets/Sounds/Choomahs/Deaths/ChoomahDeath3.wav");
+	deathSounds.push_back(d1), deathSounds.push_back(d2), deathSounds.push_back(d3);
+
 
 	//initialise all the movement variables
 	firstPosition = true;
@@ -122,15 +138,62 @@ void Enemy::reset(PathManager* pathmanager)
 	deathAnimationTimer = 150;
 	still = false;
 
+	//reset sound variables
+	deathSoundSet = false;
+	soundPlaying = false;
+	walkSoundSet = false;
 
 }
 
 void Enemy::update()
 {
+	float deltaTime = glfwGetTime();
+	//sound update
+
+	if (moving == true && walkSoundSet == false)
+	{
+		privateEngineWalking->play3D("assets/Sounds/footsteps.wav", irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
+		walkSoundSet = true;
+	}
+	else
+	{
+		privateEngineWalking->setAllSoundsPaused(true);
+		walkSoundSet = false;	
+	}
+	if (soundDelay <= 0 && dead == false)
+	{
+		if (soundPlaying == false) {
+			srand(time(0));
+			int randomSound = rand() % sounds.size();
+			privateEngine->play3D(sounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			playTime = sounds.at(randomSound)->getPlayLength() / 1000;
+			int randFactor = rand() % 100 + 50;
+			soundDelay = (24 * deltaTime) * 55.0f + playTime + randFactor;
+			soundPlaying = true;
+		}
+		if (soundPlaying == true && soundDelay <= 0.0f)
+		{
+			soundPlaying = false;
+		}
+	}
+	else
+	{
+		soundDelay -= deltaTime;
+	}
 	//uncomment for debugging
 	//cout << getPosition().x << " , " << getPosition().z << endl;
 	if (dead == true)
 	{
+		if (deathSoundSet == false) {
+			soundPlaying = false;
+			deathSoundSet = true;
+		}
+		if (soundPlaying == false) {
+			srand(time(0));
+			int randomSound = rand() % deathSounds.size();
+			privateEngine->play3D(deathSounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			soundPlaying = true;
+		}
 		deathAnimationTimer--;
 		
 		if (deathAnimationTimer <= 0) {
@@ -181,28 +244,37 @@ void Enemy::update()
 
 					//get angle between the current and the next node
 					distanceToBeCovered = next - current;
-					if (nodeSet == true) {
-						glm::vec3 result = next - currentNode;
-						rotation = glm::normalize(result);
-						//cout << endl;
-					}
-					else
-						rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
 
-					glm::vec3 currentRot = getRotation(); // current rotation
+					rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
+
+					//rotation is reset every frame with new matrix
+					glm::vec3 currentRot = glm::vec3(1.0f, 0.0f, 0.0f); // current rotation
 
 					//calculate angle between the two vectors
-					float jeff = glm::dot(currentRot, rotation);
+					float dotProd = glm::dot(currentRot, rotation);
 
-					float angle = -glm::acos(glm::dot(currentRot, rotation));
-
-					if (jeff == 0)
+					//clamp it to between -pi and pi
+					if (dotProd > 3.1415f) {
+						dotProd = fmod(dotProd, 3.1415f);
+					}else
+					if (dotProd < -3.1415f)
 					{
-						angle = 3.1415;
+						dotProd = fmod(dotProd, -3.1415f);
+					}
+
+					//find the angle from this value
+					float angle = acos(dotProd);
+
+					//calculate the cross of the two vectors
+					glm::vec3 crossProd = glm::cross(currentRot, rotation);
+
+					//if the result indicated it is upside down, rotate anti-clockwise instead of clockwise
+					if (glm::dot(glm::normalize(crossProd), glm::vec3(0.0f, 1.0f, 0.0f)) < 0)
+					{
+						angle = -angle;
 					}
 
 					movementStep = glm::normalize(distanceToBeCovered) * velocity;
-
 
 					//reset the rotation
 					glm::mat4 tempMat(1.0f);
@@ -211,12 +283,8 @@ void Enemy::update()
 					tempMat = glm::translate(tempMat, getPosition());
 					tempMat = glm::translate(tempMat, movementStep);
 
-					if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.z) != std::round(rotation.z) && rotated == false)
-					{
-						//reapply the rotation
-						tempMat = glm::rotate(tempMat, jeff, glm::vec3(0.0f, 1.0f, 0.0f));
-						rotated = true;
-					}
+					//reapply the rotation
+					tempMat = glm::rotate(tempMat, angle + glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 					//set the matrix
 					setMatrix(tempMat);
@@ -225,14 +293,10 @@ void Enemy::update()
 					if (getCollider())
 						getCollider()->setCollider(tempMat[3]);
 
-					glm::vec3 check = getRotation();
 					if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
 					{
 						//remove this from the vector and set it back to unrotated
-						currentNode = outerPath.back();
 						outerPath.pop_back();
-						rotated = false;
-						nodeSet = true;
 					}
 				}
 				else {
@@ -253,12 +317,37 @@ void Enemy::update()
 						next = getOuterPathEnd().second;
 						distanceToBeCovered = next - current;
 
+
 						glm::vec3 jumpDirection = glm::normalize(getOuterPathEnd().second - getPosition());
 						rotation = glm::normalize(jumpDirection); // rotation we want to be at
-						glm::vec3 currentRot = getRotation(); // current rotation
+						glm::vec3 currentRot = glm::vec3(1.0f, 0.0f, 0.0f);
 
 						//calculate angle between the two vectors
-						float angle = -glm::acos(glm::dot(currentRot, rotation));
+						float dotProd = glm::dot(currentRot, rotation);
+
+						//clamp it to between -pi and pi
+						if (dotProd > 3.1415f) {
+							dotProd = fmod(dotProd, 3.1415f);
+						}
+						else
+						if (dotProd < -3.1415f)
+						{
+							dotProd = fmod(dotProd, -3.1415f);
+						}
+
+
+						//calculate angle between the two vectors
+						float angle = glm::acos(dotProd);
+
+						//calculate the cross of the two vectors
+						glm::vec3 crossProd = glm::cross(currentRot, rotation);
+
+						//if the result indicated it is upside down, rotate anti-clockwise instead of clockwise
+						if (glm::dot(glm::normalize(crossProd), glm::vec3(0.0f, 1.0f, 0.0f)) < 0)
+						{
+							angle = -angle;
+						}
+
 						movementStep = glm::normalize(distanceToBeCovered) * velocity;
 
 
@@ -269,11 +358,8 @@ void Enemy::update()
 						tempMat = glm::translate(tempMat, getPosition());
 						tempMat = glm::translate(tempMat, movementStep);
 
-						if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
-						{
-							//reapply the rotation
-							tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
-						}
+						//reapply the rotation
+						tempMat = glm::rotate(tempMat, angle + glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 						//set the matrix
 						setMatrix(tempMat);
@@ -310,10 +396,33 @@ void Enemy::update()
 					movementStep = glm::normalize(distanceToBeCovered) * velocity;
 
 					rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
-					glm::vec3 currentRot = getRotation(); // current rotation
+					glm::vec3 currentRot = glm::vec3(1.0f, 0.0f, 0.0f);
 
 					//calculate angle between the two vectors
-					float angle = -glm::acos(glm::dot(currentRot, rotation));
+					float dotProd = glm::dot(currentRot, rotation);
+
+					//clamp it to between -pi and pi
+					if (dotProd > 3.1415f) {
+						dotProd = fmod(dotProd, 3.1415f);
+					}
+					else
+						if (dotProd < -3.1415f)
+						{
+							dotProd = fmod(dotProd, -3.1415f);
+						}
+
+
+					//calculate angle between the two vectors
+					float angle = glm::acos(dotProd);
+
+					//calculate the cross of the two vectors
+					glm::vec3 crossProd = glm::cross(currentRot, rotation);
+
+					//if the result indicated it is upside down, rotate anti-clockwise instead of clockwise
+					if (glm::dot(glm::normalize(crossProd), glm::vec3(0.0f, 1.0f, 0.0f)) < 0)
+					{
+						angle = -angle;
+					}
 
 					//reset the rotation
 					glm::mat4 tempMat(1.0f);
@@ -325,11 +434,8 @@ void Enemy::update()
 					if (moving == true)
 						tempMat = glm::translate(tempMat, movementStep);
 
-					if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.y) != std::round(rotation.y) || std::round(currentRot.z) != std::round(rotation.z))
-					{
-						//reapply the rotation
-						tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
-					}
+					//reapply the rotation
+					tempMat = glm::rotate(tempMat, angle + glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 					//set the matrix
 					setMatrix(tempMat);

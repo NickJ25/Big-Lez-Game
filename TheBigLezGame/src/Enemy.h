@@ -8,6 +8,7 @@
 #include <string>
 #include <cmath>
 #include <ctime>
+#include <irrKlang.h>
 
 #include "glm/gtx/vector_angle.hpp"
 
@@ -96,6 +97,17 @@ public:
 
 private:
 	
+	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
+	irrklang::ISoundEngine *privateEngineWalking = irrklang::createIrrKlangDevice();
+	float soundDelay = 20.0f;
+	float playTime = 0.0f;
+	bool soundPlaying = false;
+	bool deathSoundSet = false;
+	bool walkSoundSet = false;
+
+	vector<irrklang::ISoundSource*> sounds;
+	vector<irrklang::ISoundSource*> deathSounds;
+
 	float health;
 	float originalHealth;
 
@@ -104,11 +116,6 @@ private:
 
 	int deathAnimationTimer = 150;
 	bool dead = false;
-
-	//rotation variables
-	bool rotated = false;
-	bool nodeSet = false;
-	glm::vec3 currentNode;
 
 	//spawning and pathing variables
 	glm::vec3 spawnPoint;

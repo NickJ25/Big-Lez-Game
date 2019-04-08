@@ -8,6 +8,9 @@
 #include <vector>
 #include <iostream>
 
+// Include Audio engine
+#include <irrKlang.h>
+
 //test include
 #include "Shader.h"
 #include "Model.h"
@@ -91,6 +94,31 @@ private:
 	//sync up sounds waves and animations
 	bool initialised = false;
 
+	//background music engine
+	irrklang::ISoundEngine *AmbientEngine = irrklang::createIrrKlangDevice();
+	bool ambientInitialised = false;
+
+	//wave spawner noise engine
+	irrklang::ISoundEngine *WaveEngine = irrklang::createIrrKlangDevice();
+	bool waveInitialised = false;
+
+	//conversation noise engine
+	irrklang::ISoundEngine *conversationEngine = irrklang::createIrrKlangDevice();
+
+	//sound numbers
+	int noOfSounds = 0;
+
+	//sound timers
+	float conversationTimer = 15.0f;
+
+	//conversations
+	vector<vector<float>> convos;
+	vector<vector<string>> convoOrders;
+	bool convoAssigned = false;
+
+	Image* bossHealth;
+	bool ableTo = true;
+
 public:
 	Game() 
 	{
@@ -103,6 +131,10 @@ public:
 	void draw();
 	bool checkCollision(GameObject* a, GameObject* b);
 	bool checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * object);
+
+	//adding characters details
+	void addCharacterSounds(string charName);
+	vector<irrklang::ISoundSource*> loadSounds(string character);
 
 	//for calculating contact normal
 	const glm::vec3 nup = glm::vec3(0, 1, 0);

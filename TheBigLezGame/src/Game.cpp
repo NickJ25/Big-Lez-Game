@@ -66,7 +66,7 @@ void Game::init()
 	// Characters
 	Player::Character BigLez;
 	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
-	BigLez.name = "Leslie";
+	BigLez.name = "Lez";
 	BigLez.health = 100;
 	BigLez.walkSpeed = 10;
 
@@ -205,13 +205,13 @@ void Game::init()
 
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1, wave2, wave3, wave4, wave5, wave6, wave7;
-	wave1.push_back(1), wave1.push_back(0), wave1.push_back(0), wave1.push_back(0); // size 5
-	wave2.push_back(1), wave2.push_back(0), wave2.push_back(0), wave2.push_back(0); // size 7
-	wave3.push_back(1), wave3.push_back(0), wave3.push_back(0), wave3.push_back(0); // size 10
-	wave4.push_back(1), wave4.push_back(0), wave4.push_back(0), wave4.push_back(0); // 12
-	wave5.push_back(1), wave5.push_back(0), wave5.push_back(0), wave5.push_back(0); // 15
-	wave6.push_back(1), wave6.push_back(0), wave6.push_back(0), wave6.push_back(0);//18
-	//wave7.push_back(1), wave7.push_back(0), wave7.push_back(0), wave7.push_back(0);//19
+	wave1.push_back(0), wave1.push_back(0), wave1.push_back(0), wave1.push_back(1); 
+	wave2.push_back(1), wave2.push_back(0), wave2.push_back(0), wave2.push_back(0); 
+	wave3.push_back(1), wave3.push_back(0), wave3.push_back(0), wave3.push_back(0); 
+	wave4.push_back(1), wave4.push_back(0), wave4.push_back(0), wave4.push_back(0); 
+	wave5.push_back(1), wave5.push_back(0), wave5.push_back(0), wave5.push_back(0); 
+	wave6.push_back(1), wave6.push_back(0), wave6.push_back(0), wave6.push_back(0);
+	//wave7.push_back(1), wave7.push_back(0), wave7.push_back(0), wave7.push_back(0);
 
 	//add this wave to the wave spawner
 	waveSpawner->setWave(wave1);
@@ -288,10 +288,145 @@ void Game::init()
 	mapWaves.push_back(fifthWave);
 	mapWaves.push_back(sixthWave);
 
+	vector<string> playerNames;
+	//set up audio depending on what characters are present
+	for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+	{
+		Player *p = dynamic_cast<Player*>(*it);
+
+		//add player names to temporary vector
+		if (p)
+			playerNames.push_back(p->getCharacter().name);
+	}
+
+	int LezCounter = 0;
+	int SassyCounter = 0;
+	int DonnyCounter = 0;
+	int ClarenceCounter = 0;
+
+	//find missing character of the possible 4 ( 2 missing if playing single player ) 
+	for (int i = 0; i < playerNames.size(); i++)
+	{
+		if (playerNames[i] == "Clarence")
+		{
+			ClarenceCounter++;
+		}
+		if (playerNames[i] == "Donny")
+		{
+			DonnyCounter++;
+		}
+		if (playerNames[i] == "Sassy")
+		{
+			SassyCounter++;
+		}
+		if (playerNames[i] == "Lez")
+		{
+			LezCounter++;
+		}
+	}
+
+	if (ClarenceCounter == 0)
+	{
+	
+		//firstly add all their relevant one liners
+		vector<float> times; // in seconds
+		vector<string> orders;
+
+		//add lez lines
+		addCharacterSounds("Lez");
+
+		times.push_back(0.0f);
+		orders.push_back("Lez");
+
+		//add the same orders and times 3 times, once for each line
+		for (int i = 0; i < 3; i++) {
+			convos.push_back(times);
+			convoOrders.push_back(orders);
+		}
+
+		times.clear();
+		orders.clear();
+
+		//add sassy lines
+		addCharacterSounds("Sassy");
+
+		times.push_back(0.0f);
+		orders.push_back("Sassy");
+
+		//add the same orders and times 3 times, once for each line
+		for (int i = 0; i < 3; i++) {
+			convos.push_back(times);
+			convoOrders.push_back(orders);
+		}
+
+		times.clear();
+		orders.clear();
+
+		//add donny lines
+		addCharacterSounds("Donny");
+
+		times.push_back(0.0f);
+		orders.push_back("Donny");
+
+		//add the same orders and times 3 times, once for each line
+		for (int i = 0; i < 3; i++) {
+			convos.push_back(times);
+			convoOrders.push_back(orders);
+		}
+
+		times.clear();
+		orders.clear();
+		//push back donny, lez and sassy conversations
+
+		//3 of each 
+
+		//lez sassy conversation
+		irrklang::ISoundSource* LSconvo1 = conversationEngine->addSoundSourceFromFile("assets/Sounds/Lez/LezSassy1.wav");
+		irrklang::ISoundSource* LSconvo2 = conversationEngine->addSoundSourceFromFile("assets/Sounds/Sassy/LezSassy1.wav");
+		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+		{
+			Player *p = dynamic_cast<Player*>(*it);
+
+			//check the cast result and add the sounds appropriately
+			if (p) {
+				if (p->getCharacter().name == "Lez")
+					p->setSound(LSconvo1);
+				if (p->getCharacter().name == "Sassy")
+					p->setSound(LSconvo2);
+
+
+				times.push_back(0.0f);
+				times.push_back(1.5f);
+
+				orders.push_back("Lez");
+				orders.push_back("Sassy");
+
+				convos.push_back(times);
+				convoOrders.push_back(orders);
+
+				noOfSounds++;
+			}
+		}
+	}
+	if (DonnyCounter == 0)
+	{
+		//push back clarence, lez and sassy conversations
+	}
+	if (SassyCounter == 0)
+	{
+		//push back donny, lez and clarence conversations
+	}
+	if (LezCounter == 0)
+	{
+		//push back donny, clarene and sassy conversations
+	}
 	//set the first wave to be spawned
 	currentWave = 0;
 
 #pragma endregion
+
+	//initialise the HUD
+	bossHealth = new Image("Assets/Art/BossHealth.png", glm::vec2(0.0f, 700.0f), false);
 
 	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
 	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
@@ -306,6 +441,38 @@ void Game::init()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+vector<irrklang::ISoundSource*> Game::loadSounds(string character)
+{
+	vector<irrklang::ISoundSource*> temp;
+	for (int i = 0; i < 3; i++) {
+		string tempstr = "assets/Sounds/" + character + "/lines/line" + to_string(i) + ".wav";
+		const char* tmpChar = tempstr.c_str();
+		irrklang::ISoundSource* tempSource = conversationEngine->addSoundSourceFromFile(tmpChar);
+		temp.push_back(tempSource);
+	}
+	return temp;
+}
+
+void Game::addCharacterSounds(string charName)
+{
+	vector<irrklang::ISoundSource*> charSounds = loadSounds(charName);
+	for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+	{
+		Player *p = dynamic_cast<Player*>(*it);
+
+		//check the cast result and add the sounds appropriately
+		if (p && p->getCharacter().name == charName) 
+		{
+			//cycle through all the preloaded sounds
+			for (int i = 0; i < charSounds.size(); i++)
+			{
+				//and add them to the player
+				p->setSound(charSounds[i]);
+			}
+		}
+	}
 }
 
 bool Game::checkCollision(GameObject* a, GameObject* b)
@@ -490,13 +657,66 @@ void Game::update()
 {
 	if(isGameRunning == true && initialised)
 	{
+		if (ambientInitialised == false) {
+			//set up sound
+			AmbientEngine->setSoundVolume(0.03f);
+			AmbientEngine->play2D("assets/Sounds/Ambient/AmbientMusic.wav", GL_TRUE);
+			ambientInitialised = true;
+
+		}
+
 		//set up timing 
 		currentTime = glfwGetTime();
 		deltaTime = currentTime - previousTime;
 		previousTime = currentTime;
+
+		if (conversationTimer > 0)
+		{
+			conversationTimer -= deltaTime;
+		}
+		else {
+			//get random sound and play it
+			srand(time(0));
+			int randomSound = rand() % noOfSounds;
+
+				int orderPlace = 0;
+				int count = 0;
+				for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+				{
+					count++;
+					int check = 0;
+					if (randomSound < 3)
+					{
+						check = 1;
+					}
+					else
+					{
+						check = convoOrders.at(randomSound).size();
+					}
+					
+
+					Player *p = dynamic_cast<Player*>(*it);
+					if (p && p->getCharacter().name == convoOrders.at(randomSound).at(orderPlace)) {
+						p->playSound(randomSound, convos.at(randomSound).at(orderPlace));
+						orderPlace++;
+						if (orderPlace == check)
+							break;
+					}
+
+					if (count == gameObjects.size() && orderPlace < check)
+					{
+						it = gameObjects.begin();
+						count = 0;
+					}
+
+
+				}
+
+				conversationTimer = 15.0f;
+		}
 		
 		//check if there are no enemies left 
-		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end() - 1; ++it)
+		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
 		{
 			Boss* tmp = dynamic_cast<Boss*>((*it));
 			Enemy* tmp1 = dynamic_cast<Enemy*>((*it));
@@ -510,6 +730,11 @@ void Game::update()
 		{
 			waveTimer -= deltaTime;
 			transparency += deltaTime;
+			if (waveInitialised == false) {
+				WaveEngine->setSoundVolume(0.075f);
+				WaveEngine->play2D("assets/Sounds/Ambient/WaveChange.wav", GL_FALSE);
+				waveInitialised = true;
+			}
 			waveText->draw("Wave " + std::to_string(currentWave + 1) + "...", glm::vec4(1.0f, 1.0f, 1.0f, textAlpha), 1);
 			if (currentWave > 0) {
 				if (textAlpha > 0.0f)
@@ -523,6 +748,7 @@ void Game::update()
 		}
 		else
 		{
+			waveInitialised = false;
 			textAlpha = 1.0f;
 			transparency = 0.0f;
 		}
@@ -556,6 +782,8 @@ void Game::update()
 				Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
 				if (b)
 				{
+					bossHealth->scale(glm::vec2(b->getHealth(), 20.0f));
+					bossHealth->draw();
 					b->update();
 					b->checkFieldEmpty(gameObjects);
 					b->spawnMinions(gameObjects, toonShader, pathManager);
@@ -637,20 +865,62 @@ void Game::update()
 		g_window = glfwGetCurrentContext();
 		glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
-	if (Input::keyboard1.keys[GLFW_KEY_B])
-	{
-		if (clicked == false) {
-			removeEnemies(gameObjects);
-			clicked = true;
+#pragma region debug tools
+
+	//for testing bounding box locations on the path finding grid and viewing them visually.
+	if (Input::keyboard1.keys[GLFW_KEY_1]) {
+
+		if (showBoundingBoxes == false) {
+			vector<GameObject*>::iterator it;
+			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+			{
+				Player *tmp = dynamic_cast<Player*>(*it);
+				if (tmp != nullptr)
+				{
+					if (tmp->getCharacter().name == "boundingbox")
+					{
+						if (showBoundingBoxes == false)
+							(*it)->setDraw(true);
+					}
+				}
+			}
+			showBoundingBoxes = true;
 		}
 	}
 
-	if (Input::keyboard1.keys[GLFW_KEY_N])
-	{
-		if (clicked == true) {
-			clicked = false;
+	//for testing health bar for the boss
+		if (Input::keyboard1.keys[GLFW_KEY_U])
+		{
+			if (ableTo) {
+				for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+				{
+					Boss *b = dynamic_cast<Boss*>(*it);
+					if (b)
+					{
+						b->setHealth(-20.0f);
+					}
+				}
+				ableTo = false;
+			}
 		}
-	}
+		//interchangeable - for boss health or uncomment for checking boss waves
+		if (Input::keyboard1.keys[GLFW_KEY_B])
+		{
+			ableTo == true;
+			/*if (clicked == false) {
+				removeEnemies(gameObjects);
+				clicked = true;
+			}*/
+		}
+
+		//reset function for remove enemies
+		if (Input::keyboard1.keys[GLFW_KEY_N])
+		{
+			if (clicked == true) {
+				clicked = false;
+			}
+		}
+#pragma endregion
 
 	if (isGameRunning == false) 
 	{
@@ -676,36 +946,6 @@ void Game::update()
 			exit(0);
 		}
 
-	}
-	//glm::vec3 ray_Test(0.0f, 0.0f, 0.0f);
-	//ray_Test = mainPlayer->getPosition() + mainPlayer->getCamera()->getCameraFront() * 1.0f;
-	//cout << "Ray: " << ray_Test.x << " " << ray_Test.y << " " << ray_Test.z << endl;
-
-	if (Input::keyboard1.keys[GLFW_KEY_C]) {
-		sassy->Move(glm::vec3(1.0f, 0.0f, 0.0f));
-	}
-	if (Input::keyboard1.keys[GLFW_KEY_V]) {
-		sassy->Move(glm::vec3(-1.0f, 0.0f, 0.0f));
-	}
-
-	if (Input::keyboard1.keys[GLFW_KEY_1]) {
-
-		if (showBoundingBoxes == false) {
-			vector<GameObject*>::iterator it;
-			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
-			{
-				Player *tmp = dynamic_cast<Player*>(*it);
-				if (tmp != nullptr)
-				{
-					if (tmp->getCharacter().name == "boundingbox")
-					{
-						if (showBoundingBoxes == false)
-							(*it)->setDraw(true);
-					}
-				}
-			}
-			showBoundingBoxes = true;
-		}
 	}
 
 	if (Input::keyboard1.keys[GLFW_KEY_Q]) {
