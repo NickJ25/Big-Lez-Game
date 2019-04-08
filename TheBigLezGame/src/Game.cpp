@@ -342,6 +342,7 @@ void Game::init()
 		for (int i = 0; i < 3; i++) {
 			convos.push_back(times);
 			convoOrders.push_back(orders);
+			noOfSounds++;
 		}
 
 		times.clear();
@@ -357,6 +358,7 @@ void Game::init()
 		for (int i = 0; i < 3; i++) {
 			convos.push_back(times);
 			convoOrders.push_back(orders);
+			noOfSounds++;
 		}
 
 		times.clear();
@@ -372,6 +374,7 @@ void Game::init()
 		for (int i = 0; i < 3; i++) {
 			convos.push_back(times);
 			convoOrders.push_back(orders);
+			noOfSounds++;
 		}
 
 		times.clear();
@@ -404,7 +407,8 @@ void Game::init()
 				convos.push_back(times);
 				convoOrders.push_back(orders);
 
-				noOfSounds++;
+				//in the works for future full conversations
+				//noOfSounds++;
 			}
 		}
 	}
@@ -659,7 +663,7 @@ void Game::update()
 	{
 		if (ambientInitialised == false) {
 			//set up sound
-			AmbientEngine->setSoundVolume(0.003f);
+			AmbientEngine->setSoundVolume(0.03f);
 			AmbientEngine->play2D("assets/Sounds/Ambient/AmbientMusic.wav", GL_TRUE);
 			ambientInitialised = true;
 
@@ -697,6 +701,10 @@ void Game::update()
 
 					Player *p = dynamic_cast<Player*>(*it);
 					if (p && p->getCharacter().name == convoOrders.at(randomSound).at(orderPlace)) {
+						if (p->getCharacter().name == "Sassy")
+							randomSound -= 3;
+						if (p->getCharacter().name == "Donny")
+							randomSound -= 6;
 						p->playSound(randomSound, convos.at(randomSound).at(orderPlace));
 						orderPlace++;
 						if (orderPlace == check)
@@ -731,7 +739,7 @@ void Game::update()
 			waveTimer -= deltaTime;
 			transparency += deltaTime;
 			if (waveInitialised == false) {
-				WaveEngine->setSoundVolume(0.015f);
+				WaveEngine->setSoundVolume(0.065f);
 				WaveEngine->play2D("assets/Sounds/Ambient/WaveChange.wav", GL_FALSE);
 				waveInitialised = true;
 			}

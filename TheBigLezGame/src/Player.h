@@ -67,6 +67,10 @@ private:
 
 	bool playerShootGun = false;
 
+	float currentTime = 0.0f;
+	float previousTime = 0.0f;
+
+
 };
 
 // Make camera unique

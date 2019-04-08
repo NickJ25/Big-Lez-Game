@@ -45,24 +45,29 @@ void Player::playSound(int sound, float delay)
 		soundDelay = delay;
 		playingSound = true;
 	}
-
+	cout << endl;
 	if(playingSound == true){
-		float time = glfwGetTime();
-		soundDelay -= time;
+
+
+		currentTime = glfwGetTime();
+		float deltaTime = currentTime - previousTime;
+		previousTime = currentTime;
+		soundDelay -= deltaTime;
 		if (soundDelay <= 0)
 		{
 			if (soundCalled == false) {
-				privateEngine->play3D(getSound(sound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+				privateEngine->setSoundVolume(1.0f);
+				privateEngine->play2D(getSound(sound));//, irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
 				soundCalled = true;
 			}
 			if (soundAnimSet == false) {
-				soundAnimationTime = getSound(sound)->getPlayLength() / 1000;
+				soundAnimationTime = getSound(sound)->getPlayLength()/1000;
 				soundAnimSet = true;
 			}
 			if (soundAnimationTime > 0 && soundAnimSet == true)
 			{
 
-				soundAnimationTime -= time;
+				soundAnimationTime -= deltaTime;
 
 				if(isMoving == true)
 					//universal walking - talking animation
@@ -78,7 +83,7 @@ void Player::playSound(int sound, float delay)
 			}
 		}
 	}
-	
+	cout << endl;
 }
 
 void Player::update()
