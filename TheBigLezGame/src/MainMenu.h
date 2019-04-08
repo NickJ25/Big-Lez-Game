@@ -10,7 +10,8 @@
 
 class MainMenu : public MenuState {
 private:
-	Image* background;
+	Image* background, *fog;
+	float fogPos = 0;
 	Image* logo;
 	Button* singlePlayerBtn, *optionsBtn, *quitBtn;
 	Text* testText;

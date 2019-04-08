@@ -782,7 +782,7 @@ void Game::update()
 				Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
 				if (b)
 				{
-					bossHealth->scale(glm::vec2(b->getHealth(), 20.0f));
+					bossHealth->scale(glm::vec2(b->getHealth(), 20.0f), false);
 					bossHealth->draw();
 					b->update();
 					b->checkFieldEmpty(gameObjects);

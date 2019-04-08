@@ -134,7 +134,7 @@ void LobbyMenu::update()
 
 		p1CurrentCharPic->changeImage(charPicList[p1Choice]);
 		p1CurrentCharPic->translate(glm::vec2(Input::SCREEN_WIDTH * 0.25, Input::SCREEN_HEIGHT * 0.52));
-		p1CurrentCharPic->scale(glm::vec2(239 / 2, 307 / 2));
+		p1CurrentCharPic->scale(glm::vec2(239 / 2, 307 / 2), true);
 	}
 
 	if (playerList[1] == nullptr) {
