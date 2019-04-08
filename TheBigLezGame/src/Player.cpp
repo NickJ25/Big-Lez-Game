@@ -45,7 +45,7 @@ void Player::playSound(int sound, float delay)
 		soundDelay = delay;
 		playingSound = true;
 	}
-	else 
+
 	if(playingSound == true){
 		float time = glfwGetTime();
 		soundDelay -= time;

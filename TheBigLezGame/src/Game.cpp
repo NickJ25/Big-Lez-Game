@@ -659,7 +659,7 @@ void Game::update()
 	{
 		if (ambientInitialised == false) {
 			//set up sound
-			AmbientEngine->setSoundVolume(0.03f);
+			AmbientEngine->setSoundVolume(0.003f);
 			AmbientEngine->play2D("assets/Sounds/Ambient/AmbientMusic.wav", GL_TRUE);
 			ambientInitialised = true;
 
@@ -731,7 +731,7 @@ void Game::update()
 			waveTimer -= deltaTime;
 			transparency += deltaTime;
 			if (waveInitialised == false) {
-				WaveEngine->setSoundVolume(0.075f);
+				WaveEngine->setSoundVolume(0.015f);
 				WaveEngine->play2D("assets/Sounds/Ambient/WaveChange.wav", GL_FALSE);
 				waveInitialised = true;
 			}

@@ -61,6 +61,10 @@ public:
 	}
 private:
 
+	//timing variables
+	float currentTime = 0.0f;
+	float previousTime = 0.0f;
+
 	float health = 2400.0f;
 
 	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();

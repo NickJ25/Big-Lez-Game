@@ -147,7 +147,9 @@ void Enemy::reset(PathManager* pathmanager)
 
 void Enemy::update()
 {
-	float deltaTime = glfwGetTime();
+	currentTime = glfwGetTime();
+	float deltaTime = currentTime - previousTime;
+	previousTime = currentTime;
 	//sound update
 
 	if (moving == true && walkSoundSet == false)
@@ -158,13 +160,14 @@ void Enemy::update()
 	else
 	{
 		privateEngineWalking->setAllSoundsPaused(true);
-		walkSoundSet = false;	
+		//walkSoundSet = false;	
 	}
 	if (soundDelay <= 0 && dead == false)
 	{
 		if (soundPlaying == false) {
 			srand(time(0));
 			int randomSound = rand() % sounds.size();
+			privateEngine->play3D(sounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
 			privateEngine->play3D(sounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
 			playTime = sounds.at(randomSound)->getPlayLength() / 1000;
 			int randFactor = rand() % 100 + 50;
@@ -191,7 +194,7 @@ void Enemy::update()
 		if (soundPlaying == false) {
 			srand(time(0));
 			int randomSound = rand() % deathSounds.size();
-			privateEngine->play3D(deathSounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			//privateEngine->play3D(deathSounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
 			soundPlaying = true;
 		}
 		deathAnimationTimer--;

@@ -97,6 +97,10 @@ public:
 
 private:
 	
+	//timing variables
+	float currentTime = 0.0f;
+	float previousTime = 0.0f;
+
 	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
 	irrklang::ISoundEngine *privateEngineWalking = irrklang::createIrrKlangDevice();
 	float soundDelay = 20.0f;
