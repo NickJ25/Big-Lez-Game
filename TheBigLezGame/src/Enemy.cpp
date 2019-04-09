@@ -92,9 +92,15 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	deathAnimations.push_back(chargerDeath);
 
 	//brawler choomah injuries
-	//injuryAnimations.at(2).push_back(pair<float, float>(5.42f, 2.13f));
-	//injuryAnimations.at(2).push_back(pair<float, float>(6.25f, 1.88f));
+	std::vector<pair<float, float>> brawlerInjuries;
+	brawlerInjuries.push_back(pair<float, float>(1.75f, 1.92f));
 
+	injuryAnimations.push_back(brawlerInjuries);
+
+	//finally the brawler death
+	std::vector<pair<float, float>> brawlerDeath;
+	brawlerDeath.push_back(pair<float, float>(1.25f, 2.5f));
+	deathAnimations.push_back(brawlerDeath);
 }
 
 Enemy::~Enemy()
@@ -205,7 +211,7 @@ void Enemy::update()
 				setAnimation(1.357, 1.0f);
 			if (name == "charger")
 				setAnimation(9.208, 1.0f);
-			if (name == "normal")
+			if (name == "brawler")
 				setAnimation(1.357, 1.0f);
 
 			//then pause the model
@@ -223,7 +229,12 @@ void Enemy::update()
 				injured = false;
 
 				//set back to default run animation
-				setAnimation(0.0f, 8.3f);
+				if (name == "normal")
+					setAnimation(0.0, 8.3f);
+				if (name == "charger")
+					setAnimation(0.0, 8.0f);
+				if (name == "brawler")
+					setAnimation(0.0f, 5.55f);
 
 				//reset injury time
 				injuryAnimationTimer = 40;
@@ -315,8 +326,12 @@ void Enemy::update()
 
 						inside = true;
 						//jumping animation
+						if (name == "normal")
+							setAnimValues(4.58f, 1.0f);
+						if (name == "charger")
+							setAnimValues(12.5f, 1.0f);
 						if (name == "brawler")
-							setAnimValues(0.0f, 1.0f);
+							setAnimValues(3.33f, 1.0f);
 						else
 							setAnimValues(4.58, 1.0f);
 
@@ -390,8 +405,13 @@ void Enemy::update()
 				if (outsideMovement == true && outerPath.empty() == true && innerPath.empty() == false && Jump == true)
 				{
 
-					//running animation
-					setAnimValues(0.0f, 8.3f);
+					//set back to default run animation
+					if (name == "normal")
+						setAnimation(0.0, 8.3f);
+					if (name == "charger")
+						setAnimation(0.0, 8.0f);
+					if (name == "brawler")
+						setAnimation(0.0f, 5.55f);
 
 					velocity = 0.05;
 
@@ -594,6 +614,10 @@ void Enemy::death()
 	if (name == "charger") {
 		setAnimation(deathAnimations.at(1).at(0).first, deathAnimations.at(1).at(0).second);
 		setPauseFrame(9.208f);
+	}
+	if (name == "charger") {
+		setAnimation(deathAnimations.at(2).at(0).first, deathAnimations.at(2).at(0).second);
+		setPauseFrame(1.67f);
 	}
 
 }

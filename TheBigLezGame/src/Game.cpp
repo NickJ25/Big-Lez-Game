@@ -837,18 +837,30 @@ void Game::update()
 						{
 							//reimplement when injury animations are all fixed
 							//check which one is the enemy, then set to attack animation
-	/*						if (e1)
+							if (e1)
 							{
 								e1->setMoving(false);
-								if(!e1->getInjured())
-								e1->setAnimValues(3.6f, 1.36);
+								if (!e1->getInjured()) {
+									if (e1->getName() == "normal")
+										e1->setAnimValues(3.75f, 1.36f);
+									if (e1->getName() == "charger")
+										e1->setAnimValues(10.83f, 1.1f);
+									if (e1->getName() == "brawler")
+										e1->setAnimValues(2.25f, 1.35f);
+								}
 							}
 							if (e2)
 							{
 								e2->setMoving(false);
-								if (!e2->getInjured())
-								e2->setAnimValues(3.6f, 1.36);
-							}*/
+								if (!e2->getInjured()) {
+									if (e2->getName() == "normal")
+										e2->setAnimValues(3.75f, 1.36f);
+									if (e2->getName() == "charger")
+										e2->setAnimValues(10.83f, 1.1f);
+									if (e2->getName() == "brawler")
+										e2->setAnimValues(2.25f, 1.35f);
+								}
+							}
 							
 						}
 					}
