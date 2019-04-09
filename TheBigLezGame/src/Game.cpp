@@ -442,6 +442,8 @@ void Game::init()
 	waveText = new Text(glm::vec2(600.0, 300.0), "assets/Fonts/Another_.ttf");
 	waveText->scale(glm::vec2(2.5f, 2.5f));
 
+	bossText = new Text(glm::vec2(550.0, 625.0), "assets/Fonts/Another_.ttf");
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -792,6 +794,7 @@ void Game::update()
 				{
 					bossHealth->scale(glm::vec2(b->getHealth(), 20.0f));
 					bossHealth->draw();
+					bossText->draw("Bumble-Brutus", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
 					b->update();
 					b->checkFieldEmpty(gameObjects);
 					b->spawnMinions(gameObjects, toonShader, pathManager);

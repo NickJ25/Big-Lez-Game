@@ -88,6 +88,7 @@ private:
 	bool gameWon = false;
 
 	Text* waveText;
+	Text* bossText;
 	float textAlpha = 1.0f;
 	float transparency = 1.0f;
 
@@ -109,7 +110,7 @@ private:
 	int noOfSounds = 0;
 
 	//sound timers
-	float conversationTimer = 15.0f;
+	float conversationTimer = 30.0f;
 
 	//conversations
 	vector<vector<float>> convos;

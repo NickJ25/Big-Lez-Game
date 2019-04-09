@@ -194,7 +194,7 @@ void Enemy::update()
 		if (soundPlaying == false) {
 			srand(time(0));
 			int randomSound = rand() % deathSounds.size();
-			//privateEngine->play3D(deathSounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			privateEngine->play3D(deathSounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
 			soundPlaying = true;
 		}
 		deathAnimationTimer--;
