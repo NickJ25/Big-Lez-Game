@@ -46,6 +46,7 @@ public:
 	bool getPaused();
 
 	void setStill(bool s);
+	void setPauseFrame(float p);
 
 private:
 	Assimp::Importer import;
@@ -87,6 +88,7 @@ private:
 	bool paused = false;
 	double pauseFrame;
 	bool pauseFrameSet = false;
+	float pauseAnim = 0.0f;
 
 	bool still = false;
 };

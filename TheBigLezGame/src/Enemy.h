@@ -91,9 +91,13 @@ public:
 	//death
 	void death();
 
+	bool getDeath();
+
 	float getHealth();
 
 	bool getInjured();
+
+	void setPauseFrame(float frame);
 
 private:
 	

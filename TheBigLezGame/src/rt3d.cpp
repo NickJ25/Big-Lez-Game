@@ -19,7 +19,8 @@ namespace rt3d {
 
 	// Something went wrong - print error message and quit
 	void exitFatalError(const char *message) {
-		cout << message << " ";
+		
+	cout << message << " ";
 		exit(1);
 	}
 

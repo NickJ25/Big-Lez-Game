@@ -63,6 +63,10 @@ void AnimModel::setStill(bool s)
 {
 	still = s;
 }
+void AnimModel::setPauseFrame(float p)
+{
+	pauseAnim = p;
+}
 
 void AnimModel::draw(GLuint shaders_program, bool isAnimated)
 {
@@ -75,7 +79,7 @@ void AnimModel::draw(GLuint shaders_program, bool isAnimated)
 	else {
 	if (pauseFrameSet == false)
 		pauseFrame = (double)glfwGetTime();
-		boneTransform(pauseFrame, transforms);
+		boneTransform(pauseAnim, transforms);
 		pauseFrameSet = true;
 	}
 

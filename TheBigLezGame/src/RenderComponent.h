@@ -64,5 +64,5 @@ public:
 	bool getPaused();
 	void setStill(bool s);
 	void Draw();
-
+	void setPauseFrame(float p);
 };

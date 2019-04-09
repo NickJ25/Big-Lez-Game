@@ -95,9 +95,7 @@ void Image::changeImage(std::string newImage)
 
 void Image::translate(glm::vec2 position)
 {
-	std::cout << "S: " << m_model[3][0] << " " << m_model[3][1] << " " << m_model[3][2] << "\n";
 	m_model = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
-	std::cout << "E: " << m_model[3][0] << " " << m_model[3][1] << " " << m_model[3][2] << "\n";
 }
 
 void Image::rotate(GLfloat radians) {
@@ -115,7 +113,6 @@ void Image::scale(glm::vec2 scale)
 	temp = glm::rotate(temp, currentRot, glm::vec3(0.0f, 1.0f, 0.0f));
 	temp = glm::scale(temp, glm::vec3(scale.x, scale.y, 0.0f));
 	m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
-	std::cout << std::endl;
 	m_model = temp;// glm::scale(m_model, glm::vec3(scale, 0.0f));
 }
 

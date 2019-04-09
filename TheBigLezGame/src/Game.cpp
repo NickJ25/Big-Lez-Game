@@ -856,15 +856,24 @@ void Game::update()
 			}
 		}
 		// Player Attacking
-		if(mainPlayer->hasPlayerAttacked()) cout << "FIRE ZE MISSILES!" << endl;
+		if(mainPlayer->hasPlayerAttacked()){cout << "FIRE ZE MISSILES!" << endl;
 
-		for (int i = 0; i < gameObjects.size(); i++) {
+			conversationEngine->play2D("assets/Sounds/gun.wav");
+
+			for (int i = 0; i < gameObjects.size(); i++) {
 			Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
 			if (e) {
-				cout << "C_Area: " << e->getCollider()->getPos().x << " " << e->getCollider()->getPos().y << " " << e->getCollider()->getPos().z << endl;
-				cout << "P_Player: " << mainPlayer->getPosition().x << " " << mainPlayer->getPosition().y << " " << mainPlayer->getPosition().z << endl;
-				cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (e)) << endl;
+				//c/out << "C_Area: " << e->getCollider()->getPos().x << " " << e->getCollider()->getPos().y << " " << e->getCollider()->getPos().z << endl;
+				//cout << "P_Player: " << mainPlayer->getPosition().x << " " << mainPlayer->getPosition().y << " " << mainPlayer->getPosition().z << endl;
+				//cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (e)) << endl;
+				if (checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (e)))
+				{
+					cout << "hit" << endl;
+					e->takeDamage(10.0f);
+
+				}
 			}
+		}
 
 		}
 
@@ -917,11 +926,11 @@ void Game::update()
 		//interchangeable - for boss health or uncomment for checking boss waves
 		if (Input::keyboard1.keys[GLFW_KEY_B])
 		{
-			ableTo == true;
-			/*if (clicked == false) {
+			//ableTo == true;
+			if (clicked == false) {
 				removeEnemies(gameObjects);
 				clicked = true;
-			}*/
+			}
 		}
 
 		//reset function for remove enemies

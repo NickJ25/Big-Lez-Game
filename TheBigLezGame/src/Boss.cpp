@@ -113,11 +113,7 @@ void Boss::update()
 
 	if (stopped == false && soundSet == false)
 	{
-		if (privateEngine)
-		{
-			cout << "namajeff" << endl;
-		}
-		privateEngine->play3D("assets/Sounds/BumbleBrutus/stomp.wav", irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
+		privateEngine->play2D("assets/Sounds/BumbleBrutus/stomp.wav");// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
 		soundSet = true;
 	}
 
@@ -137,7 +133,7 @@ void Boss::update()
 		{
 			srand(time(0));
 			float randomNumber = rand() % sounds.size();
-			speechEngine->play3D(sounds.at(randomNumber), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), false);
+			speechEngine->play2D(sounds.at(randomNumber));// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), false);
 			float clipSize = sounds.at(randomNumber)->getPlayLength() / 1000;
 			speechTimer = 25.0f + clipSize;
 		}
@@ -326,7 +322,7 @@ void Boss::checkFieldEmpty(std::vector<GameObject*> g)
 	for (it = g.begin(); it != g.end(); it++)
 	{
 		Enemy *e = dynamic_cast<Enemy*>((*it));
-		if (e)
+		if (e && e->getDeath() == false)
 			counter++;
 	}
 	if (counter <= 0)

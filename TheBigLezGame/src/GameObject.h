@@ -79,4 +79,6 @@ public:
 
 	void componentUpdate();
 	void componentDraw(glm::mat4 view);
+
+	void setPauseFrame(float p);
 };

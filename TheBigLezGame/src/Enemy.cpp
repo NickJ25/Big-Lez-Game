@@ -151,10 +151,10 @@ void Enemy::update()
 	float deltaTime = currentTime - previousTime;
 	previousTime = currentTime;
 	//sound update
-
+	
 	if (moving == true && walkSoundSet == false)
 	{
-		privateEngineWalking->play3D("assets/Sounds/footsteps.wav", irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
+		privateEngineWalking->play2D("assets/Sounds/footsteps.wav");// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
 		walkSoundSet = true;
 	}
 	else
@@ -167,8 +167,8 @@ void Enemy::update()
 		if (soundPlaying == false) {
 			srand(time(0));
 			int randomSound = rand() % sounds.size();
-			privateEngine->play3D(sounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
-			privateEngine->play3D(sounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			privateEngine->play2D(sounds.at(randomSound));// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			privateEngine->play2D(sounds.at(randomSound));// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
 			playTime = sounds.at(randomSound)->getPlayLength() / 1000;
 			int randFactor = rand() % 100 + 50;
 			soundDelay = (24 * deltaTime) * 55.0f + playTime + randFactor;
@@ -194,15 +194,23 @@ void Enemy::update()
 		if (soundPlaying == false) {
 			srand(time(0));
 			int randomSound = rand() % deathSounds.size();
-			privateEngine->play3D(deathSounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			privateEngine->play2D(deathSounds.at(randomSound));// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
 			soundPlaying = true;
 		}
 		deathAnimationTimer--;
 		
 		if (deathAnimationTimer <= 0) {
+			//set to fully lying down frame
+			if (name == "normal")
+				setAnimation(1.357, 1.0f);
+			if (name == "charger")
+				setAnimation(9.208, 1.0f);
+			if (name == "normal")
+				setAnimation(1.357, 1.0f);
+
 			//then pause the model
 			setStill(true);
-			still == true;
+			still = true;
 		}
 	}
 	else {
@@ -579,10 +587,14 @@ void Enemy::death()
 	//set death animation and timer the length of it -1 frame
 	dead = true;
 
-	if (name == "normal")
+	if (name == "normal") {
 		setAnimation(deathAnimations.at(0).at(0).first, deathAnimations.at(0).at(0).second);
-	if (name == "charger")
+		setPauseFrame(1.375f);
+	}
+	if (name == "charger") {
 		setAnimation(deathAnimations.at(1).at(0).first, deathAnimations.at(1).at(0).second);
+		setPauseFrame(9.208f);
+	}
 
 }
 
@@ -595,4 +607,15 @@ float Enemy::getHealth()
 bool Enemy::getInjured()
 {
 	return injured;
+}
+
+void Enemy::setPauseFrame(float frame)
+{
+
+}
+
+
+bool Enemy::getDeath()
+{
+	return dead;
 }
