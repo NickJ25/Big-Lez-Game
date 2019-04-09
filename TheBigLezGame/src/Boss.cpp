@@ -111,77 +111,122 @@ void Boss::update()
 
 	bool rotated = false; 
 
-	if (stopped == false && soundSet == false)
+	if (dead == true)
 	{
-		privateEngine->play2D("assets/Sounds/BumbleBrutus/stomp.wav");// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
-		soundSet = true;
-	}
-
-	if (soundSet == true && stopped == true)
-	{
-		privateEngine->setAllSoundsPaused(true);
-
+		if (deadSet == false)
+		{
+			deathStart = glfwGetTime();
+			deadSet = true;
+		}
 		currentTime = glfwGetTime();
-		float deltaTime = currentTime - previousTime;
-		previousTime = currentTime;
 		
-		if (speechTimer > 0)
+		if (currentTime > deathStart + 1.75f)
 		{
-			speechTimer -= deltaTime;
+			setStill(true);
+			still = true;
 		}
-		else
-		{
-			srand(time(0));
-			float randomNumber = rand() % sounds.size();
-			speechEngine->play2D(sounds.at(randomNumber));// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), false);
-			float clipSize = sounds.at(randomNumber)->getPlayLength() / 1000;
-			speechTimer = 25.0f + clipSize;
-		}
+
 	}
-	if (paused == false) {
-		//get it to follow
-		if (!selectedPath.empty())
+	else {
+
+		if (stopped == false && soundSet == false)
 		{
+			privateEngine->play2D("assets/Sounds/BumbleBrutus/stomp.wav");// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
+			soundSet = true;
+		}
 
-			current = getPosition();
-			next = selectedPath.back();
+		if (soundSet == true && stopped == true)
+		{
+			privateEngine->setAllSoundsPaused(true);
 
-			//get angle between the current and the next node
-			distanceToBeCovered = next - current;
-			rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
-			glm::vec3 currentRot = getRotation(); // current rotation
+			currentTime = glfwGetTime();
+			float deltaTime = currentTime - previousTime;
+			previousTime = currentTime;
 
-						//calculate angle between the two vectors
-			float angle = -glm::acos(glm::dot(currentRot, rotation));
-			movementStep = glm::normalize(distanceToBeCovered) * velocity;
-
-
-			//reset the rotation
-			glm::mat4 tempMat(1.0f);
-
-			//calculate the translation 
-			tempMat = glm::translate(tempMat, getPosition());
-			tempMat = glm::translate(tempMat, movementStep);
-
-			if (std::round(currentRot.x) != std::round(rotation.x) || std::round(currentRot.z) != std::round(rotation.z) && rotated == false)
+			if (speechTimer > 0)
 			{
-				//reapply the rotation
-				tempMat = glm::rotate(tempMat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
-				rotated = true;
+				speechTimer -= deltaTime;
 			}
-
-			//set the matrix
-			setMatrix(tempMat);
-
-			if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
+			else
 			{
-				selectedPath.pop_back();
-				rotated = false;
+				srand(time(0));
+				float randomNumber = rand() % sounds.size();
+				speechEngine->play2D(sounds.at(randomNumber));// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), false);
+				float clipSize = sounds.at(randomNumber)->getPlayLength() / 1000;
+				speechTimer = 25.0f + clipSize;
 			}
 		}
-		else
-		{
-			stopped = true;
+		if (paused == false) {
+			//get it to follow
+			if (!selectedPath.empty())
+			{
+
+				current = getPosition();
+				next = selectedPath.back();
+
+				//get angle between the current and the next node
+				distanceToBeCovered = next - current;
+
+				rotation = glm::normalize(distanceToBeCovered); // rotation we want to be at
+
+				//rotation is reset every frame with new matrix
+				glm::vec3 currentRot = glm::vec3(1.0f, 0.0f, 0.0f); // current rotation
+
+				//calculate angle between the two vectors
+				float dotProd = glm::dot(currentRot, rotation);
+
+				//clamp it to between -pi and pi
+				if (dotProd > 3.1415f) {
+					dotProd = fmod(dotProd, 3.1415f);
+				}
+				else
+					if (dotProd < -3.1415f)
+					{
+						dotProd = fmod(dotProd, -3.1415f);
+					}
+
+				//find the angle from this value
+				float angle = acos(dotProd);
+
+				//calculate the cross of the two vectors
+				glm::vec3 crossProd = glm::cross(currentRot, rotation);
+
+				//if the result indicated it is upside down, rotate anti-clockwise instead of clockwise
+				if (glm::dot(glm::normalize(crossProd), glm::vec3(0.0f, 1.0f, 0.0f)) < 0)
+				{
+					angle = -angle;
+				}
+
+				movementStep = glm::normalize(distanceToBeCovered) * velocity;
+
+
+				//reset the rotation
+				glm::mat4 tempMat(1.0f);
+
+				//calculate the translation 
+				tempMat = glm::translate(tempMat, getPosition());
+				tempMat = glm::translate(tempMat, movementStep);
+
+				//reapply the rotation
+				tempMat = glm::rotate(tempMat, angle + glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+				//set the matrix
+				setMatrix(tempMat);
+
+				//move the bounding box with the model without applying rotation
+				if (getCollider())
+					getCollider()->setCollider(tempMat[3]);
+
+				if (glm::vec3(std::round(getPosition().x), -12.5f, std::round(getPosition().z)) == next)
+				{
+					selectedPath.pop_back();
+					rotated = false;
+				}
+			}
+			else
+			{
+				stopped = true;
+			}
 		}
 	}
 }
@@ -360,4 +405,24 @@ glm::vec3 Boss::getSpawnPoint()
 float Boss::getHealth()
 {
 	return (health / 2400.0f) * 1280.0f;
+}
+
+void Boss::takeDamage(float damage)
+{
+	health -= damage/100 * armour;
+
+	if (health <= 0) {
+		health = 0;
+		death();
+	}
+}
+
+void Boss::death()
+{
+	//set death animation and timer the length of it -1 frame
+	dead = true;
+
+	setAnimation(8.75f, 1.48f);
+	setPauseFrame(10.0f);
+
 }

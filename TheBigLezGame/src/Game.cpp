@@ -189,7 +189,7 @@ void Game::init()
 	topDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, -30.0f), glm::vec3(43.0f, -12.5f, -10.0f)));
 
 	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, -6.0f), glm::vec3(80.0f, -12.5f, -6.0f)));
-	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 32.0f), glm::vec3(80.0f, -12.5f, 32.0f)));
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 55.0f), glm::vec3(80.0f, -12.5f, 55.0f)));
 
 
 	//grid has to be the last game object added
@@ -840,7 +840,7 @@ void Game::update()
 							if (e1)
 							{
 								e1->setMoving(false);
-								if (!e1->getInjured()) {
+								if (!e1->getInjured() && !e1->getDeath()) {
 									if (e1->getName() == "normal")
 										e1->setAnimValues(3.75f, 1.36f);
 									if (e1->getName() == "charger")
@@ -852,7 +852,7 @@ void Game::update()
 							if (e2)
 							{
 								e2->setMoving(false);
-								if (!e2->getInjured()) {
+								if (!e2->getInjured() && !e2->getDeath()) {
 									if (e2->getName() == "normal")
 										e2->setAnimValues(3.75f, 1.36f);
 									if (e2->getName() == "charger")
@@ -882,6 +882,15 @@ void Game::update()
 				{
 					cout << "hit" << endl;
 					e->takeDamage(10.0f);
+
+				}
+			}
+			Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
+			if (b) {
+				if (checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (b)))
+				{
+					cout << "hittoi" << endl;
+					b->takeDamage(10.0f);
 
 				}
 			}

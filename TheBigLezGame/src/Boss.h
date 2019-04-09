@@ -53,8 +53,13 @@ public:
 
 	void setWave();
 
+	void takeDamage(float damage);
+
+	void death();
+
 	//returns health clipped between 0 and 1 for scaling purposes
 	float getHealth();
+
 	void setHealth(float num)
 	{
 		health += num;
@@ -66,6 +71,11 @@ private:
 	float previousTime = 0.0f;
 
 	float health = 2400.0f;
+	float armour = 45.0f;
+
+	bool dead = false;
+	bool deadSet = false;
+	float deathStart = 0.0f;
 
 	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
 	bool soundSet = false;
