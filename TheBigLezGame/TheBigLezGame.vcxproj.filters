@@ -45,6 +45,7 @@
     <ClCompile Include="src\TextureLoader.cpp" />
     <ClCompile Include="src\WaveSpawner.cpp" />
     <ClCompile Include="src\windowGLFW.cpp" />
+    <ClCompile Include="src\GameScreenMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ControllerComponent.h" />
@@ -98,6 +99,9 @@
     <ClInclude Include="src\Weapon.h" />
     <ClInclude Include="src\windowGLFW.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="src\GameScreenMenu.h" />
+    <ClInclude Include="src\GameSettings.h" />
+    <ClInclude Include="src\GameData.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Image.frag" />

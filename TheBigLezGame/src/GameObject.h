@@ -74,7 +74,7 @@ public:
 	CollisionComponent* getCollider();
 	bool isColliderNull();
 
-	void addController(ControllerComponent::ControllerType controller);
+	void addController(Input::ControllerType controller);
 	ControllerComponent* getController();
 
 	void componentUpdate();

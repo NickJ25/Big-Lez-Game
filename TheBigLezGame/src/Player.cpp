@@ -1,8 +1,8 @@
  #include "Player.h"
 
-Player::Player(ControllerComponent::ControllerType controller, Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
+Player::Player(Input::ControllerType controller, Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
 {
-	if (controller == ControllerComponent::KEYBOARD) {
+	if (controller == Input::KEYBOARD) {
 		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 4.5f, 0.0f), DYNAMIC);
 	}
 	else {

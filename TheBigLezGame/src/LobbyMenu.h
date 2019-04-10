@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "windowGLFW.h"
 #include <vector>
+#include "GameData.h"
 
 class LobbyMenu : public MenuState {
 private:
@@ -23,6 +24,11 @@ private:
 	Text* p1Status, *p2Status;
 	int p1Choice = 0, p2Choice = 0;
 	bool p1Ready = false , p2Ready = false;
+
+	Text* timerText;
+	bool gameTimerStart = false;
+	float startTime;
+	int timeOnTimer;
 
 	bool keyboardInUse = false;
 	bool controller1InUse = false;

@@ -156,6 +156,7 @@
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\ControllerComponent.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
+    <ClCompile Include="src\GameScreenMenu.cpp" />
     <ClCompile Include="src\Grid.cpp" />
     <ClCompile Include="src\Gun.cpp" />
     <ClCompile Include="src\Image.cpp" />
@@ -196,9 +197,12 @@
     <ClCompile Include="src\windowGLFW.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameData.h" />
+    <ClInclude Include="src\GameScreenMenu.h" />
     <ClInclude Include="src\ControllerComponent.h" />
     <ClInclude Include="src\Boss.h" />
     <ClInclude Include="src\Enemy.h" />
+    <ClInclude Include="src\GameSettings.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\Obstacle.h" />

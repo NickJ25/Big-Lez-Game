@@ -28,6 +28,18 @@ int specular = 1;
 float shininess = 32.0f;
 
 
+void Game::createPlayers()
+{
+	for (int i = 0; i < GameData::g_PlayerData.size(); i++) {
+		if (GameData::g_PlayerData[i] != nullptr) {
+			playerList[i] = new Player(GameData::g_PlayerData[i]->control, *GameData::g_PlayerData[i], glm::vec3(0.0f, 0.0f, 0.0f));
+			playerList[i]->setShader(toonShader);
+			playerList[i]->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
+			gameObjects.push_back(playerList[i]);
+		}
+	}
+}
+
 void Game::init()
 {
 	std::cout << "Game.cpp Init" << std::endl;
@@ -63,6 +75,8 @@ void Game::init()
 	environment->Move(glm::vec3(0.0f, 60.0f, 0.0f));
 	gameObjects.push_back(environment);
 
+	createPlayers();
+
 	// Characters
 	Player::Character BigLez;
 	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
@@ -90,25 +104,26 @@ void Game::init()
 	//gameObjects.push_back(bigLez);
 
 
-	sassy = new Player(ControllerComponent::CONTROLLER1, Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
+	sassy = new Player(Input::CONTROLLER1, Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
 	sassy->setShader(toonShader);
 	sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
 	sassy->setAnimation(5.0f, 1.0f);
 	sassy->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 	gameObjects.push_back(sassy);
 
-	mainPlayer = new Player(ControllerComponent::KEYBOARD, BigLez, glm::vec3(45.0f, -12.5f, 20.0f));
-	mainPlayer->setShader(toonShader);
-	mainPlayer->Move(glm::vec3(45.0f, -12.5f, 20.0f));
-	//mainPlayer->setStill(true);
-	mainPlayer->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
-	gameObjects.push_back(mainPlayer);
+	//mainPlayer = new Player(Input::KEYBOARD, BigLez, glm::vec3(45.0f, -12.5f, 20.0f));
+	//mainPlayer->setShader(toonShader);
+	//mainPlayer->Move(glm::vec3(45.0f, -12.5f, 20.0f));
+	////mainPlayer->setStill(true);
+	//mainPlayer->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
+	//gameObjects.push_back(mainPlayer);
 
-	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
-	lezShotgun->setShader(toonShader);
-	lezShotgun->setAnimation(0.0f, 1.0f);
-	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
-	gameObjects.push_back(lezShotgun);
+	//GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
+	//lezShotgun->setShader(toonShader);
+	//lezShotgun->setAnimation(0.0f, 1.0f);
+	////mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun)); 
+	//playerList[0]->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
+	//gameObjects.push_back(lezShotgun);
 
 	//GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f), "NoBounding");
 	//lezTest->Move(glm::vec3(-10.0f, 0.0f, -10.0f));
@@ -845,14 +860,14 @@ void Game::update()
 			}
 		}
 		// Player Attacking
-		if(mainPlayer->hasPlayerAttacked()) cout << "FIRE ZE MISSILES!" << endl;
+		if(playerList[0]->hasPlayerAttacked()) cout << "FIRE ZE MISSILES!" << endl;
 
 		for (int i = 0; i < gameObjects.size(); i++) {
 			Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
 			if (e) {
 				cout << "C_Area: " << e->getCollider()->getPos().x << " " << e->getCollider()->getPos().y << " " << e->getCollider()->getPos().z << endl;
-				cout << "P_Player: " << mainPlayer->getPosition().x << " " << mainPlayer->getPosition().y << " " << mainPlayer->getPosition().z << endl;
-				cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (e)) << endl;
+				cout << "P_Player: " << playerList[0]->getPosition().x << " " << playerList[0]->getPosition().y << " " << playerList[0]->getPosition().z << endl;
+				cout << "AABB: " << checkRayToAABB(&playerList[0]->getPosition(), &playerList[0]->getCamera()->getCameraFront(), (e)) << endl;
 			}
 
 		}
@@ -997,9 +1012,9 @@ void Game::update()
 		}
 	}
 
-	if (Input::keyboard1.keys[GLFW_KEY_X]) {
-		mainPlayer->playAnimation();
-	}
+	//if (Input::keyboard1.keys[GLFW_KEY_X]) {
+	//	mainPlayer->playAnimation();
+	//}
 
 	if (Input::keyboard1.keys[GLFW_KEY_M]) {
 
@@ -1045,10 +1060,10 @@ void Game::draw()
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 \
-	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
+	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), playerList[0]->getCamera()->getCameraPos().x, playerList[0]->getCamera()->getCameraPos().y, playerList[0]->getCamera()->getCameraPos().z);
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
-	skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));
+	skybox->draw(projection * glm::mat4(glm::mat3(playerList[0]->getCamera()->lookAtMat())));
 
 
 	if (isGameRunning == false)
@@ -1063,7 +1078,7 @@ void Game::draw()
 
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
-			gameObjects[i]->componentDraw(mainPlayer->getCamera()->lookAtMat());
+			gameObjects[i]->componentDraw(playerList[0]->getCamera()->lookAtMat());
 		}
 	}
 	

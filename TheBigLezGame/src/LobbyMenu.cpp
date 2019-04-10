@@ -126,6 +126,8 @@ void LobbyMenu::handle(Menu * menu)
 	p2CharacterSelected = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.80, 5.0), "assets/Fonts/ariali.ttf");
 	p1InfoText = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.20, 5.0), "assets/Fonts/ariali.ttf");
 	p2InfoText = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.80, 5.0), "assets/Fonts/ariali.ttf");
+	timerText = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.50, Input::SCREEN_HEIGHT * 0.50 - 20), "assets/Fonts/ariali.ttf");
+	timerText->scale(glm::vec2(1.4, 1.4));
 	selectedMenu = menu;
 }
 
@@ -134,7 +136,6 @@ void LobbyMenu::update()
 	// Fog Scrolling
 	fog->translate(glm::vec2(fogPos, 360));
 	fog->scale(glm::vec2(3840.0f, 1080.0f), true);
-	std::cout << fogPos << "\n";
 	fogPos += 4;
 	if (fogPos > 3800) fogPos = 0;
 
@@ -174,13 +175,23 @@ void LobbyMenu::update()
 			// Confirm Character Selection Key
 			int confirmKey;
 			if (playerList[0]->control == Input::KEYBOARD) confirmKey = GLFW_KEY_ENTER;
-			else if (playerList[0]->control == Input::CONTROLLER1 || playerList[0]->control == Input::CONTROLLER2) confirmKey = 0;
+			else if (playerList[0]->control == Input::CONTROLLER1 || playerList[0]->control == Input::CONTROLLER2) confirmKey = 2;
+			if (Input::determineInput(playerList[0]->control, confirmKey)) {
+				p1Ready = true;
+				playerList[0]->name = characterList[p1Choice].name;
+				playerList[0]->fileLocation = characterList[p1Choice].fileLocation;
+				playerList[0]->health = characterList[p1Choice].health;
+				playerList[0]->walkSpeed = characterList[p1Choice].walkSpeed;
+			}
 		}
 		else {
 			// Cancel Character Selection
 			int cancelKey;
 			if (playerList[0]->control == Input::KEYBOARD) cancelKey = GLFW_KEY_BACKSPACE;
 			else if (playerList[0]->control == Input::CONTROLLER1 || playerList[0]->control == Input::CONTROLLER2) cancelKey = 1;
+			if (Input::determineInput(playerList[0]->control, cancelKey)) {
+				p1Ready = false;
+			}
 		}
 
 		// Update Character Picture
@@ -208,13 +219,23 @@ void LobbyMenu::update()
 			// Confirm Character Selection
 			int confirmKey;
 			if (playerList[1]->control == Input::KEYBOARD) confirmKey = GLFW_KEY_ENTER;
-			else if (playerList[1]->control == Input::CONTROLLER1 || playerList[1]->control == Input::CONTROLLER2) confirmKey = 0;
+			else if (playerList[1]->control == Input::CONTROLLER1 || playerList[1]->control == Input::CONTROLLER2) confirmKey = 2;
+			if (Input::determineInput(playerList[1]->control, confirmKey)) {
+				p2Ready = true;
+				playerList[1]->name = characterList[p2Choice].name;
+				playerList[1]->fileLocation = characterList[p2Choice].fileLocation;
+				playerList[1]->health = characterList[p2Choice].health;
+				playerList[1]->walkSpeed = characterList[p2Choice].walkSpeed;
+			}
 		}
 		else {
 			// Cancel Character Selection
 			int cancelKey;
-			if (playerList[0]->control == Input::KEYBOARD) cancelKey = GLFW_KEY_BACKSPACE;
-			else if (playerList[0]->control == Input::CONTROLLER1 || playerList[0]->control == Input::CONTROLLER2) cancelKey = 1;
+			if (playerList[1]->control == Input::KEYBOARD) cancelKey = GLFW_KEY_BACKSPACE;
+			else if (playerList[1]->control == Input::CONTROLLER1 || playerList[1]->control == Input::CONTROLLER2) cancelKey = 1;
+			if (Input::determineInput(playerList[1]->control, cancelKey)) {
+				p2Ready = false;
+			}
 		}
 
 		// Update Character Picture
@@ -223,16 +244,36 @@ void LobbyMenu::update()
 		p2CurrentCharPic->scale(glm::vec2(239 / 2, 307 / 2), true);
 	}
 
+	// If both players are ready, start the timer
+	if (p1Ready && p2Ready || p1Ready && playerList[1] == nullptr) {
+		if (!gameTimerStart) {
+			gameTimerStart = true;
+			startTime = glfwGetTime();
+		}
+		timeOnTimer = 10 - (glfwGetTime() - startTime);
+		if (gameTimerStart && timeOnTimer <= 0) {
+			// Start the game
+			GameData::g_PlayerData = playerList;
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			selectedMenu->setCurrent(selectedMenu->getGameScreen());
+			selectedMenu->getCurrentState()->handle(selectedMenu);
+		}
+	}
+	else {
+		gameTimerStart = false;
+	}
+
+	// Back to previous menu
 	if (backBtn->buttonClick()) {
 		selectedMenu->setCurrent(selectedMenu->getMainMenu());
 		selectedMenu->getCurrentState()->handle(selectedMenu);
 	}
 
-	if (startBtn->buttonClick()) {
-		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		selectedMenu->setCurrent(selectedMenu->getSinglePlayer());
-		selectedMenu->getCurrentState()->handle(selectedMenu);
-	}
+	//if (startBtn->buttonClick()) {
+	//	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//	selectedMenu->setCurrent(selectedMenu->getSinglePlayer());
+	//	selectedMenu->getCurrentState()->handle(selectedMenu);
+	//}
 }
 
 void LobbyMenu::draw()
@@ -243,18 +284,26 @@ void LobbyMenu::draw()
 	fog->draw();
 
 	if (playerList[0] != nullptr) {
-		p1BtnLeft->draw();
-		p1BtnRight->draw();
-		p1CurrentCharPic->draw();
+		if (!p1Ready) {
+			p1BtnLeft->draw();
+			p1BtnRight->draw();
 
+			// Ready Info Text
+			p1InfoText->move(glm::vec2((Input::SCREEN_WIDTH * 0.25) - (p1InfoText->getSize().x / 4), Input::SCREEN_HEIGHT * 0.75));
+			p1InfoText->scale(glm::vec2(0.5, 0.5));
+			p1InfoText->draw("Press [Space] or X to ready!", glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
+		}
+		else {
+			// Ready Text
+			p1InfoText->move(glm::vec2((Input::SCREEN_WIDTH * 0.25) - (p1InfoText->getSize().x / 4), Input::SCREEN_HEIGHT * 0.75));
+			p1InfoText->scale(glm::vec2(0.7, 0.7));
+			p1InfoText->draw("Ready!", glm::vec4(0.0, 1.0, 0.0, 1.0), 1);
+		}
+
+		// Draw player 1s currently selected character picture
+		p1CurrentCharPic->draw();
 		p1CharacterSelected->move(glm::vec2((Input::SCREEN_WIDTH * 0.25)- (p1CharacterSelected->getSize().x / 2), Input::SCREEN_HEIGHT * 0.25));
 		p1CharacterSelected->draw(characterList[p1Choice].name, glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
-
-		// Ready Info Text
-		p1InfoText->move(glm::vec2((Input::SCREEN_WIDTH * 0.25) - (p1InfoText->getSize().x / 4), Input::SCREEN_HEIGHT * 0.75));
-		p1InfoText->scale(glm::vec2(0.5, 0.5));
-		p1InfoText->draw("Press [Space] or A to ready!", glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
-
 	}
 	else {
 		// Player 1 Join Info Text
@@ -264,16 +313,26 @@ void LobbyMenu::draw()
 	}
 
 	if (playerList[1] != nullptr) {
-		p2BtnLeft->draw();
-		p2BtnRight->draw();
+		if (!p2Ready) {
+			p2BtnLeft->draw();
+			p2BtnRight->draw();
+
+			// Ready Info Text
+			p2InfoText->move(glm::vec2((Input::SCREEN_WIDTH * 0.75) - (p2InfoText->getSize().x / 4), Input::SCREEN_HEIGHT * 0.75));
+			p2InfoText->scale(glm::vec2(0.5, 0.5));
+			p2InfoText->draw("Press [Enter] or X to ready!", glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
+		}
+		else {
+			p2InfoText->move(glm::vec2((Input::SCREEN_WIDTH * 0.75) - (p2InfoText->getSize().x / 4), Input::SCREEN_HEIGHT * 0.75));
+			p2InfoText->scale(glm::vec2(0.7, 0.7));
+			p2InfoText->draw("Ready!", glm::vec4(0.0, 1.0, 0.0, 1.0), 1);
+		}
+
+		// Draw player 2s currently selected character picture
 		p2CurrentCharPic->draw();
 		p2CharacterSelected->move(glm::vec2((Input::SCREEN_WIDTH * 0.75) - (p2CharacterSelected->getSize().x / 2), Input::SCREEN_HEIGHT * 0.25));
 		p2CharacterSelected->draw(characterList[p2Choice].name, glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
 
-		// Ready Info Text
-		p2InfoText->move(glm::vec2((Input::SCREEN_WIDTH * 0.75) - (p2InfoText->getSize().x / 4), Input::SCREEN_HEIGHT * 0.75));
-		p2InfoText->scale(glm::vec2(0.5, 0.5));
-		p2InfoText->draw("Press [Enter] or A to ready!", glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
 	}
 	else {
 		// Player 2 Join Info Text
@@ -282,6 +341,11 @@ void LobbyMenu::draw()
 		p2InfoText->draw("Press [Space] or A to join!", glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
 	}
 
+	// Draw countdown
+	if (gameTimerStart) {
+		timerText->draw(std::to_string(timeOnTimer), glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
+	}
+
 	backBtn->draw();
-	startBtn->draw();
+	//startBtn->draw();
 }

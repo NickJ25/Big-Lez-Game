@@ -3,12 +3,10 @@
 #include "GLFW/glfw3.h"
 
 class ControllerComponent {
-	enum ControllerType;
 private:
-	ControllerType m_controllerType;
+	Input::ControllerType m_controllerType;
 public:
-	enum ControllerType {KEYBOARD, CONTROLLER1, CONTROLLER2};
-	ControllerComponent(ControllerType control);
+	ControllerComponent(Input::ControllerType control);
 	~ControllerComponent();
 
 	bool getPrimaryAction();

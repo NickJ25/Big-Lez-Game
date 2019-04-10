@@ -106,7 +106,7 @@ bool GameObject::isColliderNull()
 	else return false;
 }
 
-void GameObject::addController(ControllerComponent::ControllerType controller)
+void GameObject::addController(Input::ControllerType controller)
 {
 	controllerComponent = new ControllerComponent(controller);
 }

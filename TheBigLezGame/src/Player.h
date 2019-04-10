@@ -20,7 +20,7 @@ public:
 		Input::ControllerType control;
 	};
 
-	Player(ControllerComponent::ControllerType controller, Character character, glm::vec3 startPos);
+	Player(Input::ControllerType controller, Character character, glm::vec3 startPos);
 	Player(Character character, glm::vec3 startPos);
 	~Player();
 
