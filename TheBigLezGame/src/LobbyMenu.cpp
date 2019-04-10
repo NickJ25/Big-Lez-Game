@@ -24,9 +24,13 @@ void LobbyMenu::addCharacters()
 	BigLez.health = 100;
 	BigLez.walkSpeed = 10;
 	characterList.push_back(BigLez);
-	//Image* bigLezPic = new Image("assets/Characters/BigLez/biglezPicture.png", glm::vec2(0, 0));
-	//bigLezPic->scale(glm::vec2(500, 500));
-	charPicList.push_back("assets/Characters/BigLez/biglezPicture.png");
+
+	// Picture setup for Player 1
+	characterPicSetup("assets/Characters/BigLez/biglezPicture.png", p1CharPicList);
+
+	// Picture setup for Player 2
+	characterPicSetup("assets/Characters/BigLez/biglezPicture.png", p2CharPicList);
+
 
 	// Create Sassy
 	Player::Character Sassy;
@@ -35,9 +39,13 @@ void LobbyMenu::addCharacters()
 	Sassy.health = 100;
 	Sassy.walkSpeed = 10;
 	characterList.push_back(Sassy);
-	//Image* sassyPic = new Image("assets/Characters/Sassy/sassyPicture.png", glm::vec2(0, 0));
-	//sassyPic->scale(glm::vec2(0.2, 0.4));
-	charPicList.push_back("assets/Characters/Sassy/sassyPicture.png");
+
+	// Picture setup for Player 1
+	characterPicSetup("assets/Characters/Sassy/sassyPicture.png", p1CharPicList);
+
+	// Picture setup for Player 2
+	characterPicSetup("assets/Characters/Sassy/sassyPicture.png", p2CharPicList);
+
 
 	// Create Donny
 	Player::Character Donny;
@@ -46,9 +54,13 @@ void LobbyMenu::addCharacters()
 	Donny.health = 100;
 	Donny.walkSpeed = 10;
 	characterList.push_back(Donny);
-	//Image* donnyPic = new Image("assets/Characters/Donny/donnyPicture.png", glm::vec2(0, 0));
-	//donnyPic->scale(glm::vec2(0.2, 0.4));
-	charPicList.push_back("assets/Characters/Donny/donnyPicture.png");
+
+	// Picture setup for Player 1
+	characterPicSetup("assets/Characters/Donny/donnyPicture.png", p1CharPicList);
+
+	// Picture setup for Player 2
+	characterPicSetup("assets/Characters/Donny/donnyPicture.png", p2CharPicList);
+
 
 	// Create Clarence
 	Player::Character Clarence;
@@ -58,10 +70,26 @@ void LobbyMenu::addCharacters()
 	Clarence.walkSpeed = 12;
 	Clarence.isLocked = true;
 	characterList.push_back(Clarence);
-	//Image* clarencePic = new Image("assets/Characters/Clarence/clarencePicture.png", glm::vec2(0, 0));
-	//clarencePic->scale(glm::vec2(0.2, 0.4));
-	charPicList.push_back("assets/Characters/Clarence/clarencePicture.png");
 
+	// Picture setup for Player 1
+	characterPicSetup("assets/Characters/Clarence/clarencePicture.png", p1CharPicList);
+
+	// Picture setup for Player 2
+	characterPicSetup("assets/Characters/Clarence/clarencePicture.png", p2CharPicList);
+}
+
+// For adding images to character picture lists
+void LobbyMenu::characterPicSetup(const char* filename, vector<Image*>& piclist)
+{
+	Image* t_picture = new Image(filename, glm::vec2(0, 0));
+	piclist.push_back(t_picture);
+}
+
+// Returns colour depending on the player status
+glm::vec4 LobbyMenu::colourCheck(bool ready)
+{
+	if (ready) return glm::vec4(0.0f, 0.9f, 0.0f, 1.0f); // Green
+	else return glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // White
 }
 
 LobbyMenu::LobbyMenu()
@@ -79,6 +107,8 @@ void LobbyMenu::handle(Menu * menu)
 	playerList = { nullptr, nullptr };
 
 	background = new Image("assets/Art/background.png", glm::vec2(640.0, 360.0));
+	fog = new Image("assets/Art/fog.png", glm::vec2(640.0f, 0.0f));
+
 	m_window = glfwGetCurrentContext();
 	backBtn = new Button(Button::NORMAL, glm::vec2(Input::SCREEN_WIDTH / 2, 100.0), "Back");
 	startBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Start");
@@ -97,11 +127,17 @@ void LobbyMenu::handle(Menu * menu)
 	p1InfoText = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.20, 5.0), "assets/Fonts/ariali.ttf");
 	p2InfoText = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.80, 5.0), "assets/Fonts/ariali.ttf");
 	selectedMenu = menu;
-	p1CurrentCharPic = new Image(charPicList[p1Choice].c_str(), glm::vec2(0.0f, 0.0f));
 }
 
 void LobbyMenu::update() 
 {
+	// Fog Scrolling
+	fog->translate(glm::vec2(fogPos, 360));
+	fog->scale(glm::vec2(3840.0f, 1080.0f), true);
+	std::cout << fogPos << "\n";
+	fogPos += 4;
+	if (fogPos > 3800) fogPos = 0;
+
 	// Check input devices for input to assign players
 	if (Input::keyboard1.keys[GLFW_KEY_SPACE] && !keyboardInUse) {
 		keyboardInUse = true;
@@ -118,40 +154,73 @@ void LobbyMenu::update()
 		addController(Input::CONTROLLER2);
 	}
 
-	if (playerList[0] == nullptr) {
+	// Player 1 Character Selection
+	if (playerList[0] != nullptr) {
 
-	}
-	else {
-		if (p1BtnLeft->buttonClick()) {
-			p1Choice--;
+		if (!p1Ready) {
+			// Left Character Select Button
+			if (p1BtnLeft->buttonClick()) {
+				p1Choice--;
+				if (p1Choice < 0) p1Choice = characterList.size() - 1;
+			}
+
+			// Right Character Select Button
+			if (p1BtnRight->buttonClick()) {
+				p1Choice++;
+				if (p1Choice > characterList.size() - 1) p1Choice = 0;
+			}
 			if (p1Choice < 0) p1Choice = characterList.size() - 1;
-		}
-		if (p1BtnRight->buttonClick()) {
-			p1Choice++;
-			if (p1Choice > characterList.size() - 1) p1Choice = 0;
-		}
-		if (p1Choice < 0) p1Choice = characterList.size() - 1;
 
-		p1CurrentCharPic->changeImage(charPicList[p1Choice]);
+			// Confirm Character Selection Key
+			int confirmKey;
+			if (playerList[0]->control == Input::KEYBOARD) confirmKey = GLFW_KEY_ENTER;
+			else if (playerList[0]->control == Input::CONTROLLER1 || playerList[0]->control == Input::CONTROLLER2) confirmKey = 0;
+		}
+		else {
+			// Cancel Character Selection
+			int cancelKey;
+			if (playerList[0]->control == Input::KEYBOARD) cancelKey = GLFW_KEY_BACKSPACE;
+			else if (playerList[0]->control == Input::CONTROLLER1 || playerList[0]->control == Input::CONTROLLER2) cancelKey = 1;
+		}
+
+		// Update Character Picture
+		p1CurrentCharPic = p1CharPicList[p1Choice];
 		p1CurrentCharPic->translate(glm::vec2(Input::SCREEN_WIDTH * 0.25, Input::SCREEN_HEIGHT * 0.52));
 		p1CurrentCharPic->scale(glm::vec2(239 / 2, 307 / 2), true);
 	}
 
-	if (playerList[1] == nullptr) {
+	// Player 2 Character Selection
+	if (playerList[1] != nullptr) {
 
-	}
-	else {
-		if (p2BtnLeft->buttonClick()) {
-			p2Choice--;
-			if (p2Choice < 0) p2Choice = characterList.size() - 1;
+		if (!p2Ready) {
+			// Left Character Select Button
+			if (p2BtnLeft->buttonClick()) {
+				p2Choice--;
+				if (p2Choice < 0) p2Choice = characterList.size() - 1;
+			}
+
+			// Right Character Select Button
+			if (p2BtnRight->buttonClick()) {
+				p2Choice++;
+				if (p2Choice > characterList.size() - 1) p2Choice = 0;
+			}
+
+			// Confirm Character Selection
+			int confirmKey;
+			if (playerList[1]->control == Input::KEYBOARD) confirmKey = GLFW_KEY_ENTER;
+			else if (playerList[1]->control == Input::CONTROLLER1 || playerList[1]->control == Input::CONTROLLER2) confirmKey = 0;
 		}
-		if (p2BtnRight->buttonClick()) {
-			p2Choice++;
-			if (p2Choice > characterList.size() - 1) p2Choice = 0;
+		else {
+			// Cancel Character Selection
+			int cancelKey;
+			if (playerList[0]->control == Input::KEYBOARD) cancelKey = GLFW_KEY_BACKSPACE;
+			else if (playerList[0]->control == Input::CONTROLLER1 || playerList[0]->control == Input::CONTROLLER2) cancelKey = 1;
 		}
-		//p2CurrentCharPic = charPicList[p2Choice];
-		//p2CurrentCharPic->translate(glm::vec2(Input::SCREEN_WIDTH * 0.75, Input::SCREEN_HEIGHT * 0.52));
-		//p2CurrentCharPic->scale(glm::vec2(239 / 2, 307 / 2));
+
+		// Update Character Picture
+		p2CurrentCharPic = p2CharPicList[p2Choice];
+		p2CurrentCharPic->translate(glm::vec2(Input::SCREEN_WIDTH * 0.75, Input::SCREEN_HEIGHT * 0.52));
+		p2CurrentCharPic->scale(glm::vec2(239 / 2, 307 / 2), true);
 	}
 
 	if (backBtn->buttonClick()) {
@@ -171,6 +240,7 @@ void LobbyMenu::draw()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	background->draw();
+	fog->draw();
 
 	if (playerList[0] != nullptr) {
 		p1BtnLeft->draw();
@@ -184,6 +254,7 @@ void LobbyMenu::draw()
 		p1InfoText->move(glm::vec2((Input::SCREEN_WIDTH * 0.25) - (p1InfoText->getSize().x / 4), Input::SCREEN_HEIGHT * 0.75));
 		p1InfoText->scale(glm::vec2(0.5, 0.5));
 		p1InfoText->draw("Press [Space] or A to ready!", glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
+
 	}
 	else {
 		// Player 1 Join Info Text

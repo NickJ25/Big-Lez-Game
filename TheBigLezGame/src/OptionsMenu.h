@@ -8,7 +8,9 @@
 
 class OptionsMenu : public MenuState {
 private:
-	Image* background;
+	Image* background, *fog;
+	float fogPos = 0;
+
 	Button* backBtn, *graphicsBtn, *controlsBtn, *audioBtn;
 public:
 	OptionsMenu();

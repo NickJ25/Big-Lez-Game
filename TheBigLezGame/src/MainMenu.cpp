@@ -23,6 +23,7 @@ void MainMenu::handle(Menu * menu)
 
 void MainMenu::update()
 {
+	// Fog Scrolling
 	fog->translate(glm::vec2(fogPos, 360));
 	fog->scale(glm::vec2(3840.0f, 1080.0f), true);
 	std::cout << fogPos << "\n";

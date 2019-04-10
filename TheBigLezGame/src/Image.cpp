@@ -84,7 +84,8 @@ Image::Image(const char * filename, glm::vec2 screenPos, int width, int height, 
 
 Image::~Image()
 {
-
+	delete imageShader;
+	imageShader = nullptr;
 }
 
 void Image::changeImage(std::string newImage)
@@ -95,9 +96,7 @@ void Image::changeImage(std::string newImage)
 
 void Image::translate(glm::vec2 position)
 {
-	std::cout << "S: " << m_model[3][0] << " " << m_model[3][1] << " " << m_model[3][2] << "\n";
 	m_model = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
-	std::cout << "E: " << m_model[3][0] << " " << m_model[3][1] << " " << m_model[3][2] << "\n";
 }
 
 void Image::rotate(GLfloat radians) {
