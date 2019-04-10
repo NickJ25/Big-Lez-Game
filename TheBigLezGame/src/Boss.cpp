@@ -68,7 +68,7 @@ void Boss::initialiseWaveSpawner(vector<GameObject*> gameObjects, Shader* shader
 	bottomDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, 50.0f), glm::vec3(43.0f, -12.5f, 30.0f)));
 
 	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, -10.0f), glm::vec3(80.0f, -12.5f, -10.0f)));
-	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 30.0f), glm::vec3(80.0f, -12.5f, 30.0f)));
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 40.0f), glm::vec3(80.0f, -12.5f, 40.0f)));
 
 
 	privateSpawner->setEndCoords(bottomDoors, 0);
@@ -115,13 +115,21 @@ void Boss::update()
 	{
 		if (deadSet == false)
 		{
-			deathStart = glfwGetTime();
+			//death sound and start animation
+			setAnimation(9.167f, 1.479f);
 			deadSet = true;
 		}
 		currentTime = glfwGetTime();
-		
-		if (currentTime > deathStart + 1.75f)
-		{
+		float deltaTime = currentTime - previousTime;
+		previousTime = currentTime;
+
+		deathAnimationTimer -= deltaTime;
+
+		if (deathAnimationTimer <= 0) {
+			//set to fully lying down frame
+			setAnimation(10.0f, 1.479f);
+
+			//then pause the model
 			setStill(true);
 			still = true;
 		}
@@ -420,9 +428,11 @@ void Boss::takeDamage(float damage)
 void Boss::death()
 {
 	//set death animation and timer the length of it -1 frame
-	dead = true;
+	if (dead == false) {
+		dead = true;
 
-	setAnimation(8.75f, 1.48f);
-	setPauseFrame(10.0f);
+		setAnimation(8.75f, 1.48f);
+		setPauseFrame(10.0f);
+	}
 
 }

@@ -189,7 +189,7 @@ void Game::init()
 	topDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(43.0f, -12.5f, -30.0f), glm::vec3(43.0f, -12.5f, -10.0f)));
 
 	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, -6.0f), glm::vec3(80.0f, -12.5f, -6.0f)));
-	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 55.0f), glm::vec3(80.0f, -12.5f, 55.0f)));
+	rightDoors.push_back(std::pair<glm::vec3, glm::vec3>(glm::vec3(100.0f, -12.5f, 35.0f), glm::vec3(80.0f, -12.5f, 35.0f)));
 
 
 	//grid has to be the last game object added
@@ -661,6 +661,8 @@ void Game::generateWave(int waveNumber)
 
 void Game::update()
 {
+
+	//cout << "cpos: " << mainPlayer->getCamera()->getCameraPos().x << " , " << mainPlayer->getCamera()->getCameraPos().z << endl;
 	if(isGameRunning == true && initialised)
 	{
 		if (ambientInitialised == false) {
@@ -887,10 +889,13 @@ void Game::update()
 			}
 			Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
 			if (b) {
+				cout << "C_Area: " << b->getCollider()->getPos().x << " " << b->getCollider()->getPos().y << " " << b->getCollider()->getPos().z << endl;
+				cout << "P_Player: " << mainPlayer->getPosition().x << " " << mainPlayer->getPosition().y << " " << mainPlayer->getPosition().z << endl;
+				cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (b)) << endl;
 				if (checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (b)))
 				{
 					cout << "hittoi" << endl;
-					b->takeDamage(10.0f);
+					b->takeDamage(1000.0f);
 
 				}
 			}

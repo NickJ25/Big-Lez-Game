@@ -76,6 +76,7 @@ private:
 	bool dead = false;
 	bool deadSet = false;
 	float deathStart = 0.0f;
+	float deathAnimationTimer = 1.67f;
 
 	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
 	bool soundSet = false;
