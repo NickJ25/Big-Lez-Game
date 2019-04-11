@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameData.cpp" />
     <ClCompile Include="src\AnimMesh.cpp" />
     <ClCompile Include="src\AnimModel.cpp" />
     <ClCompile Include="src\Boss.cpp" />

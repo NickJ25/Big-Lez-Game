@@ -46,6 +46,7 @@
     <ClCompile Include="src\WaveSpawner.cpp" />
     <ClCompile Include="src\windowGLFW.cpp" />
     <ClCompile Include="src\GameScreenMenu.cpp" />
+    <ClCompile Include="src\GameData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ControllerComponent.h" />

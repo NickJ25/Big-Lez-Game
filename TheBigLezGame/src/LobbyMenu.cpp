@@ -1,5 +1,7 @@
 #include "LobbyMenu.h"
 
+vector<Player::Character*> GameData::g_PlayerData{ nullptr, nullptr };
+
 void LobbyMenu::addController(Input::ControllerType controller)
 {
 	if (playerList[0] == nullptr)
@@ -63,8 +65,8 @@ void LobbyMenu::addCharacters()
 
 
 	// Create Clarence
-	Player::Character Clarence;
-	//Clarence.fileLocation
+	Player::Character Clarence; 
+	Clarence.fileLocation = "assets/Characters/Clarence/Clarence.dae";
 	Clarence.name = "Clarence";
 	Clarence.health = 100000;
 	Clarence.walkSpeed = 12;
@@ -101,6 +103,7 @@ LobbyMenu::LobbyMenu()
 void LobbyMenu::handle(Menu * menu)
 {
 	// Reset Controller Usage
+	
 	keyboardInUse = false;
 	controller1InUse = false;
 	controller2InUse = false;

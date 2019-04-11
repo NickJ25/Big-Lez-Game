@@ -3,5 +3,5 @@
 #include <vector>
 
 namespace GameData {
-	static vector<Player::Character*>g_PlayerData; // { nullptr, nullptr };
+	extern vector<Player::Character*>g_PlayerData;
 }

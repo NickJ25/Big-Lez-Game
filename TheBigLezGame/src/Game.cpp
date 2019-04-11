@@ -118,12 +118,12 @@ void Game::init()
 	//mainPlayer->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 	//gameObjects.push_back(mainPlayer);
 
-	//GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
-	//lezShotgun->setShader(toonShader);
-	//lezShotgun->setAnimation(0.0f, 1.0f);
-	////mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun)); 
-	//playerList[0]->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
-	//gameObjects.push_back(lezShotgun);
+	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
+	lezShotgun->setShader(toonShader);
+	lezShotgun->setAnimation(0.0f, 1.0f);
+	//mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun)); 
+	playerList[0]->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
+	gameObjects.push_back(lezShotgun);
 
 	//GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f), "NoBounding");
 	//lezTest->Move(glm::vec3(-10.0f, 0.0f, -10.0f));
