@@ -13,10 +13,15 @@ Prop* collisionTest;
 
 GameObject* sassy;
 
-// Initalize Two Camera
-//Camera lezCamera(glm::vec3(110.0f, 12.5f, 190.0f), FREECAM);
+struct materialStruct
+{
+		GLfloat ambient[4];
+		GLfloat diffuse[4];
+		GLfloat specular[4];
+		GLfloat shininess;
+};
 
-rt3d::materialStruct material0 = {
+materialStruct material0 = {
 	{0.0f, 0.8f, 0.2f, 1.0f}, // ambient
 	{0.5f, 1.0f, 0.5f, 1.0f}, // diffuse
 	{0.0f, 0.1f, 0.0f, 1.0f}, // specular
@@ -27,36 +32,30 @@ int diffuse = 0;
 int specular = 1;
 float shininess = 32.0f;
 
-
+#pragma region Initialise
 void Game::init()
 {
+#pragma region Utility and shaders
+
 	std::cout << "Game.cpp Init" << std::endl;
+
+	//initialise shaders from file sources
 	toonShader = new Shader("src/toonShader.vert", "src/toonShader.frag");
 
 	skybox = new Skybox("assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
-		"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
-		"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp");
+						"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
+						"assets/Skybox/top.bmp", "assets/Skybox/bottom.bmp");
 
+	//for bounding box debug tool
 	showBoundingBoxes = false;
+
+#pragma endregion
+#pragma region Object initialisation
 
 	////	Init Objects	////
 	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
 	dirLight->setShader(toonShader);
 	gameObjects.push_back(dirLight);
-
-	//GameObject* spotLight = new SpotLight(mainCamera->getCameraPos(), mainCamera->getCameraFront(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.1f), 0.4, 3);
-	//spotLight->setShader(toonShader);
-	//gameObjects.push_back(spotLight);
-	//GameObject* pointLight = new PointLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.09f, 0.05f, 0.09f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.09f, 0.32f));
-	//pointLight->setShader(toonShader);
-	//gameObjects.push_back(pointLight);
-
-	//GameObject* table = new Prop("assets/Props/Table/table.obj", glm::vec3(0.0f, 0.0f, 0.0f));
-	//table->setShader(toonShader);
-	//gameObjects.push_back(table);
-	//GameObject* couch = new Prop("assets/Props/Couch/couch.obj", glm::vec3(5.0f, 0.0f, 5.0f));
-	//couch->setShader(toonShader);
-	//gameObjects.push_back(couch);
 
 	GameObject* environment = new Prop("assets/Props/Map/envMap1.dae", glm::vec3(0.0f, 20.0f, 100.0f));
 	environment->setShader(toonShader);
@@ -78,18 +77,6 @@ void Game::init()
 	cube.fileLocation = "assets/Props/Map/gridblock.dae";
 	cube.name = "boundingbox";
 
-	//Player::Character doorCollider;
-	//cube.fileLocation = "assets/Props/Map/gridblock.dae";
-	//cube.name = "doorbox";
-
-	//GameObject* bigLez = new Player(doorCollider);
-	//bigLez->setShader(toonShader);
-	//bigLez->setAnim(0);
-	//bigLez->Move(glm::vec3(45.0f, -12.5f, -26.0f));
-	//bigLez->addCollision(glm::vec3(45.0f, -12.5f, -26.0f), 1.0f, 1.0f);
-	//gameObjects.push_back(bigLez);
-
-
 	sassy = new Player(ControllerComponent::CONTROLLER1, Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
 	sassy->setShader(toonShader);
 	sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
@@ -100,7 +87,6 @@ void Game::init()
 	mainPlayer = new Player(ControllerComponent::KEYBOARD, BigLez, glm::vec3(45.0f, -12.5f, 20.0f));
 	mainPlayer->setShader(toonShader);
 	mainPlayer->Move(glm::vec3(45.0f, -12.5f, 20.0f));
-	//mainPlayer->setStill(true);
 	mainPlayer->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 	gameObjects.push_back(mainPlayer);
 
@@ -110,15 +96,7 @@ void Game::init()
 	mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
 	gameObjects.push_back(lezShotgun);
 
-	//GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f), "NoBounding");
-	//lezTest->Move(glm::vec3(-10.0f, 0.0f, -10.0f));
-	//cout << "lez test pos:" << lezTest->getPosition().x << " " << lezTest->getPosition().y << " " << lezTest->getPosition().z << "----------------------" << endl;
-	//lezTest->setShader(toonShader);
-	//lezTest->Rotate(-90.0f, glm::vec3(1.0, 0.0, 0.0));
-	//lezTest->addCollision(glm::vec3(-10.0f, 0.0f, -10.0f), 50, 50);
-	//gameObjects.push_back(lezTest);
-
-
+#pragma endregion
 #pragma region Fences & Wave Junk
 	// add environmental collision boxes for pathfinding an' such
 	glm::vec3 fenceScaleVertical = glm::vec3(1.0f, 4.0f, 35.0f);
@@ -230,10 +208,6 @@ void Game::init()
 	//dlc
 	//waveSpawner->setEndCoords(leftDoors, "Left");
 
-	//prepare wave 1 to be spawned
-	//for (int i = 0; i < 5; i++) { 
-	//	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, false);
-	//}
 	int waveCount = 0;
 
 	while(firstWave.size() < 1) { 
@@ -428,7 +402,7 @@ void Game::init()
 	currentWave = 0;
 
 #pragma endregion
-
+#pragma region HUD and Text
 	//initialise the HUD
 	bossHealth = new Image("Assets/Art/BossHealth.png", glm::vec2(0.0f, 700.0f), false);
 
@@ -447,7 +421,9 @@ void Game::init()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#pragma endregion
 }
+#pragma endregion
 
 vector<irrklang::ISoundSource*> Game::loadSounds(string character)
 {
@@ -486,51 +462,8 @@ bool Game::checkCollision(GameObject* a, GameObject* b)
 	if (abs(a->getCollider()->getPos().x - b->getCollider()->getPos().x) > (a->getCollider()->getHW() + b->getCollider()->getHW())) return false;
 	if (abs(a->getCollider()->getPos().z - b->getCollider()->getPos().z) > (a->getCollider()->getHH() + b->getCollider()->getHH())) return false;
 
-	//penetrationDepthX = a->getCollider()->getHW() + b->getCollider()->getHW() - a->getCollider()->getPos().x - b->getCollider()->getPos().x;
-	//penetrationDepthZ = a->getCollider()->getHH() + b->getCollider()->getHW() - a->getCollider()->getPos().z - b->getCollider()->getPos().z;
-
 	return true;
 }
-
-//bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * object)
-//{	
-//	// Prerequisites
-//	vector<float>t_rayPos = { rayPos->x, rayPos->y, rayPos->z};
-//	vector<float>t_rayDir = { rayDir->x, rayDir->y, rayDir->z };
-//	vector<float>t_min = { object->getCollider()->getPos().x - object->getCollider()->getHW(),
-//							object->getCollider()->getPos().y - object->getCollider()->getTH(),
-//							object->getCollider()->getPos().z - object->getCollider()->getHH() };
-//	vector<float>t_max = { object->getCollider()->getPos().x + object->getCollider()->getHW(),
-//							object->getCollider()->getPos().y + object->getCollider()->getTH(),
-//							object->getCollider()->getPos().z + object->getCollider()->getHH() };
-//
-//	// For all three slabs
-//	for (int i = 0; i < 3; i++) {
-//		float tmin = 0.0f;
-//		float tmax = FLT_MAX;
-//		if (abs(t_rayDir[i]) < std::numeric_limits<float>::epsilon()) {
-//			if (t_rayPos[i] < t_min[i] || t_rayPos[i] > t_max[i]) return 0;
-//		}
-//		else {
-//			// Compute intersection t value of ray with near and far plane of slab
-//			float ood = 1.0f / t_rayDir[i];
-//			float t1 = (t_min[i] - t_rayPos[i]) * ood;
-//			float t2 = (t_max[i] - t_rayPos[i]) * ood;
-//			// Make t1 be intersection with near plane, t2 with far plane
-//			if (t1 > t2) {
-//				float temp;
-//				temp = t2;
-//				t1 = t2;
-//				t1 = temp;
-//			}
-//			// Compute the intersection of slab intersection intervals
-//			if (t1 > tmin) tmin = t1;
-//			if (t2 > tmax) tmax = t2;
-//			//Exit with no collision as soon as slab intersection becomes empty
-//		}
-//	}
-//	return 1;
-//}
 
 bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * object)
 {
@@ -579,59 +512,6 @@ bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * obj
 	return true;
 }
 
-bool Game::pointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d)
-{
-	return glm::dot(n, P) + d > FLT_EPSILON;
-}
-
-char Game::computePointMask(glm::vec3 p, Enemy* e)
-{
-	glm::vec3 center = p;
-	glm::vec2 radii = glm::vec2(e->getCollider()->getHW(), e->getCollider()->getHH());
-
-	char mask = 0;
-	if (pointIsAbovePlane(p, nright, -center.x - radii.x))
-	{
-		mask |= 1;// +x
-	}
-	if (pointIsAbovePlane(p, nleft, center.x - radii.x))
-	{
-		mask |= 2;	// -x
-	}
-	if (pointIsAbovePlane(p, nup, -center.z - radii.y))
-	{
-		mask |= 4;	// +y
-	}
-	if (pointIsAbovePlane(p, ndown, center.z - radii.y))
-	{
-		mask |= 8;	// -y
-	}
-	return mask;
-}
-
-glm::vec3 Game::getFaceNormal(glm::vec3 p, Enemy* e)
-{
-	char mask = computePointMask(p, e);
-	glm::vec3 normal = glm::vec3(0, 0, 0);
-	if ((mask & 1) == 1)	// +x
-	{
-		normal += nright;
-	}
-	if ((mask & 2) == 2)	// -x
-	{
-		normal += nleft;
-	}
-	if ((mask & 4) == 4)	// +y
-	{
-		normal += nup;
-	}
-	if ((mask & 8) == 8)	// -y
-	{
-		normal += ndown;
-	}
-	return normalize(normal);
-}
-
 void removeEnemies(std::vector<GameObject*> & gameObjects)
 {
 	std::vector<GameObject*>::iterator it = gameObjects.begin();
@@ -659,18 +539,21 @@ void Game::generateWave(int waveNumber)
 
 }
 
+#pragma region Update
 void Game::update()
 {
-
+	//debug for position
 	//cout << "cpos: " << mainPlayer->getCamera()->getCameraPos().x << " , " << mainPlayer->getCamera()->getCameraPos().z << endl;
+
+	//to prevent updates running before everything has loaded
 	if(isGameRunning == true && initialised)
 	{
+		// if not already playing
 		if (ambientInitialised == false) {
 			//set up sound
 			AmbientEngine->setSoundVolume(0.03f);
 			AmbientEngine->play2D("assets/Sounds/Ambient/AmbientMusic.wav", GL_TRUE);
 			ambientInitialised = true;
-
 		}
 
 		//set up timing 
@@ -678,21 +561,25 @@ void Game::update()
 		deltaTime = currentTime - previousTime;
 		previousTime = currentTime;
 
+		//timing for speech calls to prevent characters talking over each other too much
 		if (conversationTimer > 0)
 		{
 			conversationTimer -= deltaTime;
 		}
 		else {
+
 			//get random sound and play it
 			srand(time(0));
 			int randomSound = rand() % noOfSounds;
 
 				int orderPlace = 0;
 				int count = 0;
+				//iterate through the current objects
 				for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
 				{
 					count++;
 					int check = 0;
+					//if the random sound is less than three (sounds involving only one character)
 					if (randomSound < 3)
 					{
 						check = 1;
@@ -702,7 +589,7 @@ void Game::update()
 						check = convoOrders.at(randomSound).size();
 					}
 					
-
+					//assign sounds according to each character
 					Player *p = dynamic_cast<Player*>(*it);
 					if (p && p->getCharacter().name == convoOrders.at(randomSound).at(orderPlace)) {
 						if (p->getCharacter().name == "Sassy")
@@ -715,15 +602,17 @@ void Game::update()
 							break;
 					}
 
+					//if not all the characters have had their sounds assigned
 					if (count == gameObjects.size() && orderPlace < check)
 					{
+						//restart the loop
 						it = gameObjects.begin();
 						count = 0;
 					}
 
 
 				}
-
+				//reset the timer for 15 seconds
 				conversationTimer = 15.0f;
 		}
 		
@@ -740,13 +629,16 @@ void Game::update()
 		//if an enemy was not detected
 		if (enemyCounter <= 0)
 		{
+			
 			waveTimer -= deltaTime;
 			transparency += deltaTime;
+			//if the wave has not been initialised yet, initialise the wave change sound and volume
 			if (waveInitialised == false) {
 				WaveEngine->setSoundVolume(0.065f);
 				WaveEngine->play2D("assets/Sounds/Ambient/WaveChange.wav", GL_FALSE);
 				waveInitialised = true;
 			}
+			//draw the wave notification text
 			waveText->draw("Wave " + std::to_string(currentWave + 1) + "...", glm::vec4(1.0f, 1.0f, 1.0f, textAlpha), 1);
 			if (currentWave > 0) {
 				if (textAlpha > 0.0f)
@@ -760,6 +652,7 @@ void Game::update()
 		}
 		else
 		{
+			//reset everything for the next wave
 			waveInitialised = false;
 			textAlpha = 1.0f;
 			transparency = 0.0f;
@@ -791,6 +684,7 @@ void Game::update()
 					e->update();
 				}
 
+				//update the boss health and path finding attributes
 				Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
 				if (b)
 				{
@@ -804,6 +698,7 @@ void Game::update()
 			}
 		}
 
+#pragma region Collision Loop
 		//collision checking loop
 		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end() - 1; ++it)
 		{
@@ -811,22 +706,8 @@ void Game::update()
 			{
 				if ((*it)->getCollider() && (*it1)->getCollider()) {
 
-					//if it is a player and a wall
-					Player *p1 = dynamic_cast<Player*>((*it));
-					Player *p2 = dynamic_cast<Player*>((*it1));
-					Obstacle *o1 = dynamic_cast<Obstacle*>((*it));
-					Obstacle *o2 = dynamic_cast<Obstacle*>((*it1));
-
 					if (checkCollision((*it), (*it1)) == true)
 					{
-
-
-
-						if (o1 && p2 || p1 && o2)
-						{
-							cout << "colliding" << endl;
-						}
-
 						//an enemy is colliding with something
 						//if it is another enemy
 						Enemy *e1 = dynamic_cast<Enemy*>((*it));
@@ -868,45 +749,46 @@ void Game::update()
 					}
 				}
 			}
-		}
-		// Player Attacking
-		if(mainPlayer->hasPlayerAttacked()){cout << "FIRE ZE MISSILES!" << endl;
 
+		}
+
+#pragma endregion
+
+		// Player Attacking
+		if(mainPlayer->hasPlayerAttacked()){
+			
+		//play the gunshot noise
 			conversationEngine->play2D("assets/Sounds/gun.wav");
 
+			//iterate through game objects and find an enemy
 			for (int i = 0; i < gameObjects.size(); i++) {
 			Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
 			if (e) {
-				//c/out << "C_Area: " << e->getCollider()->getPos().x << " " << e->getCollider()->getPos().y << " " << e->getCollider()->getPos().z << endl;
-				//cout << "P_Player: " << mainPlayer->getPosition().x << " " << mainPlayer->getPosition().y << " " << mainPlayer->getPosition().z << endl;
-				//cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (e)) << endl;
+				
+				//check for an intersection and take damage if so
 				if (checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (e)))
 				{
-					cout << "hit" << endl;
 					e->takeDamage(10.0f);
-
 				}
 			}
+			//do the same for the boss
 			Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
 			if (b) {
-				cout << "C_Area: " << b->getCollider()->getPos().x << " " << b->getCollider()->getPos().y << " " << b->getCollider()->getPos().z << endl;
-				cout << "P_Player: " << mainPlayer->getPosition().x << " " << mainPlayer->getPosition().y << " " << mainPlayer->getPosition().z << endl;
-				cout << "AABB: " << checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (b)) << endl;
 				if (checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (b)))
 				{
-					cout << "hittoi" << endl;
 					b->takeDamage(1000.0f);
-
 				}
 			}
-		}
-
 		}
 
 	}
+
+	}
 	
+	//pause button
 	if (Input::keyboard1.keys[GLFW_KEY_P])
 	{
+		//stop running the gameloop
 		isGameRunning = false;	
 		g_window = glfwGetCurrentContext();
 		glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -934,6 +816,25 @@ void Game::update()
 		}
 	}
 
+	//undraw debug bounding boxes
+	if (Input::keyboard1.keys[GLFW_KEY_2]) {
+
+		if (showBoundingBoxes == true) {
+			vector<GameObject*>::iterator it;
+			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+			{
+				Player *tmp = dynamic_cast<Player*>(*it);
+				if (tmp != nullptr)
+				{
+					if (tmp->getCharacter().name == "boundingbox")
+					{
+						(*it)->setDraw(false);
+					}
+				}
+			}
+			showBoundingBoxes = false;
+		}
+	}
 	//for testing health bar for the boss
 		if (Input::keyboard1.keys[GLFW_KEY_U])
 		{
@@ -968,13 +869,17 @@ void Game::update()
 		}
 #pragma endregion
 
+	//if the game is paused
 	if (isGameRunning == false) 
 	{
+		//loop through and set all the objects to paused
 		vector<GameObject*>::iterator it;
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
 			(*it)->setPaused(true);
 		}
+		
+		//if the game is unpaused do the opposite and restart the game loop
 		if (resumeBtn->buttonClick()) 
 		{
 			vector<GameObject*>::iterator it;
@@ -986,6 +891,7 @@ void Game::update()
 			glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
 
+		//end the program if the main menu button is selected
 		if (mainMenuBtn->buttonClick()) 
 		{
 			glfwDestroyWindow(g_window);
@@ -994,80 +900,9 @@ void Game::update()
 
 	}
 
-	if (Input::keyboard1.keys[GLFW_KEY_Q]) {
-
-		vector<GameObject*>::iterator it;
-		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
-		{
-			(*it)->setPaused(true);
-
-			Enemy *tmp = dynamic_cast<Enemy*>(*it);
-			if (tmp != nullptr) {
-				tmp->setPaused(true);
-			}
-		}
-	}
-
-	if (Input::keyboard1.keys[GLFW_KEY_E]) {
-
-		vector<GameObject*>::iterator it;
-		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
-		{
-			(*it)->setPaused(false);
-
-			Enemy *tmp = dynamic_cast<Enemy*>(*it);
-			if (tmp != nullptr) {
-				tmp->setPaused(false);
-			}
-
-		}
-	}
-
-
-	if (Input::keyboard1.keys[GLFW_KEY_2]) {
-
-		if (showBoundingBoxes == true) {
-			vector<GameObject*>::iterator it;
-			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
-			{
-				Player *tmp = dynamic_cast<Player*>(*it);
-				if (tmp != nullptr)
-				{
-					if (tmp->getCharacter().name == "boundingbox")
-					{
-							(*it)->setDraw(false);
-					}
-				}
-			}
-			showBoundingBoxes = false;
-		}
-	}
 
 	if (Input::keyboard1.keys[GLFW_KEY_X]) {
 		mainPlayer->playAnimation();
-	}
-
-	if (Input::keyboard1.keys[GLFW_KEY_M]) {
-
-		if (takeDamage == false) {
-			vector<GameObject*>::iterator it;
-			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
-			{
-				Enemy *tmp = dynamic_cast<Enemy*>(*it);
-				if (tmp)
-				{
-					tmp->takeDamage(0.05f);
-				}
-			}
-			takeDamage = true;
-		}
-	}
-
-	if (Input::keyboard1.keys[GLFW_KEY_O]) {
-
-		if (takeDamage == true) {
-			takeDamage = false;
-		}
 	}
 
 	//update one path per frame so the computer doesnt melt
@@ -1077,15 +912,12 @@ void Game::update()
 	if (pathManager->working == true)
 		pathManager->working = false;
 
-	const Uint8 *keys = SDL_GetKeyboardState(NULL); /// ----------------------------------------------------------------------REMOVE
-	if (keys[SDL_SCANCODE_ESCAPE]) SDL_SetRelativeMouseMode(SDL_FALSE); // TEMP
-	else SDL_SetRelativeMouseMode(SDL_TRUE);
 }
-
+#pragma endregion
 
 void Game::draw()
 {
-	//glEnable(GL_DEPTH_TEST);
+	//pass material and position variables to the shader
 	glUseProgram(toonShader->getID());
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
@@ -1094,9 +926,10 @@ void Game::draw()
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), mainPlayer->getCamera()->getCameraPos().x, mainPlayer->getCamera()->getCameraPos().y, mainPlayer->getCamera()->getCameraPos().z);
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
+	//draw the skybox
 	skybox->draw(projection * glm::mat4(glm::mat3(mainPlayer->getCamera()->lookAtMat())));
 
-
+	//if the game is paused
 	if (isGameRunning == false)
 	{
 		// Draws pause menu
@@ -1107,6 +940,7 @@ void Game::draw()
 		pauseBackground->draw();
 	}
 
+	//loop through the gameobjects and draw 
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] != nullptr) {
 			gameObjects[i]->componentDraw(mainPlayer->getCamera()->lookAtMat());

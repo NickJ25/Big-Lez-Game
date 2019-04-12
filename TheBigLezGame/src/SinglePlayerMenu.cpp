@@ -1,6 +1,5 @@
 #include "SinglePlayerMenu.h"
 #include <iostream>
-#include <SDL.h>
 
 SinglePlayerMenu::SinglePlayerMenu()
 {
@@ -9,7 +8,6 @@ SinglePlayerMenu::SinglePlayerMenu()
 void SinglePlayerMenu::handle(Menu * menu)
 {
 	singleplayerGame = new Game;
-	//singleplayerGame->init();
 	selectedMenu = menu;
 }
 

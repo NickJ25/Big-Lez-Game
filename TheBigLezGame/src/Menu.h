@@ -11,7 +11,6 @@ private:
 	MenuState* options;
 	MenuState* controls;
 	MenuState* graphics;
-	MenuState* audio;
 	MenuState* scoreboard;
 	MenuState* lobby;
 
@@ -26,9 +25,7 @@ public:
 		delete options;
 		delete controls;
 		delete graphics;
-		delete audio;
 		delete scoreboard;
-		//delete current;
 	}
 	void setCurrent(MenuState* menu);
 	void updateMenus();
@@ -39,7 +36,6 @@ public:
 	MenuState* getOptions();
 	MenuState* getControls();
 	MenuState* getGraphics();
-	MenuState* getAudio();
 	MenuState* getScoreboard();
 	MenuState* getLobby();
 };

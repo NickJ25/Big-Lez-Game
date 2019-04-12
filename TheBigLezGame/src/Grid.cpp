@@ -351,8 +351,3 @@ std::vector<glm::vec3> Grid::retracePath(Node* startNode, Node* endNode, std::ve
 
 	return path;
 }
-
-void Grid::addEndPoints(std::vector<glm::vec3> endPoints)
-{
-	//doors = endPoints;
-}

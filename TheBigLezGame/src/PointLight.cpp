@@ -11,11 +11,4 @@ void PointLight::update()
 	glUniform1f(glGetUniformLocation(shaderID, "pointLights[0].linear"), linear);
 	glUniform1f(glGetUniformLocation(shaderID, "pointLights[0].quadratic"), quadratic);
 	glUniform3f(glGetUniformLocation(shaderID, "pointLights[0].position"), objPosition.x, objPosition.y, objPosition.z);
-	//cout << "POINTLIGHT :: Light POS: " << glGetUniformLocation(shaderID, "pointLights[0].position") << endl;
-	//cout << "POINTLIGHT :: Light Ambient: " << glGetUniformLocation(shaderID, "pointLights[0].ambient") << endl;
-	//cout << "POINTLIGHT :: Light diffuse: " << glGetUniformLocation(shaderID, "pointLights[0].diffuse") << endl;
-	//cout << "POINTLIGHT :: Light specular: " << glGetUniformLocation(shaderID, "pointLights[0].specular") << endl;
-	//cout << "POINTLIGHT :: Light constant: " << glGetUniformLocation(shaderID, "pointLights[0].constant") << endl;
-	//cout << "POINTLIGHT :: Light quadratic: " << glGetUniformLocation(shaderID, "pointLights[0].quadratic") << endl;
-	//cout << "POINTLIGHT :: Light linear: " << glGetUniformLocation(shaderID, "pointLights[0].linear") << endl;
 }

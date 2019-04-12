@@ -1,8 +1,15 @@
 #pragma once
+//std library
 #include <iostream>
 #include <string>
+
+//glm
 #include "glm/glm.hpp"
+
+//glew
 #include "GL/glew.h"
+
+//other files
 #include "Weapon.h"
 #include "Text.h"
 

@@ -1,8 +1,7 @@
 #pragma once
 #include "MenuState.h"
 #include "Menu.h"
-#include "rt3d.h"
-#include "rt3dObjLoader.h"
+#include <GL/glew.h>
 #include "Game.h"
 #include "Button.h"
 #include <glm/glm.hpp>

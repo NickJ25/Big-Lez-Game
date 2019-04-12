@@ -137,20 +137,23 @@ void Boss::update()
 	}
 	else {
 
+		//if the boss is still moving
 		if (stopped == false && soundSet == false)
 		{
 			privateEngine->play2D("assets/Sounds/BumbleBrutus/stomp.wav");// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
 			soundSet = true;
 		}
-
+		//if the boss isn't moving
 		if (soundSet == true && stopped == true)
 		{
 			privateEngine->setAllSoundsPaused(true);
 
+			//record the time and delta time
 			currentTime = glfwGetTime();
 			float deltaTime = currentTime - previousTime;
 			previousTime = currentTime;
 
+			//iterate down the speech timer until 0 then play a random line
 			if (speechTimer > 0)
 			{
 				speechTimer -= deltaTime;
@@ -159,7 +162,7 @@ void Boss::update()
 			{
 				srand(time(0));
 				float randomNumber = rand() % sounds.size();
-				speechEngine->play2D(sounds.at(randomNumber));// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), false);
+				speechEngine->play2D(sounds.at(randomNumber));
 				float clipSize = sounds.at(randomNumber)->getPlayLength() / 1000;
 				speechTimer = 25.0f + clipSize;
 			}
@@ -168,7 +171,6 @@ void Boss::update()
 			//get it to follow
 			if (!selectedPath.empty())
 			{
-
 				current = getPosition();
 				next = selectedPath.back();
 
@@ -241,6 +243,7 @@ void Boss::update()
 
 int Boss::getCurrentWave()
 {
+	//return a random wave
 	srand(time(0));
 	int type = (rand() % bossWaves.size());
 	return type;
@@ -248,10 +251,8 @@ int Boss::getCurrentWave()
 
 void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager* pathmanager)
 {
-
 	if (animationTimer > 0)
 	{
-
 		if (animating == true) {
 
 			if (still == true) {
@@ -277,7 +278,6 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 		if (stopped == true) {
 			animating = false;
 			animationTimer = 144;
-			//setAnimation(0.0f, 1.0f);
 			setStill(true);
 			still = true;
 		}
@@ -285,10 +285,12 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 
 	if (canSpawn == true && stopped == true)
 	{
+		//find the anim type by checking which enemy is spawned
 		Enemy* temp = dynamic_cast<Enemy*>(currentObj.at(0));
 		if (temp)
 			animType = temp->getName();
 
+		//if the wave is not set, then set it
 		if (waveSet == false)
 		{
 			current = bossWaves.at(currentWave);
@@ -304,12 +306,13 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 
 		}
 
+		//spawn one enemy per frame for efficiency
 		while (numToBeSpawned > 0) {
 			privateSpawner->spawnEnemy(currentObj, g);
 			numToBeSpawned--;
 		}
 
-			//reset whichever wave has just been dispensed
+		//reset whichever wave has just been dispensed
 		if (currentWave == 0) {
 			for (vector<GameObject*>::iterator it = normalObj.begin(); it < normalObj.end(); ++it)
 			{
@@ -334,20 +337,18 @@ void Boss::spawnMinions(std::vector<GameObject*> &g, Shader* shader, PathManager
 					e->reset(pathmanager);
 			}
 		}
-
 			waveSpawned = true;
 			canSpawn = false;
 			currentWave = NULL;
 
 			//set a new wave
 			setWave();
-			//cout << endl;
 	}
-	//cout << endl;
 }
 
 void Boss::setWave()
 {
+	//choose a random wave, then set all the relevant information to that waves variables
 	srand(time(0));
 	int randomNumber = rand() % 3;
 	if (randomNumber == 0) {
@@ -365,11 +366,11 @@ void Boss::setWave()
 		current = brawlerWave;
 		currentWave = 2;
 	}
-	//cout << endl;
 }
 
 void Boss::checkFieldEmpty(std::vector<GameObject*> g)
 {
+	//iterate through gameobjects and increment the counter if an enemy is found
 	int counter = 0;
 	std::vector<GameObject*>::iterator it;
 	for (it = g.begin(); it != g.end(); it++)
@@ -378,6 +379,7 @@ void Boss::checkFieldEmpty(std::vector<GameObject*> g)
 		if (e && e->getDeath() == false)
 			counter++;
 	}
+	//if there are no enemies in the scene
 	if (counter <= 0)
 	{
 		canSpawn = true;
@@ -400,9 +402,9 @@ void Boss::setPathEnd(glm::vec3 p)
 	outerPathEnd.push_back(p);
 }
 
-glm::vec3 Boss::getOuterPathEnd(int position)
+void Boss::setHealth(float num)
 {
-	return outerPathEnd.at(position);
+	health += num;
 }
 
 glm::vec3 Boss::getSpawnPoint()
@@ -412,13 +414,16 @@ glm::vec3 Boss::getSpawnPoint()
 
 float Boss::getHealth()
 {
+	//return health as a percentage of the screen width for the health bar
 	return (health / 2400.0f) * 1280.0f;
 }
 
 void Boss::takeDamage(float damage)
 {
+	//take damage while taking into consideration the armour value
 	health -= damage/100 * armour;
 
+	//if the boss has no more health
 	if (health <= 0) {
 		health = 0;
 		death();
@@ -430,9 +435,7 @@ void Boss::death()
 	//set death animation and timer the length of it -1 frame
 	if (dead == false) {
 		dead = true;
-
 		setAnimation(8.75f, 1.48f);
 		setPauseFrame(10.0f);
 	}
-
 }

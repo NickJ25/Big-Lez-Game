@@ -1,40 +1,32 @@
 #pragma once
+//glm
 #include <glm/vec3.hpp>
 
+//structure that defines the nodes that make up a grid for path finding
 struct Node {
 
+	//constructor
 	Node();
 
+	//nodes position in space
 	glm::vec3 position;
 
-	void setBlocked(bool b)
-	{
-		isBlocked = b;
-	}
-	bool getBlocked()
-	{
-		return isBlocked;
-	}
+	//set and get if the node is blocked by an obstacle
+	void setBlocked(bool b);
+	bool getBlocked();
+
+	//costs for calculating fastest route
 	float fCost, gCost = 0, hCost = 0;
 
+	//containers
 	float gridX, gridY;
 
+	//return F cost
+	float getFCost();
 
-	float getFCost()
-	{
-		fCost = gCost + hCost;
-		return fCost;
-	}
-
-	void SetParent(Node *p)
-	{
-			parent = p;
-	}
-
-	Node* getParent()
-	{
-		return parent;
-	}
+	//return and set the nodes parents - nodes on the grid are essentially an undirected graph
+	void SetParent(Node *p);
+	Node* getParent();
 
 private:
 	bool isBlocked = false;

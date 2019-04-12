@@ -14,7 +14,6 @@ private:
 public:
 	DirectionalLight(glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) : Light(m_position),
 		m_direction(direction), m_ambient(ambient), m_diffuse(diffuse), m_specular(specular){
-
 	};
 
 	void update() override;
