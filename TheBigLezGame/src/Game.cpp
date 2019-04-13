@@ -40,6 +40,15 @@ void Game::createPlayers()
 	}
 }
 
+void Game::createWeapons()
+{
+	for (int i = 0; i < playerList.size(); i++) {
+		switch (playerList[i]->getCharacter().name) {
+
+		}
+	}
+}
+
 void Game::init()
 {
 	std::cout << "Game.cpp Init" << std::endl;

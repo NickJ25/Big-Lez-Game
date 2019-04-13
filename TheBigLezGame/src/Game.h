@@ -37,8 +37,10 @@ using namespace std;
 
 class Game {
 private:
-	Player* playerList[2]; // Hold all players in this array?
+	vector<Player*> playerList{nullptr, nullptr};
+	//Player* playerList[2]; // Hold all players in this array?
 	void createPlayers();
+	void createWeapons();
 
 	//Player* mainPlayer;
 	Text* testtxt;
