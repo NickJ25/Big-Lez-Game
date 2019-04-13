@@ -102,14 +102,14 @@ void Game::init()
 #pragma region Object initialisation
 
 	////	Init Objects	////
-	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
-	dirLight->setShader(toonShader);
-	gameObjects.push_back(dirLight);
+	//GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
+	//dirLight->setShader(toonShader);
+	//gameObjects.push_back(dirLight);
 
-	GameObject* environment = new Prop("assets/Props/Map/envMap1.dae", glm::vec3(0.0f, 20.0f, 100.0f));
-	environment->setShader(toonShader);
-	environment->Move(glm::vec3(0.0f, 60.0f, 0.0f));
-	gameObjects.push_back(environment);
+	//GameObject* environment = new Prop("assets/Props/Map/envMap1.dae", glm::vec3(0.0f, 20.0f, 100.0f));
+	//environment->setShader(toonShader);
+	//environment->Move(glm::vec3(0.0f, 60.0f, 0.0f));
+	//gameObjects.push_back(environment);
 
 	createPlayers();
 	createWeapons();
@@ -586,7 +586,7 @@ void Game::update()
 	//cout << "cpos: " << mainPlayer->getCamera()->getCameraPos().x << " , " << mainPlayer->getCamera()->getCameraPos().z << endl;
 
 	//to prevent updates running before everything has loaded
-	if(isGameRunning == true && initialised)
+	if (isGameRunning == true && initialised)
 	{
 		// if not already playing
 		if (ambientInitialised == false) {
@@ -612,50 +612,50 @@ void Game::update()
 			srand(time(0));
 			int randomSound = rand() % noOfSounds;
 
-				int orderPlace = 0;
-				int count = 0;
-				//iterate through the current objects
-				for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+			int orderPlace = 0;
+			int count = 0;
+			//iterate through the current objects
+			for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+			{
+				count++;
+				int check = 0;
+				//if the random sound is less than three (sounds involving only one character)
+				if (randomSound < 3)
 				{
-					count++;
-					int check = 0;
-					//if the random sound is less than three (sounds involving only one character)
-					if (randomSound < 3)
-					{
-						check = 1;
-					}
-					else
-					{
-						check = convoOrders.at(randomSound).size();
-					}
-					
-					//assign sounds according to each character
-					Player *p = dynamic_cast<Player*>(*it);
-					if (p && p->getCharacter().name == convoOrders.at(randomSound).at(orderPlace)) {
-						if (p->getCharacter().name == "Sassy")
-							randomSound -= 3;
-						if (p->getCharacter().name == "Donny")
-							randomSound -= 6;
-						p->playSound(randomSound, convos.at(randomSound).at(orderPlace));
-						orderPlace++;
-						if (orderPlace == check)
-							break;
-					}
-
-					//if not all the characters have had their sounds assigned
-					if (count == gameObjects.size() && orderPlace < check)
-					{
-						//restart the loop
-						it = gameObjects.begin();
-						count = 0;
-					}
-
-
+					check = 1;
 				}
-				//reset the timer for 15 seconds
-				conversationTimer = 15.0f;
+				else
+				{
+					check = convoOrders.at(randomSound).size();
+				}
+
+				//assign sounds according to each character
+				Player *p = dynamic_cast<Player*>(*it);
+				if (p && p->getCharacter().name == convoOrders.at(randomSound).at(orderPlace)) {
+					if (p->getCharacter().name == "Sassy")
+						randomSound -= 3;
+					if (p->getCharacter().name == "Donny")
+						randomSound -= 6;
+					p->playSound(randomSound, convos.at(randomSound).at(orderPlace));
+					orderPlace++;
+					if (orderPlace == check)
+						break;
+				}
+
+				//if not all the characters have had their sounds assigned
+				if (count == gameObjects.size() && orderPlace < check)
+				{
+					//restart the loop
+					it = gameObjects.begin();
+					count = 0;
+				}
+
+
+			}
+			//reset the timer for 15 seconds
+			conversationTimer = 15.0f;
 		}
-		
+
 		//check if there are no enemies left 
 		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
 		{
@@ -669,7 +669,7 @@ void Game::update()
 		//if an enemy was not detected
 		if (enemyCounter <= 0)
 		{
-			
+
 			waveTimer -= deltaTime;
 			transparency += deltaTime;
 			//if the wave has not been initialised yet, initialise the wave change sound and volume
@@ -784,7 +784,7 @@ void Game::update()
 										e2->setAnimValues(2.25f, 1.35f);
 								}
 							}
-							
+
 						}
 					}
 				}
@@ -795,33 +795,33 @@ void Game::update()
 #pragma endregion
 
 		// Player Attacking
-		if(playerList[0]->hasPlayerAttacked()){
-			
-		//play the gunshot noise
-			conversationEngine->play2D("assets/Sounds/gun.wav");
+		for (int i = 0; i < playerList.size(); i++) {
+			if (playerList[i]->hasPlayerAttacked()) {
 
-			//iterate through game objects and find an enemy
-			for (int i = 0; i < gameObjects.size(); i++) {
-			Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
-			if (e) {
-				//check for an intersection and take damage if so
-				if (checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (e)))
-				{
-					e->takeDamage(10.0f);
-				}
-			}
-			//do the same for the boss
-			Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
-			if (b) {
-				if (checkRayToAABB(&mainPlayer->getPosition(), &mainPlayer->getCamera()->getCameraFront(), (b)))
-				{
-					b->takeDamage(1000.0f);
+				//play the gunshot noise
+				conversationEngine->play2D("assets/Sounds/gun.wav");
+
+				//iterate through game objects and find an enemy
+				for (int i = 0; i < gameObjects.size(); i++) {
+					Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
+					if (e) {
+						//check for an intersection and take damage if so
+						if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (e)))
+						{
+							e->takeDamage(10.0f);
+						}
+					}
+					//do the same for the boss
+					Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
+					if (b) {
+						if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (b)))
+						{
+							b->takeDamage(1000.0f);
+						}
+					}
 				}
 			}
 		}
-
-	}
-
 	}
 	
 	//pause button
@@ -956,7 +956,7 @@ void Game::draw()
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
-\
+
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), playerList[0]->getCamera()->getCameraPos().x, playerList[0]->getCamera()->getCameraPos().y, playerList[0]->getCamera()->getCameraPos().z);
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 

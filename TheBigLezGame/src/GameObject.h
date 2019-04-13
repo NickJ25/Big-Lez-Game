@@ -2,7 +2,6 @@
 #include "RenderComponent.h"
 #include "TransformComponent.h"
 #include "CollisionComponent.h"
-#include "PhysicsComponent.h"
 #include "ControllerComponent.h"
 #include "Shader.h"
 

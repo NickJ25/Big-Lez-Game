@@ -104,7 +104,7 @@ void Image::rotate(GLfloat radians) {
 	currentRot += radians;
 }
 
-void Image::scale(glm::vec2 scale, bool resetMat){
+void Image::scale(glm::vec2 scale, bool resetMat) {
 	if (!resetMat) {
 		glm::mat4 temp(1.0f);
 		temp = glm::translate(temp, glm::vec3(posX, posY, 0.0f));
@@ -119,21 +119,7 @@ void Image::scale(glm::vec2 scale, bool resetMat){
 	else {
 		m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
 	}
-
-
-//void Image::scale(glm::vec2 scale)
-//{
-//	glm::mat4 temp(1.0f);
-//	temp = glm::translate(temp, glm::vec3(posX, posY, 0.0f));
-//	if(isMenu)
-//	temp = glm::scale(temp, glm::vec3(640.0f, 360.0f, 1.0f));
-//
-//	temp = glm::rotate(temp, currentRot, glm::vec3(0.0f, 1.0f, 0.0f));
-//	temp = glm::scale(temp, glm::vec3(scale.x, scale.y, 0.0f));
-//	m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
-//	std::cout << std::endl;
-//	m_model = temp;// glm::scale(m_model, glm::vec3(scale, 0.0f));
-//}
+}
 
 void Image::draw()
 {

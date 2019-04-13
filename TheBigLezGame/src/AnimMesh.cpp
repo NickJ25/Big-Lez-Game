@@ -67,7 +67,9 @@ void AnimMesh::Draw(GLuint shaders_program)
 
 	//Draw the arrays of vertices via its indices
 	glBindVertexArray(VAO);
+	glGetError();
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glGetError();
 	glBindVertexArray(0);
 
 	for (int i = 0; i < textures.size(); i++)
