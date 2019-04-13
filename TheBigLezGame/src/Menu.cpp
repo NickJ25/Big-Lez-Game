@@ -12,7 +12,7 @@
 Menu::Menu()
 {
 	mainMenu = new MainMenu();
-	singlePlayer = new SinglePlayerMenu();
+	gameScreen = new SinglePlayerMenu();
 	options = new OptionsMenu();
 	controls = new ControlsMenu();
 	graphics = new GraphicsMenu();
@@ -37,7 +37,7 @@ MenuState * Menu::getCurrentState()
 
 void Menu::updateMenus()
 {
-	if (current == singlePlayer)
+	if (current == gameScreen)
 		AmbientEngine->stopAllSounds();
 	current->update();
 }
@@ -52,9 +52,9 @@ MenuState * Menu::getMainMenu()
 	return mainMenu;
 }
 
-MenuState * Menu::getSinglePlayer()
+MenuState * Menu::getGameScreen()
 {
-	return singlePlayer;
+	return gameScreen;
 }
 
 MenuState * Menu::getOptions()

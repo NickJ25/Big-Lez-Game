@@ -31,14 +31,18 @@
 #include "PathManager.h"
 #include "ControllerComponent.h"
 #include "Obstacle.h"
+#include "GameData.h"
 
 using namespace std;
 
 class Game {
 private:
-	Player* ALL_PLAYERS[2]; // Hold all players in this array?
+	vector<Player*> playerList{nullptr, nullptr};
+	//Player* playerList[2]; // Hold all players in this array?
+	void createPlayers();
+	void createWeapons();
 
-	Player* mainPlayer;
+	//Player* mainPlayer;
 	Text* testtxt;
 	bool isGameRunning = true; 
 	Button* resumeBtn, *mainMenuBtn;

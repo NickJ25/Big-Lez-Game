@@ -58,6 +58,6 @@ public:
 	void changeImage(std::string newImage);
 	void translate(glm::vec2 position);
 	void rotate(GLfloat radians);
-	void scale(glm::vec2 scale);
+	void scale(glm::vec2 scale, bool resetMat);
 	void draw();
 };

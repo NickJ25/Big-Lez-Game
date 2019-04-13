@@ -84,7 +84,8 @@ Image::Image(const char * filename, glm::vec2 screenPos, int width, int height, 
 
 Image::~Image()
 {
-
+	delete imageShader;
+	imageShader = nullptr;
 }
 
 void Image::changeImage(std::string newImage)
@@ -95,9 +96,7 @@ void Image::changeImage(std::string newImage)
 
 void Image::translate(glm::vec2 position)
 {
-	std::cout << "S: " << m_model[3][0] << " " << m_model[3][1] << " " << m_model[3][2] << "\n";
 	m_model = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
-	std::cout << "E: " << m_model[3][0] << " " << m_model[3][1] << " " << m_model[3][2] << "\n";
 }
 
 void Image::rotate(GLfloat radians) {
@@ -105,19 +104,36 @@ void Image::rotate(GLfloat radians) {
 	currentRot += radians;
 }
 
-void Image::scale(glm::vec2 scale)
-{
-	glm::mat4 temp(1.0f);
-	temp = glm::translate(temp, glm::vec3(posX, posY, 0.0f));
-	if(isMenu)
-	temp = glm::scale(temp, glm::vec3(640.0f, 360.0f, 1.0f));
+void Image::scale(glm::vec2 scale, bool resetMat){
+	if (!resetMat) {
+		glm::mat4 temp(1.0f);
+		temp = glm::translate(temp, glm::vec3(posX, posY, 0.0f));
+		if (isMenu)
+			temp = glm::scale(temp, glm::vec3(640.0f, 360.0f, 1.0f));
 
-	temp = glm::rotate(temp, currentRot, glm::vec3(0.0f, 1.0f, 0.0f));
-	temp = glm::scale(temp, glm::vec3(scale.x, scale.y, 0.0f));
-	m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
-	std::cout << std::endl;
-	m_model = temp;// glm::scale(m_model, glm::vec3(scale, 0.0f));
+		temp = glm::rotate(temp, currentRot, glm::vec3(0.0f, 1.0f, 0.0f));
+		temp = glm::scale(temp, glm::vec3(scale.x, scale.y, 0.0f));
+		m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
+		m_model = temp;// glm::scale(m_model, glm::vec3(scale, 0.0f));
+	}
+	else {
+		m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
+	}
 }
+
+//void Image::scale(glm::vec2 scale)
+//{
+//	glm::mat4 temp(1.0f);
+//	temp = glm::translate(temp, glm::vec3(posX, posY, 0.0f));
+//	if(isMenu)
+//	temp = glm::scale(temp, glm::vec3(640.0f, 360.0f, 1.0f));
+//
+//	temp = glm::rotate(temp, currentRot, glm::vec3(0.0f, 1.0f, 0.0f));
+//	temp = glm::scale(temp, glm::vec3(scale.x, scale.y, 0.0f));
+//	m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
+//	std::cout << std::endl;
+//	m_model = temp;// glm::scale(m_model, glm::vec3(scale, 0.0f));
+//}
 
 void Image::draw()
 {

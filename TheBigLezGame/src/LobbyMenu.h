@@ -7,10 +7,13 @@
 #include "Player.h"
 #include "windowGLFW.h"
 #include <vector>
+#include "GameData.h"
 
 class LobbyMenu : public MenuState {
 private:
-	Image* background;
+	Image* background, *fog;
+	float fogPos = 0;
+
 	Image* p1CurrentCharPic = nullptr, *p2CurrentCharPic = nullptr;
 	Button* backBtn, *startBtn;
 	GLFWwindow* m_window;
@@ -22,14 +25,22 @@ private:
 	int p1Choice = 0, p2Choice = 0;
 	bool p1Ready = false , p2Ready = false;
 
+	Text* timerText;
+	bool gameTimerStart = false;
+	float startTime;
+	int timeOnTimer;
+
 	bool keyboardInUse = false;
 	bool controller1InUse = false;
 	bool controller2InUse = false;
 	vector<Player::Character*> playerList{ nullptr, nullptr };
 	vector<Player::Character> characterList;
-	vector<string>charPicList;
+	vector<Image*>p1CharPicList;
+	vector<Image*>p2CharPicList;
 	void addController(Input::ControllerType controller);
 	void addCharacters();
+	void characterPicSetup(const char* filename, vector<Image*> &piclist);
+	glm::vec4 colourCheck(bool ready);
 
 public:
 	LobbyMenu();

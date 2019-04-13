@@ -7,11 +7,11 @@ Button::Button(BUTTON_TYPE type, glm::vec2 position, std::string button_text) //
 	// Button Art
 	if (type == NORMAL) {
 		m_texNormal = new Image("assets/Art/button_normal.png", position);
-		m_texNormal->scale(glm::vec2(0.24f, 0.12f));
+		m_texNormal->scale(glm::vec2(0.24f, 0.12f), false);
 		m_texHover = new Image("assets/Art/button_hover.png", position);
-		m_texHover->scale(glm::vec2(0.24f, 0.12f));
+		m_texHover->scale(glm::vec2(0.24f, 0.12f), false);
 		m_texClick = new Image("assets/Art/button_click.png", position);
-		m_texClick->scale(glm::vec2(0.24f, 0.12f));
+		m_texClick->scale(glm::vec2(0.24f, 0.12f), false);
 
 		// Button Collision Box
 		m_buttonCollision = new AABB();
@@ -21,11 +21,11 @@ Button::Button(BUTTON_TYPE type, glm::vec2 position, std::string button_text) //
 	}
 	else if (type == ARROW) {
 		m_texNormal = new Image("assets/Art/arrow_normal.png", position);
-		m_texNormal->scale(glm::vec2(0.05f, 0.12f));
+		m_texNormal->scale(glm::vec2(0.05f, 0.12f), false);
 		m_texHover = new Image("assets/Art/arrow_hover.png", position);
-		m_texHover->scale(glm::vec2(0.05f, 0.12f));
+		m_texHover->scale(glm::vec2(0.05f, 0.12f), false);
 		m_texClick = new Image("assets/Art/arrow_click.png", position);
-		m_texClick->scale(glm::vec2(0.05f, 0.12f));
+		m_texClick->scale(glm::vec2(0.05f, 0.12f), false);
 
 		// Button Collision Box
 		m_buttonCollision = new AABB();

@@ -12,6 +12,7 @@ class Player : public GameObject
 {
 public:
 	struct Character {
+		int id;
 		std::string name;
 		std::string fileLocation;
 		bool isLocked = false;		// Not locked by default
@@ -20,7 +21,7 @@ public:
 		Input::ControllerType control;
 	};
 
-	Player(ControllerComponent::ControllerType controller, Character character, glm::vec3 startPos);
+	Player(Input::ControllerType controller, Character character, glm::vec3 startPos);
 	Player(Character character, glm::vec3 startPos);
 	~Player();
 

@@ -7,7 +7,7 @@ class Menu {
 private:
 	MenuState* current;
 	MenuState* mainMenu;
-	MenuState* singlePlayer;
+	MenuState* gameScreen;
 	MenuState* options;
 	MenuState* controls;
 	MenuState* graphics;
@@ -22,7 +22,7 @@ public:
 	virtual ~Menu()
 	{
 		delete mainMenu;
-		delete singlePlayer;
+		delete gameScreen;
 		delete options;
 		delete controls;
 		delete graphics;
@@ -35,7 +35,7 @@ public:
 	void drawMenus();
 	MenuState* getCurrentState();
 	MenuState* getMainMenu();
-	MenuState* getSinglePlayer();
+	MenuState* getGameScreen();
 	MenuState* getOptions();
 	MenuState* getControls();
 	MenuState* getGraphics();
