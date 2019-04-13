@@ -1,29 +1,36 @@
 #include "Shader.h"
 
-Shader::Shader(const GLchar * vertexPath, const GLchar * fragmentPath)
+Shader::Shader(const GLchar * vertexPath, const GLchar * geometryPath, const GLchar * fragmentPath)
 {
 	// Retrieve the vertex/fragment source code from filePath
 	std::string vertexCode;
+	std::string geometryCode;
 	std::string fragmentCode;
 	std::ifstream vShaderFile;
+	std::ifstream gShaderFile;
 	std::ifstream fShaderFile;
 	// ensures ifstream objects can throw exceptions:
 	vShaderFile.exceptions(std::ifstream::badbit);
+	gShaderFile.exceptions(std::ifstream::badbit);
 	fShaderFile.exceptions(std::ifstream::badbit);
 	try
 	{
 		// Open files
 		vShaderFile.open(vertexPath);
+		gShaderFile.open(geometryPath);
 		fShaderFile.open(fragmentPath);
-		std::stringstream vShaderStream, fShaderStream;
+		std::stringstream vShaderStream, gShaderStream, fShaderStream;
 		// Read file's buffer contents into streams
 		vShaderStream << vShaderFile.rdbuf();
+		gShaderStream << gShaderFile.rdbuf();
 		fShaderStream << fShaderFile.rdbuf();
 		// close file handlers
 		vShaderFile.close();
+		gShaderFile.close();
 		fShaderFile.close();
 		// Convert stream into string
 		vertexCode = vShaderStream.str();
+		geometryCode = gShaderStream.str();
 		fragmentCode = fShaderStream.str();
 	}
 	catch (std::ifstream::failure e)
@@ -31,11 +38,13 @@ Shader::Shader(const GLchar * vertexPath, const GLchar * fragmentPath)
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 	}
 	const GLchar *vShaderCode = vertexCode.c_str();
+	const GLchar *gShaderCode = geometryCode.c_str();
 	const GLchar *fShaderCode = fragmentCode.c_str();
 	// 2. Compile shaders
-	GLuint vertex, fragment;
+	GLuint vertex, geometry, fragment;
 	GLint success;
 	GLchar infoLog[512];
+
 	// Vertex Shader
 	vertex = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertex, 1, &vShaderCode, NULL);
@@ -47,6 +56,19 @@ Shader::Shader(const GLchar * vertexPath, const GLchar * fragmentPath)
 		glGetShaderInfoLog(vertex, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
+
+	// Geometry Shader
+	geometry = glCreateShader(GL_GEOMETRY_SHADER);
+	glShaderSource(geometry, 1, &gShaderCode, NULL);
+	glCompileShader(geometry);
+	// Print compile errors if any
+	glGetShaderiv(geometry, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(geometry, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::GEOMETRY::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
 	// Fragment Shader
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragment, 1, &fShaderCode, NULL);
@@ -61,6 +83,7 @@ Shader::Shader(const GLchar * vertexPath, const GLchar * fragmentPath)
 	// Shader Program
 	this->ID = glCreateProgram();
 	glAttachShader(this->ID, vertex);
+	glAttachShader(this->ID, geometry);
 	glAttachShader(this->ID, fragment);
 	glLinkProgram(this->ID);
 	// Print linking errors if any
@@ -72,6 +95,7 @@ Shader::Shader(const GLchar * vertexPath, const GLchar * fragmentPath)
 	}
 	// Delete the shaders as they're linked into our program now and no longer necessery
 	glDeleteShader(vertex);
+	glDeleteShader(geometry);
 	glDeleteShader(fragment);
 }
 
@@ -85,34 +109,3 @@ void Shader::use()
 	glUseProgram(ID);
 }
 
-//template<typename T>
-//inline void Shader::Pass(const char * location, T value)
-//{
-//	GLuint uniformIndex = glGetUniformLocation(ID, location);
-//	if (uniformIndex == -1) {
-//		std::cout << "ERROR::SHADER::PASS_LOCATION_NOT_FOUND" << std::endl;
-//
-//	}
-//	else {
-//
-//		if (is_same<T, float>::value) {
-//			glUniform1f(uniformIndex, value);
-//		}
-//		else if (is_same<T, int>::value) {
-//			glUniform1i(uniformIndex, value);
-//		}
-//		else if (is_same<T, glm::vec2>::value) {
-//			glUniform2f(uniformIndex, value);
-//		}
-//		else if (is_same<T, glm::vec3>::value) {
-//			glUniform3f(uniformIndex, value);
-//		}
-//		else if (is_same<T, glm::vec4>::value) {
-//			glUniform4f(uniformIndex, value);
-//		}
-//		else {
-//			std::cout << "ERROR::SHADER::PASS_TYPE_NOT_RECOGNISED" << std::endl;
-//		}
-//
-//	}
-//}

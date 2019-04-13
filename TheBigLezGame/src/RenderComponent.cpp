@@ -93,7 +93,4 @@ void RenderComponent::Draw()
 	glUseProgram(0);
 	// End Draw Items////////////
 	//mvStack.pop();
-	//m_currentShader->Pass("projection", );
-	//m_currentShader->Pass("model", );
-	//m_currentShader->Pass("view", );
 }
