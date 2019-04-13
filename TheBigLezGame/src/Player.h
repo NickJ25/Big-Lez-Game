@@ -57,8 +57,8 @@ private:
 	Character m_character;
 	Camera* m_playerCamera;
 	Text* m_charLabel;
-	Weapon* m_playerInventory[2];
-	Weapon* currentWeapon = NULL;
+	Weapon* m_playerInventory[2] = { nullptr, nullptr };
+	Weapon* currentWeapon = nullptr;
 
 	GLfloat prevYaw, currentYaw;
 

@@ -121,6 +121,7 @@ void AnimModel::processNode(aiNode* node, const aiScene* scene)
 	{
 		aiMesh* ai_mesh = scene->mMeshes[i];
 		mesh = processMesh(ai_mesh, scene);
+		mesh = processMesh(ai_mesh, scene);
 		meshes.push_back(mesh); //accumulate all meshes in one vector
 	}
 

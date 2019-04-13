@@ -102,17 +102,19 @@ void Game::init()
 #pragma region Object initialisation
 
 	////	Init Objects	////
-	//GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
-	//dirLight->setShader(toonShader);
-	//gameObjects.push_back(dirLight);
+	GameObject* dirLight = new DirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.9f, 0.9f, 0.9f));
+	dirLight->setShader(toonShader);
+	gameObjects.push_back(dirLight);
 
-	//GameObject* environment = new Prop("assets/Props/Map/envMap1.dae", glm::vec3(0.0f, 20.0f, 100.0f));
-	//environment->setShader(toonShader);
-	//environment->Move(glm::vec3(0.0f, 60.0f, 0.0f));
-	//gameObjects.push_back(environment);
+	GameObject* environment = new Prop("assets/Props/Map/envMap1.dae", glm::vec3(0.0f, 20.0f, 100.0f));
+	environment->setShader(toonShader);
+	environment->Move(glm::vec3(0.0f, 60.0f, 0.0f));
+	gameObjects.push_back(environment);
 
 	createPlayers();
 	createWeapons();
+
+	
 
 	// Characters
 	Player::Character BigLez;
@@ -796,27 +798,29 @@ void Game::update()
 
 		// Player Attacking
 		for (int i = 0; i < playerList.size(); i++) {
-			if (playerList[i]->hasPlayerAttacked()) {
+			if (playerList[i] != nullptr) {
+				if (playerList[i]->hasPlayerAttacked()) {
 
-				//play the gunshot noise
-				conversationEngine->play2D("assets/Sounds/gun.wav");
+					//play the gunshot noise
+					conversationEngine->play2D("assets/Sounds/gun.wav");
 
-				//iterate through game objects and find an enemy
-				for (int i = 0; i < gameObjects.size(); i++) {
-					Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
-					if (e) {
-						//check for an intersection and take damage if so
-						if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (e)))
-						{
-							e->takeDamage(10.0f);
+					//iterate through game objects and find an enemy
+					for (int i = 0; i < gameObjects.size(); i++) {
+						Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
+						if (e) {
+							//check for an intersection and take damage if so
+							if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (e)))
+							{
+								e->takeDamage(10.0f);
+							}
 						}
-					}
-					//do the same for the boss
-					Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
-					if (b) {
-						if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (b)))
-						{
-							b->takeDamage(1000.0f);
+						//do the same for the boss
+						Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
+						if (b) {
+							if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (b)))
+							{
+								b->takeDamage(1000.0f);
+							}
 						}
 					}
 				}
@@ -962,6 +966,9 @@ void Game::draw()
 
 	// draw skybox
 	skybox->draw(projection * glm::mat4(glm::mat3(playerList[0]->getCamera()->lookAtMat())));
+
+	//glViewportIndexedf(2, 0, Input::SCREEN_HEIGHT / 2, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
+	//glViewportIndexedf(1, 0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
 
 	//if the game is paused
 	if (isGameRunning == false)

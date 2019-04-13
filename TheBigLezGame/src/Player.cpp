@@ -135,7 +135,7 @@ void Player::update()
 	collisionComponent->setCollider(m_playerCamera->getCameraPos());
 
 	// Apply the same matrix to the gun model
-	if (currentWeapon != NULL) {
+	if (currentWeapon != nullptr) {
 		glm::mat4 gunMat(1.0f);
 		//gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -13.0f, 0.0f)));
@@ -148,7 +148,7 @@ void Player::update()
 	}
 
 	// Gun controls
-	if (currentWeapon != NULL) {
+	if (currentWeapon != nullptr) {
 		currentWeapon->primaryMove(this->getController()->getPrimaryAction());
 		currentWeapon->secondaryMove(this->getController()->getSecondaryAction());
 		currentWeapon->action(this->getController()->getReloadAction());
@@ -159,11 +159,11 @@ void Player::update()
 
 void Player::addWeapon(Weapon * weapon)
 {
-	if (m_playerInventory[0] == NULL) {
+	if (m_playerInventory[0] == nullptr) {
 		m_playerInventory[0] = weapon;
 		currentWeapon = m_playerInventory[0];
 	}
-	else if (m_playerInventory[1] == NULL) {
+	else if (m_playerInventory[1] == nullptr) {
 		m_playerInventory[1] = weapon;
 	}
 	else {
@@ -173,7 +173,7 @@ void Player::addWeapon(Weapon * weapon)
 
 bool Player::hasPlayerAttacked()
 {
-	if (currentWeapon != NULL) {
+	if (currentWeapon != nullptr) {
 		return currentWeapon->hasAttacked();
 	}
 	return false;
