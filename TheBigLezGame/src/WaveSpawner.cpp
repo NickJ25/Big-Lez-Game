@@ -219,7 +219,7 @@ void WaveSpawner::spawnWave(std::vector<GameObject*> &gameObjects, int wavenumbe
 						b->Move(b->getSpawnPoint());
 						b->initialiseWaveSpawner(gameObjects, shader, pathManager);
 						b->setAnimation(0.0f, 8.3f); // animation start is the number of seconds in (24 ticks per second), anim end is what you need to divide the animation length by to get the desired animation end number
-						b->addCollision(glm::vec3(b->getPosition().x, -12.5f, -b->getPosition().y), 1.0, 1.0);
+						b->addCollision(glm::vec3(b->getPosition().x, -12.5f, -b->getPosition().y), 2.0, 15.0, 2.0f);
 					}
 				}
 				//if this wavespawner is sending these enemies to a different vector

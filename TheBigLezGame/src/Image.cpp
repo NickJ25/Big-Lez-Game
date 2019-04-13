@@ -119,7 +119,7 @@ void Image::scale(glm::vec2 scale, bool resetMat){
 	else {
 		m_model = glm::scale(m_model, glm::vec3(scale, 0.0f));
 	}
-}
+
 
 //void Image::scale(glm::vec2 scale)
 //{

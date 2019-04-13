@@ -1,62 +1,34 @@
 ﻿#include "AnimModel.h"
 
-
-#include "SDL.h"
+//for texture loading
 #include "SOIL2\SOIL2.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 AnimModel::AnimModel()
 {
+	//initialise the scene pointer
 	scene = nullptr;
 }
 
 
 AnimModel::~AnimModel()
 {
+	//release the memory containing the model
 	import.FreeScene();
 }
 
 void AnimModel::initShaders(GLuint shader_program)
 {
-	for (uint i = 0; i < MAX_BONES; i++) // get location all matrices of bones
+	//cycle through the bones and send their details to the shader
+	for (uint i = 0; i < MAX_BONES; i++) 
 	{
-		string name = "bones[" + to_string(i) + "]";// name like in shader
+		string name = "bones[" + to_string(i) + "]";
 		m_bone_location[i] = glGetUniformLocation(shader_program, name.c_str());
 	}
-	// rotate head AND AXIS(y_z) about x !!!!!  Not be gimbal lock
-	//rotate_head_xz *= glm::quat(cos(glm::radians(-45.0f / 2)), sin(glm::radians(-45.0f / 2)) * glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
 void AnimModel::update()
 {
-	// making new quaternions for rotate head
-
-	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-
-	if (keys[SDL_SCANCODE_1])
-	{
-		rotate_head_xz *= glm::quat(cos(glm::radians(1.0f / 2)), sin(glm::radians(1.0f / 2)) * glm::vec3(1.0f, 0.0f, 0.0f));
-	}
-
-	if (keys[SDL_SCANCODE_2])
-	{
-		rotate_head_xz *= glm::quat(cos(glm::radians(-1.0f / 2)), sin(glm::radians(-1.0f / 2)) * glm::vec3(1.0f, 0.0f, 0.0f));
-	}
-
-	if (keys[SDL_SCANCODE_3])
-	{
-		rotate_head_xz *= glm::quat(cos(glm::radians(1.0f / 2)), sin(glm::radians(1.0f / 2)) * glm::vec3(0.0f, 0.0f, 1.0f));
-	}
-
-	if (keys[SDL_SCANCODE_4])
-	{
-		rotate_head_xz *= glm::quat(cos(glm::radians(-1.0f / 2)), sin(glm::radians(-1.0f / 2)) * glm::vec3(0.0f, 0.0f, 1.0f));
-	}
-
-
+	//empty, but can be used for moving individual bones
 }
 
 void AnimModel::setStill(bool s)
@@ -64,100 +36,77 @@ void AnimModel::setStill(bool s)
 	still = s;
 }
 
+void AnimModel::setPauseFrame(float p)
+{
+	pauseAnim = p;
+}
+
 void AnimModel::draw(GLuint shaders_program, bool isAnimated)
 {
+	//create an empty vector of matrices to hold the transforms
 	vector<aiMatrix4x4> transforms;
 
+	//if the model is not paused or dead
 	if (paused == false && still == false) {
 		pauseFrame = false;
+		//update normally using the timer
 		boneTransform((double)glfwGetTime(), transforms);
 	}
 	else {
+		//pause the model with a specific frame specified by the programmer
 	if (pauseFrameSet == false)
 		pauseFrame = (double)glfwGetTime();
-		boneTransform(pauseFrame, transforms);
+		boneTransform(pauseAnim, transforms);
 		pauseFrameSet = true;
 	}
 
-	for (uint i = 0; i < transforms.size(); i++) // move all matrices for actual model position to shader
+	// move all matrices for actual model position to shader
+	for (uint i = 0; i < transforms.size(); i++) 
 	{
 		glUniformMatrix4fv(m_bone_location[i], 1, GL_TRUE, (const GLfloat*)&transforms[i]);
 	}
 
+	//cycle through and draw all the meshes
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i].Draw(shaders_program);
 	}
-
-
-}
-
-void AnimModel::playSound()
-{
-
 }
 
 void AnimModel::loadModel(const string& path)
 {
-	// how work skeletal animation in assimp //translated with google =) :
-	// node is a separate part of the loaded model (the model is not only a character)
-	// for example, the camera, armature, cube, light source, part of the character's body (leg, rug, head).
-	// a bone can be attached to the node
-	// in the bone there is an array of vertices on which the bone affects (weights from 0 to 1).
-	// each mChannels is one aiNodeAnim.
-	// In aiNodeAnim accumulated transformations (scaling rotate translate) for the bone with which they have the common name
-	// these transformations will change those vertices whose IDs are in the bone with a force equal to the weight.
-	// the bone simply contains the ID and the weight of the vertices to which the transformation from aiNodeAnim is moving (with no common name for the bone)
-	// (the vertex array and the weight of the transforms for each vertex are in each bone)
-
-	// result: a specific transformation will affect a particular vertex with a certain force.
-
+	//import the file and load it into the scene pointer
 	scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
+	//error check
 	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		cout << "error assimp : " << import.GetErrorString() << endl;
 		return;
 	}
+
 	m_global_inverse_transform = scene->mRootNode->mTransformation;
 	m_global_inverse_transform.Inverse();
 
+	//if the file specifies its framerate
 	if (scene->mAnimations[0]->mTicksPerSecond != 0.0)
 	{
 		ticks_per_second = scene->mAnimations[0]->mTicksPerSecond;
 	}
 	else
 	{
-		ticks_per_second = 25.0f;
+		ticks_per_second = 24.0f;
 	}
 
-	// directoru = container for model.obj and textures and other files
+	// directory = container for model and textures and other files
 	directory = path.substr(0, path.find_last_of('/'));
-
-	//cout << "scene->HasAnimations() 1: " << scene->HasAnimations() << endl;
-	//cout << "scene->mNumMeshes 1: " << scene->mNumMeshes << endl;
-	//cout << "scene->mAnimations[0]->mNumChannels 1: " << scene->mAnimations[0]->mNumChannels << endl;
-	//cout << "scene->mAnimations[0]->mDuration 1: " << scene->mAnimations[0]->mDuration << endl;
-	//cout << "scene->mAnimations[0]->mTicksPerSecond 1: " << scene->mAnimations[0]->mTicksPerSecond << endl << endl;
-
-	//cout << "		name nodes : " << endl;
-	//showNodeName(scene->mRootNode);
-	//cout << endl;
-
-	//cout << "		name bones : " << endl;
 	processNode(scene->mRootNode, scene);
 
-	//cout << "		name nodes animation : " << endl;
-	for (uint i = 0; i < scene->mAnimations[0]->mNumChannels; i++)
-	{
-		//cout << scene->mAnimations[0]->mChannels[i]->mNodeName.C_Str() << endl;
-	}
-	//cout << endl;
 }
 
 void AnimModel::showNodeName(aiNode* node)
 {
-	//cout << node->mName.data << endl;
+	//utility function for finding nodes
 	for (uint i = 0; i < node->mNumChildren; i++)
 	{
 		showNodeName(node->mChildren[i]);
@@ -166,6 +115,7 @@ void AnimModel::showNodeName(aiNode* node)
 
 void AnimModel::processNode(aiNode* node, const aiScene* scene)
 {
+	//process the mesh
 	AnimMesh mesh;
 	for (uint i = 0; i < scene->mNumMeshes; i++)
 	{
@@ -178,8 +128,9 @@ void AnimModel::processNode(aiNode* node, const aiScene* scene)
 
 AnimMesh AnimModel::processMesh(aiMesh* mesh, const aiScene* scene)
 {
-	//std::cout << "bones: " << mesh->mNumBones << " vertices: " << mesh->mNumVertices << std::endl;
+	//create an anim mesh for the anim model
 
+	//temporary storage
 	vector<AnimVertex> vertices;
 	vector<GLuint> indices;
 	vector<AnimTexture> textures;
@@ -303,6 +254,7 @@ AnimMesh AnimModel::processMesh(aiMesh* mesh, const aiScene* scene)
 
 vector<AnimTexture> AnimModel::LoadMaterialTexture(aiMaterial* mat, aiTextureType type, string type_name)
 {
+	//load the textures using assimp and add them to the textures vector
 	vector<AnimTexture> textures;
 	for (uint i = 0; i < mat->GetTextureCount(type); i++)
 	{
@@ -323,7 +275,7 @@ vector<AnimTexture> AnimModel::LoadMaterialTexture(aiMaterial* mat, aiTextureTyp
 
 uint AnimModel::findPosition(float p_animation_time, const aiNodeAnim* p_node_anim)
 {
-
+	//cycle through each node for its position
 	for (uint i = 0; i < p_node_anim->mNumPositionKeys - 1; i++)
 	{
 		if (p_animation_time < (float)p_node_anim->mPositionKeys[i + 1].mTime)
@@ -331,14 +283,14 @@ uint AnimModel::findPosition(float p_animation_time, const aiNodeAnim* p_node_an
 			return i;
 		}
 	}
-
+	//make sure the model has a frame 0 animation
 	assert(0);
 	return 0;
 }
 
 uint AnimModel::findRotation(float p_animation_time, const aiNodeAnim* p_node_anim)
 {
-
+	//the same for rotation....
 	for (uint i = 0; i < p_node_anim->mNumRotationKeys - 1; i++)
 	{
 		if (p_animation_time < (float)p_node_anim->mRotationKeys[i + 1].mTime)
@@ -346,14 +298,14 @@ uint AnimModel::findRotation(float p_animation_time, const aiNodeAnim* p_node_an
 			return i;
 		}
 	}
-
+	//make sure the model has a frame 0 animation
 	assert(0);
 	return 0;
 }
 
 uint AnimModel::findScaling(float p_animation_time, const aiNodeAnim* p_node_anim)
 {
-
+	//and finally scaling
 	for (uint i = 0; i < p_node_anim->mNumScalingKeys - 1; i++)
 	{
 		if ( p_animation_time < (float)p_node_anim->mScalingKeys[i + 1].mTime)
@@ -361,7 +313,7 @@ uint AnimModel::findScaling(float p_animation_time, const aiNodeAnim* p_node_ani
 			return i;
 		}
 	}
-
+	//make sure the model has a frame 0 animation
 	assert(0);
 	return 0;
 }
@@ -372,16 +324,20 @@ aiVector3D AnimModel::calcInterpolatedPosition(float p_animation_time, const aiN
 	{
 		return p_node_anim->mPositionKeys[0].mValue;
 	}
-
+	//get the frame to find the position for
 	double time_in_ticks = (double)glfwGetTime() * ticks_per_second;
 	uint position_index;
+	//find the position
 	position_index = findPosition(p_animation_time, p_node_anim);
+	//set the next position to find
 	uint next_position_index = position_index + 1;
+	//make sure the next index to check isn't out of bounds
 	assert(next_position_index < p_node_anim->mNumPositionKeys);
 	float delta_time = (float)(p_node_anim->mPositionKeys[next_position_index].mTime - p_node_anim->mPositionKeys[position_index].mTime);
 
 	float  factor = ((p_animation_time)-(float)p_node_anim->mPositionKeys[position_index].mTime) / delta_time;
 	assert(factor >= 0.0f && factor <= 1.0f);
+	//find the delta
 	aiVector3D start = p_node_anim->mPositionKeys[position_index].mValue;
 	aiVector3D end = p_node_anim->mPositionKeys[next_position_index].mValue;
 	aiVector3D delta = end - start;
@@ -396,9 +352,10 @@ aiQuaternion AnimModel::calcInterpolatedRotation(float p_animation_time, const a
 		return p_node_anim->mRotationKeys[0].mValue;
 	}
 	uint rotation_index;
-
+	//find the current roation
 	rotation_index = findRotation(p_animation_time, p_node_anim);
 
+	//check the next index isn't out of bounds
 	uint next_rotation_index = rotation_index + 1;
 	assert(next_rotation_index < p_node_anim->mNumRotationKeys);
 
@@ -421,14 +378,15 @@ aiVector3D AnimModel::calcInterpolatedScaling(float p_animation_time, const aiNo
 	}
 
 	uint scaling_index;
-
+	//find the scaling
 	scaling_index = findScaling(p_animation_time, p_node_anim);
-
+	//find and check the next scaling index
 	uint next_scaling_index = scaling_index + 1; 
 	assert(next_scaling_index < p_node_anim->mNumScalingKeys);
 	float delta_time = (float)(p_node_anim->mScalingKeys[next_scaling_index].mTime - p_node_anim->mScalingKeys[scaling_index].mTime);
 	float  factor = ((p_animation_time) - (float)p_node_anim->mScalingKeys[scaling_index].mTime) / delta_time;
 	assert(factor >= 0.0f && factor <= 1.0f);
+	//find the delta
 	aiVector3D start = p_node_anim->mScalingKeys[scaling_index].mValue;
 	aiVector3D end = p_node_anim->mScalingKeys[next_scaling_index].mValue;
 	aiVector3D delta = end - start;
@@ -509,23 +467,24 @@ void AnimModel::boneTransform(double time_in_sec, vector<aiMatrix4x4>& transform
 {
 
 		aiMatrix4x4 identity_matrix;
-
+		//get the time in ticks
 		double time_in_ticks = time_in_sec * ticks_per_second;
-
+		//get the floating point modulus of the current time and the size of the animation as specified by the end point
 		float animation_time = fmod(time_in_ticks, scene->mAnimations[0]->mDuration / animEnd);
-
+		//compensate for the starting frame by removing animStart
 		float animation_size = (scene->mAnimations[0]->mDuration / animEnd) - animStart;
 
+		//loop to keep playing the same selected section of animation
 		if (animation_time < animStart)
 			animation_time += animStart;
 		while (animation_time > animation_size + animStart) {
 			float difference = animation_time - (animation_size + animStart);
 			animation_time = animStart + difference;
 		}
-
+		//read the nodes
 		readNodeHierarchy(animation_time, scene->mRootNode, identity_matrix);
 		transforms.resize(m_num_bones);
-
+		//apply the transformations
 		for (uint i = 0; i < m_num_bones; i++)
 		{
 			transforms[i] = m_bone_matrices[i].final_world_transform;
@@ -534,6 +493,7 @@ void AnimModel::boneTransform(double time_in_sec, vector<aiMatrix4x4>& transform
 
 glm::mat4 AnimModel::aiToGlm(aiMatrix4x4 ai_matr)
 {
+	//simple function to set ai matrices to glm ones
 	glm::mat4 result;
 	result[0].x = ai_matr.a1; result[0].y = ai_matr.b1; result[0].z = ai_matr.c1; result[0].w = ai_matr.d1;
 	result[1].x = ai_matr.a2; result[1].y = ai_matr.b2; result[1].z = ai_matr.c2; result[1].w = ai_matr.d2;
@@ -546,7 +506,7 @@ glm::mat4 AnimModel::aiToGlm(aiMatrix4x4 ai_matr)
 
 aiQuaternion AnimModel::nlerp(aiQuaternion a, aiQuaternion b, float blend)
 {
-	//cout << a.w + a.x + a.y + a.z << endl;
+	//create an interpolated quaternion to describe the rotatation at any given point
 	a.Normalize();
 	b.Normalize();
 

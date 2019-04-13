@@ -45,7 +45,6 @@ void Player::playSound(int sound, float delay)
 		soundDelay = delay;
 		playingSound = true;
 	}
-	cout << endl;
 	if(playingSound == true){
 
 
@@ -83,7 +82,6 @@ void Player::playSound(int sound, float delay)
 			}
 		}
 	}
-	cout << endl;
 }
 
 void Player::update()

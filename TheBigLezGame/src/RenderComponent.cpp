@@ -55,6 +55,11 @@ void RenderComponent::setPaused(bool p)
 	m_objModel->setPaused(p);
 }
 
+void RenderComponent::setPauseFrame(float p)
+{
+	m_objModel->setPauseFrame(p);
+}
+
 void RenderComponent::setStill(bool s)
 {
 	m_objModel->setStill(s);

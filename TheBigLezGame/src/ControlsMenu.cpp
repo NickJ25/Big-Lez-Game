@@ -1,6 +1,7 @@
 #include "ControlsMenu.h"
 #include <iostream>
-#include <SDL.h>
+#include "Input.h"
+#include "GLFW/glfw3.h"
 
 ControlsMenu::ControlsMenu()
 {
@@ -15,8 +16,7 @@ void ControlsMenu::handle(Menu * menu)
 
 void ControlsMenu::update()
 {
-	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	if (keys[SDL_SCANCODE_1] && keys[SDL_KEYUP]) {
+	if (Input::keyboard1.keys[GLFW_KEY_1] && Input::keyboard1.keys[GLFW_KEY_UP]) {
 		selectedMenu->setCurrent(selectedMenu->getOptions());
 		selectedMenu->getCurrentState()->handle(selectedMenu);
 	}

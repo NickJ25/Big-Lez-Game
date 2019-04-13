@@ -1,7 +1,5 @@
 #include "OptionsMenu.h"
 #include <iostream>
-#include <SDL.h>
-
 
 OptionsMenu::OptionsMenu()
 {
@@ -44,10 +42,6 @@ void OptionsMenu::update()
 		selectedMenu->getCurrentState()->handle(selectedMenu);
 	}
 
-	if (audioBtn->buttonClick()) {
-		selectedMenu->setCurrent(selectedMenu->getAudio());
-		selectedMenu->getCurrentState()->handle(selectedMenu);
-	}
 }
 
 void OptionsMenu::draw()

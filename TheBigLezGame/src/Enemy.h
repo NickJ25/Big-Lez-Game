@@ -1,17 +1,23 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #pragma once
+//other files
 #include "GameObject.h"
 #include "Shader.h"
 #include "Player.h"
 
+//std library
 #include <iostream>
 #include <string>
 #include <cmath>
 #include <ctime>
+
+//audio engine
 #include <irrKlang.h>
 
+//glm
 #include "glm/gtx/vector_angle.hpp"
 
+//path manager forward declaration
 class PathManager;
 class Enemy : public GameObject
 {
@@ -91,9 +97,13 @@ public:
 	//death
 	void death();
 
+	bool getDeath();
+
 	float getHealth();
 
 	bool getInjured();
+
+	void setPauseFrame(float frame);
 
 private:
 	
@@ -101,20 +111,26 @@ private:
 	float currentTime = 0.0f;
 	float previousTime = 0.0f;
 
+	//audio engines
 	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
 	irrklang::ISoundEngine *privateEngineWalking = irrklang::createIrrKlangDevice();
+
+	//audio control variables
 	float soundDelay = 20.0f;
 	float playTime = 0.0f;
 	bool soundPlaying = false;
 	bool deathSoundSet = false;
 	bool walkSoundSet = false;
 
+	//audio containers
 	vector<irrklang::ISoundSource*> sounds;
 	vector<irrklang::ISoundSource*> deathSounds;
 
+	//health variables
 	float health;
 	float originalHealth;
 
+	//injury animation variables
 	int injuryAnimationTimer = 40;
 	bool injured = false;
 

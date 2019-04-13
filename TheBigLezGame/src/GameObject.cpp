@@ -41,6 +41,13 @@ void GameObject::setAnimation(float s, float e)
 	}
 }
 
+void GameObject::setPauseFrame(float p)
+{
+	if (renderComponent != nullptr) {
+		renderComponent->setPauseFrame(p);
+	}
+}
+
 void GameObject::setStill(bool s)
 {
 	if (renderComponent != nullptr) {

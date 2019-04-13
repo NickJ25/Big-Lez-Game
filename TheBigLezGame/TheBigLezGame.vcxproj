@@ -90,13 +90,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\dev\irrKlang-1.6.0\include;..\..\..\dev\glew-2.1.0\include;..\..\..\dev\SDL2-2.0.8\include;..\..\..\dev\glm;..\..\..\dev\Assimp\include;..\..\..\dev\SOIL2\include;..\..\..\dev\glfw-3.2.1.bin.WIN32\include;..\..\..\dev\freetype-windows-binaries-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dev\irrKlang-1.6.0\include;..\..\..\dev\glew-2.1.0\include;..\..\..\dev\glm;..\..\..\dev\Assimp\include;..\..\..\dev\SOIL2\include;..\..\..\dev\glfw-3.2.1.bin.WIN32\include;..\..\..\dev\freetype-windows-binaries-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\dev\irrKlang-1.6.0\lib\Win32-visualStudio;..\..\..\dev\SDL2-2.0.8\VisualC\Win32\Debug;..\..\..\dev\glew-2.1.0\lib\Debug\Win32;..\..\..\dev\Assimp\lib;..\..\..\dev\SOIL2\lib;..\..\..\dev\glfw-3.2.1.bin.WIN32\lib-vc2015;..\..\..\dev\freetype-windows-binaries-master\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>
-      </SubSystem>
-      <AdditionalDependencies>glew32d.lib;opengl32.lib;SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;soil2-debug.lib;glfw3.lib;freetype.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\dev\irrKlang-1.6.0\lib\Win32-visualStudio;..\..\..\dev\glew-2.1.0\lib\Debug\Win32;..\..\..\dev\Assimp\lib;..\..\..\dev\SOIL2\lib;..\..\..\dev\glfw-3.2.1.bin.WIN32\lib-vc2015;..\..\..\dev\freetype-windows-binaries-master\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>NotSet</SubSystem>
+      <AdditionalDependencies>glew32d.lib;opengl32.lib;assimp-vc140-mt.lib;soil2-debug.lib;glfw3.lib;freetype.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -166,10 +165,7 @@
     <ClCompile Include="src\DirectionalLight.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\LobbyMenu.cpp" />
-    <ClCompile Include="src\Mesh.cpp" />
-    <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\AudioMenu.cpp" />
     <ClCompile Include="src\ControlsMenu.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\GraphicsMenu.cpp" />
@@ -184,8 +180,6 @@
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\Prop.cpp" />
     <ClCompile Include="src\RenderComponent.cpp" />
-    <ClCompile Include="src\rt3d.cpp" />
-    <ClCompile Include="src\rt3dObjLoader.cpp" />
     <ClCompile Include="src\ScoreboardMenu.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\SinglePlayerMenu.cpp" />
@@ -216,7 +210,6 @@
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\Input.h" />
-    <ClInclude Include="src\MapReader.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PointLight.h" />
     <ClInclude Include="src\SpotLight.h" />
@@ -224,26 +217,18 @@
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Prop.h" />
-    <ClInclude Include="src\Mesh.h" />
-    <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\CollisionComponent.h" />
     <ClInclude Include="src\Skybox.h" />
-    <ClInclude Include="src\AIComponent.h" />
-    <ClInclude Include="src\Component.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameObject.h" />
-    <ClInclude Include="src\PhysicsComponent.h" />
     <ClInclude Include="src\RenderComponent.h" />
-    <ClInclude Include="src\AudioMenu.h" />
     <ClInclude Include="src\ControlsMenu.h" />
     <ClInclude Include="src\GraphicsMenu.h" />
     <ClInclude Include="src\MainMenu.h" />
     <ClInclude Include="src\MenuState.h" />
     <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\OptionsMenu.h" />
-    <ClInclude Include="src\rt3d.h" />
-    <ClInclude Include="src\rt3dObjLoader.h" />
     <ClInclude Include="src\ScoreboardMenu.h" />
     <ClInclude Include="src\SinglePlayerMenu.h" />
     <ClInclude Include="src\Text.h" />

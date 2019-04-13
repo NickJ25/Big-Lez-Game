@@ -1,8 +1,12 @@
 #pragma once
+
 #include "GameObject.h"
+#include "Input.h"
+
+//glm
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Input.h"
+
 enum Camera_Type
 {
 	STATIC,
@@ -46,8 +50,6 @@ public:
 	glm::vec3 getFront();
 	glm::vec3 getRight();
 	GLfloat getYaw();
-	//void lookAt(GameObject object);
-	//void lookAt(0);
 	void follow(glm::vec3 &position);
 	void unfollow();
 

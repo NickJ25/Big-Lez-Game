@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 
+//Obstacle is a utility game object to be purely for collider representation, being neither a player, prop or enemy.
 struct Obstacle : public GameObject
 {
 	struct Character
@@ -20,6 +21,3 @@ struct Obstacle : public GameObject
 	std::string name;
 	Character m_char;
 };
-
-// Make camera unique
-// Make array to hold multiple players

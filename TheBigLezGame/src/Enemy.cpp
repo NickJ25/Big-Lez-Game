@@ -59,8 +59,8 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	}
 
 	//set velocity
-	velocity = random / 5000;
-	originalVelocity = random / 5000;
+	velocity = random / 1000;
+	originalVelocity = random / 1000;
 
 	//constant angular velocity and orientation
 	angularVelocity = 0.5f;
@@ -92,9 +92,15 @@ Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())
 	deathAnimations.push_back(chargerDeath);
 
 	//brawler choomah injuries
-	//injuryAnimations.at(2).push_back(pair<float, float>(5.42f, 2.13f));
-	//injuryAnimations.at(2).push_back(pair<float, float>(6.25f, 1.88f));
+	std::vector<pair<float, float>> brawlerInjuries;
+	brawlerInjuries.push_back(pair<float, float>(1.75f, 1.92f));
 
+	injuryAnimations.push_back(brawlerInjuries);
+
+	//finally the brawler death
+	std::vector<pair<float, float>> brawlerDeath;
+	brawlerDeath.push_back(pair<float, float>(1.25f, 2.5f));
+	deathAnimations.push_back(brawlerDeath);
 }
 
 Enemy::~Enemy()
@@ -137,6 +143,7 @@ void Enemy::reset(PathManager* pathmanager)
 	injured = false;
 	deathAnimationTimer = 150;
 	still = false;
+	setStill(false);
 
 	//reset sound variables
 	deathSoundSet = false;
@@ -147,14 +154,18 @@ void Enemy::reset(PathManager* pathmanager)
 
 void Enemy::update()
 {
+
+	moving = true;
+
 	currentTime = glfwGetTime();
 	float deltaTime = currentTime - previousTime;
 	previousTime = currentTime;
 	//sound update
-
+	
 	if (moving == true && walkSoundSet == false)
 	{
-		privateEngineWalking->play3D("assets/Sounds/footsteps.wav", irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
+		privateEngineWalking->setSoundVolume(1.0f);
+		privateEngineWalking->play2D("assets/Sounds/BumbleBrutus/stomp.wav", true);// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z), true);
 		walkSoundSet = true;
 	}
 	else
@@ -167,8 +178,8 @@ void Enemy::update()
 		if (soundPlaying == false) {
 			srand(time(0));
 			int randomSound = rand() % sounds.size();
-			privateEngine->play3D(sounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
-			privateEngine->play3D(sounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			privateEngine->play2D(sounds.at(randomSound));// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			privateEngine->play2D(sounds.at(randomSound));// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
 			playTime = sounds.at(randomSound)->getPlayLength() / 1000;
 			int randFactor = rand() % 100 + 50;
 			soundDelay = (24 * deltaTime) * 55.0f + playTime + randFactor;
@@ -194,15 +205,23 @@ void Enemy::update()
 		if (soundPlaying == false) {
 			srand(time(0));
 			int randomSound = rand() % deathSounds.size();
-			privateEngine->play3D(deathSounds.at(randomSound), irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
+			privateEngine->play2D(deathSounds.at(randomSound));// , irrklang::vec3df(getPosition().x, getPosition().y, getPosition().z));
 			soundPlaying = true;
 		}
 		deathAnimationTimer--;
 		
 		if (deathAnimationTimer <= 0) {
+			//set to fully lying down frame
+			if (name == "normal")
+				setAnimation(1.357, 1.0f);
+			if (name == "charger")
+				setAnimation(9.208, 1.0f);
+			if (name == "brawler")
+				setAnimation(1.63, 1.0f);
+
 			//then pause the model
 			setStill(true);
-			still == true;
+			still = true;
 		}
 	}
 	else {
@@ -215,7 +234,12 @@ void Enemy::update()
 				injured = false;
 
 				//set back to default run animation
-				setAnimation(0.0f, 8.3f);
+				if (name == "normal")
+					setAnimation(0.0, 8.3f);
+				if (name == "charger")
+					setAnimation(0.0, 8.0f);
+				if (name == "brawler")
+					setAnimation(0.0f, 5.55f);
 
 				//reset injury time
 				injuryAnimationTimer = 40;
@@ -229,7 +253,12 @@ void Enemy::update()
 			glm::vec3 distanceToBeCovered;
 			glm::vec3 movementStep;
 
-			//bool rotated = false;
+			if (name == "normal")
+				setAnimation(0.0, 8.3f);
+			if (name == "charger")
+				setAnimation(0.0, 8.0f);
+			if (name == "brawler")
+				setAnimation(0.0f, 5.55f);
 
 			//if the game isnt paused
 			if (paused == false) {
@@ -307,10 +336,12 @@ void Enemy::update()
 
 						inside = true;
 						//jumping animation
+						if (name == "normal")
+							setAnimation(4.58f, 1.0f);
+						if (name == "charger")
+							setAnimation(12.5f, 1.0f);
 						if (name == "brawler")
-							setAnimValues(0.0f, 1.0f);
-						else
-							setAnimValues(4.58, 1.0f);
+							setAnimation(3.33f, 1.0f);
 
 						velocity = 0.1;
 
@@ -382,8 +413,13 @@ void Enemy::update()
 				if (outsideMovement == true && outerPath.empty() == true && innerPath.empty() == false && Jump == true)
 				{
 
-					//running animation
-					setAnimValues(0.0f, 8.3f);
+					//set back to default run animation
+					if (name == "normal")
+						setAnimation(0.0, 8.3f);
+					if (name == "charger")
+						setAnimation(0.0, 8.0f);
+					if (name == "brawler")
+						setAnimation(0.0f, 5.55f);
 
 					velocity = 0.05;
 
@@ -565,8 +601,9 @@ void Enemy::takeDamage(float damage)
 			setAnimation(injuryAnimations.at(0).at(randomNumber).first, injuryAnimations.at(0).at(randomNumber).second);
 		if (name == "charger")
 			setAnimation(injuryAnimations.at(1).at(randomNumber).first, injuryAnimations.at(1).at(randomNumber).second);
+		//except brawler cause he only has one injury animation
 		if (name == "brawler")
-			setAnimation(injuryAnimations.at(2).at(randomNumber).first, injuryAnimations.at(2).at(randomNumber).second);
+			setAnimation(injuryAnimations.at(2).at(0).first, injuryAnimations.at(2).at(0).second);
 
 	}
 
@@ -579,10 +616,18 @@ void Enemy::death()
 	//set death animation and timer the length of it -1 frame
 	dead = true;
 
-	if (name == "normal")
+	if (name == "normal") {
 		setAnimation(deathAnimations.at(0).at(0).first, deathAnimations.at(0).at(0).second);
-	if (name == "charger")
+		setPauseFrame(1.375f);
+	}
+	if (name == "charger") {
 		setAnimation(deathAnimations.at(1).at(0).first, deathAnimations.at(1).at(0).second);
+		setPauseFrame(9.208f);
+	}
+	if (name == "brawler") {
+		setAnimation(deathAnimations.at(2).at(0).first, deathAnimations.at(2).at(0).second);
+		setPauseFrame(1.60f);
+	}
 
 }
 
@@ -595,4 +640,15 @@ float Enemy::getHealth()
 bool Enemy::getInjured()
 {
 	return injured;
+}
+
+void Enemy::setPauseFrame(float frame)
+{
+
+}
+
+
+bool Enemy::getDeath()
+{
+	return dead;
 }

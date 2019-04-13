@@ -5,7 +5,6 @@
 #include <stack>
 
 #include "Shader.h"
-#include "Model.h"
 #include "AnimModel.h"
 
 // Assimp Includes
@@ -24,7 +23,6 @@ private:
 	// Object Settings
 	bool m_isAnimated = false;
 
-	Model* testModel; // TEST
 	AnimModel* m_objModel;
 
 	// Object Render Settings
@@ -64,5 +62,5 @@ public:
 	bool getPaused();
 	void setStill(bool s);
 	void Draw();
-
+	void setPauseFrame(float p);
 };

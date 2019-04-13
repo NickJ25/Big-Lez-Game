@@ -11,7 +11,6 @@ private:
 
 public:
 	CollisionComponent(glm::vec3 pos, float hw, float hh, float th) : centre(pos), halfWidth(hw), halfHeight(hh), halfTrueHeight(th){}
-	//CollisionComponent(glm::vec3 pos)
 
 	void setScale(glm::vec3 newScale);
 
