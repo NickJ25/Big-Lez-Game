@@ -21,6 +21,7 @@ void LobbyMenu::addCharacters()
 {
 	// Create Big Lez
 	Player::Character BigLez;
+	BigLez.id = 1;
 	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
 	BigLez.name = "Leslie";
 	BigLez.health = 100;
@@ -36,6 +37,7 @@ void LobbyMenu::addCharacters()
 
 	// Create Sassy
 	Player::Character Sassy;
+	Sassy.id = 2;
 	Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
 	Sassy.name = "Sassy";
 	Sassy.health = 100;
@@ -51,6 +53,7 @@ void LobbyMenu::addCharacters()
 
 	// Create Donny
 	Player::Character Donny;
+	Donny.id = 3;
 	Donny.fileLocation = "assets/Characters/Donny/donny.dae";
 	Donny.name = "Donny";
 	Donny.health = 100;
@@ -66,6 +69,7 @@ void LobbyMenu::addCharacters()
 
 	// Create Clarence
 	Player::Character Clarence; 
+	Clarence.id = 4;
 	Clarence.fileLocation = "assets/Characters/Clarence/Clarence.dae";
 	Clarence.name = "Clarence";
 	Clarence.health = 100000;
@@ -181,6 +185,7 @@ void LobbyMenu::update()
 			else if (playerList[0]->control == Input::CONTROLLER1 || playerList[0]->control == Input::CONTROLLER2) confirmKey = 2;
 			if (Input::determineInput(playerList[0]->control, confirmKey)) {
 				p1Ready = true;
+				playerList[0]->id = characterList[p1Choice].id;
 				playerList[0]->name = characterList[p1Choice].name;
 				playerList[0]->fileLocation = characterList[p1Choice].fileLocation;
 				playerList[0]->health = characterList[p1Choice].health;
@@ -225,6 +230,7 @@ void LobbyMenu::update()
 			else if (playerList[1]->control == Input::CONTROLLER1 || playerList[1]->control == Input::CONTROLLER2) confirmKey = 2;
 			if (Input::determineInput(playerList[1]->control, confirmKey)) {
 				p2Ready = true;
+				playerList[1]->id = characterList[p2Choice].id;
 				playerList[1]->name = characterList[p2Choice].name;
 				playerList[1]->fileLocation = characterList[p2Choice].fileLocation;
 				playerList[1]->health = characterList[p2Choice].health;

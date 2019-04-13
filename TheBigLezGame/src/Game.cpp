@@ -43,8 +43,36 @@ void Game::createPlayers()
 void Game::createWeapons()
 {
 	for (int i = 0; i < playerList.size(); i++) {
-		switch (playerList[i]->getCharacter().name) {
+		if (playerList[i] != nullptr) {
+			switch (playerList[i]->getCharacter().id) {
+			case 1: // Gun Setup for BigLez
+			{
+				GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
+				lezShotgun->setShader(toonShader);
+				lezShotgun->setAnimation(0.0f, 1.0f);
+				playerList[i]->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
+				gameObjects.push_back(lezShotgun);
 
+				break;
+			}
+			case 2: // Gun Setup for Sassy
+			{
+				cout << "------------------------------------s guns" << "\n";
+				break;
+			}
+			case 3: // Gun Setup for Donny
+			{
+				cout << "------------------------------------d guns" << "\n";
+				break;
+			}
+			case 4: // Gun Setup for Clarence
+			{
+				cout << "------------------------------------c guns" << "\n";
+				break;
+			}
+			default:
+				cout << "couldn't find player" << "\n";
+			}
 		}
 	}
 }
@@ -85,6 +113,7 @@ void Game::init()
 	gameObjects.push_back(environment);
 
 	createPlayers();
+	createWeapons();
 
 	// Characters
 	Player::Character BigLez;
@@ -126,13 +155,6 @@ void Game::init()
 	////mainPlayer->setStill(true);
 	//mainPlayer->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 	//gameObjects.push_back(mainPlayer);
-
-	GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
-	lezShotgun->setShader(toonShader);
-	lezShotgun->setAnimation(0.0f, 1.0f);
-	//mainPlayer->addWeapon(dynamic_cast<Weapon*> (lezShotgun)); 
-	playerList[0]->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
-	gameObjects.push_back(lezShotgun);
 
 	//GameObject* lezTest = new Prop("assets/Props/Table/Table.dae", glm::vec3(0.0f, 0.0f, 0.0f), "NoBounding");
 	//lezTest->Move(glm::vec3(-10.0f, 0.0f, -10.0f));

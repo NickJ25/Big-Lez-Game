@@ -12,6 +12,7 @@ class Player : public GameObject
 {
 public:
 	struct Character {
+		int id;
 		std::string name;
 		std::string fileLocation;
 		bool isLocked = false;		// Not locked by default
