@@ -6,7 +6,7 @@ Player::Player(Input::ControllerType controller, Character character, glm::vec3 
 		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 4.5f, 0.0f), KEYBOARD);
 	}
 	else {
-		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f), CONTROLLER);
+		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 4.5f, 0.0f), CONTROLLER);
 	}
 	this->addController(controller);
 	m_character = character;
