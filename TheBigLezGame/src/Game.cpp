@@ -89,7 +89,7 @@ void Game::init()
 	std::cout << "Game.cpp Init" << std::endl;
 
 	//initialise shaders from file sources
-	toonShader = new Shader("src/toonShader.vert", "src/toonShader.frag");
+	toonShader = new Shader("src/toonShader.vert", "src/toonShader.geom", "src/toonShader.frag");
 
 	skybox = new Skybox("assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
 						"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",
@@ -97,6 +97,11 @@ void Game::init()
 
 	//for bounding box debug tool
 	showBoundingBoxes = false;
+
+	// Uniform buffer for splitscreen modelview data
+	glGenBuffers(1, &uniform_buffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, uniform_buffer);
+	glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
 #pragma endregion
 #pragma region Object initialisation
@@ -955,6 +960,11 @@ void Game::update()
 
 void Game::draw()
 {
+	// viewports
+	glViewport(0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT);
+	glViewportIndexedf(1, 0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
+	glViewportIndexedf(0, 0, Input::SCREEN_HEIGHT, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
+	
 	//pass material and position variables to the shader
 	glUseProgram(toonShader->getID());
 	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
@@ -965,10 +975,16 @@ void Game::draw()
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
 	// draw skybox
+
+	glBindBufferBase(GL_UNIFORM_BUFFER, 0, uniform_buffer);
+	glm::mat4 * mv_matrix = (glm::mat4*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, 4 * sizeof(glm::mat4), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+	for (int i = 0; i < 1; i++) {
+		mv_matrix[i] = projection * glm::mat4(glm::mat3(playerList[0]->getCamera()->lookAtMat()));
+	}
+	glUnmapBuffer(GL_UNIFORM_BUFFER);
+
 	skybox->draw(projection * glm::mat4(glm::mat3(playerList[0]->getCamera()->lookAtMat())));
 
-	//glViewportIndexedf(2, 0, Input::SCREEN_HEIGHT / 2, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
-	//glViewportIndexedf(1, 0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
 
 	//if the game is paused
 	if (isGameRunning == false)

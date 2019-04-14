@@ -12,6 +12,7 @@ private:
 	GLuint ID;
 	
 public:
+	Shader(const GLchar *vertexPath, const GLchar *fragmentPath);
 	Shader(const GLchar *vertexPath, const GLchar * geometryPath, const GLchar *fragmentPath);
 	GLuint getID();
 	void use();

@@ -36,7 +36,7 @@ GLuint Skybox::createCubeTexture(const char * image1, const char * image2, const
 Skybox::Skybox(const char * image1, const char * image2, const char * image3, const char * image4, const char * image5, const char * image6)
 {
 	// Make Skybox Shader
-	m_skyBoxShader = new Shader("src/skyboxShader.vert", "src/skyboxShader.frag");
+	m_skyBoxShader = new Shader("src/skyboxShader.vert", "src/skyboxShader.geom", "src/skyboxShader.frag");
 
 	float offset_side_cube = 1.0f;
 
@@ -110,7 +110,7 @@ void Skybox::draw(glm::mat4 viewMatrix)
 	glDepthFunc(GL_LEQUAL); // optimization in shaders
 	glUseProgram(m_skyBoxShader->getID());
 	glBindVertexArray(m_VAO_skybox);
-	glUniformMatrix4fv(glGetUniformLocation(m_skyBoxShader->getID(), "VP"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
+	//glUniformMatrix4fv(glGetUniformLocation(m_skyBoxShader->getID(), "VP"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_VBO_texture);
 	glDrawArrays(GL_TRIANGLES, 0, 36);

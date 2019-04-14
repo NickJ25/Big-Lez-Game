@@ -8,7 +8,7 @@ uniform mat4 VP; //   WITHOUT model matrix
 
 void main()
 {
-	vec4 pos = VP * vec4( in_position, 1.0);
+	vec4 pos = VP * vec4( in_position, 1.0); //vec4(in_position, 1.0) =
 	gl_Position = pos.xyww; // optimization !! its work with glDepthFunc(GL_LEQUAL);
 							// and draw skybox after scene !!!
 

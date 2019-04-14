@@ -118,6 +118,9 @@ private:
 	vector<vector<string>> convoOrders;
 	bool convoAssigned = false;
 
+	//splitscreen modelview buffer
+	GLuint uniform_buffer;
+
 	Image* bossHealth;
 	bool ableTo = true;
 

@@ -259,7 +259,7 @@ void LobbyMenu::update()
 			gameTimerStart = true;
 			startTime = glfwGetTime();
 		}
-		timeOnTimer = 10 - (glfwGetTime() - startTime);
+		timeOnTimer = GAME_COUNTDOWN_TIME - (glfwGetTime() - startTime);
 		if (gameTimerStart && timeOnTimer <= 0) {
 			// Start the game
 			GameData::g_PlayerData = playerList;
