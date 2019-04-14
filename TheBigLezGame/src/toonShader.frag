@@ -49,13 +49,15 @@ struct Material
 	float transparency; //?
 };
 
-
-in vec3 FragPos;		// Replaces frag_pos
-in vec3 Normal;			// Replaces normal
-in vec2 TexCoords;		// Replaces text_coords
-in vec4 ModelView;		// Replaces viewSpace
-in vec3 EyeDirection_cameraspace;
-in vec3 LightDirection_cameraspace;
+in GS_OUT
+{
+    in vec3 Normal;			// Replaces normal
+    in vec3 FragPos;		// Replaces frag_pos
+    in vec2 TexCoords;		// Replaces text_coords
+    in vec4 ModelView;		// Replaces viewSpace
+    in vec3 EyeDirection_cameraspace;
+    in vec3 LightDirection_cameraspace;
+} fs_in;
 
 out vec4 color;
 
@@ -90,9 +92,9 @@ vec3 CalcSpotLight( Light light, vec3 normal, vec3 fragPos, vec3 viewDir )
     float intensity = clamp( ( theta - light.outerCutOff ) / epsilon, 0.0, 1.0 );
     
     // Combine results
-    vec3 ambient = light.ambient * vec3( texture( material.texture_diffuse1, TexCoords ) );
-    vec3 diffuse = light.diffuse * diff * vec3( texture( material.texture_diffuse1, TexCoords ) );
-    vec3 specular = light.specular * spec * vec3( texture( material.texture_specular1, TexCoords ) );
+    vec3 ambient = light.ambient * vec3( texture( material.texture_diffuse1, fs_in.TexCoords ) );
+    vec3 diffuse = light.diffuse * diff * vec3( texture( material.texture_diffuse1, fs_in.TexCoords ) );
+    vec3 specular = light.specular * spec * vec3( texture( material.texture_specular1, fs_in.TexCoords ) );
     
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
@@ -113,9 +115,9 @@ vec3 CalcDirLight( DirLight light, vec3 normal, vec3 viewDir )
     float spec = pow( max( dot( viewDir, reflectDir ), 0.0 ), material.shininess );
     
     // Combine results
-    vec3 ambient = light.ambient * vec3( texture( material.texture_diffuse1, TexCoords ) );
-    vec3 diffuse = light.diffuse * diff * vec3( texture( material.texture_diffuse1, TexCoords ) );
-    vec3 specular = light.specular * spec * vec3( texture( material.texture_specular1, TexCoords ) );
+    vec3 ambient = light.ambient * vec3( texture( material.texture_diffuse1, fs_in.TexCoords ) );
+    vec3 diffuse = light.diffuse * diff * vec3( texture( material.texture_diffuse1, fs_in.TexCoords ) );
+    vec3 specular = light.specular * spec * vec3( texture( material.texture_specular1, fs_in.TexCoords ) );
     
     return ( ambient + diffuse + specular );
 }
@@ -137,9 +139,9 @@ vec3 CalcPointLight( PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir )
     float attenuation = 1.0f / ( light.constant + light.linear * distance + light.quadratic * ( distance * distance ) );
     
     // Combine results
-    vec3 ambient = light.ambient * vec3( texture( material.texture_diffuse1, TexCoords ) );
-    vec3 diffuse = light.diffuse * diff * vec3( texture( material.texture_diffuse1, TexCoords ) );
-    vec3 specular = light.specular * spec * vec3( texture( material.texture_specular1, TexCoords ) );
+    vec3 ambient = light.ambient * vec3( texture( material.texture_diffuse1, fs_in.TexCoords ) );
+    vec3 diffuse = light.diffuse * diff * vec3( texture( material.texture_diffuse1, fs_in.TexCoords ) );
+    vec3 specular = light.specular * spec * vec3( texture( material.texture_specular1, fs_in.TexCoords ) );
     
     ambient *= attenuation;
     diffuse *= attenuation;
@@ -152,13 +154,13 @@ void main( )
 {
     // Properties
    // vec3 norm = normalize( Normal );
-    vec3 viewDir = normalize( viewPos - FragPos );
+    vec3 viewDir = normalize( viewPos - fs_in.FragPos );
     
 	//vec3 calcLight = vec3(0.0f, 0.0f, 0.0f);
 
 
     // Directional lighting
-   vec3 calcLight = CalcDirLight( dirLight, Normal, viewDir );
+   vec3 calcLight = CalcDirLight( dirLight, fs_in.Normal, viewDir );
     
     
     // Spot light
@@ -174,15 +176,15 @@ void main( )
 ////////////////////////////////fog shading //////////////////////////////
 
 color = vec4(calcLight, 1.0f);vec3 RimColor = vec3(0.2, 0.2, 0.2);
-vec3 tex1 = texture(material.texture_diffuse1, TexCoords).rgb;
+vec3 tex1 = texture(material.texture_diffuse1, fs_in.TexCoords).rgb;
 
 
 //get light an view directions
-vec3 L = normalize(LightDirection_cameraspace);
-vec3 V = normalize(EyeDirection_cameraspace);
+vec3 L = normalize(fs_in.LightDirection_cameraspace);
+vec3 V = normalize(fs_in.EyeDirection_cameraspace);
 
 //diffuse lighting
-vec3 fogNorm = normalize(Normal);
+vec3 fogNorm = normalize(fs_in.Normal);
 vec3 diffuse = light.diffuse * max(0, dot(L, fogNorm));
 
 //rim lighting
@@ -201,7 +203,7 @@ float fogFactor = 0;
 //compute distance used in fog equations
 
 //range based
-dist = length(ModelView);
+dist = length(fs_in.ModelView);
 
 fogFactor = 1.0 / exp((dist * FogDensity)* (dist * FogDensity));
 fogFactor = clamp(fogFactor, 0.0, 1.0);

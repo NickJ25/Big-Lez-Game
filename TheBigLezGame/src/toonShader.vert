@@ -10,14 +10,15 @@ uniform mat4 view; // Replace V
 uniform mat4 projection; // Replace normals_matrix
 uniform mat4 normals; // Replaces normals_matrix
 
-out vec3 Normal;
-out vec3 FragPos;
-out vec2 TexCoords;
-
-// Additional Ones
-out vec4 ModelView; // Replaces viewSpace
-out vec3 EyeDirection_cameraspace;
-out vec3 LightDirection_cameraspace;
+out VS_OUT
+{
+	out vec3 Normal;
+	out vec3 FragPos;
+	out vec2 TexCoords;
+	out vec4 ModelView; // Replaces viewSpace
+	out vec3 EyeDirection_cameraspace;
+	out vec3 LightDirection_cameraspace;
+ } vs_out;
 
 const int MAX_BONES = 100;
 uniform mat4 bones[MAX_BONES];
@@ -31,20 +32,20 @@ void main( )
 
 	vec4 boned_position = bone_transform * vec4(in_position, 1.0); 
 
-	ModelView = view * model * boned_position;
+	vs_out.ModelView = view * model * boned_position;
 
-	Normal = normalize(vec3(normals * (bone_transform * vec4(in_normal, 0.0f))));
+	vs_out.Normal = normalize(vec3(normals * (bone_transform * vec4(in_normal, 0.0f))));
 
 	// In camera space, the camera is at the origin
-	EyeDirection_cameraspace = vec3(0.0f, 0.0f, 0.0f) - (view * model * boned_position).xyz;
+	vs_out.EyeDirection_cameraspace = vec3(0.0f, 0.0f, 0.0f) - (view * model * boned_position).xyz;
 
 	// Vector that goes from the vertex to the light in camera space
-	LightDirection_cameraspace = (view * vec4(0.0f, 0.0f, 0.0f, 0.0f)).xyz;
+	vs_out.LightDirection_cameraspace = (view * vec4(0.0f, 0.0f, 0.0f, 0.0f)).xyz;
 
 	
 
-	FragPos = vec3(model * boned_position);
-    TexCoords = in_texCoords;
+	vs_out.FragPos = vec3(model * boned_position);
+    vs_out.TexCoords = in_texCoords;
 
-	 gl_Position = (projection * view *  model) * boned_position;
+	 gl_Position = (model) * boned_position; //projection * view *
 }

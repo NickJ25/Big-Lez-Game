@@ -962,8 +962,18 @@ void Game::draw()
 {
 	// viewports
 	glViewport(0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT);
+
+	glViewportIndexedf(0, 0, Input::SCREEN_HEIGHT / 2, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
 	glViewportIndexedf(1, 0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
-	glViewportIndexedf(0, 0, Input::SCREEN_HEIGHT, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
+
+	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f)); //
+
+	glBindBufferBase(GL_UNIFORM_BUFFER, 0, uniform_buffer);
+	glm::mat4 * mv_matrix = (glm::mat4*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, 2 * sizeof(glm::mat4), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+	for (int i = 0; i < 2; i++) {
+		mv_matrix[i] = projection * glm::mat4(glm::mat3(playerList[0]->getCamera()->lookAtMat()));
+	}
+	glUnmapBuffer(GL_UNIFORM_BUFFER);
 	
 	//pass material and position variables to the shader
 	glUseProgram(toonShader->getID());
@@ -972,17 +982,9 @@ void Game::draw()
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), playerList[0]->getCamera()->getCameraPos().x, playerList[0]->getCamera()->getCameraPos().y, playerList[0]->getCamera()->getCameraPos().z);
-	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
+	//glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
 	// draw skybox
-
-	glBindBufferBase(GL_UNIFORM_BUFFER, 0, uniform_buffer);
-	glm::mat4 * mv_matrix = (glm::mat4*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, 4 * sizeof(glm::mat4), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-	for (int i = 0; i < 1; i++) {
-		mv_matrix[i] = projection * glm::mat4(glm::mat3(playerList[0]->getCamera()->lookAtMat()));
-	}
-	glUnmapBuffer(GL_UNIFORM_BUFFER);
-
 	skybox->draw(projection * glm::mat4(glm::mat3(playerList[0]->getCamera()->lookAtMat())));
 
 
