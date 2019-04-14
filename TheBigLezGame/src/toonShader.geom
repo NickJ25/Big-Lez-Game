@@ -1,11 +1,14 @@
 #version 420 core
+
 layout (triangles, invocations = 2) in;
 layout (triangle_strip, max_vertices = 3) out;
 
-layout(std140, binding = 0) uniform transform_block
-{
-    mat4 mvp_matrix[2];
-};
+// layout(std140, binding = 0) uniform transform_block
+// {
+//     mat4 mvp_matrix[2];
+// };
+uniform mat4 mvp_matrix;
+uniform int viewportNum;
 
 in VS_OUT
 {
@@ -39,8 +42,8 @@ void main(void)
         gs_out.EyeDirection_cameraspace = gs_in[i].EyeDirection_cameraspace;
         gs_out.LightDirection_cameraspace = gs_in[i].LightDirection_cameraspace;
 
-        gl_Position = mvp_matrix[gl_InvocationID] * gl_in[i].gl_Position;
-        gl_ViewportIndex = gl_InvocationID;
+        gl_Position = mvp_matrix * gl_in[i].gl_Position;
+        gl_ViewportIndex = viewportNum; //gl_InvocationID
         EmitVertex();
     }
     EndPrimitive();

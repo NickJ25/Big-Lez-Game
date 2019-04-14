@@ -974,48 +974,41 @@ void Game::draw()
 	else {
 		playerCount = 1;
 	}
-	
-	//glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glViewportIndexedf(0, 0, Input::SCREEN_HEIGHT / 2, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
-	//glViewportIndexedf(1, 0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
 
-	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f)); //
-
-	glBindBufferBase(GL_UNIFORM_BUFFER, 0, uniform_buffer);
-	glm::mat4 * mv_matrix = (glm::mat4*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, playerCount * sizeof(glm::mat4), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-	for (int j = 0; j < playerCount; j++) {
-		mv_matrix[j] = projection; //* glm::mat4(glm::mat3(playerList[i]->getCamera()->lookAtMat()));
-	}
-	glUnmapBuffer(GL_UNIFORM_BUFFER);
-	
-	//pass material and position variables to the shader
-	glUseProgram(toonShader->getID());
-	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
-	glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
-	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
-
-	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), playerList[0]->getCamera()->getCameraPos().x, playerList[0]->getCamera()->getCameraPos().y, playerList[0]->getCamera()->getCameraPos().z);
-	//glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
-
-	// draw skybox
-	skybox->draw(projection * glm::mat4(glm::mat3(playerList[0]->getCamera()->lookAtMat())));
-
-	//if the game is paused
-	if (isGameRunning == false)
+	for (int k = 0; k < playerCount; k++)
 	{
-		// Draws pause menu
-		resumeBtn->draw();
-		mainMenuBtn->draw(); 
-		testtxt->draw("Resume", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),1);
-		testtxt2->draw("Quit", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),1);
-		pauseBackground->draw();
-	}
+		glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f)); 
 
-	//loop through the gameobjects and draw 
-	for (int i = 0; i < gameObjects.size(); i++) {
-		if (gameObjects[i] != nullptr) {
-			gameObjects[i]->componentDraw(playerList[0]->getCamera()->lookAtMat());
+		//pass material and position variables to the shader
+		glUseProgram(toonShader->getID());
+		glUniform1i(glGetUniformLocation(toonShader->getID(), "viewportNum"), k);
+		cout << "1: " << glGetUniformLocation(toonShader->getID(), "viewportNum") << " 2: " << glGetUniformLocation(toonShader->getID(), "mvp_matrix") << "\n";
+		glUniformMatrix4fv(glGetUniformLocation(toonShader->getID(), "mvp_matrix"), 1, GL_FALSE, glm::value_ptr(projection));
+		glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
+		glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
+		glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
+
+		glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), playerList[k]->getCamera()->getCameraPos().x, playerList[k]->getCamera()->getCameraPos().y, playerList[k]->getCamera()->getCameraPos().z);
+
+		// draw skybox
+		skybox->draw(projection * glm::mat4(glm::mat3(playerList[k]->getCamera()->lookAtMat())), k);
+
+		//if the game is paused
+		if (isGameRunning == false)
+		{
+			// Draws pause menu
+			resumeBtn->draw();
+			mainMenuBtn->draw();
+			testtxt->draw("Resume", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
+			testtxt2->draw("Quit", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
+			pauseBackground->draw();
+		}
+
+		//loop through the gameobjects and draw 
+		for (int i = 0; i < gameObjects.size(); i++) {
+			if (gameObjects[i] != nullptr) {
+				gameObjects[i]->componentDraw(playerList[k]->getCamera()->lookAtMat());
+			}
 		}
 	}
 

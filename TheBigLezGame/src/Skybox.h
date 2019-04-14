@@ -14,6 +14,6 @@ private:
 	GLuint createCubeTexture(const char* image1, const char* image2, const char* image3, const char* image4, const char* image5, const char* image6);
 public:
 	Skybox(const char* image1, const char* image2, const char* image3, const char* image4, const char* image5, const char* image6);
-	void draw(glm::mat4 viewMatrix);
+	void draw(glm::mat4 viewMatrix, int playerNum);
 
 };

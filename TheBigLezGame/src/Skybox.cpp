@@ -104,14 +104,14 @@ Skybox::Skybox(const char * image1, const char * image2, const char * image3, co
 	m_VBO_texture = createCubeTexture(image1, image2, image3, image4, image5, image6);
 }
 
-void Skybox::draw(glm::mat4 viewMatrix)
+void Skybox::draw(glm::mat4 viewMatrix, int playerNum)
 {
 	// draw skybox LAST in scene ( optimization in vertex shader )
 	glDepthFunc(GL_LEQUAL); // optimization in shaders
 	glUseProgram(m_skyBoxShader->getID());
 	glBindVertexArray(m_VAO_skybox);
 	glUniformMatrix4fv(glGetUniformLocation(m_skyBoxShader->getID(), "VP"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
-
+	glUniform1i(glGetUniformLocation(m_skyBoxShader->getID(), "viewportNum"), playerNum);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_VBO_texture);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
