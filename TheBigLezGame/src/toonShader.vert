@@ -47,5 +47,5 @@ void main( )
 	vs_out.FragPos = vec3(model * boned_position);
     vs_out.TexCoords = in_texCoords;
 
-	 gl_Position = (model) * boned_position; //projection * view *
+	 gl_Position = (view * model) * boned_position; //projection * view *
 }

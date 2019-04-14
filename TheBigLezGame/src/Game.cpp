@@ -960,18 +960,32 @@ void Game::update()
 
 void Game::draw()
 {
+	
 	// viewports
+	int playerCount = 0;
 	glViewport(0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT);
 
-	glViewportIndexedf(0, 0, Input::SCREEN_HEIGHT / 2, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
-	glViewportIndexedf(1, 0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
+	// Check whether splitscreen or not
+	if (playerList[1] != nullptr) {
+		glViewportIndexedf(0, 0, Input::SCREEN_HEIGHT / 2, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
+		glViewportIndexedf(1, 0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
+		playerCount = 2;
+	}
+	else {
+		playerCount = 1;
+	}
+	
+	//glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glViewportIndexedf(0, 0, Input::SCREEN_HEIGHT / 2, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
+	//glViewportIndexedf(1, 0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT / 2);
 
 	glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f)); //
 
 	glBindBufferBase(GL_UNIFORM_BUFFER, 0, uniform_buffer);
-	glm::mat4 * mv_matrix = (glm::mat4*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, 2 * sizeof(glm::mat4), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-	for (int i = 0; i < 2; i++) {
-		mv_matrix[i] = projection * glm::mat4(glm::mat3(playerList[0]->getCamera()->lookAtMat()));
+	glm::mat4 * mv_matrix = (glm::mat4*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, playerCount * sizeof(glm::mat4), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+	for (int j = 0; j < playerCount; j++) {
+		mv_matrix[j] = projection; //* glm::mat4(glm::mat3(playerList[i]->getCamera()->lookAtMat()));
 	}
 	glUnmapBuffer(GL_UNIFORM_BUFFER);
 	
@@ -982,12 +996,10 @@ void Game::draw()
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), playerList[0]->getCamera()->getCameraPos().x, playerList[0]->getCamera()->getCameraPos().y, playerList[0]->getCamera()->getCameraPos().z);
-	cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
 	// draw skybox
 	skybox->draw(projection * glm::mat4(glm::mat3(playerList[0]->getCamera()->lookAtMat())));
-
 
 	//if the game is paused
 	if (isGameRunning == false)
@@ -1006,5 +1018,6 @@ void Game::draw()
 			gameObjects[i]->componentDraw(playerList[0]->getCamera()->lookAtMat());
 		}
 	}
+
 	
 }

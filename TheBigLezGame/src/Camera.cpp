@@ -32,7 +32,6 @@ glm::vec3 Camera::getRight()
 
 void Camera::follow(glm::vec3 &objPosition)
 {
-	//m_followPos = &objPosition;
 	m_position = objPosition;
 }
 
@@ -45,7 +44,7 @@ void Camera::update()
 {
 	// Different types of camera movement
 	switch (m_camType) {
-	case FREECAM: // Aka noclip
+	case FREECAM: // Aka noclip (Uses keyboard)
 	{
 		if (Input::keyboard1.keys[GLFW_KEY_W]) {
 			m_position -= m_front * 1.0f;
@@ -66,10 +65,10 @@ void Camera::update()
 		if (Input::keyboard1.keys[GLFW_KEY_SPACE]) {
 			m_position += glm::vec3(0.0f, 1.0f, 0.0f);
 		}
-		break;
 	}
 	case KEYBOARD: // Keyboard Usage
 	{
+		// Keyboard looking, keeps mouse 'locked' into centre
 		float xpos, ypos;
 		xpos = Input::mouse1.current_Xpos;
 		ypos = Input::mouse1.current_Ypos;
@@ -91,6 +90,7 @@ void Camera::update()
 	}
 	case CONTROLLER: // Controller Usage
 	{
+		// Controller looking
 		float xpos, ypos;
 		xpos = Input::controller1.rightThumb.x;
 		ypos = Input::controller1.rightThumb.y;
@@ -101,12 +101,11 @@ void Camera::update()
 	}
 	}
 
-
-
+	// Prevent m_yaw value from overflowing
 	if (m_yaw > 360) m_yaw = 0;
 	if (m_yaw < 0) m_yaw = 360;
 
-
+	// Lock pitch so player can 'flip' camera/ look too far up or down
 	if (this->m_pitch > 89.0f)
 	{
 		this->m_pitch = 89.0f;
@@ -116,6 +115,8 @@ void Camera::update()
 	{
 		this->m_pitch = -89.0f;
 	}
+
+	// Recalculate front and right
 	glm::vec3 front;
 	front.x = cos(glm::radians(m_yaw)) *cos(glm::radians(m_pitch));
 	front.y = sin(glm::radians(m_pitch));
