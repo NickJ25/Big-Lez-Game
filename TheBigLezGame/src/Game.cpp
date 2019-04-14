@@ -982,6 +982,7 @@ void Game::draw()
 	glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 
 	glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), playerList[0]->getCamera()->getCameraPos().x, playerList[0]->getCamera()->getCameraPos().y, playerList[0]->getCamera()->getCameraPos().z);
+	cout << glGetUniformLocation(toonShader->getID(), "viewPos") << endl;
 	//glm::mat4 projection = (glm::perspective(float(glm::radians(60.0f)), 1280.0f / 720.0f, 1.0f, 150.0f));
 
 	// draw skybox

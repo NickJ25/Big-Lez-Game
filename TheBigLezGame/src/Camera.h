@@ -9,8 +9,8 @@
 
 enum Camera_Type
 {
-	STATIC,
-	DYNAMIC,
+	CONTROLLER,
+	KEYBOARD,
 	FREECAM,
 };
 

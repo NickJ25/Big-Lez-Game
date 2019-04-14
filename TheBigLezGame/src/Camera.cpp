@@ -46,6 +46,7 @@ void Camera::update()
 	// Different types of camera movement
 	switch (m_camType) {
 	case FREECAM: // Aka noclip
+	{
 		if (Input::keyboard1.keys[GLFW_KEY_W]) {
 			m_position -= m_front * 1.0f;
 		}
@@ -66,45 +67,41 @@ void Camera::update()
 			m_position += glm::vec3(0.0f, 1.0f, 0.0f);
 		}
 		break;
-	case DYNAMIC: // Standard player
-		//if (Input::keyboard1.keys[GLFW_KEY_W]) {
-		//	m_position = m_position - getFront() * 1.0f;
-		//	m_position.y = 0;
-		//}
-		//if (Input::keyboard1.keys[GLFW_KEY_S]) {
-		//	m_position = m_position + m_front * 1.0f;
-		//	m_position.y = 0;
-		//}
-		//if (Input::keyboard1.keys[GLFW_KEY_A]) {
-		//	m_position = m_position + glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
-		//	m_position.y = 0;
-		//}
-		//if (Input::keyboard1.keys[GLFW_KEY_D]) {
-		//	m_position = m_position - glm::normalize(glm::cross(m_front, m_up)) * 1.0f;
-		//	m_position.y = 0;
-		//}
-		break;
-	case STATIC: // No movement
-		break;
 	}
+	case KEYBOARD: // Keyboard Usage
+	{
+		float xpos, ypos;
+		xpos = Input::mouse1.current_Xpos;
+		ypos = Input::mouse1.current_Ypos;
 
-	float xpos, ypos;
-	xpos = Input::mouse1.current_Xpos; //Input::controller1.rightThumb.x;
-	ypos =  Input::mouse1.current_Ypos; // Input::controller1.rightThumb.y;
+		if (firstCamLoad) {
+			lastOffsetX = (float)xpos;
+			lastOffsetY = (float)ypos;
+			firstCamLoad = false;
+		}
 
-	if (firstCamLoad) { // Add start position for camera?
+		mouseOffsetX = (float)xpos - lastOffsetX;
+		mouseOffsetY = lastOffsetY - (float)ypos;
 		lastOffsetX = (float)xpos;
 		lastOffsetY = (float)ypos;
-		firstCamLoad = false;
+
+		this->m_yaw += (mouseOffsetX *= this->m_mouseSensitivity);
+		this->m_pitch += (mouseOffsetY *= this->m_mouseSensitivity);
+		break;
+	}
+	case CONTROLLER: // Controller Usage
+	{
+		float xpos, ypos;
+		xpos = Input::controller1.rightThumb.x;
+		ypos = Input::controller1.rightThumb.y;
+
+		this->m_yaw += ((xpos * 9) * this->m_mouseSensitivity);
+		this->m_pitch += ((-ypos * 8) * this->m_mouseSensitivity);
+		break;
+	}
 	}
 
-	mouseOffsetX = (float)xpos - lastOffsetX; // Controller xpos * 9
-	mouseOffsetY = lastOffsetY - (float)ypos; // Controller -ypos* 8
-	lastOffsetX = (float)xpos;
-	lastOffsetY = (float)ypos;
 
-	this->m_yaw += (mouseOffsetX *= this->m_mouseSensitivity);
-	this->m_pitch += (mouseOffsetY *= this->m_mouseSensitivity);
 
 	if (m_yaw > 360) m_yaw = 0;
 	if (m_yaw < 0) m_yaw = 360;

@@ -102,11 +102,6 @@ Skybox::Skybox(const char * image1, const char * image2, const char * image3, co
 
 	// Create Sample Cube
 	m_VBO_texture = createCubeTexture(image1, image2, image3, image4, image5, image6);
-
-	// Uniform buffer for splitscreen modelview data
-	glGenBuffers(1, &m_uniform_buffer);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_uniform_buffer);
-	glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 }
 
 void Skybox::draw(glm::mat4 viewMatrix)
@@ -116,13 +111,6 @@ void Skybox::draw(glm::mat4 viewMatrix)
 	glUseProgram(m_skyBoxShader->getID());
 	glBindVertexArray(m_VAO_skybox);
 	glUniformMatrix4fv(glGetUniformLocation(m_skyBoxShader->getID(), "VP"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
-
-	//glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_uniform_buffer);
-	//glm::mat4 * mv_matrix = (glm::mat4*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, 2 * sizeof(glm::mat4), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-	//for (int i = 0; i < 2; i++) {
-	//	mv_matrix[i] = viewMatrix;
-	//}
-	//glUnmapBuffer(GL_UNIFORM_BUFFER);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_VBO_texture);

@@ -3,10 +3,10 @@
 Player::Player(Input::ControllerType controller, Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
 {
 	if (controller == Input::KEYBOARD) {
-		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 4.5f, 0.0f), DYNAMIC);
+		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 4.5f, 0.0f), KEYBOARD);
 	}
 	else {
-		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f), STATIC);
+		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 7.0f, 0.0f), CONTROLLER);
 	}
 	this->addController(controller);
 	m_character = character;
@@ -174,7 +174,7 @@ void Player::addWeapon(Weapon * weapon)
 bool Player::hasPlayerAttacked()
 {
 	if (currentWeapon != nullptr) {
-		return currentWeapon->hasAttacked();
+		return false; // currentWeapon->hasAttacked();
 	}
 	return false;
 }
