@@ -4,7 +4,7 @@ layout(location = 0) in vec3 in_position;
 
 //out vec3 text_coords;
 
-//uniform mat4 VP; //   WITHOUT model matrix
+uniform mat4 VP; //   WITHOUT model matrix
 
 out VS_OUT
 {
@@ -13,7 +13,7 @@ out VS_OUT
 
 void main()
 {
-	vec4 pos = vec4( in_position, 1.0); //VP * 
+	vec4 pos =VP * vec4( in_position, 1.0); // 
 	gl_Position = pos.xyww; // optimization !! its work with glDepthFunc(GL_LEQUAL);
 							// and draw skybox after scene !!!
 

@@ -9,6 +9,9 @@ private:
 	GLuint m_VAO_skybox;
 	GLuint m_VBO_vertices_textures;
 
+	//splitscreen modelview buffer
+	GLuint m_uniform_buffer;
+
 	Shader *m_skyBoxShader;
 
 	GLuint createCubeTexture(const char* image1, const char* image2, const char* image3, const char* image4, const char* image5, const char* image6);

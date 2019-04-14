@@ -22,7 +22,7 @@ void main(void)
     for (int i = 0; i < gl_in.length(); i++)
     {
 		gs_out.text_coords = gs_in[i].text_coords;
-        gl_Position = mvp_matrix[gl_InvocationID] * gl_in[i].gl_Position;
+        gl_Position =  gl_in[i].gl_Position; //mvp_matrix[gl_InvocationID] *
         gl_ViewportIndex = gl_InvocationID;
         EmitVertex();
     }
