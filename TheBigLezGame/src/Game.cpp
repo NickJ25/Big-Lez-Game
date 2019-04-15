@@ -810,8 +810,8 @@ void Game::update()
 					conversationEngine->play2D("assets/Sounds/gun.wav");
 
 					//iterate through game objects and find an enemy
-					for (int i = 0; i < gameObjects.size(); i++) {
-						Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
+					for (int j = 0; j < gameObjects.size(); j++) {
+						Enemy *e = dynamic_cast<Enemy*>(gameObjects[j]);
 						if (e) {
 							//check for an intersection and take damage if so
 							if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (e)))
@@ -820,7 +820,7 @@ void Game::update()
 							}
 						}
 						//do the same for the boss
-						Boss *b = dynamic_cast<Boss*>(gameObjects[i]);
+						Boss *b = dynamic_cast<Boss*>(gameObjects[j]);
 						if (b) {
 							if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (b)))
 							{

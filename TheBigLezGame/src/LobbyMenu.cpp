@@ -22,7 +22,7 @@ void LobbyMenu::addCharacters()
 	// Create Big Lez
 	Player::Character BigLez;
 	BigLez.id = 1;
-	BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
+	BigLez.fileLocation = "assets/Characters/BigLez/lez3.dae";
 	BigLez.name = "Leslie";
 	BigLez.health = 100;
 	BigLez.walkSpeed = 10;
