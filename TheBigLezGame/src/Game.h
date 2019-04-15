@@ -37,6 +37,7 @@ class Game {
 private:
 	vector<Player*> playerList{nullptr, nullptr};
 	void createPlayers();
+	void assignAttributes(int n);
 	void createWeapons();
 
 	//Player* mainPlayer;

@@ -32,23 +32,55 @@ int diffuse = 0;
 int specular = 1;
 float shininess = 32.0f;
 
+void Game::assignAttributes(int n)
+{
+	if (GameData::g_PlayerData[n]->name == "Leslie")
+	{
+		playerList[n]->setCharacterAttributes(300, 2.5);
+		//set run
+		playerList[n]->setAnimationCalls(0.0, 7.625, 0);
+		////set still
+		playerList[n]->setAnimationCalls(5.208, 2.103, 1);
+		////set death
+		playerList[n]->setAnimationCalls(5.0, 2.541, 2);
+		////set deathstill
+		playerList[n]->setAnimationCalls(6.041, 0.0, 3);
+	}
+
+	if (GameData::g_PlayerData[n]->name == "Sassy")
+	{
+		playerList[n]->setCharacterAttributes(450, 2.5);
+		//set run
+		playerList[n]->setAnimationCalls(0.0, 2.7, 0);
+		////set still
+		playerList[n]->setAnimationCalls(2.083, 2.7, 1);
+
+		//currently dont have animations for it
+		////set death
+		playerList[n]->setAnimationCalls(0.0, 1.0, 2);
+		////set deathstill
+		playerList[n]->setAnimationCalls(0.0, 1.0, 3);
+	}
+
+	if (GameData::g_PlayerData[n]->name == "Donny")
+	{
+		playerList[n]->setCharacterAttributes(300, 1.5);
+		//set run
+		playerList[n]->setAnimationCalls(0.0, 6.045, 0);
+		////set still
+		playerList[n]->setAnimationCalls(0.916, 6.045, 1);
+		////set death
+		playerList[n]->setAnimationCalls(0.916, 3.594, 2);
+		////set deathstill
+		playerList[n]->setAnimationCalls(1.541, 3.594, 3);
+	}
+}
 void Game::createPlayers()
 {
 	for (int i = 0; i < GameData::g_PlayerData.size(); i++) {
 		if (GameData::g_PlayerData[i] != nullptr) {
 			playerList[i] = new Player(GameData::g_PlayerData[i]->control, *GameData::g_PlayerData[i], glm::vec3(0.0f, 0.0f, 0.0f));
-			if (GameData::g_PlayerData[i]->name == "Leslie")
-			{
-				playerList[i]->setCharacterAttributes(300, 2.5);
-				//set run
-				//playerList[i]->setAnimationCalls()
-				////set still
-				//	playerList[i]->setAnimationCalls()
-				////set death
-				//	playerList[i]->setAnimationCalls()
-				////set deathstill
-				//playerList[i]->setAnimationCalls()
-			}
+			assignAttributes(i);
 			playerList[i]->setShader(toonShader);
 			playerList[i]->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 			gameObjects.push_back(playerList[i]);
