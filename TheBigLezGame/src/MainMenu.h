@@ -16,6 +16,11 @@ private:
 	Button* singlePlayerBtn, *optionsBtn, *quitBtn;
 	Text* testText;
 	GLFWwindow* m_window;
+
+	//timekeeping
+	float current = 0.0f;
+	float previous = 0.0f;
+
 public:
 	MainMenu();
 	virtual ~MainMenu() {};

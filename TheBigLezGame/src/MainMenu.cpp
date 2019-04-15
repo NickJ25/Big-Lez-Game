@@ -24,9 +24,14 @@ void MainMenu::handle(Menu * menu)
 void MainMenu::update()
 {
 	// Fog Scrolling
+	//get the time
+	current = glfwGetTime();
+	float deltaTime = current - previous;
+	previous = current;
+
 	fog->translate(glm::vec2(fogPos, 360));
 	fog->scale(glm::vec2(3840.0f, 1080.0f), true);
-	fogPos+= 4;
+	fogPos += 300 * deltaTime;
 	if (fogPos > 3800) fogPos = 0;
 
 	if (singlePlayerBtn->buttonClick()) {

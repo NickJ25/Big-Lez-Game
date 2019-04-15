@@ -43,6 +43,10 @@ private:
 	void characterPicSetup(const char* filename, vector<Image*> &piclist);
 	glm::vec4 colourCheck(bool ready);
 
+	//timekeeping
+	float current = 0.0f;
+	float previous = 0.0f;
+
 public:
 	LobbyMenu();
 	virtual ~LobbyMenu() {};
