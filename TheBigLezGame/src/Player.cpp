@@ -16,9 +16,9 @@ Player::Player(Input::ControllerType controller, Character character, glm::vec3 
 
 	//initialise animation storage
 	runAnim = { 0, 0 };
-	injuryAnim = { 0,0 };
 	deathAnim = { 0,0 };
 	stillAnim = { 0,0 };
+	deathStillAnim = 0;
 
 	//set default health and armour to prevent crashes
 	health = 100;
@@ -34,9 +34,9 @@ Player::Player(Character character, glm::vec3 startPos) : GameObject(startPos, c
 
 	//initialise animation storage
 	runAnim = { 0, 0 };
-	injuryAnim = { 0,0 };
 	deathAnim = { 0,0 };
 	stillAnim = { 0,0 };
+	deathStillAnim = 0;
 
 	//set default health and armour to prevent crashes
 	health = 100;
@@ -68,9 +68,7 @@ void Player::playSound(int sound, float delay)
 	if(playingSound == true){
 
 
-		currentTime = glfwGetTime();
 		float deltaTime = currentTime - previousTime;
-		previousTime = currentTime;
 		soundDelay -= deltaTime;
 		if (soundDelay <= 0)
 		{
@@ -109,11 +107,29 @@ void Player::update()
 	//updates the timer without setting a new sound
 	playSound(0, 100.0f);
 
+	currentTime = glfwGetTime();
+	float deltaTime = currentTime - previousTime;
+	previousTime = currentTime;
+
 	//check for injuries or death
 	if (isDead == true) {
-
+		if (deathAnimSet == false) {
+			setAnimation(deathAnim.first, deathAnim.second);
+			deathAnimSet = true;
+		}
+		if (deathTimer <= 0)
+		{
+			setStill(true);
+			still = true;
+			setPauseFrame(deathStillAnim);
+		}
+		else
+		{
+			deathTimer -= deltaTime;
+		}
 	}
 	else {
+
 		//Movement controls
 		if (this->getController()->getForwardMovement()) {
 			glm::vec3 tempPos = m_playerCamera->getCameraPos() - m_playerCamera->getCameraFront() * 1.0f;
@@ -233,10 +249,13 @@ void Player::setAnimationCalls(float s, float e, int type)
 		runAnim.first = s, runAnim.second = e;
 	}
 	if (type == 1) {
-		injuryAnim.first = s, injuryAnim.second = e;
+		deathAnim.first = s, deathAnim.second = e;
 	}
 	if (type == 2) {
-		deathAnim.first = s, deathAnim.second = e;
+		stillAnim.first = s, stillAnim.second = e;
+	}
+	if (type == 3) {
+		deathStillAnim = s;
 	}
 }
 
@@ -249,8 +268,6 @@ void Player::setCharacterAttributes(float h, float a)
 void Player::takeDamage(float damage)
 {
 	health = damage / armour;
-	if(isInjured == false)
-	isInjured = true;
 
 	if (health <= 0)
 	{

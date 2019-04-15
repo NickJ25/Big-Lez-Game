@@ -48,21 +48,23 @@ public:
 	void takeDamage(float damage);
 
 private:
+
 	//health
 	float health;
 	float armour;
 
 	//animation storage
 	std::pair<float, float> runAnim;
-	std::pair<float, float> injuryAnim;
 	std::pair<float, float> deathAnim; 
 	std::pair<float, float> stillAnim;
+	float deathStillAnim;
 
 	//animation timers
 	float deathTimer = 3.0f;
+
 	//animation control variables
-	bool isInjured = false;
 	bool isDead = false;
+	bool deathAnimSet = false;
 
 	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
 	float soundDelay;

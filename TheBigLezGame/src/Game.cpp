@@ -37,6 +37,18 @@ void Game::createPlayers()
 	for (int i = 0; i < GameData::g_PlayerData.size(); i++) {
 		if (GameData::g_PlayerData[i] != nullptr) {
 			playerList[i] = new Player(GameData::g_PlayerData[i]->control, *GameData::g_PlayerData[i], glm::vec3(0.0f, 0.0f, 0.0f));
+			if (GameData::g_PlayerData[i]->name == "Leslie")
+			{
+				playerList[i]->setCharacterAttributes(300, 2.5);
+				//set run
+				//playerList[i]->setAnimationCalls()
+				////set still
+				//	playerList[i]->setAnimationCalls()
+				////set death
+				//	playerList[i]->setAnimationCalls()
+				////set deathstill
+				//playerList[i]->setAnimationCalls()
+			}
 			playerList[i]->setShader(toonShader);
 			playerList[i]->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
 			gameObjects.push_back(playerList[i]);
