@@ -37,10 +37,32 @@ public:
 	void setSound(irrklang::ISoundSource*);
 	irrklang::ISoundSource* getSound(int sound);
 
+	//plays selected sound
 	void playSound(int sound, float delay = 100.0f);
 
+	//sets animation to storage pairs
+	void setAnimationCalls(float s, float e, int type);
+
+	void setCharacterAttributes(float h, float a);
+
+	void takeDamage(float damage);
 
 private:
+	//health
+	float health;
+	float armour;
+
+	//animation storage
+	std::pair<float, float> runAnim;
+	std::pair<float, float> injuryAnim;
+	std::pair<float, float> deathAnim; 
+	std::pair<float, float> stillAnim;
+
+	//animation timers
+	float deathTimer = 3.0f;
+	//animation control variables
+	bool isInjured = false;
+	bool isDead = false;
 
 	irrklang::ISoundEngine *privateEngine = irrklang::createIrrKlangDevice();
 	float soundDelay;
