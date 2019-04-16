@@ -1023,6 +1023,9 @@ void Game::update()
 
 void Game::draw()
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	// viewports
 	int playerCount = 0;
 	glViewport(0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT);
@@ -1051,7 +1054,6 @@ void Game::draw()
 		glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 
 		glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), playerList[k]->getCamera()->getCameraPos().x, playerList[k]->getCamera()->getCameraPos().y, playerList[k]->getCamera()->getCameraPos().z);
-
 		// draw skybox
 		skybox->draw(projection * glm::mat4(glm::mat3(playerList[k]->getCamera()->lookAtMat())), k);
 

@@ -5,8 +5,8 @@ Gun::Gun(const char * filename, std::string gunName, GLuint maxAmmo, GLuint clip
 {
 	t_ammoCount = new Text(glm::vec2(50.0, 80.0), "assets/Fonts/Another_.ttf");
 	t_gunName = new Text(glm::vec2(50.0, 40.0), "assets/Fonts/Another_.ttf");
-	i_crosshair = new Image("assets/Art/crosshair.png", glm::vec2(Input::SCREEN_WIDTH / 2, Input::SCREEN_HEIGHT / 2), 16, 16, false);
-	i_crosshair->scale(glm::vec2(16, 16), false);
+	i_crosshair = new Image("assets/Art/crosshair.png", glm::vec2((Input::SCREEN_WIDTH / 2) - 1, (Input::SCREEN_HEIGHT / 2) - 1), 16, 16, false);
+	i_crosshair->scale(glm::vec2(2, 2), false);
 }
 
 Gun::~Gun()
