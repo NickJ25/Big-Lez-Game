@@ -196,6 +196,7 @@ void Player::update()
 
 		// Gun controls
 		if (currentWeapon != nullptr) {
+			currentWeapon->setViewport(m_playerNum);
 			currentWeapon->primaryMove(this->getController()->getPrimaryAction());
 			currentWeapon->secondaryMove(this->getController()->getSecondaryAction());
 			currentWeapon->action(this->getController()->getReloadAction());
@@ -272,4 +273,9 @@ void Player::takeDamage(float damage)
 		health = 0;
 		isDead = true;
 	}
+}
+
+void Player::setPlayerNum(int playerNum)
+{
+	m_playerNum = playerNum;
 }

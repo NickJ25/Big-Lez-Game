@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 #include <string>
 #include <map>
+#include "Input.h"
 
 #include FT_FREETYPE_H
 
@@ -30,6 +31,7 @@ private:
 	glm::mat4 m_model = glm::mat4(1.0);
 	glm::mat4 m_proj = glm::mat4(1.0);
 	glm::mat4 m_view = glm::mat4(1.0);
+	
 public:
 	Text(glm::vec2 position, const char* font);
 	~Text();
@@ -40,4 +42,5 @@ public:
 
 	glm::vec2 getSize();
 	void draw(std::string text, glm::vec4 colour, int imageMode);
+	void draw(std::string text, glm::vec4 colour, int imageMode, int viewport);
 };

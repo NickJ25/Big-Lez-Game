@@ -57,8 +57,9 @@ void Gun::setMatrix(glm::mat4 newMat)
 
 void Gun::update()
 {
-	t_ammoCount->draw(std::to_string(m_currentClip) + " / " + std::to_string(m_clipSize), glm::vec4(1.0, 1.0, 1.0, 1.0),1);
-	t_gunName->draw(m_gunName, glm::vec4(1.0, 1.0, 1.0, 1.0),1);
+	t_ammoCount->draw(std::to_string(m_currentClip) + " / " + std::to_string(m_clipSize), glm::vec4(1.0, 1.0, 1.0, 1.0),1, m_viewport);
+	t_gunName->draw(m_gunName, glm::vec4(1.0, 1.0, 1.0, 1.0),1, m_viewport);
+	i_crosshair->setViewport(m_viewport);
 	i_crosshair->draw();
 }
 
@@ -100,4 +101,9 @@ bool Gun::hasAttacked()
 			return false;
 		}
 	}
+}
+
+void Gun::setViewport(int num)
+{
+	m_viewport = num;
 }

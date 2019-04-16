@@ -43,7 +43,7 @@ void main(void)
         gs_out.LightDirection_cameraspace = gs_in[i].LightDirection_cameraspace;
 
         gl_Position = mvp_matrix * gl_in[i].gl_Position;
-        gl_ViewportIndex = viewportNum; //gl_InvocationID
+        gl_ViewportIndex = viewportNum;
         EmitVertex();
     }
     EndPrimitive();

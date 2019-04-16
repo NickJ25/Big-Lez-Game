@@ -17,4 +17,5 @@ public:
 	virtual void action(bool active) = 0;
 	virtual bool hasAttacked() = 0;
 	virtual void setMatrix(glm::mat4 newMat) = 0;
+	virtual void setViewport(int num) = 0;
 };

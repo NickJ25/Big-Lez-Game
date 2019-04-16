@@ -20,6 +20,7 @@ private:
 	GLuint m_maxAmmo;
 	GLuint m_clipSize;
 	GLuint m_currentClip = m_clipSize;
+	GLuint m_viewport;
 	float m_shootDelay;
 
 	bool sprayAllowed;
@@ -45,4 +46,5 @@ public:
 	void secondaryMove(bool active) override;
 	void action(bool active) override;
 	bool hasAttacked() override;
+	void setViewport(int num) override;
 };

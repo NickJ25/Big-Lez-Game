@@ -46,6 +46,7 @@ public:
 	void setCharacterAttributes(float h, float a);
 
 	void takeDamage(float damage);
+	void setPlayerNum(int playerNum);
 
 private:
 
@@ -83,6 +84,7 @@ private:
 	Text* m_charLabel;
 	Weapon* m_playerInventory[2] = { nullptr, nullptr };
 	Weapon* currentWeapon = nullptr;
+	int m_playerNum;
 
 	GLfloat prevYaw, currentYaw;
 

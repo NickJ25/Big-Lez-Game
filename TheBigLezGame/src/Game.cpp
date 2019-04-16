@@ -83,6 +83,7 @@ void Game::createPlayers()
 			assignAttributes(i);
 			playerList[i]->setShader(toonShader);
 			playerList[i]->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
+			playerList[i]->setPlayerNum(i);
 			gameObjects.push_back(playerList[i]);
 		}
 	}
@@ -758,7 +759,6 @@ void Game::update()
 			if (gameObjects[i] != nullptr) {
 				gameObjects[i]->componentUpdate();
 				gameObjects[i]->update();
-
 				//update enemy AI 
 				Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
 				if (e)
@@ -1023,7 +1023,6 @@ void Game::update()
 
 void Game::draw()
 {
-	
 	// viewports
 	int playerCount = 0;
 	glViewport(0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT);
@@ -1074,6 +1073,4 @@ void Game::draw()
 			}
 		}
 	}
-
-	
 }
