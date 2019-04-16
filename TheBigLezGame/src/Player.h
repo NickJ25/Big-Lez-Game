@@ -52,7 +52,13 @@ public:
 	//increment or decrement points
 	void gainPoints(int p);
 
+	//for colliding with walls
+	glm::vec3 getPreviousPosition();
+
 private:
+
+	//for collision detection
+	glm::vec3 previousMovement = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	//points
 	int points = 0;

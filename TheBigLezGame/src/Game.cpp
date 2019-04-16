@@ -274,12 +274,12 @@ void Game::init()
 
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1, wave2, wave3, wave4, wave5, wave6, wave7;
-	wave1.push_back(0), wave1.push_back(0), wave1.push_back(0), wave1.push_back(1); 
-	wave2.push_back(1), wave2.push_back(0), wave2.push_back(0), wave2.push_back(0); 
-	wave3.push_back(1), wave3.push_back(0), wave3.push_back(0), wave3.push_back(0); 
-	wave4.push_back(1), wave4.push_back(0), wave4.push_back(0), wave4.push_back(0); 
-	wave5.push_back(1), wave5.push_back(0), wave5.push_back(0), wave5.push_back(0); 
-	wave6.push_back(1), wave6.push_back(0), wave6.push_back(0), wave6.push_back(0);
+	wave1.push_back(2), wave1.push_back(1), wave1.push_back(0), wave1.push_back(0); 
+	wave2.push_back(2), wave2.push_back(2), wave2.push_back(0), wave2.push_back(0); 
+	wave3.push_back(2), wave3.push_back(2), wave3.push_back(1), wave3.push_back(0); 
+	wave4.push_back(3), wave4.push_back(2), wave4.push_back(2), wave4.push_back(0); 
+	wave5.push_back(3), wave5.push_back(3), wave5.push_back(3), wave5.push_back(0); 
+	wave6.push_back(0), wave6.push_back(0), wave6.push_back(0), wave6.push_back(1);
 	//wave7.push_back(1), wave7.push_back(0), wave7.push_back(0), wave7.push_back(0);
 
 	//add this wave to the wave spawner
@@ -799,15 +799,24 @@ void Game::update()
 
 					if (checkCollision((*it), (*it1)) == true)
 					{
-						//an enemy is colliding with something
-						//if it is another enemy
+						//use dynamic casting to find out what is colliding with what
 						Enemy *e1 = dynamic_cast<Enemy*>((*it));
 						Enemy *e2 = dynamic_cast<Enemy*>((*it1));
 						Player *p1 = dynamic_cast<Player*>((*it));
 						Player *p2 = dynamic_cast<Player*>((*it1));
-						//if there is a player, enemy collision
+						Obstacle *ob1 = dynamic_cast<Obstacle*>((*it));
+						Obstacle *ob2 = dynamic_cast<Obstacle*>((*it1));
 
-						if (e1 && p2 || e2 && p1)
+						//player - wall collision
+						if (p1 && ob1 || p2 && ob2 || p1 && ob2 || p2 && ob1)
+						{
+							if (p1)
+								p1->Move(-p1->getPreviousPosition());
+							if(p2)
+								p2->Move(-p2->getPreviousPosition());
+						}
+						//player, enemy collision
+						if (e1 && p2 || e2 && p1 || e2 && p2 || p1 && e1)
 						{
 							//reimplement when injury animations are all fixed
 							//check which one is the enemy, then set to attack animation

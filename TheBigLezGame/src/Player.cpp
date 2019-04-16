@@ -174,6 +174,12 @@ void Player::update()
 		// Create a matrix and apply the rotations and translations on it.
 		glm::mat4 tempMat(1.0f);
 		tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -15.0f, 0.0f))); //-7.5
+
+		if(previousMovement == glm::vec3(0.0f, 0.0f, 0.0f))
+			previousMovement = m_playerCamera->getCameraPos() + glm::vec3(0.0f, -15.0f, 0.0f);
+		else
+			previousMovement -= m_playerCamera->getCameraPos() + glm::vec3(0.0f, -15.0f, 0.0f);
+
 		tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
 		tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
 
@@ -279,4 +285,9 @@ void Player::takeDamage(float damage)
 void Player::gainPoints(int p)
 {
 	points += p;
+}
+
+glm::vec3 Player::getPreviousPosition()
+{
+	return previousMovement;
 }

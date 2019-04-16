@@ -26,20 +26,8 @@ void TransformComponent::setMatrix(glm::mat4 newMat)
 
 void TransformComponent::setPosition(glm::vec3 newPos)
 {
-	//cout << "---------------- Matrix 1 ----------------" << endl;
-	//cout << m_matrix[0][0] << " " << m_matrix[1][0] << " " << m_matrix[2][3] << " " << m_matrix[3][0] << endl;
-	//cout << m_matrix[0][1] << " " << m_matrix[1][1] << " " << m_matrix[2][3] << " " << m_matrix[3][1] << endl;
-	//cout << m_matrix[0][2] << " " << m_matrix[1][2] << " " << m_matrix[2][3] << " " << m_matrix[3][2] << endl;
-	//cout << m_matrix[0][3] << " " << m_matrix[1][3] << " " << m_matrix[2][3] << " " << m_matrix[3][3] << endl;
-	//cout << "------------------------------------------" << endl;
 	m_matrix = glm::translate(m_matrix, (this->getPosition() *= -1.0f));
-	cout << this->getPosition().x << " " << this->getPosition().y << " " << this->getPosition().z << endl;
-	//cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
-	//m_matrix = glm::translate(m_matrix, -getPosition());
-	//cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
 	m_matrix = glm::translate(m_matrix, newPos);
-	//cout << getPosition().x << " " << getPosition().y << " " << getPosition().z << endl;
-	//cout << endl;
 }
 
 
