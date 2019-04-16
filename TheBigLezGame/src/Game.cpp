@@ -267,10 +267,10 @@ void Game::init()
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1, wave2, wave3, wave4, wave5, wave6, wave7;
 	wave1.push_back(0), wave1.push_back(2), wave1.push_back(0), wave1.push_back(0); 
-	wave2.push_back(2), wave2.push_back(2), wave2.push_back(0), wave2.push_back(0); 
-	wave3.push_back(2), wave3.push_back(2), wave3.push_back(1), wave3.push_back(0); 
-	wave4.push_back(3), wave4.push_back(2), wave4.push_back(2), wave4.push_back(0); 
-	wave5.push_back(3), wave5.push_back(3), wave5.push_back(3), wave5.push_back(0); 
+	wave2.push_back(0), wave2.push_back(2), wave2.push_back(1), wave2.push_back(0); 
+	wave3.push_back(0), wave3.push_back(2), wave3.push_back(2), wave3.push_back(0); 
+	wave4.push_back(0), wave4.push_back(3), wave4.push_back(2), wave4.push_back(0); 
+	wave5.push_back(0), wave5.push_back(3), wave5.push_back(3), wave5.push_back(0); 
 	wave6.push_back(0), wave6.push_back(0), wave6.push_back(0), wave6.push_back(1);
 	//wave7.push_back(1), wave7.push_back(0), wave7.push_back(0), wave7.push_back(0);
 
@@ -293,34 +293,34 @@ void Game::init()
 
 	int waveCount = 0;
 
-	while(firstWave.size() < 1) { 
+	while(firstWave.size() < 2) { 
 		waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, true, firstWave);
 		waveCount++;
 	}
 	waveCounters.push_back(waveCount);
 	waveCount = 0;
-	while (secondWave.size() < 1)
+	while (secondWave.size() < 3)
 	{
 		waveSpawner->spawnWave(gameObjects, 1, toonShader, pathManager, true, secondWave);
 		waveCount++;
 	}
 	waveCounters.push_back(waveCount);
 	waveCount = 0;
-	while (thirdWave.size() < 1)
+	while (thirdWave.size() < 4)
 	{
 		waveSpawner->spawnWave(gameObjects, 2, toonShader, pathManager, true, thirdWave);
 		waveCount++;
 	}
 	waveCounters.push_back(waveCount);
 	waveCount = 0;
-	while (fourthWave.size() < 1)
+	while (fourthWave.size() < 5)
 	{
 		waveSpawner->spawnWave(gameObjects, 3, toonShader, pathManager, true, fourthWave);
 		waveCount++;
 	}
 	waveCounters.push_back(waveCount);
 	waveCount = 0;
-	while (fifthWave.size() < 1)
+	while (fifthWave.size() < 6)
 	{
 		waveSpawner->spawnWave(gameObjects, 4, toonShader, pathManager, true, fifthWave);
 		waveCount++;
@@ -705,7 +705,7 @@ void Game::update()
 			Boss* tmp = dynamic_cast<Boss*>((*it));
 			Enemy* tmp1 = dynamic_cast<Enemy*>((*it));
 
-			if (tmp || tmp1)
+			if (tmp && tmp->getHealth() > 0 || tmp1 && tmp1->getDeath() == false)
 				enemyCounter++;
 		}
 

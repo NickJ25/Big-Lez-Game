@@ -13,7 +13,7 @@ class LobbyMenu : public MenuState {
 private:
 	Image* background, *fog;
 	float fogPos = 0;
-	const float GAME_COUNTDOWN_TIME = 2;
+	const float GAME_COUNTDOWN_TIME = 10;
 
 	Image* p1CurrentCharPic = nullptr, *p2CurrentCharPic = nullptr;
 	Button* backBtn, *startBtn;
