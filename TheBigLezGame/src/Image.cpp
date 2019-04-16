@@ -3,7 +3,7 @@
 
 void Image::init(unsigned char* image)
 {
-	imageShader = new Shader("src/Image.vert", "src/Image.frag");
+	imageShader = new Shader("src/Image.vert", "src/Image.geom", "src/Image.frag");
 
 	// Generate and load image data
 	glGenTextures(1, &m_texture);
@@ -68,7 +68,7 @@ Image::Image(const char * filename, glm::vec2 screenPos, int width, int height, 
 	m_Height = height;
 	m_image = SOIL_load_image(filename, &m_imgWidth, &m_imgHeight, 0, SOIL_LOAD_RGBA);
 	m_model = glm::translate(m_model, glm::vec3(screenPos, 0.0f));
-
+	m_viewport = 0;
 
 	posX = screenPos.x;
 	posY = screenPos.y;
@@ -86,6 +86,11 @@ Image::~Image()
 {
 	delete imageShader;
 	imageShader = nullptr;
+}
+
+void Image::setViewport(int viewportNum)
+{
+	m_viewport = viewportNum;
 }
 
 void Image::changeImage(std::string newImage)
@@ -124,6 +129,8 @@ void Image::scale(glm::vec2 scale, bool resetMat) {
 void Image::draw()
 {
 	imageShader->use();
+	glUniform1i(glGetUniformLocation(imageShader->getID(), "imgMode"), 0);
+	glUniform1i(glGetUniformLocation(imageShader->getID(), "viewportNum"), m_viewport);
 	glUniformMatrix4fv(glGetUniformLocation(imageShader->getID(), "imgRotation"), 1, GL_FALSE, glm::value_ptr(m_model));
 	glUniformMatrix4fv(glGetUniformLocation(imageShader->getID(), "imgProj"), 1, GL_FALSE, glm::value_ptr(m_proj));
 	glUniformMatrix4fv(glGetUniformLocation(imageShader->getID(), "imgView"), 1, GL_FALSE, glm::value_ptr(m_view));

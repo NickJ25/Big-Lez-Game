@@ -2,8 +2,6 @@
 
 layout(location = 0) in vec3 in_position;
 
-//out vec3 text_coords;
-
 uniform mat4 VP; //   WITHOUT model matrix
 
 out VS_OUT

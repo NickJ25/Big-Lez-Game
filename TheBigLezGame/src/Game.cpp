@@ -79,10 +79,11 @@ void Game::createPlayers()
 {
 	for (int i = 0; i < GameData::g_PlayerData.size(); i++) {
 		if (GameData::g_PlayerData[i] != nullptr) {
-			playerList[i] = new Player(GameData::g_PlayerData[i]->control, *GameData::g_PlayerData[i], glm::vec3(0.0f, 0.0f, 0.0f));
+			playerList[i] = new Player(GameData::g_PlayerData[i]->control, *GameData::g_PlayerData[i], startingPositions[i]);
 			assignAttributes(i);
 			playerList[i]->setShader(toonShader);
 			playerList[i]->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
+			playerList[i]->setPlayerNum(i);
 			gameObjects.push_back(playerList[i]);
 		}
 	}
@@ -95,7 +96,8 @@ void Game::createWeapons()
 			switch (playerList[i]->getCharacter().id) {
 			case 1: // Gun Setup for BigLez
 			{
-				GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
+				// Lez's Shotgun
+				GameObject* lezShotgun = new Gun("assets/Weapons/LezShotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
 				lezShotgun->setShader(toonShader);
 				lezShotgun->setAnimation(0.0f, 1.0f);
 				playerList[i]->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
@@ -105,12 +107,20 @@ void Game::createWeapons()
 			}
 			case 2: // Gun Setup for Sassy
 			{
-				cout << "------------------------------------s guns" << "\n";
+				GameObject* donnyRifle = new Gun("assets/Weapons/DonnyRifle/DonnyRifle.dae", "Rifle", 6, 6, 2, false);
+				donnyRifle->setShader(toonShader);
+				donnyRifle->setAnimation(0.0f, 1.0f);
+				playerList[i]->addWeapon(dynamic_cast<Weapon*> (donnyRifle));
+				gameObjects.push_back(donnyRifle);
 				break;
 			}
 			case 3: // Gun Setup for Donny
 			{
-				cout << "------------------------------------d guns" << "\n";
+				GameObject* donnyPistol = new Gun("assets/Weapons/DonnyPistol/DonnyPistol.dae", "Pistol", 8, 8, 0.2, false);
+				donnyPistol->setShader(toonShader);
+				donnyPistol->setAnimation(0.0f, 1.0f);
+				playerList[i]->addWeapon(dynamic_cast<Weapon*> (donnyPistol));
+				gameObjects.push_back(donnyPistol);
 				break;
 			}
 			case 4: // Gun Setup for Clarence
@@ -160,32 +170,14 @@ void Game::init()
 	environment->Move(glm::vec3(0.0f, 60.0f, 0.0f));
 	gameObjects.push_back(environment);
 
+	GameObject* roof = new Prop("assets/Props/Map/roof.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+	roof->setShader(toonShader);
+	roof->Scale(glm::vec3(1.5f, 1.5f, 1.5f));
+	roof->Move(glm::vec3(17.5f, -70.0f, 65.5f));
+	gameObjects.push_back(roof);
+
 	createPlayers();
 	createWeapons();
-
-	
-
-	//// Characters
-	//Player::Character BigLez;
-	//BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
-	//BigLez.name = "Lez";
-	//BigLez.health = 100;
-	//BigLez.walkSpeed = 10;
-
-	//Player::Character Sassy;
-	//Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
-	//Sassy.name = "Sassy";
-
-	//Player::Character cube;
-	//cube.fileLocation = "assets/Props/Map/gridblock.dae";
-	//cube.name = "boundingbox";
-
-	//sassy = new Player(Input::CONTROLLER1, Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
-	//sassy->setShader(toonShader);
-	//sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
-	//sassy->setAnimation(5.0f, 1.0f);
-	//sassy->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
-	//gameObjects.push_back(sassy);
 
 #pragma endregion
 #pragma region Fences & Wave Junk
@@ -767,7 +759,6 @@ void Game::update()
 			if (gameObjects[i] != nullptr) {
 				gameObjects[i]->componentUpdate();
 				gameObjects[i]->update();
-
 				//update enemy AI 
 				Enemy *e = dynamic_cast<Enemy*>(gameObjects[i]);
 				if (e)
@@ -1051,6 +1042,8 @@ void Game::update()
 
 void Game::draw()
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	// viewports
 	int playerCount = 0;
@@ -1080,7 +1073,6 @@ void Game::draw()
 		glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
 
 		glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), playerList[k]->getCamera()->getCameraPos().x, playerList[k]->getCamera()->getCameraPos().y, playerList[k]->getCamera()->getCameraPos().z);
-
 		// draw skybox
 		skybox->draw(projection * glm::mat4(glm::mat3(playerList[k]->getCamera()->lookAtMat())), k);
 
@@ -1102,6 +1094,4 @@ void Game::draw()
 			}
 		}
 	}
-
-	
 }

@@ -36,7 +36,7 @@ private:
 	GLuint m_VAO;
 	GLuint m_VBO, m_VBO2, m_EBO;
 	GLuint m_texture;
-
+	GLuint m_viewport;
 
 	glm::mat4 m_model = glm::mat4(1.0);
 	glm::mat4 m_proj = glm::mat4(1.0);
@@ -55,6 +55,7 @@ public:
 	Image(const char* filename, glm::vec2 screenPos, bool isMenu = true);
 	Image(const char* filename, glm::vec2 screenPos, int width, int height, bool isMenu = true);
 	~Image();
+	void setViewport(int viewportNum);
 	void changeImage(std::string newImage);
 	void translate(glm::vec2 position);
 	void rotate(GLfloat radians);

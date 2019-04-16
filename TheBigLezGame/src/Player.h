@@ -30,7 +30,7 @@ public:
 	void update() override;
 	void addWeapon(Weapon* weapon);
 	bool hasPlayerAttacked();
-	
+
 	Player::Character getCharacter();
 
 	//sound stuff
@@ -48,6 +48,7 @@ public:
 
 	//loose health from attacks
 	void takeDamage(float damage);
+	void setPlayerNum(int playerNum);
 
 	//increment or decrement points
 	void gainPoints(int p);
@@ -69,7 +70,7 @@ private:
 
 	//animation storage
 	std::pair<float, float> runAnim;
-	std::pair<float, float> deathAnim; 
+	std::pair<float, float> deathAnim;
 	std::pair<float, float> stillAnim;
 	float deathStillAnim;
 
@@ -97,6 +98,7 @@ private:
 	Text* m_charLabel;
 	Weapon* m_playerInventory[2] = { nullptr, nullptr };
 	Weapon* currentWeapon = nullptr;
+	int m_playerNum;
 
 	GLfloat prevYaw, currentYaw;
 
@@ -109,7 +111,7 @@ private:
 	float currentTime = 0.0f;
 	float previousTime = 0.0f;
 
-
+	glm::vec3 cameraOffset{ 0.0f, 2.4f, 0.0f };
 };
 
 // Make camera unique

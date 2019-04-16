@@ -12,6 +12,7 @@
 //other files
 #include "Weapon.h"
 #include "Text.h"
+#include "Image.h"
 
 class Gun : public Weapon {
 private:
@@ -19,14 +20,16 @@ private:
 	GLuint m_maxAmmo;
 	GLuint m_clipSize;
 	GLuint m_currentClip = m_clipSize;
+	GLuint m_viewport;
 	float m_shootDelay;
 
 	bool sprayAllowed;
 	bool gunFired;
 	float lastFired = glfwGetTime();
-	bool alreadyFired = false;;
+	bool alreadyFired = false;
 	Text* t_ammoCount;
 	Text* t_gunName;
+	Image* i_crosshair;
 
 public:
 	Gun(const char* filename, std::string gunName, GLuint maxAmmo, GLuint clipSize, 
@@ -43,4 +46,5 @@ public:
 	void secondaryMove(bool active) override;
 	void action(bool active) override;
 	bool hasAttacked() override;
+	void setViewport(int num) override;
 };

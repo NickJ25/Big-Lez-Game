@@ -2,7 +2,12 @@
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texCoord;
 
-out vec2 o_texCoord;
+out VS_OUT
+{
+	vec2 o_texCoord;
+} vs_out;
+
+//out vec2 o_texCoord;
 
 uniform mat4 imgRotation;
 uniform mat4 imgProj;
@@ -11,7 +16,7 @@ uniform mat4 imgView;
 
 void main()
 {
-	vec4 newPosition = (imgProj * imgView * imgRotation) * vec4(position, 1.0f);
+	vec4 newPosition = (imgView * imgRotation) * vec4(position, 1.0f); //imgProj * 
     gl_Position = vec4(newPosition.xyz, 1.0f);
-	o_texCoord = texCoord;
+	vs_out.o_texCoord = texCoord;
 }
