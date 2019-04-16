@@ -160,8 +160,17 @@ void Enemy::update()
 	currentTime = glfwGetTime();
 	float deltaTime = currentTime - previousTime;
 	previousTime = currentTime;
+
+	if (hasAttacked == false)
+	{
+		attackTimer -= deltaTime;
+	}
+	else
+	{
+		attackTimer = 2.5f;
+	}
+
 	//sound update
-	
 	if (moving == true && walkSoundSet == false)
 	{
 		privateEngineWalking->setSoundVolume(1.0f);

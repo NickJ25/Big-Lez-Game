@@ -811,6 +811,34 @@ void Game::update()
 						{
 							//reimplement when injury animations are all fixed
 							//check which one is the enemy, then set to attack animation
+							if (p1 && e1) {
+								if (e1->canAttack() == true) {
+									p1->takeDamage(15.0f);
+									e1->Attacked(true);
+								}
+
+							}
+							if (p1 && e2) {
+								if (e2->canAttack() == true) {
+									p1->takeDamage(15.0f);
+									e2->Attacked(true);
+								}
+
+							}
+							if (p2 && e1) {
+								if (e1->canAttack() == true) {
+									p2->takeDamage(15.0f);
+									e1->Attacked(true);
+								}
+
+							}
+							if (p2 && e2) {
+								if (e2->canAttack() == true) {
+									p2->takeDamage(15.0f);
+									e2->Attacked(true);
+								}
+
+							}
 							if (e1)
 							{
 								e1->setMoving(false);

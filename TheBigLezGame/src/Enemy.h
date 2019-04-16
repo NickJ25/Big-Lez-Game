@@ -105,6 +105,18 @@ public:
 
 	void setPauseFrame(float frame);
 
+	void Attacked(bool b)
+	{
+		hasAttacked = b;
+	}
+
+	bool canAttack()
+	{
+		if (attackTimer <= 0)
+			return true;
+
+		return false;
+	}
 private:
 	
 	//timing variables
@@ -169,6 +181,10 @@ private:
 	//animation variables
 	float animStart = 0.0f;
 	float animEnd = 0.0f;
+
+	//attack variables
+	float attackTimer = 2.5f;
+	bool hasAttacked = false;
 
 	//reset variables
 	float originalVelocity;
