@@ -99,7 +99,7 @@ void Game::createWeapons()
 				// Lez's Shotgun
 				GameObject* lezShotgun = new Gun("assets/Weapons/LezShotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
 				lezShotgun->setShader(toonShader);
-				lezShotgun->setAnimation(0.0f, 1.0f);
+				lezShotgun->setAnimation(0.0f, 3.0f);
 				playerList[i]->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
 				gameObjects.push_back(lezShotgun);
 

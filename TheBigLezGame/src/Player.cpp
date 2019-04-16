@@ -193,10 +193,11 @@ void Player::update()
 		if (currentWeapon != nullptr) {
 			glm::mat4 gunMat(1.0f);
 			//gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -13.0f, 0.0f)));
+			gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -9.0f, 0.0f)));
 			gunMat = glm::rotate(gunMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
 			gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
-			//gunMat = glm::translate(gunMat, (glm::vec3(0.2f, -4.0f, 0.0f)));
+			gunMat = glm::scale(gunMat, glm::vec3(0.8, 0.8, 0.8));
+			gunMat = glm::translate(gunMat, (glm::vec3(0.2f, -2.0f, 0.0f)));
 
 			currentWeapon->setMatrix(gunMat);
 			currentWeapon->update();
