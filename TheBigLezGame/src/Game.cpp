@@ -169,32 +169,14 @@ void Game::init()
 	environment->Move(glm::vec3(0.0f, 60.0f, 0.0f));
 	gameObjects.push_back(environment);
 
+	GameObject* roof = new Prop("assets/Props/Map/roof.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+	roof->setShader(toonShader);
+	roof->Scale(glm::vec3(1.5f, 1.5f, 1.5f));
+	roof->Move(glm::vec3(17.5f, -70.0f, 65.5f));
+	gameObjects.push_back(roof);
+
 	createPlayers();
 	createWeapons();
-
-	
-
-	//// Characters
-	//Player::Character BigLez;
-	//BigLez.fileLocation = "assets/Characters/BigLez/lez.dae";
-	//BigLez.name = "Lez";
-	//BigLez.health = 100;
-	//BigLez.walkSpeed = 10;
-
-	//Player::Character Sassy;
-	//Sassy.fileLocation = "assets/Characters/Sassy/sassy.dae";
-	//Sassy.name = "Sassy";
-
-	//Player::Character cube;
-	//cube.fileLocation = "assets/Props/Map/gridblock.dae";
-	//cube.name = "boundingbox";
-
-	//sassy = new Player(Input::CONTROLLER1, Sassy, glm::vec3(45.0f, -12.5f, 20.0f)); // Change to prop is issue?
-	//sassy->setShader(toonShader);
-	//sassy->Move(glm::vec3(45.0f, -12.5f, 20.0f));
-	//sassy->setAnimation(5.0f, 1.0f);
-	//sassy->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
-	//gameObjects.push_back(sassy);
 
 #pragma endregion
 #pragma region Fences & Wave Junk
