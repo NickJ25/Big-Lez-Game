@@ -889,6 +889,11 @@ void Game::update()
 							if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (e)))
 							{
 								e->takeDamage(10.0f);
+								if (e->getDeath() == true)
+									playerList[i]->gainPoints(25);
+								else
+									playerList[i]->gainPoints(5);
+								
 							}
 						}
 						//do the same for the boss
@@ -897,7 +902,12 @@ void Game::update()
 							if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (b)))
 							{
 								b->takeDamage(1000.0f);
+								if (b->getHealth() <= 0)
+									playerList[i]->gainPoints(250);
+								else
+									playerList[i]->gainPoints(12);
 							}
+
 						}
 					}
 				}

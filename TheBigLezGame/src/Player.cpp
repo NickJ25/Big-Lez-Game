@@ -275,3 +275,8 @@ void Player::takeDamage(float damage)
 		isDead = true;
 	}
 }
+
+void Player::gainPoints(int p)
+{
+	points += p;
+}

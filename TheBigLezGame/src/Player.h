@@ -43,11 +43,19 @@ public:
 	//sets animation to storage pairs
 	void setAnimationCalls(float s, float e, int type);
 
+	//set up characters unique health and armour values
 	void setCharacterAttributes(float h, float a);
 
+	//loose health from attacks
 	void takeDamage(float damage);
 
+	//increment or decrement points
+	void gainPoints(int p);
+
 private:
+
+	//points
+	int points = 0;
 
 	//health
 	float health;
