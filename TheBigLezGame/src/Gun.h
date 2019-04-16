@@ -12,6 +12,7 @@
 //other files
 #include "Weapon.h"
 #include "Text.h"
+#include "Image.h"
 
 class Gun : public Weapon {
 private:
@@ -24,9 +25,10 @@ private:
 	bool sprayAllowed;
 	bool gunFired;
 	float lastFired = glfwGetTime();
-	bool alreadyFired = false;;
+	bool alreadyFired = false;
 	Text* t_ammoCount;
 	Text* t_gunName;
+	Image* i_crosshair;
 
 public:
 	Gun(const char* filename, std::string gunName, GLuint maxAmmo, GLuint clipSize, 

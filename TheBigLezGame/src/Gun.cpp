@@ -5,6 +5,8 @@ Gun::Gun(const char * filename, std::string gunName, GLuint maxAmmo, GLuint clip
 {
 	t_ammoCount = new Text(glm::vec2(50.0, 80.0), "assets/Fonts/Another_.ttf");
 	t_gunName = new Text(glm::vec2(50.0, 40.0), "assets/Fonts/Another_.ttf");
+	i_crosshair = new Image("assets/Art/crosshair.png", glm::vec2(Input::SCREEN_WIDTH / 2, Input::SCREEN_HEIGHT / 2), 16, 16, false);
+	i_crosshair->scale(glm::vec2(16, 16), false);
 }
 
 Gun::~Gun()
@@ -57,6 +59,7 @@ void Gun::update()
 {
 	t_ammoCount->draw(std::to_string(m_currentClip) + " / " + std::to_string(m_clipSize), glm::vec4(1.0, 1.0, 1.0, 1.0),1);
 	t_gunName->draw(m_gunName, glm::vec4(1.0, 1.0, 1.0, 1.0),1);
+	i_crosshair->draw();
 }
 
 void Gun::checkHit()

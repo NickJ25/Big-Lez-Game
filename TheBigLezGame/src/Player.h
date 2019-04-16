@@ -30,7 +30,7 @@ public:
 	void update() override;
 	void addWeapon(Weapon* weapon);
 	bool hasPlayerAttacked();
-	
+
 	Player::Character getCharacter();
 
 	//sound stuff
@@ -55,7 +55,7 @@ private:
 
 	//animation storage
 	std::pair<float, float> runAnim;
-	std::pair<float, float> deathAnim; 
+	std::pair<float, float> deathAnim;
 	std::pair<float, float> stillAnim;
 	float deathStillAnim;
 
@@ -95,7 +95,7 @@ private:
 	float currentTime = 0.0f;
 	float previousTime = 0.0f;
 
-
+	glm::vec3 cameraOffset{ 0.0f, 2.4f, 0.0f };
 };
 
 // Make camera unique

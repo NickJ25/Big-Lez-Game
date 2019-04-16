@@ -36,6 +36,7 @@ using namespace std;
 class Game {
 private:
 	vector<Player*> playerList{nullptr, nullptr};
+	glm::vec3 startingPositions[2] = { glm::vec3(75.0f, -2.4f, 15.0f), glm::vec3(45.0f, -2.4f, 15.0f) };
 	void createPlayers();
 	void assignAttributes(int n);
 	void createWeapons();

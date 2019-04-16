@@ -79,7 +79,7 @@ void Game::createPlayers()
 {
 	for (int i = 0; i < GameData::g_PlayerData.size(); i++) {
 		if (GameData::g_PlayerData[i] != nullptr) {
-			playerList[i] = new Player(GameData::g_PlayerData[i]->control, *GameData::g_PlayerData[i], glm::vec3(0.0f, 0.0f, 0.0f));
+			playerList[i] = new Player(GameData::g_PlayerData[i]->control, *GameData::g_PlayerData[i], startingPositions[i]);
 			assignAttributes(i);
 			playerList[i]->setShader(toonShader);
 			playerList[i]->addCollision(glm::vec3(45.0f, -12.5f, 20.0f), 5.0f, 5.0f);
@@ -95,7 +95,8 @@ void Game::createWeapons()
 			switch (playerList[i]->getCharacter().id) {
 			case 1: // Gun Setup for BigLez
 			{
-				GameObject* lezShotgun = new Gun("assets/Weapons/Shotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
+				// Lez's Shotgun
+				GameObject* lezShotgun = new Gun("assets/Weapons/LezShotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
 				lezShotgun->setShader(toonShader);
 				lezShotgun->setAnimation(0.0f, 1.0f);
 				playerList[i]->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
@@ -105,12 +106,20 @@ void Game::createWeapons()
 			}
 			case 2: // Gun Setup for Sassy
 			{
-				cout << "------------------------------------s guns" << "\n";
+				GameObject* donnyRifle = new Gun("assets/Weapons/DonnyRifle/DonnyRifle.dae", "Rifle", 6, 6, 2, false);
+				donnyRifle->setShader(toonShader);
+				donnyRifle->setAnimation(0.0f, 1.0f);
+				playerList[i]->addWeapon(dynamic_cast<Weapon*> (donnyRifle));
+				gameObjects.push_back(donnyRifle);
 				break;
 			}
 			case 3: // Gun Setup for Donny
 			{
-				cout << "------------------------------------d guns" << "\n";
+				GameObject* donnyPistol = new Gun("assets/Weapons/DonnyPistol/DonnyPistol.dae", "Pistol", 8, 8, 0.2, false);
+				donnyPistol->setShader(toonShader);
+				donnyPistol->setAnimation(0.0f, 1.0f);
+				playerList[i]->addWeapon(dynamic_cast<Weapon*> (donnyPistol));
+				gameObjects.push_back(donnyPistol);
 				break;
 			}
 			case 4: // Gun Setup for Clarence

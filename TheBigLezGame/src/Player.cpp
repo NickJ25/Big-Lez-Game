@@ -3,10 +3,10 @@
 Player::Player(Input::ControllerType controller, Character character, glm::vec3 startPos) : GameObject(startPos, character.fileLocation.c_str())
 {
 	if (controller == Input::KEYBOARD) {
-		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 0.0f , 0.0f), KEYBOARD); //4.5f
+		m_playerCamera = new Camera(startPos, KEYBOARD);
 	}
 	else {
-		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 4.5f, 0.0f), CONTROLLER);
+		m_playerCamera = new Camera(startPos, CONTROLLER);
 	}
 	this->addController(controller);
 	m_character = character;
@@ -129,56 +129,54 @@ void Player::update()
 		}
 	}
 	else {
-
 		//Movement controls
+		cout << "Player Pos: " << m_playerCamera->getCameraPos().x << " " << m_playerCamera->getCameraPos().z << endl;
+		m_playerCamera->setCameraPos(m_playerCamera->getCameraPos() + cameraOffset);
+		glm::vec3 tempPos = m_playerCamera->getCameraPos();
 		if (this->getController()->getForwardMovement()) {
-			glm::vec3 tempPos = m_playerCamera->getCameraPos() - m_playerCamera->getCameraFront() * 1.0f;
+			tempPos = m_playerCamera->getCameraPos() - m_playerCamera->getCameraFront() * 1.0f;
 			tempPos.y = 0;
-			m_playerCamera->setCameraPos(tempPos);
+			isMoving = true;
+			setAnimation(runAnim.first, runAnim.second);
+		}
+		if (this->getController()->getBackMovement()) {
+			tempPos = m_playerCamera->getCameraPos() + m_playerCamera->getCameraFront() * 1.0f;
+			tempPos.y = 0;
+			isMoving = true;
+			setAnimation(runAnim.first, runAnim.second);
+		}
+		if (this->getController()->getLeftMovement()) {
+			tempPos = m_playerCamera->getCameraPos() + glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
+			tempPos.y = 0;
+			isMoving = true;
+			setAnimation(runAnim.first, runAnim.second);
+		}
+		if (this->getController()->getRightMovement()) {
+			tempPos = m_playerCamera->getCameraPos() - glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
+			tempPos.y = 0;
+			//m_playerCamera->setCameraPos(tempPos);
 			isMoving = true;
 			setAnimation(runAnim.first, runAnim.second);
 		}
 		else
-			if (this->getController()->getBackMovement()) {
-				glm::vec3 tempPos = m_playerCamera->getCameraPos() + m_playerCamera->getCameraFront() * 1.0f;
-				tempPos.y = 0;
-				m_playerCamera->setCameraPos(tempPos);
-				isMoving = true;
-				setAnimation(runAnim.first, runAnim.second);
-			}
-			else
-				if (this->getController()->getLeftMovement()) {
-					glm::vec3 tempPos = m_playerCamera->getCameraPos() + glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
-					tempPos.y = 0;
-					m_playerCamera->setCameraPos(tempPos);
-					isMoving = true;
-					setAnimation(runAnim.first, runAnim.second);
-				}
-				else
-					if (this->getController()->getRightMovement()) {
-						glm::vec3 tempPos = m_playerCamera->getCameraPos() - glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
-						tempPos.y = 0;
-						m_playerCamera->setCameraPos(tempPos);
-						isMoving = true;
-						setAnimation(runAnim.first, runAnim.second);
-					}
-					else
-					{
-						isMoving = false;
-						setAnimation(stillAnim.first, stillAnim.second);
-					}
+		{
+			isMoving = false;
+			setAnimation(stillAnim.first, stillAnim.second);
+		}
+		//m_playerCamera->setCameraPos(tempPos);
 
-
+		
 		m_playerCamera->update();
 
 		// Create a matrix and apply the rotations and translations on it.
 		glm::mat4 tempMat(1.0f);
-		tempMat = glm::translate(tempMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -15.0f, 0.0f))); //-7.5
+		tempMat = glm::translate(tempMat, (tempPos + glm::vec3(0.0f, -14.0f, 0.0f)));
 		tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
 		tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
 
 
 		GameObject::setMatrix(tempMat);
+		m_playerCamera->setCameraPos(tempPos - cameraOffset);
 
 		//move the collider alongside the player
 		collisionComponent->setCollider(m_playerCamera->getCameraPos());
