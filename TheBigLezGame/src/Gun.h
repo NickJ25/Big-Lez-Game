@@ -47,4 +47,5 @@ public:
 	void action(bool active) override;
 	bool hasAttacked() override;
 	void setViewport(int num) override;
+	string getName() override;
 };

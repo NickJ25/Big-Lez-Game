@@ -96,6 +96,8 @@ private:
 	Character m_character;
 	Camera* m_playerCamera;
 	Text* m_charLabel;
+	Text* m_Healthlabel;
+	Text* m_scoreLabel;
 	Weapon* m_playerInventory[2] = { nullptr, nullptr };
 	Weapon* currentWeapon = nullptr;
 	int m_playerNum;

@@ -14,6 +14,8 @@ Player::Player(Input::ControllerType controller, Character character, glm::vec3 
 	prevYaw = -90;
 	currentYaw = 0;
 	m_charLabel = new Text(glm::vec2(6.0f, 5.0f), "assets/Fonts/ariali.ttf");
+	m_Healthlabel = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.5, 80.0f), "assets/Fonts/ariali.ttf");
+	m_scoreLabel = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.9, Input::SCREEN_HEIGHT * 0.5), "assets/Fonts/ariali.ttf");
 
 	//initialise animation storage
 	runAnim = { 0, 0 };
@@ -185,20 +187,28 @@ void Player::update()
 
 		GameObject::setMatrix(tempMat);
 		m_playerCamera->setCameraPos(tempPos - cameraOffset);
-
+		m_Healthlabel->draw(std::to_string(100), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, m_playerNum);
+		m_scoreLabel->draw(std::to_string(points), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, m_playerNum);
 		//move the collider alongside the player
 		collisionComponent->setCollider(m_playerCamera->getCameraPos());
 
 		// Apply the same matrix to the gun model
 		if (currentWeapon != nullptr) {
 			glm::mat4 gunMat(1.0f);
-			//gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -9.0f, 0.0f)));
-			gunMat = glm::rotate(gunMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
-			gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
-			gunMat = glm::scale(gunMat, glm::vec3(0.8, 0.8, 0.8));
-			gunMat = glm::translate(gunMat, (glm::vec3(0.2f, -2.0f, 0.0f)));
-
+			if (currentWeapon->getName() == "Shotgun") {
+				gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -9.0f, 0.0f)));
+				gunMat = glm::rotate(gunMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
+				gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+				gunMat = glm::scale(gunMat, glm::vec3(0.8, 0.8, 0.8));
+				gunMat = glm::translate(gunMat, (glm::vec3(0.2f, -2.0f, 0.0f)));
+			}
+			if (currentWeapon->getName() == "Rifle") {
+				gunMat = glm::translate(gunMat, (m_playerCamera->getCameraPos() + glm::vec3(0.0f, -11.0f, 0.0f)));
+				gunMat = glm::rotate(gunMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
+				gunMat = glm::rotate(gunMat, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+				gunMat = glm::scale(gunMat, glm::vec3(0.8, 0.8, 0.8));
+				gunMat = glm::translate(gunMat, (glm::vec3(0.2f, -2.0f, 0.0f)));
+			}
 			currentWeapon->setMatrix(gunMat);
 			currentWeapon->update();
 		}

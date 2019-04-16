@@ -18,4 +18,5 @@ public:
 	virtual bool hasAttacked() = 0;
 	virtual void setMatrix(glm::mat4 newMat) = 0;
 	virtual void setViewport(int num) = 0;
+	virtual string getName() = 0;
 };

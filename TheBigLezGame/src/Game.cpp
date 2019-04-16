@@ -109,7 +109,7 @@ void Game::createWeapons()
 			{
 				GameObject* donnyRifle = new Gun("assets/Weapons/DonnyRifle/DonnyRifle.dae", "Rifle", 6, 6, 2, false);
 				donnyRifle->setShader(toonShader);
-				donnyRifle->setAnimation(0.0f, 1.0f);
+				donnyRifle->setAnimation(4.0f, 1.0f);
 				playerList[i]->addWeapon(dynamic_cast<Weapon*> (donnyRifle));
 				gameObjects.push_back(donnyRifle);
 				break;
@@ -266,7 +266,7 @@ void Game::init()
 
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1, wave2, wave3, wave4, wave5, wave6, wave7;
-	wave1.push_back(2), wave1.push_back(1), wave1.push_back(0), wave1.push_back(0); 
+	wave1.push_back(0), wave1.push_back(2), wave1.push_back(0), wave1.push_back(0); 
 	wave2.push_back(2), wave2.push_back(2), wave2.push_back(0), wave2.push_back(0); 
 	wave3.push_back(2), wave3.push_back(2), wave3.push_back(1), wave3.push_back(0); 
 	wave4.push_back(3), wave4.push_back(2), wave4.push_back(2), wave4.push_back(0); 

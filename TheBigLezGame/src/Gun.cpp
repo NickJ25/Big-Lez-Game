@@ -107,3 +107,8 @@ void Gun::setViewport(int num)
 {
 	m_viewport = num;
 }
+
+string Gun::getName()
+{
+	return m_gunName;
+}
