@@ -147,6 +147,7 @@ void Game::init()
 	glBindBuffer(GL_UNIFORM_BUFFER, uniform_buffer);
 	glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
+
 #pragma endregion
 #pragma region Object initialisation
 
