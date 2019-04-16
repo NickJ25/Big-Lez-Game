@@ -53,11 +53,11 @@ void Game::assignAttributes(int n)
 		//set run
 		playerList[n]->setAnimationCalls(0.0, 2.7, 0);
 		////set still
-		playerList[n]->setAnimationCalls(2.083, 2.7, 1);
+		playerList[n]->setAnimationCalls(2.083, 2.7, 2);
 
 		//currently dont have animations for it
 		////set death
-		playerList[n]->setAnimationCalls(0.0, 1.0, 2);
+		playerList[n]->setAnimationCalls(0.0, 1.0, 1);
 		////set deathstill
 		playerList[n]->setAnimationCalls(0.0, 1.0, 3);
 	}
@@ -68,9 +68,9 @@ void Game::assignAttributes(int n)
 		//set run
 		playerList[n]->setAnimationCalls(0.0, 6.045, 0);
 		////set still
-		playerList[n]->setAnimationCalls(0.916, 6.045, 1);
+		playerList[n]->setAnimationCalls(0.916, 6.045, 2);
 		////set death
-		playerList[n]->setAnimationCalls(0.916, 3.594, 2);
+		playerList[n]->setAnimationCalls(0.916, 3.594, 1);
 		////set deathstill
 		playerList[n]->setAnimationCalls(1.541, 3.594, 3);
 	}
