@@ -8,6 +8,7 @@ Player::Player(Input::ControllerType controller, Character character, glm::vec3 
 	else {
 		m_playerCamera = new Camera(startPos + glm::vec3(0.0f, 4.5f, 0.0f), CONTROLLER);
 	}
+	//this->addCollision(startPos, 50, 50);
 	this->addController(controller);
 	m_character = character;
 	prevYaw = -90;
