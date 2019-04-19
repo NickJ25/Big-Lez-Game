@@ -56,6 +56,9 @@ public:
 	//for colliding with walls
 	glm::vec3 getPreviousPosition();
 
+	//for the game loop to check if the game is still going
+	bool getDeath();
+
 private:
 
 	//for collision detection

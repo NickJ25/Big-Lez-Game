@@ -46,9 +46,13 @@ private:
 	AABB* m_buttonCollision;
 
 	// Add audio for hoovering over the button
+
+	//check if a game or menu button
+	bool isMenuButton;
+
 public:
 	const enum BUTTON_TYPE { NORMAL, ARROW };
-	Button(BUTTON_TYPE type, glm::vec2 position, std::string button_text); // ,MenuState* destination
+	Button(BUTTON_TYPE type, glm::vec2 position, std::string button_text, bool isMenu = false); // ,MenuState* destination
 	~Button();
 	bool buttonClick();
 	void draw();

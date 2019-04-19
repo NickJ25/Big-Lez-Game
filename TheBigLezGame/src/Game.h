@@ -41,14 +41,11 @@ private:
 	void assignAttributes(int n);
 	void createWeapons();
 
-	//Player* mainPlayer;
-	Text* testtxt;
 	bool isGameRunning = true; 
-	Button* resumeBtn, *mainMenuBtn;
+	Button* resumeBtn, *mainMenuBtn, *quitBtn, *exitBtn;
 	GLFWwindow* g_window;
 	Menu* selectedMenu;
 	Image* pauseBackground;
-	Text* testtxt2;
 	bool showBoundingBoxes;
 	int penetrationDepthX;
 	int penetrationDepthZ;
@@ -70,9 +67,10 @@ private:
 
 	int firstWaveCounter;
 
-	//record if there are enemies on the map
+	//record if there are players/enemies on the map
 	bool mapEmpty = false;
 	int enemyCounter = 0;
+	int playerCounter = 0;
 
 	//utility functions for testing
 	bool takeDamage = false;
@@ -89,9 +87,11 @@ private:
 
 	//check if the game has been completed
 	bool gameWon = false;
+	bool gameLost = false;
 
 	Text* waveText;
 	Text* bossText;
+	Text* endGameText;
 	float textAlpha = 1.0f;
 	float transparency = 1.0f;
 
@@ -103,11 +103,11 @@ private:
 	bool ambientInitialised = false;
 
 	//wave spawner noise engine
-	irrklang::ISoundEngine *WaveEngine = irrklang::createIrrKlangDevice();
+	//irrklang::ISoundEngine *WaveEngine = irrklang::createIrrKlangDevice();
 	bool waveInitialised = false;
 
 	//conversation noise engine
-	irrklang::ISoundEngine *conversationEngine = irrklang::createIrrKlangDevice();
+	//irrklang::ISoundEngine *conversationEngine = irrklang::createIrrKlangDevice();
 
 	//sound numbers
 	int noOfSounds = 0;

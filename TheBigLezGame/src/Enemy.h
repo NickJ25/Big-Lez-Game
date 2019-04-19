@@ -107,7 +107,7 @@ public:
 
 	void Attacked(bool b)
 	{
-		hasAttacked = b;
+		attackTimer = 2.5f;
 	}
 
 	bool canAttack()
@@ -183,8 +183,7 @@ private:
 	float animEnd = 0.0f;
 
 	//attack variables
-	float attackTimer = 2.5f;
-	bool hasAttacked = false;
+	float attackTimer = 0.0f;
 
 	//reset variables
 	float originalVelocity;

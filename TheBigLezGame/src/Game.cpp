@@ -441,8 +441,8 @@ void Game::init()
 		//3 of each 
 
 		//lez sassy conversation
-		irrklang::ISoundSource* LSconvo1 = conversationEngine->addSoundSourceFromFile("assets/Sounds/Lez/LezSassy1.wav");
-		irrklang::ISoundSource* LSconvo2 = conversationEngine->addSoundSourceFromFile("assets/Sounds/Sassy/LezSassy1.wav");
+		irrklang::ISoundSource* LSconvo1 = AmbientEngine->addSoundSourceFromFile("assets/Sounds/Lez/LezSassy1.wav"); //conversation
+		irrklang::ISoundSource* LSconvo2 = AmbientEngine->addSoundSourceFromFile("assets/Sounds/Sassy/LezSassy1.wav"); //conversation
 		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
 		{
 			Player *p = dynamic_cast<Player*>(*it);
@@ -489,17 +489,20 @@ void Game::init()
 	//initialise the HUD
 	bossHealth = new Image("Assets/Art/BossHealth.png", glm::vec2(0.0f, 700.0f), false);
 
-	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume");
-	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit");
-	pauseBackground = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
+	//initialise end condition buttons
+	quitBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Exit", true);
+	exitBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Main Menu", true);
 
-	testtxt = new Text(glm::vec2(590.0, 445.0), "assets/Fonts/Another_.ttf");
-	testtxt2 = new Text(glm::vec2(600.0, 325.0), "assets/Fonts/Another_.ttf");
+	resumeBtn = new Button(Button::NORMAL, glm::vec2(640.0, 460.0), "Resume", true);
+	mainMenuBtn = new Button(Button::NORMAL, glm::vec2(640.0, 340.0), "Quit", true);
+	pauseBackground = new Image("assets/Art/tempBackground.png", glm::vec2(640.0, 360.0));
 
 	waveText = new Text(glm::vec2(600.0, 300.0), "assets/Fonts/Another_.ttf");
 	waveText->scale(glm::vec2(2.5f, 2.5f));
 
 	bossText = new Text(glm::vec2(550.0, 625.0), "assets/Fonts/Another_.ttf");
+
+	endGameText = new Text(glm::vec2(550.0, 625.0), "assets/Fonts/Another_.ttf");
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -514,7 +517,7 @@ vector<irrklang::ISoundSource*> Game::loadSounds(string character)
 	for (int i = 0; i < 3; i++) {
 		string tempstr = "assets/Sounds/" + character + "/lines/line" + to_string(i) + ".wav";
 		const char* tmpChar = tempstr.c_str();
-		irrklang::ISoundSource* tempSource = conversationEngine->addSoundSourceFromFile(tmpChar);
+		irrklang::ISoundSource* tempSource = AmbientEngine->addSoundSourceFromFile(tmpChar); // conversation
 		temp.push_back(tempSource);
 	}
 	return temp;
@@ -699,26 +702,43 @@ void Game::update()
 			conversationTimer = 15.0f;
 		}
 
-		//check if there are no enemies left 
+		//check if there are no players/enemies left 
 		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
 		{
-			Boss* tmp = dynamic_cast<Boss*>((*it));
-			Enemy* tmp1 = dynamic_cast<Enemy*>((*it));
-
+			Boss* tmp = dynamic_cast<Boss*>(*it);
+			Enemy* tmp1 = dynamic_cast<Enemy*>(*it);
+			Player* tmp2 = dynamic_cast<Player*>(*it);
 			if (tmp && tmp->getHealth() > 0 || tmp1 && tmp1->getDeath() == false)
 				enemyCounter++;
-		}
+			if (tmp2 && tmp2->getDeath() == false)
+				playerCounter++;
 
+		}
+		//if there are no players left alive
+		if (playerCounter < 1)
+		{
+			//lose conditions
+			isGameRunning = false;
+			gameLost = true;
+			glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+		}else
 		//if an enemy was not detected
 		if (enemyCounter <= 0)
 		{
-
+			if (currentWave > 6)
+			{
+				//victory conditions
+				isGameRunning = false;
+				gameWon = true;
+				glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			}
 			waveTimer -= deltaTime;
 			transparency += deltaTime;
 			//if the wave has not been initialised yet, initialise the wave change sound and volume
 			if (waveInitialised == false) {
-				WaveEngine->setSoundVolume(0.065f);
-				WaveEngine->play2D("assets/Sounds/Ambient/WaveChange.wav", GL_FALSE);
+				AmbientEngine->setSoundVolume(0.065f);//wave
+				AmbientEngine->play2D("assets/Sounds/Ambient/WaveChange.wav", GL_FALSE);
 				waveInitialised = true;
 			}
 			//draw the wave notification text
@@ -879,7 +899,7 @@ void Game::update()
 				if (playerList[i]->hasPlayerAttacked()) {
 
 					//play the gunshot noise
-					conversationEngine->play2D("assets/Sounds/gun.wav");
+					AmbientEngine->play2D("assets/Sounds/gun.wav"); // conversation
 
 					//iterate through game objects and find an enemy
 					for (int j = 0; j < gameObjects.size(); j++) {
@@ -925,83 +945,26 @@ void Game::update()
 	}
 #pragma region debug tools
 
-	//for testing bounding box locations on the path finding grid and viewing them visually.
-	if (Input::keyboard1.keys[GLFW_KEY_1]) {
-
-		if (showBoundingBoxes == false) {
-			vector<GameObject*>::iterator it;
-			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
-			{
-				Player *tmp = dynamic_cast<Player*>(*it);
-				if (tmp != nullptr)
-				{
-					if (tmp->getCharacter().name == "boundingbox")
-					{
-						if (showBoundingBoxes == false)
-							(*it)->setDraw(true);
-					}
-				}
-			}
-			showBoundingBoxes = true;
-		}
-	}
-
-	//undraw debug bounding boxes
-	if (Input::keyboard1.keys[GLFW_KEY_2]) {
-
-		if (showBoundingBoxes == true) {
-			vector<GameObject*>::iterator it;
-			for (it = gameObjects.begin(); it != gameObjects.end(); it++)
-			{
-				Player *tmp = dynamic_cast<Player*>(*it);
-				if (tmp != nullptr)
-				{
-					if (tmp->getCharacter().name == "boundingbox")
-					{
-						(*it)->setDraw(false);
-					}
-				}
-			}
-			showBoundingBoxes = false;
-		}
-	}
-	//for testing health bar for the boss
-		if (Input::keyboard1.keys[GLFW_KEY_U])
-		{
-			if (ableTo) {
-				for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
-				{
-					Boss *b = dynamic_cast<Boss*>(*it);
-					if (b)
-					{
-						b->setHealth(-20.0f);
-					}
-				}
-				ableTo = false;
-			}
-		}
-		//interchangeable - for boss health or uncomment for checking boss waves
 		if (Input::keyboard1.keys[GLFW_KEY_B])
 		{
-			//ableTo == true;
-			if (clicked == false) {
-				removeEnemies(gameObjects);
-				clicked = true;
-			}
+			gameLost = true;
+			isGameRunning = false;
+			glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 
 		//reset function for remove enemies
 		if (Input::keyboard1.keys[GLFW_KEY_N])
 		{
-			if (clicked == true) {
-				clicked = false;
-			}
+			gameWon = true;
+			isGameRunning = false;
+			glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 #pragma endregion
 
 	//if the game is paused
 	if (isGameRunning == false) 
 	{
+
 		//loop through and set all the objects to paused
 		vector<GameObject*>::iterator it;
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
@@ -1044,7 +1007,6 @@ void Game::draw()
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
 	// viewports
 	int playerCount = 0;
 	glViewport(0, 0, Input::SCREEN_WIDTH, Input::SCREEN_HEIGHT);
@@ -1077,16 +1039,37 @@ void Game::draw()
 		skybox->draw(projection * glm::mat4(glm::mat3(playerList[k]->getCamera()->lookAtMat())), k);
 
 		//if the game is paused
-		if (isGameRunning == false)
+		if (isGameRunning == false && gameWon == false && gameLost == false)
 		{
 			// Draws pause menu
 			resumeBtn->draw();
 			mainMenuBtn->draw();
-			testtxt->draw("Resume", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
-			testtxt2->draw("Quit", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
 			pauseBackground->draw();
+			glEnable(GL_DEPTH_TEST);
 		}
 
+		//game end state
+		if (isGameRunning == false && gameWon == true || gameLost == true) {
+
+			//glDisable(GL_DEPTH_TEST);
+
+			if (gameWon == true) {
+				bossText->draw("You Win!", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
+			}
+			if (gameLost == true) {
+				bossText->draw("You Lose...", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
+			}
+			exitBtn->draw();
+			quitBtn->draw();
+			glEnable(GL_DEPTH_TEST);
+
+			//close the program if the player clicks exit
+			if (exitBtn->buttonClick())
+			{
+				glfwDestroyWindow(g_window);
+				exit(0);
+			}
+		}
 		//loop through the gameobjects and draw 
 		for (int i = 0; i < gameObjects.size(); i++) {
 			if (gameObjects[i] != nullptr) {

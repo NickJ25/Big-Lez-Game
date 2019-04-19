@@ -161,13 +161,9 @@ void Enemy::update()
 	float deltaTime = currentTime - previousTime;
 	previousTime = currentTime;
 
-	if (hasAttacked == false)
+	if (attackTimer > 0)
 	{
 		attackTimer -= deltaTime;
-	}
-	else
-	{
-		attackTimer = 2.5f;
 	}
 
 	//sound update

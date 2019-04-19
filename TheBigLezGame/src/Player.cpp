@@ -13,9 +13,9 @@ Player::Player(Input::ControllerType controller, Character character, glm::vec3 
 	m_character = character;
 	prevYaw = -90;
 	currentYaw = 0;
-	m_charLabel = new Text(glm::vec2(6.0f, 5.0f), "assets/Fonts/ariali.ttf");
-	m_Healthlabel = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.5, 80.0f), "assets/Fonts/ariali.ttf");
-	m_scoreLabel = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.9, Input::SCREEN_HEIGHT * 0.5), "assets/Fonts/ariali.ttf");
+	m_charLabel = new Text(glm::vec2(6.0f, 5.0f), "assets/Fonts/Another_.ttf");
+	m_Healthlabel = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.8, 20.0f), "assets/Fonts/Another_.ttf");
+	m_scoreLabel = new Text(glm::vec2(Input::SCREEN_WIDTH * 0.8, Input::SCREEN_HEIGHT * 0.8), "assets/Fonts/Another_.ttf");
 
 	//initialise animation storage
 	runAnim = { 0, 0 };
@@ -187,8 +187,16 @@ void Player::update()
 
 		GameObject::setMatrix(tempMat);
 		m_playerCamera->setCameraPos(tempPos - cameraOffset);
-		m_Healthlabel->draw(std::to_string(100), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, m_playerNum);
-		m_scoreLabel->draw(std::to_string(points), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, m_playerNum);
+
+		//discern health and colour
+		if(health >= 100)
+		m_Healthlabel->draw("Health: " + std::to_string((int)health), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 1, m_playerNum);
+		if (health < 100 && health >= 30)
+			m_Healthlabel->draw("Health: " + std::to_string((int)health), glm::vec4(0.5f, 0.3f, 0.0f, 1.0f), 1, m_playerNum);
+		if (health < 30)
+			m_Healthlabel->draw("Health: " + std::to_string((int)health), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 1, m_playerNum);
+
+		m_scoreLabel->draw("Points: " + std::to_string(points), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, m_playerNum);
 		//move the collider alongside the player
 		collisionComponent->setCollider(m_playerCamera->getCameraPos());
 
@@ -285,7 +293,7 @@ void Player::setCharacterAttributes(float h, float a)
 
 void Player::takeDamage(float damage)
 {
-	health = damage / armour;
+	health -= damage / armour;
 
 	if (health <= 0)
 	{
@@ -306,4 +314,9 @@ glm::vec3 Player::getPreviousPosition()
 void Player::setPlayerNum(int playerNum)
 {
 	m_playerNum = playerNum;
+}
+
+bool Player::getDeath()
+{
+	return isDead;
 }

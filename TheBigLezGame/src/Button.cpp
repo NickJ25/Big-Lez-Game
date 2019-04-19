@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(BUTTON_TYPE type, glm::vec2 position, std::string button_text) //, MenuState * destination
+Button::Button(BUTTON_TYPE type, glm::vec2 position, std::string button_text, bool isMenu) //, MenuState * destination
 {
 	m_position = position;
 	
@@ -41,6 +41,9 @@ Button::Button(BUTTON_TYPE type, glm::vec2 position, std::string button_text) //
 
 	// Click State
 	m_buttonClick = false;
+
+	//is part of a menu or in game
+	isMenuButton = isMenu;
 }
 
 Button::~Button()
@@ -70,9 +73,17 @@ bool Button::buttonClick()
 
 void Button::draw()
 {
-	m_currentImage->draw();
-	m_textBox->move(glm::vec2(m_position.x - (m_textBox->getSize().x / 2), m_position.y - (m_textBox->getSize().y / 2) - 12));
-	m_textBox->draw(m_text, glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
+	if (isMenuButton) {
+		m_textBox->move(glm::vec2(m_position.x - (m_textBox->getSize().x / 2), m_position.y - (m_textBox->getSize().y / 2) - 12));
+		m_textBox->draw(m_text, glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
+		m_currentImage->draw();
+	}
+	else
+	{
+		m_currentImage->draw();
+		m_textBox->move(glm::vec2(m_position.x - (m_textBox->getSize().x / 2), m_position.y - (m_textBox->getSize().y / 2) - 12));
+		m_textBox->draw(m_text, glm::vec4(1.0, 1.0, 1.0, 1.0), 1);
+	}
 	m_currentImage = m_texNormal;
 	
 }
