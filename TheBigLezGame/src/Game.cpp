@@ -87,6 +87,35 @@ void Game::createPlayers()
 			gameObjects.push_back(playerList[i]);
 		}
 	}
+
+	int lCounter = 0, sCounter = 0, dCounter = 0, cCounter = 0;
+
+	//find out whose in the game
+	for (int j = 0; j < playerList.size(); j++)
+	{
+		if (playerList[j]->getCharacter().name == "Leslie")
+			lCounter++;
+		if (playerList[j]->getCharacter().name == "Sassy")
+			sCounter++;
+		if (playerList[j]->getCharacter().name == "Donny")
+			dCounter++;
+		if (playerList[j]->getCharacter().name == "Clarence")
+			cCounter++;
+	}
+
+	//finds out which character is missing and puts them behind the bar 
+	//GameObject* extraChar = new Prop(glm::vec3(0.0f, 0.0f, 0.0f));
+	//if (lCounter == 0)
+	//{
+
+	//}else
+	//	if (sCounter == 0)
+	//	{
+
+	//	}else
+	//		{
+
+	//		}
 }
 
 void Game::createWeapons()
@@ -176,6 +205,13 @@ void Game::init()
 	roof->Move(glm::vec3(17.5f, -70.0f, 65.5f));
 	gameObjects.push_back(roof);
 
+
+	const char* file = "assets/Props/Map/gridblock.dae";
+	bar = new Prop(file, glm::vec3(0.0f, 0.0f, 0.0f));
+	bar->setShader(toonShader);
+	bar->addCollision(glm::vec3(60.0f, 0.0f, 0.0f), 5.0f, 2.0f);
+	gameObjects.push_back(bar);
+
 	createPlayers();
 	createWeapons();
 
@@ -221,7 +257,7 @@ void Game::init()
 		if (i == 6) { pos = glm::vec3(98.0f, 0.0f, -165.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 		if (i == 7) { pos = glm::vec3(204.0f, 0.0f, -165.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 
-		////house in the middle 3.5 til 28
+		////house in the middle 
 		//front of house
 		if (i == 8) { pos = glm::vec3(17.5f, 0.0f, -15.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 		if (i == 9) { pos = glm::vec3(62.5f, 0.0f, -10.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
@@ -500,6 +536,8 @@ void Game::init()
 	waveText = new Text(glm::vec2(600.0, 300.0), "assets/Fonts/Another_.ttf");
 	waveText->scale(glm::vec2(2.5f, 2.5f));
 
+	barInfo = new Text(glm::vec2(550.0, 450.0), "assets/Fonts/Another_.ttf");
+
 	bossText = new Text(glm::vec2(550.0, 625.0), "assets/Fonts/Another_.ttf");
 
 	endGameText = new Text(glm::vec2(550.0, 625.0), "assets/Fonts/Another_.ttf");
@@ -598,23 +636,6 @@ bool Game::checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * obj
 	return true;
 }
 
-void removeEnemies(std::vector<GameObject*> & gameObjects)
-{
-	std::vector<GameObject*>::iterator it = gameObjects.begin();
-	while(it != gameObjects.end())
-	{
-
-		Enemy* e = dynamic_cast<Enemy*>((*it));
-		if (e)
-		{
-			it = gameObjects.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-}
-
 void Game::generateWave(int waveNumber)
 {
 	//check if an enemy is due to be spawned, and if so create it
@@ -628,9 +649,6 @@ void Game::generateWave(int waveNumber)
 #pragma region Update
 void Game::update()
 {
-	//debug for position
-	//cout << "cpos: " << mainPlayer->getCamera()->getCameraPos().x << " , " << mainPlayer->getCamera()->getCameraPos().z << endl;
-
 	//to prevent updates running before everything has loaded
 	if (isGameRunning == true && initialised)
 	{
@@ -647,60 +665,8 @@ void Game::update()
 		deltaTime = currentTime - previousTime;
 		previousTime = currentTime;
 
-		//timing for speech calls to prevent characters talking over each other too much
-		if (conversationTimer > 0)
-		{
-			conversationTimer -= deltaTime;
-		}
-		else {
-
-			//get random sound and play it
-			srand(time(0));
-			int randomSound = rand() % noOfSounds;
-
-			int orderPlace = 0;
-			int count = 0;
-			//iterate through the current objects
-			for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
-			{
-				count++;
-				int check = 0;
-				//if the random sound is less than three (sounds involving only one character)
-				if (randomSound < 3)
-				{
-					check = 1;
-				}
-				else
-				{
-					check = convoOrders.at(randomSound).size();
-				}
-
-				//assign sounds according to each character
-				Player *p = dynamic_cast<Player*>(*it);
-				if (p && p->getCharacter().name == convoOrders.at(randomSound).at(orderPlace)) {
-					if (p->getCharacter().name == "Sassy")
-						randomSound -= 3;
-					if (p->getCharacter().name == "Donny")
-						randomSound -= 6;
-					p->playSound(randomSound, convos.at(randomSound).at(orderPlace));
-					orderPlace++;
-					if (orderPlace == check)
-						break;
-				}
-
-				//if not all the characters have had their sounds assigned
-				if (count == gameObjects.size() && orderPlace < check)
-				{
-					//restart the loop
-					it = gameObjects.begin();
-					count = 0;
-				}
-
-
-			}
-			//reset the timer for 15 seconds
-			conversationTimer = 15.0f;
-		}
+		//update the conversation timers
+		conversationUpdate();
 
 		//check if there are no players/enemies left 
 		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
@@ -714,6 +680,7 @@ void Game::update()
 				playerCounter++;
 
 		}
+
 		//if there are no players left alive
 		if (playerCounter < 1)
 		{
@@ -733,6 +700,7 @@ void Game::update()
 				gameWon = true;
 				glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 			}
+
 			waveTimer -= deltaTime;
 			transparency += deltaTime;
 			//if the wave has not been initialised yet, initialise the wave change sound and volume
@@ -775,6 +743,7 @@ void Game::update()
 		if (currentWave > mapWaves.size())
 			gameWon = true;
 
+		//enemy and boss update loop
 		for (int i = 0; i < gameObjects.size(); i++) {
 			if (gameObjects[i] != nullptr) {
 				gameObjects[i]->componentUpdate();
@@ -811,79 +780,36 @@ void Game::update()
 					if (checkCollision((*it), (*it1)) == true)
 					{
 						//use dynamic casting to find out what is colliding with what
-						Enemy *e1 = dynamic_cast<Enemy*>((*it));
-						Enemy *e2 = dynamic_cast<Enemy*>((*it1));
-						Player *p1 = dynamic_cast<Player*>((*it));
-						Player *p2 = dynamic_cast<Player*>((*it1));
-						Obstacle *ob1 = dynamic_cast<Obstacle*>((*it));
-						Obstacle *ob2 = dynamic_cast<Obstacle*>((*it1));
+						e1 = dynamic_cast<Enemy*>(*it);
+						e2 = dynamic_cast<Enemy*>(*it1);
+						p1 = dynamic_cast<Player*>(*it);
+						p2 = dynamic_cast<Player*>(*it1);
+						ob1 = dynamic_cast<Obstacle*>(*it);
+						ob2 = dynamic_cast<Obstacle*>(*it1);
+						pr1 = dynamic_cast<Prop*>(*it);
+						pr2 = dynamic_cast<Prop*>(*it1);
 
+						//player - bar collision
+						if (p1 && pr1 || p2 && pr2 || p1 && pr2 || p2 && pr1)
+						{
+							if (p1)
+								barInteraction(p1);
+							else
+								barInteraction(p2);
+						}
+						else
 						//player - wall collision
 						if (p1 && ob1 || p2 && ob2 || p1 && ob2 || p2 && ob1)
 						{
 							if (p1)
 								p1->Move(-p1->getPreviousPosition());
-							if(p2)
+							else
 								p2->Move(-p2->getPreviousPosition());
-						}
+						}else
 						//player, enemy collision
 						if (e1 && p2 || e2 && p1 || e2 && p2 || p1 && e1)
 						{
-							//reimplement when injury animations are all fixed
-							//check which one is the enemy, then set to attack animation
-							if (p1 && e1) {
-								if (e1->canAttack() == true) {
-									p1->takeDamage(15.0f);
-									e1->Attacked(true);
-								}
-
-							}
-							if (p1 && e2) {
-								if (e2->canAttack() == true) {
-									p1->takeDamage(15.0f);
-									e2->Attacked(true);
-								}
-
-							}
-							if (p2 && e1) {
-								if (e1->canAttack() == true) {
-									p2->takeDamage(15.0f);
-									e1->Attacked(true);
-								}
-
-							}
-							if (p2 && e2) {
-								if (e2->canAttack() == true) {
-									p2->takeDamage(15.0f);
-									e2->Attacked(true);
-								}
-
-							}
-							if (e1)
-							{
-								e1->setMoving(false);
-								if (!e1->getInjured() && !e1->getDeath()) {
-									if (e1->getName() == "normal")
-										e1->setAnimValues(3.75f, 1.36f);
-									if (e1->getName() == "charger")
-										e1->setAnimValues(10.83f, 1.1f);
-									if (e1->getName() == "brawler")
-										e1->setAnimValues(2.25f, 1.35f);
-								}
-							}
-							if (e2)
-							{
-								e2->setMoving(false);
-								if (!e2->getInjured() && !e2->getDeath()) {
-									if (e2->getName() == "normal")
-										e2->setAnimValues(3.75f, 1.36f);
-									if (e2->getName() == "charger")
-										e2->setAnimValues(10.83f, 1.1f);
-									if (e2->getName() == "brawler")
-										e2->setAnimValues(2.25f, 1.35f);
-								}
-							}
-
+							playerEnemyCollision((*it), (*it1));
 						}
 					}
 				}
@@ -943,23 +869,6 @@ void Game::update()
 		g_window = glfwGetCurrentContext();
 		glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
-#pragma region debug tools
-
-		if (Input::keyboard1.keys[GLFW_KEY_B])
-		{
-			gameLost = true;
-			isGameRunning = false;
-			glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
-
-		//reset function for remove enemies
-		if (Input::keyboard1.keys[GLFW_KEY_N])
-		{
-			gameWon = true;
-			isGameRunning = false;
-			glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
-#pragma endregion
 
 	//if the game is paused
 	if (isGameRunning == false) 
@@ -1028,12 +937,10 @@ void Game::draw()
 		//pass material and position variables to the shader
 		glUseProgram(toonShader->getID());
 		glUniform1i(glGetUniformLocation(toonShader->getID(), "viewportNum"), k);
-		cout << "1: " << glGetUniformLocation(toonShader->getID(), "viewportNum") << " 2: " << glGetUniformLocation(toonShader->getID(), "mvp_matrix") << "\n";
 		glUniformMatrix4fv(glGetUniformLocation(toonShader->getID(), "mvp_matrix"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniform1i(glGetUniformLocation(toonShader->getID(), "material.diffuse1"), diffuse);
 		glUniform1i(glGetUniformLocation(toonShader->getID(), "material.specular1"), specular);
 		glUniform1f(glGetUniformLocation(toonShader->getID(), "material.shininess"), shininess);
-
 		glUniform3f(glGetUniformLocation(toonShader->getID(), "viewPos"), playerList[k]->getCamera()->getCameraPos().x, playerList[k]->getCamera()->getCameraPos().y, playerList[k]->getCamera()->getCameraPos().z);
 		// draw skybox
 		skybox->draw(projection * glm::mat4(glm::mat3(playerList[k]->getCamera()->lookAtMat())), k);
@@ -1050,8 +957,6 @@ void Game::draw()
 
 		//game end state
 		if (isGameRunning == false && gameWon == true || gameLost == true) {
-
-			//glDisable(GL_DEPTH_TEST);
 
 			if (gameWon == true) {
 				bossText->draw("You Win!", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
@@ -1076,5 +981,131 @@ void Game::draw()
 				gameObjects[i]->componentDraw(playerList[k]->getCamera()->lookAtMat());
 			}
 		}
+	}
+}
+
+void Game::playerEnemyCollision(GameObject* a, GameObject* b)
+{
+	//to get the objects from the gameobjects
+	Player* p;
+	Enemy* e;
+
+	//first find out which one is which
+	if (dynamic_cast<Enemy*>(a))
+	{
+		p = dynamic_cast<Player*>(b);
+		e = dynamic_cast<Enemy*>(a);
+	}
+	else
+	{
+		p = dynamic_cast<Player*>(a);
+		e = dynamic_cast<Enemy*>(b);
+	}
+
+	//check if the enemy can attack, and if so, do.
+	if (e->canAttack() == true) {
+		p->takeDamage(15.0f);
+		e->Attacked(true);
+	}
+
+	//stop the choomah from moving whilst attacking a player and set his attack animation
+	e->setMoving(false);
+	if (!e->getInjured() && !e->getDeath()) {
+		if (e->getName() == "normal")
+			e->setAnimValues(3.75f, 1.36f);
+		if (e->getName() == "charger")
+			e->setAnimValues(10.83f, 1.1f);
+		if (e->getName() == "brawler")
+			e->setAnimValues(2.25f, 1.35f);
+	}
+}
+
+void Game::barInteraction(Player* p)
+{
+	barInfo->move(glm::vec2(550.0f, 450.0f));
+	barInfo->draw("Press X to refill ammo : 50", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
+	barInfo->move(glm::vec2(550.0f, 420.0f));
+	barInfo->draw("Press Y to refill health : 100", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
+	barInfo->move(glm::vec2(550.0f, 395.0f));
+	barInfo->draw("Press B to upgrade weapon : 450", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
+
+	if (Input::keyboard1.keys[GLFW_KEY_X])
+	{
+		if (p->getPoints() >= 50)
+		{
+			//do ammo refil
+		}
+	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_Y])
+	{
+		if (p->getPoints() >= 100)
+		{
+			//do health refil
+			p->setHealth(50);
+		}
+	}
+
+	if (Input::keyboard1.keys[GLFW_KEY_B])
+	{
+		//change weapon stats here
+	}
+}
+
+void Game::conversationUpdate()
+{
+	//timing for speech calls to prevent characters talking over each other too much
+	if (conversationTimer > 0)
+	{
+		conversationTimer -= deltaTime;
+	}
+	else {
+
+		//get random sound and play it
+		srand(time(0));
+		int randomSound = rand() % noOfSounds;
+
+		int orderPlace = 0;
+		int count = 0;
+		//iterate through the current objects
+		for (vector<GameObject*>::iterator it = gameObjects.begin(); it < gameObjects.end(); ++it)
+		{
+			count++;
+			int check = 0;
+			//if the random sound is less than three (sounds involving only one character)
+			if (randomSound < 3)
+			{
+				check = 1;
+			}
+			else
+			{
+				check = convoOrders.at(randomSound).size();
+			}
+
+			//assign sounds according to each character
+			Player *p = dynamic_cast<Player*>(*it);
+			if (p && p->getCharacter().name == convoOrders.at(randomSound).at(orderPlace)) {
+				if (p->getCharacter().name == "Sassy")
+					randomSound -= 3;
+				if (p->getCharacter().name == "Donny")
+					randomSound -= 6;
+				p->playSound(randomSound, convos.at(randomSound).at(orderPlace));
+				orderPlace++;
+				if (orderPlace == check)
+					break;
+			}
+
+			//if not all the characters have had their sounds assigned
+			if (count == gameObjects.size() && orderPlace < check)
+			{
+				//restart the loop
+				it = gameObjects.begin();
+				count = 0;
+			}
+
+
+		}
+		//reset the timer for 15 seconds
+		conversationTimer = 15.0f;
 	}
 }

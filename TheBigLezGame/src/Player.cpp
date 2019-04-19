@@ -311,6 +311,7 @@ glm::vec3 Player::getPreviousPosition()
 {
 	return previousMovement;
 }
+
 void Player::setPlayerNum(int playerNum)
 {
 	m_playerNum = playerNum;
@@ -319,4 +320,14 @@ void Player::setPlayerNum(int playerNum)
 bool Player::getDeath()
 {
 	return isDead;
+}
+
+int Player::getPoints()
+{
+	return points;
+}
+
+void Player::setHealth(float h)
+{
+	health += h;
 }

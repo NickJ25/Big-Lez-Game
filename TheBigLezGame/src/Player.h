@@ -45,6 +45,7 @@ public:
 
 	//set up characters unique health and armour values
 	void setCharacterAttributes(float h, float a);
+	void setHealth(float h);
 
 	//loose health from attacks
 	void takeDamage(float damage);
@@ -52,6 +53,7 @@ public:
 
 	//increment or decrement points
 	void gainPoints(int p);
+	int getPoints();
 
 	//for colliding with walls
 	glm::vec3 getPreviousPosition();

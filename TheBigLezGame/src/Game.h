@@ -76,7 +76,7 @@ private:
 	bool takeDamage = false;
 
 	//float wavetimer
-	float waveTimer = 15.0f; // 6 seconds between the end of one wave and the start of the next, 15 to allow time for loading
+	float waveTimer = 30.0f; // 6 seconds between the end of one wave and the start of the next, 15 to allow time for loading
 
 	//time between ticks
 	float deltaTime = 0.0f;
@@ -89,6 +89,7 @@ private:
 	bool gameWon = false;
 	bool gameLost = false;
 
+	//HUD text
 	Text* waveText;
 	Text* bossText;
 	Text* endGameText;
@@ -101,13 +102,7 @@ private:
 	//background music engine
 	irrklang::ISoundEngine *AmbientEngine = irrklang::createIrrKlangDevice();
 	bool ambientInitialised = false;
-
-	//wave spawner noise engine
-	//irrklang::ISoundEngine *WaveEngine = irrklang::createIrrKlangDevice();
 	bool waveInitialised = false;
-
-	//conversation noise engine
-	//irrklang::ISoundEngine *conversationEngine = irrklang::createIrrKlangDevice();
 
 	//sound numbers
 	int noOfSounds = 0;
@@ -126,6 +121,19 @@ private:
 	Image* bossHealth;
 	bool ableTo = true;
 
+	GameObject* bar;
+	Text* barInfo;
+
+	//collision tools
+	Enemy *e1;
+	Enemy *e2;
+	Player *p1;
+	Player *p2;
+	Obstacle *ob1;
+	Obstacle *ob2;
+	Prop *pr1;
+	Prop *pr2;
+
 public:
 	Game() 
 	{
@@ -136,24 +144,21 @@ public:
 	void init();
 	void update();
 	void draw();
+
+	//collision detection
 	bool checkCollision(GameObject* a, GameObject* b);
 	bool checkRayToAABB(glm::vec3* rayPos, glm::vec3* rayDir, GameObject * object);
+
+	//collision resolution
+	void playerEnemyCollision(GameObject* a, GameObject* b);
+	void barInteraction(Player* p);
+
+	//update functions
+	void conversationUpdate();
 
 	//adding characters details
 	void addCharacterSounds(string charName);
 	vector<irrklang::ISoundSource*> loadSounds(string character);
 
-	//for calculating contact normal
-	const glm::vec3 nup = glm::vec3(0, 1, 0);
-	const glm::vec3 ndown = glm::vec3(0, -1, 0);
-	const glm::vec3 nright = glm::vec3(1, 0, 0);
-	const glm::vec3 nleft = glm::vec3(-1, 0, 0);
-
-	char computePointMask(glm::vec3 p, Enemy* e);
-	glm::vec3 getFaceNormal(glm::vec3 p, Enemy* e);
-	bool pointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d);
-
 	void generateWave(int waveNumber);
-
-	glm::vec3 contactNormal;
 };
