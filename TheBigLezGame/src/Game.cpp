@@ -91,31 +91,42 @@ void Game::createPlayers()
 	int lCounter = 0, sCounter = 0, dCounter = 0, cCounter = 0;
 
 	//find out whose in the game
-	for (int j = 0; j < playerList.size(); j++)
+	for (int j = 0; j < GameData::g_PlayerData.size(); j++)
 	{
+		if (playerList[j] == nullptr)
+			break;
 		if (playerList[j]->getCharacter().name == "Leslie")
 			lCounter++;
+		else
 		if (playerList[j]->getCharacter().name == "Sassy")
 			sCounter++;
+		else
 		if (playerList[j]->getCharacter().name == "Donny")
 			dCounter++;
+		else
 		if (playerList[j]->getCharacter().name == "Clarence")
 			cCounter++;
 	}
 
 	//finds out which character is missing and puts them behind the bar 
-	//GameObject* extraChar = new Prop(glm::vec3(0.0f, 0.0f, 0.0f));
-	//if (lCounter == 0)
-	//{
+	GameObject* extraChar;
+	if (lCounter == 0)
+	{
+		extraChar = new Prop("assets/Characters/BigLez/lez3.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+	}else
+		if (sCounter == 0)
+		{
+			extraChar = new Prop("assets/Characters/Sassy/sassy.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+		}else
+			{
+			extraChar = new Prop("assets/Characters/Donny/donny.dae", glm::vec3(0.0f, 0.0f, 0.0f));
+			}
 
-	//}else
-	//	if (sCounter == 0)
-	//	{
+		extraChar->setPaused(true);
+		extraChar->setShader(toonShader);
+		extraChar->setPosition(glm::vec3(60.0f, -12.5f, -7.5f));
+		gameObjects.push_back(extraChar);
 
-	//	}else
-	//		{
-
-	//		}
 }
 
 void Game::createWeapons()
@@ -1024,9 +1035,9 @@ void Game::barInteraction(Player* p)
 {
 	barInfo->move(glm::vec2(550.0f, 450.0f));
 	barInfo->draw("Press X to refill ammo : 50", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
-	barInfo->move(glm::vec2(550.0f, 420.0f));
+	barInfo->move(glm::vec2(550.0f, 415.0f));
 	barInfo->draw("Press Y to refill health : 100", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
-	barInfo->move(glm::vec2(550.0f, 395.0f));
+	barInfo->move(glm::vec2(550.0f, 380.0f));
 	barInfo->draw("Press B to upgrade weapon : 450", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
 
 	if (Input::keyboard1.keys[GLFW_KEY_X])
