@@ -846,10 +846,8 @@ void Game::update()
 							if (checkRayToAABB(&playerList[i]->getPosition(), &playerList[i]->getCamera()->getCameraFront(), (e)))
 							{
 								e->takeDamage(10.0f);
-								if (e->getDeath() == true)
+								if (e->getDeath() == false)
 									playerList[i]->gainPoints(25);
-								else
-									playerList[i]->gainPoints(5);
 								
 							}
 						}
@@ -862,7 +860,7 @@ void Game::update()
 								if (b->getHealth() <= 0)
 									playerList[i]->gainPoints(250);
 								else
-									playerList[i]->gainPoints(12);
+									playerList[i]->gainPoints(40);
 							}
 
 						}
@@ -1054,6 +1052,7 @@ void Game::barInteraction(Player* p)
 		{
 			//do health refil
 			p->setHealth(50);
+			p->gainPoints(-100);
 		}
 	}
 
