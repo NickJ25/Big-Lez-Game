@@ -20,6 +20,8 @@ private:
 	GLuint m_maxAmmo;
 	GLuint m_clipSize;
 	GLuint m_currentClip = m_clipSize;
+	int m_currentAmmo;
+
 	GLuint m_viewport;
 	float m_shootDelay;
 
@@ -38,6 +40,7 @@ public:
 
 	void shoot(bool clicked);
 	void reload(bool clicked);
+	void refillAmmo();
 	void setMatrix(glm::mat4 newMat);
 	void update() override;
 	void checkHit();

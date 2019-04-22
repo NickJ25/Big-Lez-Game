@@ -247,6 +247,13 @@ void Player::addWeapon(Weapon * weapon)
 	}
 }
 
+Weapon * Player::getWeapon()
+{
+	return currentWeapon;
+}
+
+
+
 bool Player::hasPlayerAttacked()
 {
 	if (currentWeapon != nullptr) {
@@ -315,6 +322,11 @@ glm::vec3 Player::getPreviousPosition()
 void Player::setPlayerNum(int playerNum)
 {
 	m_playerNum = playerNum;
+}
+
+int Player::getPlayerNum()
+{
+	return m_playerNum;
 }
 
 bool Player::getDeath()

@@ -3,6 +3,7 @@
 Gun::Gun(const char * filename, std::string gunName, GLuint maxAmmo, GLuint clipSize, float shootDelay, bool allowSpray) : Weapon(filename, glm::vec3(0.0f, 0.0f, 0.0f)),
 		m_gunName(gunName), m_maxAmmo(maxAmmo), m_clipSize(clipSize), sprayAllowed(allowSpray), m_shootDelay(shootDelay)
 {
+	m_currentAmmo = maxAmmo;
 	t_ammoCount = new Text(glm::vec2(50.0, 80.0), "assets/Fonts/Another_.ttf");
 	t_gunName = new Text(glm::vec2(50.0, 40.0), "assets/Fonts/Another_.ttf");
 	i_crosshair = new Image("assets/Art/crosshair.png", glm::vec2((Input::SCREEN_WIDTH / 2) - 1, (Input::SCREEN_HEIGHT / 2) - 1), 16, 16, false);
@@ -44,10 +45,17 @@ void Gun::shoot(bool clicked)
 void Gun::reload(bool clicked)
 {
 	if (clicked) {
-		if (m_currentClip != m_clipSize) {
+		int tempAmmo = m_currentAmmo - (m_clipSize - m_currentClip);
+		if (tempAmmo >= 0) {
+			m_currentAmmo -= (m_clipSize - m_currentClip);
 			m_currentClip = m_clipSize;
 		}
 	}
+}
+
+void Gun::refillAmmo()
+{
+	m_currentAmmo = m_maxAmmo;
 }
 
 void Gun::setMatrix(glm::mat4 newMat)
@@ -57,7 +65,7 @@ void Gun::setMatrix(glm::mat4 newMat)
 
 void Gun::update()
 {
-	t_ammoCount->draw(std::to_string(m_currentClip) + " / " + std::to_string(m_clipSize), glm::vec4(1.0, 1.0, 1.0, 1.0),1, m_viewport);
+	t_ammoCount->draw(std::to_string(m_currentClip) + " / " + std::to_string(m_currentAmmo), glm::vec4(1.0, 1.0, 1.0, 1.0),1, m_viewport);
 	t_gunName->draw(m_gunName, glm::vec4(1.0, 1.0, 1.0, 1.0),1, m_viewport);
 	i_crosshair->setViewport(m_viewport);
 	i_crosshair->draw();

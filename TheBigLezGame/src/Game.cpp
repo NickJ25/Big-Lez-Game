@@ -137,7 +137,7 @@ void Game::createWeapons()
 			case 1: // Gun Setup for BigLez
 			{
 				// Lez's Shotgun
-				GameObject* lezShotgun = new Gun("assets/Weapons/LezShotgun/lezshotgun.dae", "Shotgun", 8, 8, 1.0, false);
+				GameObject* lezShotgun = new Gun("assets/Weapons/LezShotgun/lezshotgun.dae", "Shotgun", 24, 8, 1.0, false);
 				lezShotgun->setShader(toonShader);
 				lezShotgun->setAnimation(0.0f, 3.0f);
 				playerList[i]->addWeapon(dynamic_cast<Weapon*> (lezShotgun));
@@ -147,7 +147,7 @@ void Game::createWeapons()
 			}
 			case 2: // Gun Setup for Sassy
 			{
-				GameObject* donnyRifle = new Gun("assets/Weapons/DonnyRifle/DonnyRifle.dae", "Rifle", 6, 6, 2, false);
+				GameObject* donnyRifle = new Gun("assets/Weapons/DonnyRifle/DonnyRifle.dae", "Rifle", 18, 6, 2, false);
 				donnyRifle->setShader(toonShader);
 				donnyRifle->setAnimation(4.0f, 1.0f);
 				playerList[i]->addWeapon(dynamic_cast<Weapon*> (donnyRifle));
@@ -156,7 +156,7 @@ void Game::createWeapons()
 			}
 			case 3: // Gun Setup for Donny
 			{
-				GameObject* donnyPistol = new Gun("assets/Weapons/DonnyPistol/DonnyPistol.dae", "Pistol", 8, 8, 0.2, false);
+				GameObject* donnyPistol = new Gun("assets/Weapons/DonnyPistol/DonnyPistol.dae", "Pistol", 24, 8, 0.2, false);
 				donnyPistol->setShader(toonShader);
 				donnyPistol->setAnimation(0.0f, 1.0f);
 				playerList[i]->addWeapon(dynamic_cast<Weapon*> (donnyPistol));
@@ -1032,17 +1032,21 @@ void Game::playerEnemyCollision(GameObject* a, GameObject* b)
 void Game::barInteraction(Player* p)
 {
 	barInfo->move(glm::vec2(550.0f, 450.0f));
-	barInfo->draw("Press X to refill ammo : 50", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
+	barInfo->draw("Press X to refill ammo : 50", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, p->getPlayerNum());
 	barInfo->move(glm::vec2(550.0f, 415.0f));
-	barInfo->draw("Press Y to refill health : 100", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
+	barInfo->draw("Press Y to refill health : 100", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, p->getPlayerNum());
 	barInfo->move(glm::vec2(550.0f, 380.0f));
-	barInfo->draw("Press B to upgrade weapon : 450", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1);
+	barInfo->draw("Press B to upgrade weapon : 450", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, p->getPlayerNum());
 
 	if (Input::keyboard1.keys[GLFW_KEY_X])
 	{
 		if (p->getPoints() >= 50)
 		{
-			//do ammo refil
+			if (p->getWeapon())
+			{
+				Gun* tempGun = dynamic_cast<Gun*>(p->getWeapon());
+				tempGun->refillAmmo();
+			}
 		}
 	}
 

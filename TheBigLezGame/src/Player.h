@@ -29,6 +29,7 @@ public:
 	Camera* getCamera();
 	void update() override;
 	void addWeapon(Weapon* weapon);
+	Weapon* getWeapon();
 	bool hasPlayerAttacked();
 
 	Player::Character getCharacter();
@@ -50,6 +51,7 @@ public:
 	//loose health from attacks
 	void takeDamage(float damage);
 	void setPlayerNum(int playerNum);
+	int getPlayerNum();
 
 	//increment or decrement points
 	void gainPoints(int p);
