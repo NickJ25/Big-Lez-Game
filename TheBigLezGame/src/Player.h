@@ -28,11 +28,12 @@ public:
 	void playAnimation();
 	Camera* getCamera();
 	void update() override;
+	Player::Character getCharacter();
+
+	// weapon stuff
+	bool hasPlayerAttacked();
 	void addWeapon(Weapon* weapon);
 	Weapon* getWeapon();
-	bool hasPlayerAttacked();
-
-	Player::Character getCharacter();
 
 	//sound stuff
 	void setSound(irrklang::ISoundSource*);
@@ -59,6 +60,7 @@ public:
 
 	//for colliding with walls
 	glm::vec3 getPreviousPosition();
+	void oneFramebackPos();
 
 	//for the game loop to check if the game is still going
 	bool getDeath();

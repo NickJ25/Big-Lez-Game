@@ -786,11 +786,13 @@ void Game::update()
 						if (p1 && ob1 || p2 && ob2 || p1 && ob2 || p2 && ob1)
 						{
 							cout << "Walllll \n";
- 							if (p1)
-								p1->Move(-p1->getPreviousPosition());
+							if (p1)
+								//p1->Move(-p1->getPreviousPosition());
+								p1->oneFramebackPos();
 							else
 								p2->Move(-p2->getPreviousPosition());
-						}else
+						}
+						else
 						//player, enemy collision
 						if (e1 && p2 || e2 && p1 || e2 && p2 || p1 && e1)
 						{
