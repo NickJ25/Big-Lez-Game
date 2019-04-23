@@ -183,7 +183,7 @@ void Game::init()
 	std::cout << "Game.cpp Init" << std::endl;
 
 	//initialise shaders from file sources
-	toonShader = new Shader("src/toonShader.vert", "src/toonShader.geom", "src/toonShader.frag");
+	toonShader = new Shader("assets/Shaders/Toon/toonShader.vert", "assets/Shaders/Toon/toonShader.geom", "assets/Shaders/Toon/toonShader.frag");
 
 	skybox = new Skybox("assets/Skybox/back.bmp", "assets/Skybox/front.bmp",
 						"assets/Skybox/right.bmp", "assets/Skybox/left.bmp",

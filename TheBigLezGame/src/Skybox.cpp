@@ -36,7 +36,7 @@ GLuint Skybox::createCubeTexture(const char * image1, const char * image2, const
 Skybox::Skybox(const char * image1, const char * image2, const char * image3, const char * image4, const char * image5, const char * image6)
 {
 	// Make Skybox Shader
-	m_skyBoxShader = new Shader("src/skyboxShader.vert", "src/skyboxShader.geom", "src/skyboxShader.frag");
+	m_skyBoxShader = new Shader("assets/Shaders/Skybox/skyboxShader.vert", "assets/Shaders/Skybox/skyboxShader.geom", "assets/Shaders/Skybox/skyboxShader.frag");
 
 	float offset_side_cube = 1.0f;
 

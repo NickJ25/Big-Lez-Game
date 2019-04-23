@@ -3,7 +3,7 @@
 
 void Image::init(unsigned char* image)
 {
-	imageShader = new Shader("src/Image.vert", "src/Image.geom", "src/Image.frag");
+	imageShader = new Shader("assets/Shaders/Image/Image.vert", "assets/Shaders/Image/Image.geom", "assets/Shaders/Image/Image.frag");
 
 	// Generate and load image data
 	glGenTextures(1, &m_texture);

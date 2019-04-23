@@ -73,7 +73,7 @@ void Text::initText(const char* font)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	m_textShader = new Shader("src/Image.vert", "src/Image.geom", "src/Image.frag");
+	m_textShader = new Shader("assets/Shaders/Image/Image.vert", "assets/Shaders/Image/Image.geom", "assets/Shaders/Image/Image.frag");
 }
 
 void Text::move(glm::vec2 position)
