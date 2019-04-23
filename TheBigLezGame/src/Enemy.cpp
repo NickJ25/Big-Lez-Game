@@ -1,4 +1,4 @@
-#include "Enemy.h"
+ #include "Enemy.h"
 #include "PathManager.h"
 
 Enemy::Enemy(Character character) : GameObject(character.fileLocation.c_str())

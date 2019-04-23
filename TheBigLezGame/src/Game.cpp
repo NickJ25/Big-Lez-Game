@@ -313,7 +313,7 @@ void Game::init()
 
 	// numbers correspond to number of each choomah type per round
 	vector<int> wave1, wave2, wave3, wave4, wave5, wave6, wave7;
-	wave1.push_back(0), wave1.push_back(2), wave1.push_back(0), wave1.push_back(0); 
+	wave1.push_back(0), wave1.push_back(2), wave1.push_back(3), wave1.push_back(0); 
 	wave2.push_back(0), wave2.push_back(2), wave2.push_back(1), wave2.push_back(0); 
 	wave3.push_back(0), wave3.push_back(2), wave3.push_back(2), wave3.push_back(0); 
 	wave4.push_back(0), wave4.push_back(3), wave4.push_back(2), wave4.push_back(0); 
@@ -338,51 +338,24 @@ void Game::init()
 	//dlc
 	//waveSpawner->setEndCoords(leftDoors, "Left");
 
-	int waveCount = 0;
 
-	while(firstWave.size() < 2) { 
-		waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, true, firstWave);
-		waveCount++;
-	}
-	waveCounters.push_back(waveCount);
-	waveCount = 0;
-	while (secondWave.size() < 3)
-	{
-		waveSpawner->spawnWave(gameObjects, 1, toonShader, pathManager, true, secondWave);
-		waveCount++;
-	}
-	waveCounters.push_back(waveCount);
-	waveCount = 0;
-	while (thirdWave.size() < 4)
-	{
-		waveSpawner->spawnWave(gameObjects, 2, toonShader, pathManager, true, thirdWave);
-		waveCount++;
-	}
-	waveCounters.push_back(waveCount);
-	waveCount = 0;
-	while (fourthWave.size() < 5)
-	{
-		waveSpawner->spawnWave(gameObjects, 3, toonShader, pathManager, true, fourthWave);
-		waveCount++;
-	}
-	waveCounters.push_back(waveCount);
-	waveCount = 0;
-	while (fifthWave.size() < 6)
-	{
-		waveSpawner->spawnWave(gameObjects, 4, toonShader, pathManager, true, fifthWave);
-		waveCount++;
-	}
-	waveCounters.push_back(waveCount);
-	waveCount = 0;
-	while (sixthWave.size() < 1) 
-	{
-		waveSpawner->spawnWave(gameObjects, 5, toonShader, pathManager, true, sixthWave);
-		waveCount++;
-	}
-	waveCounters.push_back(waveCount);
-	waveCount = 0;
+	waveSpawner->spawnWave(gameObjects, 0, toonShader, pathManager, true, firstWave);
+	waveCounters.push_back(5);
 
+	waveSpawner->spawnWave(gameObjects, 1, toonShader, pathManager, true, secondWave);
+	waveCounters.push_back(3);
 
+	waveSpawner->spawnWave(gameObjects, 2, toonShader, pathManager, true, thirdWave);
+	waveCounters.push_back(4);
+
+	waveSpawner->spawnWave(gameObjects, 3, toonShader, pathManager, true, fourthWave);
+	waveCounters.push_back(5);
+
+	waveSpawner->spawnWave(gameObjects, 4, toonShader, pathManager, true, fifthWave);
+	waveCounters.push_back(6);
+
+	waveSpawner->spawnWave(gameObjects, 5, toonShader, pathManager, true, sixthWave);
+	waveCounters.push_back(1);
 
 	//add the waves to the wave generating vector
 	mapWaves.push_back(firstWave);

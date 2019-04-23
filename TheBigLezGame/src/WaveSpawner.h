@@ -36,34 +36,19 @@ public:
 
 	int getType();
 
-	void setWave(std::vector<int> w)
-	{
-		waves.push_back(w);
-	}
+	void setWave(std::vector<int> w);
 
-	std::vector<vector<int>> getWaves()
-	{
-		return waves;
-	}
+	std::vector<vector<int>> getWaves();
 
-	void spawnEnemy(std::vector<GameObject*> currentObj, std::vector<GameObject*> &gameObjects)
-	{
-		if(toBeSpawned.size() == 0)
-			toBeSpawned = currentObj;
-		if (!toBeSpawned.empty()) {
-			GameObject* tmp = toBeSpawned.at(0);
-			toBeSpawned.erase(toBeSpawned.begin());
-			gameObjects.push_back(tmp);
-		}
-	}
+	void spawnEnemy(std::vector<GameObject*> currentObj, std::vector<GameObject*> &gameObjects);
+
 private:
 
 	//enemy templates
-	GameObject* choomah;// = new Enemy(normalChoomah);
-	GameObject* charger;// = new Enemy(chargerChoomah);
-	GameObject* brawler;// = new Enemy(brawlerChoomah);
-
-	GameObject* currentChoomah;// = choomah;
+	GameObject* choomah;
+	GameObject* charger;
+	GameObject* brawler;
+	GameObject* currentChoomah;
 
 	//position values
 	float radius;
