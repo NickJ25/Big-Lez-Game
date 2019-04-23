@@ -83,9 +83,6 @@ void RenderComponent::Draw()
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "view"), 1, GL_FALSE, glm::value_ptr(m_view));
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "model"), 1, GL_FALSE, glm::value_ptr(m_model));
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "normals"), 1, GL_FALSE, glm::value_ptr(glm::mat4(glm::transpose(glm::inverse(m_model)))));
-	//cout << "Projection: " << glGetUniformLocation(shaderID, "projection") << endl; // TEMP
-	//cout << "Model: " << glGetUniformLocation(shaderID, "model") << endl; // TEMP
-	//cout << "View: " << glGetUniformLocation(shaderID, "view") << endl; // TEMP
 	// Draw Items////////////////
 
 	m_objModel->draw(m_currentShader->getID(), true);

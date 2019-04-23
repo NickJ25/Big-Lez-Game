@@ -281,7 +281,7 @@ void Game::init()
 		if (i == 12) { pos = glm::vec3(17.5f, 0.0f, 44.0f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 
 		//left of house 45 to -10 at 0 
-		if (i == 13) { pos = glm::vec3(0.0f, 0.0f, 17.5f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
+		if (i == 13) { pos = glm::vec3(25.0f, 0.0f, 17.5f); Fence->addCollision(pos, scaleFactor.x, scaleFactor.z); }
 		//add collision objects to the game objects vector
 		gameObjects.push_back(Fence);
 
@@ -785,7 +785,6 @@ void Game::update()
 						//player - wall collision
 						if (p1 && ob1 || p2 && ob2 || p1 && ob2 || p2 && ob1)
 						{
-							cout << "Walllll \n";
 							if (p1)
 								//p1->Move(-p1->getPreviousPosition());
 								p1->oneFramebackPos();

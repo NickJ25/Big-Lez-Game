@@ -136,7 +136,7 @@ void Player::update()
 		//Movement controls
 		previousMovement = m_playerCamera->getCameraPos();
 		m_playerCamera->setCameraPos(m_playerCamera->getCameraPos() + cameraOffset);
-		
+
 		glm::vec3 tempPos = m_playerCamera->getCameraPos();
 		if (this->getController()->getForwardMovement()) {
 			tempPos = m_playerCamera->getCameraPos() - m_playerCamera->getCameraFront() * 1.0f;
@@ -245,7 +245,7 @@ Weapon * Player::getWeapon()
 }
 
 
-
+// Returns whether player has attached
 bool Player::hasPlayerAttacked()
 {
 	if (currentWeapon != nullptr) {
@@ -311,9 +311,18 @@ glm::vec3 Player::getPreviousPosition()
 	return previousMovement;
 }
 
+// Set player position and gun position one turn back
 void Player::oneFramebackPos()
 {
 	m_playerCamera->setCameraPos(previousMovement);
+
+	// Move player model one frame back
+	glm::mat4 tempMat(1.0f);
+	tempMat = glm::translate(tempMat, ((m_playerCamera->getCameraPos() + cameraOffset) + glm::vec3(0.0f, -14.0f, 0.0f)));
+	tempMat = glm::rotate(tempMat, -glm::radians(m_playerCamera->getYaw() + 90), glm::vec3(0.0, 1.0, 0.0));
+	tempMat = glm::translate(tempMat, (glm::vec3(0.0f, 0.0f, -0.8f)));
+	GameObject::setMatrix(tempMat);
+
 }
 
 void Player::setPlayerNum(int playerNum)

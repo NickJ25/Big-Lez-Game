@@ -99,14 +99,13 @@ glm::vec2 Text::getSize()
 void Text::draw(std::string text, glm::vec4 colour, int imageMode)
 {
 	m_textShader->use();
-
+	// Pass viewport, and transformations to shader
 	glUniform1i(glGetUniformLocation(m_textShader->getID(), "viewportNum"), 0);
-	std::cout << glGetUniformLocation(m_textShader->getID(), "viewportNum") << "\n";
 	glUniformMatrix4fv(glGetUniformLocation(m_textShader->getID(), "imgRotation"), 1, GL_FALSE, glm::value_ptr(m_model));
 	glUniformMatrix4fv(glGetUniformLocation(m_textShader->getID(), "imgProj"), 1, GL_FALSE, glm::value_ptr(m_proj));
 	glUniformMatrix4fv(glGetUniformLocation(m_textShader->getID(), "imgView"), 1, GL_FALSE, glm::value_ptr(m_view));
 
-	//glUniformMatrix4fv(glGetUniformLocation(m_textShader->getID(), "PROJECTION_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+	// Pass image settings up
 	glUniform1i(glGetUniformLocation(m_textShader->getID(), "imgMode"), imageMode);
 	glUniform1f(glGetUniformLocation(m_textShader->getID(), "alpha"), colour.w);
 	glUniform3f(glGetUniformLocation(m_textShader->getID(), "imgColour"), colour.x, colour.y, colour.z);

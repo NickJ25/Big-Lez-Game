@@ -88,7 +88,6 @@ void GraphicsMenu::update()
 		break;
 	}
 
-	//std::cout << mode << " " << newWidth << "x" << newHeight << std::endl;
 	if (applyBtn->buttonClick()) {
 		Input::SCREEN_WIDTH = newWidth;
 		Input::SCREEN_HEIGHT = newHeight;
