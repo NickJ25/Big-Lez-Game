@@ -1008,13 +1008,13 @@ void Game::playerEnemyCollision(GameObject* a, GameObject* b)
 void Game::barInteraction(Player* p)
 {
 	barInfo->move(glm::vec2(550.0f, 450.0f));
-	barInfo->draw("Press X to refill ammo : 50", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, p->getPlayerNum());
+	barInfo->draw("Press X or UP-PAD to refill ammo : 50", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, p->getPlayerNum());
 	barInfo->move(glm::vec2(550.0f, 415.0f));
-	barInfo->draw("Press Y to refill health : 100", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, p->getPlayerNum());
+	barInfo->draw("Press Y or LEFT-PAD to refill health : 100", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, p->getPlayerNum());
 	barInfo->move(glm::vec2(550.0f, 380.0f));
-	barInfo->draw("Press B to upgrade weapon : 450", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, p->getPlayerNum());
+	barInfo->draw("Press B or DOWN-PAD to upgrade weapon : 450", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, p->getPlayerNum());
 
-	if (Input::keyboard1.keys[GLFW_KEY_X])
+	if (Input::keyboard1.keys[GLFW_KEY_X] || Input::controller1.buttons[10])
 	{
 		if (p->getPoints() >= 50)
 		{
@@ -1022,11 +1022,12 @@ void Game::barInteraction(Player* p)
 			{
 				Gun* tempGun = dynamic_cast<Gun*>(p->getWeapon());
 				tempGun->refillAmmo();
+				p->gainPoints(-50);
 			}
 		}
 	}
 
-	if (Input::keyboard1.keys[GLFW_KEY_Y])
+	if (Input::keyboard1.keys[GLFW_KEY_Y] || Input::controller1.buttons[13])
 	{
 		if (p->getPoints() >= 100)
 		{
@@ -1036,7 +1037,7 @@ void Game::barInteraction(Player* p)
 		}
 	}
 
-	if (Input::keyboard1.keys[GLFW_KEY_B])
+	if (Input::keyboard1.keys[GLFW_KEY_B] || Input::controller1.buttons[12])
 	{
 		//change weapon stats here
 	}

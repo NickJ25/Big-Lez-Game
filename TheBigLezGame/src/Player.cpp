@@ -61,6 +61,7 @@ Camera* Player::getCamera()
 	return m_playerCamera;
 }
 
+// Audio for players
 void Player::playSound(int sound, float delay)
 {
 	if (playingSound == false && delay != 100.0f)
@@ -158,7 +159,6 @@ void Player::update()
 		if (this->getController()->getRightMovement()) {
 			tempPos = m_playerCamera->getCameraPos() - glm::normalize(glm::cross(m_playerCamera->getCameraFront(), glm::vec3(0.0f, 1.0f, 0.0f))) * 1.0f;
 			tempPos.y = 0;
-			//m_playerCamera->setCameraPos(tempPos);
 			isMoving = true;
 			setAnimation(runAnim.first, runAnim.second);
 		}
@@ -167,8 +167,6 @@ void Player::update()
 			isMoving = false;
 			setAnimation(stillAnim.first, stillAnim.second);
 		}
-		//m_playerCamera->setCameraPos(tempPos);
-
 		
 		m_playerCamera->update();
 
@@ -226,7 +224,7 @@ void Player::update()
 	}
 }
 
-
+// Add weapons the player inventory, checks whether it should go into first slot or second slot.
 void Player::addWeapon(Weapon * weapon)
 {
 	if (m_playerInventory[0] == nullptr) {
