@@ -812,7 +812,8 @@ void Game::update()
 						//player - wall collision
 						if (p1 && ob1 || p2 && ob2 || p1 && ob2 || p2 && ob1)
 						{
-							if (p1)
+							cout << "Walllll \n";
+ 							if (p1)
 								p1->Move(-p1->getPreviousPosition());
 							else
 								p2->Move(-p2->getPreviousPosition());
